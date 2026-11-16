@@ -90,7 +90,8 @@ data class PatternSlotEntity(
     val displayOrder: Int,
     val groupId: String? = null,
     val bundleId: String? = null,
-    val bundleChoiceGroupId: String? = null
+    val bundleChoiceGroupId: String? = null,
+    val allowedChapterIdsJson: String = "[]"
 )
 
 @Entity(
