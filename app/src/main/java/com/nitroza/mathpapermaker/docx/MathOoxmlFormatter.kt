@@ -44,6 +44,27 @@ object MathOoxmlFormatter {
     private data class Parsed(val endExclusive: Int, val xml: String)
 
     private fun parseConstruct(source: String, start: Int): Parsed? {
+        listOf("sin", "cos", "tan", "log").firstOrNull { source.startsWith("$it(", start) }?.let { function ->
+            val openIndex = start + function.length
+            val end = matchingParen(source, openIndex) ?: return null
+            val argument = source.substring(openIndex + 1, end)
+            return Parsed(
+                end + 1,
+                "<m:func><m:funcPr/><m:fName><m:r><m:t>$function</m:t></m:r></m:fName><m:e>${mathContent(argument)}</m:e></m:func>"
+            )
+        }
+
+        if (source[start] == '|') {
+            val end = source.indexOf('|', start + 1)
+            if (end > start + 1) {
+                val inner = source.substring(start + 1, end)
+                return Parsed(
+                    end + 1,
+                    "<m:d><m:dPr><m:begChr m:val=\"|\"/><m:endChr m:val=\"|\"/><m:grow m:val=\"1\"/></m:dPr><m:e>${mathContent(inner)}</m:e></m:d>"
+                )
+            }
+        }
+
         if (source.startsWith("∛(", start)) {
             val end = matchingParen(source, start + 1) ?: return null
             val inner = source.substring(start + 2, end)
