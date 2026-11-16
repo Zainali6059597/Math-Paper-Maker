@@ -77,7 +77,7 @@ class PunjabBoardPatternTest {
         val sections = PunjabBoardPattern.sections(fullPaper(9))
         assertEquals(1, sections.count { it.heading.contains("MULTIPLE CHOICE") })
         assertEquals(3, sections.count { it.heading.contains("SHORT QUESTIONS") })
-        assertEquals(5, sections.count { it.heading.contains("LONG QUESTION") })
+        assertEquals(5, sections.count { it.heading.startsWith("Q") && it.heading.contains("LONG QUESTION") })
         assertTrue(sections.any { it.instruction.contains("Attempt any 6 of the 9") })
         assertTrue(sections.any { it.instruction.contains("Attempt any 2 of Q5, Q6 and Q7") })
         assertTrue(sections.any { it.instruction.contains("Attempt any 1 of Q8 and Q9") })
