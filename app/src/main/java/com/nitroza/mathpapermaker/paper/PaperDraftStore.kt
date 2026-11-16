@@ -53,27 +53,56 @@ object PaperDraftStore {
     }
 
     fun load(context: Context): PaperDraftSnapshot? {
-        val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_DRAFT, null)
-            ?: return null
+        val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .getString(KEY_DRAFT, null) ?: return null
+
         return runCatching {
             val json = JSONObject(raw)
-        val array = json.getJSONArray("questions")
-        val questions = (0 until array.length()).map { index ->
-            val item = array.getJSONObject(index)
-            StoredPaperQuestion(
-                item.getLong("id"),
-                item.getString("number"),
-                item.optString("text"),
-                item.getString("kind"),
-                item.getInt("marks"),
-                item.getInt("sourcePage"),
-                item.optString("imageFile").takeIf { it.isNotBlank() && it != "null" },
-                item.optString("chapterId"),
-                item.optString("sectionId", item.getString("number").substringBefore("("))
-            )
-        }
+            val grade = json.optInt("grade", 9)
+            require(grade == 9 || grade == 10) { "Invalid saved grade." }
+
+            val array = json.getJSONArray("questions")
+            val questions = (0 until array.length()).map { index ->
+                val item = array.getJSONObject(index)
+                val number = item.getString("number").trim()
+                val kind = item.getString("kind")
+                val marks = item.getInt("marks")
+                val sourcePage = item.getInt("sourcePage")
+                val chapterId = item.optString("chapterId")
+                val sectionId = item.optString(
+                    "sectionId",
+                    number.substringBefore("(")
+                )
+                val imageFile = item.optString("imageFile")
+                    .takeIf { it.isNotBlank() && it != "null" }
+
+                require(item.getLong("id") > 0L) { "Invalid saved question ID." }
+                require(number.isNotBlank()) { "Saved question number is blank." }
+                require(kind in setOf("MCQ", "SHORT", "LONG")) { "Invalid saved question type." }
+                require(marks > 0 && sourcePage > 0) { "Invalid saved question marks or page." }
+                require(PunjabBoardPattern.isValidChapter(grade, chapterId)) {
+                    "Invalid saved chapter."
+                }
+                require(sectionId.isNotBlank()) { "Saved question section is blank." }
+
+                StoredPaperQuestion(
+                    item.getLong("id"),
+                    number,
+                    item.optString("text"),
+                    kind,
+                    marks,
+                    sourcePage,
+                    imageFile,
+                    chapterId,
+                    sectionId
+                )
+            }
+            require(questions.map { it.id }.distinct().size == questions.size) {
+                "Duplicate saved question IDs."
+            }
+
             PaperDraftSnapshot(
-                json.optInt("grade", 9).coerceIn(9, 10),
+                grade,
                 json.optString("examTitle", "Mathematics Examination"),
                 json.optString("schoolName"),
                 questions
