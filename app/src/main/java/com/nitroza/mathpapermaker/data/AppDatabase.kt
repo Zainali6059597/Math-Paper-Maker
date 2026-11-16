@@ -68,6 +68,8 @@ interface LocalContentDao {
     suspend fun setPatternStatus(id: String, status: String)
     @Query("UPDATE questions SET verificationStatus=:status WHERE questionId=:id")
     suspend fun setQuestionStatus(id: String, status: String)
+    @Query("UPDATE questions SET verificationStatus='CONFLICTED' WHERE sourceId=:sourceId")
+    suspend fun conflictQuestionsFromSource(sourceId: String)
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertReviewAudit(record: ReviewAuditEntity)
     @Query("SELECT * FROM review_audit ORDER BY reviewedAt DESC LIMIT 100")
     suspend fun recentReviewAudit(): List<ReviewAuditEntity>
@@ -167,6 +169,17 @@ suspend fun AppDatabase.importPackage(
     exclusions: List<SyllabusExclusionEntity> = emptyList(),
     bundleChoiceGroups: List<BundleChoiceGroupEntity> = emptyList()
 ) = withTransaction {
+    val dao = contentDao()
+    val currentPattern = dao.findPattern(pattern.board, pattern.grade, pattern.stream, pattern.subject, pattern.session)
+    if (currentPattern?.patternId == pattern.patternId) return@withTransaction
+    if (currentPattern != null) {
+        require(currentPattern.version < pattern.version) {
+            "An equal or newer pattern version is already installed for this exact board/session."
+        }
+        dao.setPatternStatus(currentPattern.patternId, "CONFLICTED")
+        dao.setSourceStatus(currentPattern.sourceId, "CONFLICTED")
+        dao.conflictQuestionsFromSource(currentPattern.sourceId)
+    }
     require(slots.isNotEmpty()) { "Pattern has no slots." }
     require(source.sourceId.isNotBlank() && source.issuer.isNotBlank() && source.title.isNotBlank() && source.sourceType.isNotBlank()) {
         "Source ID, issuer, title and source type are required."
