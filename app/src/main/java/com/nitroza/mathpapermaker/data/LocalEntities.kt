@@ -149,6 +149,21 @@ data class SavedPaperDraftEntity(
 )
 
 
+
+@Entity(tableName = "textbook_candidates", indices = [Index(value = ["bookFile", "chapterId", "exerciseId"])])
+data class TextbookCandidateEntity(
+    @PrimaryKey val candidateId: String,
+    val bookFile: String,
+    val chapterId: String,
+    val exerciseId: String,
+    val questionNumber: String,
+    val questionText: String,
+    val sourcePage: Int,
+    val reviewStatus: String = "NEEDS_REVIEW",
+    val reviewNote: String = "",
+    val detectedAt: Long
+)
+
 @Entity(tableName = "review_audit", indices = [Index(value = ["itemType", "itemId"]), Index(value = ["reviewedAt"])])
 data class ReviewAuditEntity(
     @PrimaryKey val auditId: String,
