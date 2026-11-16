@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.TextFieldValue
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.docx.DocxPaperExporter
 import com.nitroza.mathpapermaker.paper.PaperQuestion
