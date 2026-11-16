@@ -49,9 +49,9 @@ object MathOoxmlFormatter {
             val numeratorEnd = matchingParen(source, start) ?: return null
             if (!source.startsWith("/(", numeratorEnd + 1)) return null
             val denominatorStart = numeratorEnd + 2
-            val denominatorEnd = matchingParen(source, denominatorStart - 1) ?: return null
+            val denominatorEnd = matchingParen(source, denominatorStart) ?: return null
             val numerator = source.substring(start + 1, numeratorEnd)
-            val denominator = source.substring(denominatorStart, denominatorEnd)
+            val denominator = source.substring(denominatorStart + 1, denominatorEnd)
             return Parsed(
                 denominatorEnd + 1,
                 "<m:f><m:fPr><m:type m:val=\"bar\"/></m:fPr><m:num>${mathContent(numerator)}</m:num><m:den>${mathContent(denominator)}</m:den></m:f>"
@@ -98,8 +98,28 @@ object MathOoxmlFormatter {
     }
 
     private fun mathContent(value: String): String {
-        val runs = inlineRuns(value)
-        return runs.replace("<m:oMath>", "").replace("</m:oMath>", "")
+        val output = StringBuilder()
+        val plain = StringBuilder()
+        fun flush() {
+            if (plain.isNotEmpty()) {
+                output.append("<m:r><m:t xml:space=\\"preserve\\">").append(xmlEscape(plain.toString())).append("</m:t></m:r>")
+                plain.clear()
+            }
+        }
+        var index = 0
+        while (index < value.length) {
+            val parsed = parseConstruct(value, index)
+            if (parsed != null) {
+                flush()
+                output.append(parsed.xml)
+                index = parsed.endExclusive
+            } else {
+                plain.append(value[index])
+                index++
+            }
+        }
+        flush()
+        return output.toString()
     }
 
     private fun wordRun(value: String): String =
