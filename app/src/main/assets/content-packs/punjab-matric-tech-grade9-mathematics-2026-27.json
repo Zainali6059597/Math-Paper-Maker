@@ -11,17 +11,17 @@
     "sourceId": "PECTAA-MT-G9-MATH-2026-27-1253",
     "issuer": "Punjab Education, Curriculum, Training and Assessment Authority (PECTAA)",
     "title": "Smart/Reduced Syllabus, Pairing Schemes and Model Papers for Matric-Tech Grade 9, Academic Session 2026–27 (Notification No. PECTAA/C&C Unit/2026/1253, 14 November 2026)",
-    "sourceUrl": "https://pectaa.edu.pk/",
+    "sourceUrl": "https://pectaa.edu.pk/wp-content/uploads/2026/11/ALPs-Notification-14.11.2026-1253-F1.pdf",
     "sourceType": "OFFICIAL_PAIRING_SCHEME",
     "session": "2026-27",
-    "pageReference": "Notification pages 1–2: Mathematics paper structure; questions authored independently for practice and not copied from the model paper."
+    "pageReference": "Official notification pp. 1–2: Mathematics Grade 9 reduced syllabus and 75-mark paper structure. Practice questions are original, independently authored, and not copied from the model paper."
   },
   "pattern": {
     "patternId": "punjab-matric-tech-g9-math-2026-27-pectaa-1253-v1",
     "version": 1,
     "totalMarks": 75,
     "durationMinutes": 150,
-    "sourcePage": "Notification pages 1–2; MCQ 15, short questions 36 attempted marks, long questions 24 attempted marks.",
+    "sourcePage": "Official notification pp. 1–2; paper structure and syllabus exclusions.",
     "slots": [
       {
         "slotId": "MCQ01",
@@ -387,12 +387,21 @@
         "groupId": "Q4"
       },
       {
+        "slotId": "SHORT28",
+        "chapterId": "CH13",
+        "sloId": "",
+        "questionType": "SHORT",
+        "marks": 2,
+        "displayOrder": 42,
+        "groupId": "Q4"
+      },
+      {
         "slotId": "LONG1",
         "chapterId": "CH1",
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 42,
+        "displayOrder": 43,
         "groupId": "Q5-Q7"
       },
       {
@@ -401,7 +410,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 43,
+        "displayOrder": 44,
         "groupId": "Q5-Q7"
       },
       {
@@ -410,7 +419,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 44,
+        "displayOrder": 45,
         "groupId": "Q5-Q7"
       },
       {
@@ -419,7 +428,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 45,
+        "displayOrder": 46,
         "groupId": "Q8-Q9"
       },
       {
@@ -428,7 +437,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 46,
+        "displayOrder": 47,
         "groupId": "Q8-Q9"
       }
     ],
@@ -473,8 +482,8 @@
       {
         "type": "CHAPTER",
         "value": "CH8",
-        "reason": "Logic excluded in PECTAA Matric-Tech Grade 9 Smart/Reduced Syllabus 2026–27.",
-        "sourcePage": "Notification syllabus pages"
+        "reason": "Complete chapter excluded in PECTAA Mathematics Grade 9 reduced syllabus.",
+        "sourcePage": "Official notification p. 2"
       }
     ]
   },
@@ -488,11 +497,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "Which of the following is an irrational number?\nA) 0.25   B) √2   C) 3/4   D) 0.5",
-      "answerText": "B) √2 — its decimal expansion is non-terminating and non-recurring.",
+      "questionText": "Which of the following is irrational?\nA) 0.25  B) √2  C) 3/4  D) 0.5",
+      "answerText": "B) √2.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq01-which-of-the-following-is-an-irrational-number-a-0-25-b-2-c-3-4-d-0-5"
+      "semanticFingerprint": "mcq01-which-of-the-following-is-irrational-a-0-25-b-2-c-3-4-d-0-5"
     },
     {
       "questionId": "Q-MCQ02",
@@ -503,8 +512,8 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "The value of log₁₀(1000) is:\nA) 1   B) 2   C) 3   D) 10",
-      "answerText": "C) 3, because 10³ = 1000.",
+      "questionText": "The value of log₁₀(1000) is:\nA) 1  B) 2  C) 3  D) 10",
+      "answerText": "C) 3, because 10³=1000.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "mcq02-the-value-of-log-1000-is-a-1-b-2-c-3-d-10"
@@ -518,8 +527,8 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "If A = {1,2,3} and B = {3,4}, then A ∩ B is:\nA) {1,2}   B) {3}   C) {1,2,3,4}   D) {4}",
-      "answerText": "B) {3}; intersection contains common elements.",
+      "questionText": "If A={1,2,3} and B={3,4}, then A∩B is:\nA) {1,2}  B) {3}  C) {1,2,3,4}  D) {4}",
+      "answerText": "B) {3}.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "mcq03-if-a-1-2-3-and-b-3-4-then-a-b-is-a-1-2-b-3-c-1-2-3-4-d-4-"
@@ -533,11 +542,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "The domain of a function is the set of:\nA) outputs   B) inputs   C) slopes   D) ranges only",
-      "answerText": "B) inputs; domain is the set of permitted input values.",
+      "questionText": "The power set of {a,b} contains how many subsets?\nA) 2  B) 3  C) 4  D) 5",
+      "answerText": "C) 4; the subsets are ∅,{a},{b},{a,b}.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq04-the-domain-of-a-function-is-the-set-of-a-outputs-b-inputs-c-slopes-d-ranges-only"
+      "semanticFingerprint": "mcq04-the-power-set-of-a-b-contains-how-many-subsets-a-2-b-3-c-4-d-5"
     },
     {
       "questionId": "Q-MCQ05",
@@ -548,8 +557,8 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "A factor of x² − 9 is:\nA) x−9   B) x+9   C) x−3   D) x²+3",
-      "answerText": "C) x−3, since x²−9=(x−3)(x+3).",
+      "questionText": "A factor of x²−9 is:\nA) x−9  B) x+9  C) x−3  D) x²+3",
+      "answerText": "C) x−3; x²−9=(x−3)(x+3).",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "mcq05-a-factor-of-x-9-is-a-x-9-b-x-9-c-x-3-d-x-3"
@@ -563,7 +572,7 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "The common factor of 6x and 9x² is:\nA) 3x   B) 6x²   C) 9x   D) 3x²",
+      "questionText": "The common factor of 6x and 9x² is:\nA) 3x  B) 6x²  C) 9x  D) 3x²",
       "answerText": "A) 3x.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
@@ -578,8 +587,8 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "The solution of 2x + 5 = 13 is:\nA) 3   B) 4   C) 5   D) 9",
-      "answerText": "B) 4; 2x=8, so x=4.",
+      "questionText": "The solution of 2x+5=13 is:\nA) 3  B) 4  C) 5  D) 9",
+      "answerText": "B) 4.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "mcq07-the-solution-of-2x-5-13-is-a-3-b-4-c-5-d-9"
@@ -593,11 +602,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "If 3x > 12, then:\nA) x>4   B) x<4   C) x>9   D) x<9",
-      "answerText": "A) x>4; divide both sides by positive 3.",
+      "questionText": "sin 30° equals:\nA) 0  B) 1/2  C) √3/2  D) 1",
+      "answerText": "B) 1/2.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq08-if-3x-12-then-a-x-4-b-x-4-c-x-9-d-x-9"
+      "semanticFingerprint": "mcq08-sin-30-equals-a-0-b-1-2-c-3-2-d-1"
     },
     {
       "questionId": "Q-MCQ09",
@@ -608,11 +617,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "Which point lies on the x-axis?\nA) (0,5)   B) (−2,0)   C) (3,4)   D) (1,1)",
-      "answerText": "B) (−2,0); every point on the x-axis has y-coordinate 0.",
+      "questionText": "The value of sin²θ+cos²θ is:\nA) 0  B) 1  C) tanθ  D) 2",
+      "answerText": "B) 1; fundamental trigonometric identity.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq09-which-point-lies-on-the-x-axis-a-0-5-b-2-0-c-3-4-d-1-1-"
+      "semanticFingerprint": "mcq09-the-value-of-sin-cos-is-a-0-b-1-c-tan-d-2"
     },
     {
       "questionId": "Q-MCQ10",
@@ -623,11 +632,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "The slope of a horizontal line is:\nA) 1   B) −1   C) 0   D) undefined",
-      "answerText": "C) 0.",
+      "questionText": "The slope of the line y=5x+3 is:\nA) 3  B) −3  C) 5  D) −5",
+      "answerText": "C) 5.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq10-the-slope-of-a-horizontal-line-is-a-1-b-1-c-0-d-undefined"
+      "semanticFingerprint": "mcq10-the-slope-of-the-line-y-5x-3-is-a-3-b-3-c-5-d-5"
     },
     {
       "questionId": "Q-MCQ11",
@@ -638,11 +647,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "If two triangles have all corresponding sides equal, they are congruent by:\nA) ASA   B) SSS   C) RHS only   D) AAA",
-      "answerText": "B) SSS.",
+      "questionText": "If the corresponding sides of two triangles are proportional and their corresponding angles are equal, the triangles are:\nA) congruent only  B) similar  C) always right-angled  D) unequal",
+      "answerText": "B) similar.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq11-if-two-triangles-have-all-corresponding-sides-equal-they-are-congruent-by-a-asa-b-sss-c-rhs-only-d-aaa"
+      "semanticFingerprint": "mcq11-if-the-corresponding-sides-of-two-triangles-are-proportional-and-their-corresponding-angles-are-equal-the-triangles-are-a-congruent-only-b-similar-c-always-right-angled-d-unequal"
     },
     {
       "questionId": "Q-MCQ12",
@@ -653,11 +662,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "A perpendicular bisector divides a segment into:\nA) two unequal parts   B) two equal parts at 90°   C) three parts   D) two parallel parts",
-      "answerText": "B) two equal parts at 90°.",
+      "questionText": "The graph of y=2x+1 is a:\nA) circle  B) straight line  C) parabola  D) pair of parallel lines",
+      "answerText": "B) straight line.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq12-a-perpendicular-bisector-divides-a-segment-into-a-two-unequal-parts-b-two-equal-parts-at-90-c-three-parts-d-two-parallel-parts"
+      "semanticFingerprint": "mcq12-the-graph-of-y-2x-1-is-a-a-circle-b-straight-line-c-parabola-d-pair-of-parallel-lines"
     },
     {
       "questionId": "Q-MCQ13",
@@ -668,11 +677,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "The sum of the interior angles of a triangle is:\nA) 90°   B) 180°   C) 270°   D) 360°",
-      "answerText": "B) 180°.",
+      "questionText": "The locus of points equidistant from the endpoints of a segment is its:\nA) angle bisector  B) perpendicular bisector  C) median  D) altitude",
+      "answerText": "B) perpendicular bisector.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq13-the-sum-of-the-interior-angles-of-a-triangle-is-a-90-b-180-c-270-d-360-"
+      "semanticFingerprint": "mcq13-the-locus-of-points-equidistant-from-the-endpoints-of-a-segment-is-its-a-angle-bisector-b-perpendicular-bisector-c-median-d-altitude"
     },
     {
       "questionId": "Q-MCQ14",
@@ -683,11 +692,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "The locus of points equidistant from the endpoints of a segment is its:\nA) angle bisector   B) perpendicular bisector   C) median   D) altitude",
-      "answerText": "B) perpendicular bisector.",
+      "questionText": "The arithmetic mean of 2, 4 and 6 is:\nA) 3  B) 4  C) 5  D) 6",
+      "answerText": "B) 4.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq14-the-locus-of-points-equidistant-from-the-endpoints-of-a-segment-is-its-a-angle-bisector-b-perpendicular-bisector-c-median-d-altitude"
+      "semanticFingerprint": "mcq14-the-arithmetic-mean-of-2-4-and-6-is-a-3-b-4-c-5-d-6"
     },
     {
       "questionId": "Q-MCQ15",
@@ -698,11 +707,11 @@
       "difficulty": "AVERAGE",
       "questionType": "MCQ",
       "marks": 1,
-      "questionText": "In an isosceles triangle, the angles opposite equal sides are:\nA) supplementary   B) equal   C) right angles   D) always 30°",
-      "answerText": "B) equal.",
+      "questionText": "The probability of getting a head when a fair coin is tossed is:\nA) 0  B) 1/4  C) 1/2  D) 1",
+      "answerText": "C) 1/2.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "mcq15-in-an-isosceles-triangle-the-angles-opposite-equal-sides-are-a-supplementary-b-equal-c-right-angles-d-always-30-"
+      "semanticFingerprint": "mcq15-the-probability-of-getting-a-head-when-a-fair-coin-is-tossed-is-a-0-b-1-4-c-1-2-d-1"
     },
     {
       "questionId": "Q-SHORT01",
@@ -714,7 +723,7 @@
       "questionType": "SHORT",
       "marks": 2,
       "questionText": "Express 0.375 as a fraction in lowest terms.",
-      "answerText": "0.375 = 375/1000 = 3/8.",
+      "answerText": "0.375=375/1000=3/8.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "short01-express-0-375-as-a-fraction-in-lowest-terms-"
@@ -744,7 +753,7 @@
       "questionType": "SHORT",
       "marks": 2,
       "questionText": "Evaluate log₂(32).",
-      "answerText": "Since 2⁵=32, log₂(32)=5.",
+      "answerText": "2⁵=32, therefore log₂(32)=5.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "short03-evaluate-log-32-"
@@ -758,11 +767,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Write 10⁻³ as a decimal.",
-      "answerText": "10⁻³=1/1000=0.001.",
+      "questionText": "Find the characteristic of log₁₀(0.00056).",
+      "answerText": "0.00056=5.6×10⁻⁴, so its characteristic is −4.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short04-write-10-as-a-decimal-"
+      "semanticFingerprint": "short04-find-the-characteristic-of-log-0-00056-"
     },
     {
       "questionId": "Q-SHORT05",
@@ -774,7 +783,7 @@
       "questionType": "SHORT",
       "marks": 2,
       "questionText": "Find A∪B if A={a,b,c} and B={b,d}.",
-      "answerText": "A∪B={a,b,c,d}; list every element once.",
+      "answerText": "A∪B={a,b,c,d}.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "short05-find-a-b-if-a-a-b-c-and-b-b-d-"
@@ -788,11 +797,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "If f(x)=2x−3, find f(5).",
-      "answerText": "f(5)=2(5)−3=7.",
+      "questionText": "Write the power set of {p,q}.",
+      "answerText": "P({p,q})={∅,{p},{q},{p,q}}.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short06-if-f-x-2x-3-find-f-5-"
+      "semanticFingerprint": "short06-write-the-power-set-of-p-q-"
     },
     {
       "questionId": "Q-SHORT07",
@@ -819,7 +828,7 @@
       "questionType": "SHORT",
       "marks": 2,
       "questionText": "Factorize 4a²−25.",
-      "answerText": "4a²−25=(2a−5)(2a+5).",
+      "answerText": "(2a−5)(2a+5).",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
       "semanticFingerprint": "short08-factorize-4a-25-"
@@ -848,11 +857,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Solve 5x−7=2x+8.",
-      "answerText": "3x=15, therefore x=5.",
+      "questionText": "Solve 2x−3≤7.",
+      "answerText": "2x≤10, so x≤5.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short10-solve-5x-7-2x-8-"
+      "semanticFingerprint": "short10-solve-2x-3-7-"
     },
     {
       "questionId": "Q-SHORT11",
@@ -863,11 +872,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Solve 2x−3≤7.",
-      "answerText": "2x≤10, therefore x≤5.",
+      "questionText": "Convert 150° into radians.",
+      "answerText": "150°×π/180°=5π/6 radians.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short11-solve-2x-3-7-"
+      "semanticFingerprint": "short11-convert-150-into-radians-"
     },
     {
       "questionId": "Q-SHORT12",
@@ -878,11 +887,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Find the coordinates of the midpoint of (2,4) and (6,8).",
-      "answerText": "Midpoint=((2+6)/2,(4+8)/2)=(4,6).",
+      "questionText": "Find the arc length when r=6 cm and θ=π/3 radians.",
+      "answerText": "s=rθ=6×π/3=2π cm.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short12-find-the-coordinates-of-the-midpoint-of-2-4-and-6-8-"
+      "semanticFingerprint": "short12-find-the-arc-length-when-r-6-cm-and-3-radians-"
     },
     {
       "questionId": "Q-SHORT13",
@@ -893,11 +902,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "State the quadrant containing the point (−3,5).",
-      "answerText": "x is negative and y positive, so it lies in Quadrant II.",
+      "questionText": "Evaluate 2cos(π/6)sin(π/6).",
+      "answerText": "2×(√3/2)×(1/2)=√3/2.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short13-state-the-quadrant-containing-the-point-3-5-"
+      "semanticFingerprint": "short13-evaluate-2cos-6-sin-6-"
     },
     {
       "questionId": "Q-SHORT14",
@@ -908,11 +917,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Find the slope through (1,2) and (3,6).",
-      "answerText": "m=(6−2)/(3−1)=4/2=2.",
+      "questionText": "Find the distance between (0,3) and (−2,−4).",
+      "answerText": "d=√[(-2−0)²+(-4−3)²]=√53.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short14-find-the-slope-through-1-2-and-3-6-"
+      "semanticFingerprint": "short14-find-the-distance-between-0-3-and-2-4-"
     },
     {
       "questionId": "Q-SHORT15",
@@ -923,11 +932,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Write the equation of a line with slope 3 and y-intercept 2.",
-      "answerText": "Using y=mx+c, the equation is y=3x+2.",
+      "questionText": "Find the slope joining (3,−2) and (2,7).",
+      "answerText": "m=(7+2)/(2−3)=9/(−1)=−9.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short15-write-the-equation-of-a-line-with-slope-3-and-y-intercept-2-"
+      "semanticFingerprint": "short15-find-the-slope-joining-3-2-and-2-7-"
     },
     {
       "questionId": "Q-SHORT16",
@@ -938,11 +947,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "What is the x-intercept of y=2x−6?",
-      "answerText": "Put y=0: 2x−6=0, so x=3; intercept (3,0).",
+      "questionText": "Write the equation of the horizontal line through (7,−9).",
+      "answerText": "y=−9.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short16-what-is-the-x-intercept-of-y-2x-6-"
+      "semanticFingerprint": "short16-write-the-equation-of-the-horizontal-line-through-7-9-"
     },
     {
       "questionId": "Q-SHORT17",
@@ -953,11 +962,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "State the SSS congruence condition.",
-      "answerText": "If the three corresponding sides of two triangles are equal, the triangles are congruent by SSS.",
+      "questionText": "Two similar triangles have corresponding sides in ratio 2:3. Find the ratio of their areas.",
+      "answerText": "Area ratio is the square of side ratio: 2²:3²=4:9.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short17-state-the-sss-congruence-condition-"
+      "semanticFingerprint": "short17-two-similar-triangles-have-corresponding-sides-in-ratio-2-3-find-the-ratio-of-their-areas-"
     },
     {
       "questionId": "Q-SHORT18",
@@ -968,11 +977,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "If ∠A=50° and ∠B=60° in triangle ABC, find ∠C.",
-      "answerText": "∠C=180°−50°−60°=70°.",
+      "questionText": "If two corresponding angles of two triangles are equal, and their third angles are also equal, what can be concluded?",
+      "answerText": "The triangles are equiangular and therefore similar.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short18-if-a-50-and-b-60-in-triangle-abc-find-c-"
+      "semanticFingerprint": "short18-if-two-corresponding-angles-of-two-triangles-are-equal-and-their-third-angles-are-also-equal-what-can-be-concluded-"
     },
     {
       "questionId": "Q-SHORT19",
@@ -983,11 +992,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Differentiate congruent and similar triangles briefly.",
-      "answerText": "Congruent triangles have equal corresponding sides and angles; similar triangles have equal corresponding angles and proportional sides.",
+      "questionText": "The sides of two similar triangles are in ratio 3:5. If a side of the smaller is 9 cm, find the corresponding larger side.",
+      "answerText": "9/ x=3/5, so x=15 cm.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short19-differentiate-congruent-and-similar-triangles-briefly-"
+      "semanticFingerprint": "short19-the-sides-of-two-similar-triangles-are-in-ratio-3-5-if-a-side-of-the-smaller-is-9-cm-find-the-corresponding-larger-side-"
     },
     {
       "questionId": "Q-SHORT20",
@@ -998,11 +1007,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Define the perpendicular bisector of a line segment.",
-      "answerText": "A line that passes through the midpoint of a segment and is perpendicular to it.",
+      "questionText": "Find y when x=3 in y=2x−1.",
+      "answerText": "y=2(3)−1=5.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short20-define-the-perpendicular-bisector-of-a-line-segment-"
+      "semanticFingerprint": "short20-find-y-when-x-3-in-y-2x-1-"
     },
     {
       "questionId": "Q-SHORT21",
@@ -1013,11 +1022,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "What is the locus of points at a fixed distance from a point?",
-      "answerText": "A circle whose centre is the fixed point and whose radius is the given distance.",
+      "questionText": "Give two points that lie on y=x+2.",
+      "answerText": "For x=0, y=2; for x=1, y=3. Points: (0,2),(1,3).",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short21-what-is-the-locus-of-points-at-a-fixed-distance-from-a-point-"
+      "semanticFingerprint": "short21-give-two-points-that-lie-on-y-x-2-"
     },
     {
       "questionId": "Q-SHORT22",
@@ -1028,11 +1037,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Find the third angle of a triangle if two angles are 45° and 65°.",
-      "answerText": "Third angle=180°−45°−65°=70°.",
+      "questionText": "Define the perpendicular bisector of a line segment.",
+      "answerText": "A line through the segment's midpoint and perpendicular to it.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short22-find-the-third-angle-of-a-triangle-if-two-angles-are-45-and-65-"
+      "semanticFingerprint": "short22-define-the-perpendicular-bisector-of-a-line-segment-"
     },
     {
       "questionId": "Q-SHORT23",
@@ -1043,11 +1052,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Define a parallelogram.",
-      "answerText": "A quadrilateral in which both pairs of opposite sides are parallel.",
+      "questionText": "What is the locus of points at a fixed distance from a fixed point?",
+      "answerText": "A circle centred at the fixed point with the given radius.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short23-define-a-parallelogram-"
+      "semanticFingerprint": "short23-what-is-the-locus-of-points-at-a-fixed-distance-from-a-fixed-point-"
     },
     {
       "questionId": "Q-SHORT24",
@@ -1058,11 +1067,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "What is an angle bisector?",
-      "answerText": "A ray or line that divides an angle into two equal angles.",
+      "questionText": "Find the arithmetic mean of 4, 6, 8 and 10.",
+      "answerText": "Mean=(4+6+8+10)/4=28/4=7.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short24-what-is-an-angle-bisector-"
+      "semanticFingerprint": "short24-find-the-arithmetic-mean-of-4-6-8-and-10-"
     },
     {
       "questionId": "Q-SHORT25",
@@ -1073,11 +1082,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "State one property of the perpendicular bisector of a segment.",
-      "answerText": "Every point on it is equidistant from the two endpoints of the segment.",
+      "questionText": "Find the mode of 3, 5, 5, 6, 7, 5, 8.",
+      "answerText": "The mode is 5, as it occurs most often.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short25-state-one-property-of-the-perpendicular-bisector-of-a-segment-"
+      "semanticFingerprint": "short25-find-the-mode-of-3-5-5-6-7-5-8-"
     },
     {
       "questionId": "Q-SHORT26",
@@ -1088,11 +1097,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "If a point is equidistant from the two arms of an angle, where does it lie?",
-      "answerText": "It lies on one of the angle bisectors of that angle.",
+      "questionText": "Find the median of 2, 4, 7, 9, 12.",
+      "answerText": "The middle value is 7.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short26-if-a-point-is-equidistant-from-the-two-arms-of-an-angle-where-does-it-lie-"
+      "semanticFingerprint": "short26-find-the-median-of-2-4-7-9-12-"
     },
     {
       "questionId": "Q-SHORT27",
@@ -1103,11 +1112,26 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "In a triangle, two angles are 2x and 3x and the third is 5x. Find x.",
-      "answerText": "2x+3x+5x=180°, so 10x=180° and x=18°.",
+      "questionText": "A fair die is rolled. Find the probability of getting an even number.",
+      "answerText": "Favourable outcomes={2,4,6}; probability=3/6=1/2.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short27-in-a-triangle-two-angles-are-2x-and-3x-and-the-third-is-5x-find-x-"
+      "semanticFingerprint": "short27-a-fair-die-is-rolled-find-the-probability-of-getting-an-even-number-"
+    },
+    {
+      "questionId": "Q-SHORT28",
+      "chapterId": "CH13",
+      "topic": "Original practice question",
+      "sloId": "",
+      "cognitiveLevel": "UNDERSTANDING",
+      "difficulty": "AVERAGE",
+      "questionType": "SHORT",
+      "marks": 2,
+      "questionText": "Define sample space for a single coin toss.",
+      "answerText": "S={H,T}, the set of all possible outcomes.",
+      "summative": true,
+      "copyrightStatus": "ORIGINAL",
+      "semanticFingerprint": "short28-define-sample-space-for-a-single-coin-toss-"
     },
     {
       "questionId": "Q-LONG1",
@@ -1118,11 +1142,11 @@
       "difficulty": "AVERAGE",
       "questionType": "LONG",
       "marks": 8,
-      "questionText": "Q5 — (a) Simplify √50 + √8. (b) Rationalize 1/√3.",
-      "answerText": "(a) √50+√8=5√2+2√2=7√2. (b) (1/√3)(√3/√3)=√3/3.",
+      "questionText": "Q5 — (a) Simplify √50+√8. (b) Solve log₁₀x=−2.",
+      "answerText": "(a) √50+√8=5√2+2√2=7√2. (b) x=10⁻²=0.01.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "long1-q5-a-simplify-50-8-b-rationalize-1-3-"
+      "semanticFingerprint": "long1-q5-a-simplify-50-8-b-solve-log-x-2-"
     },
     {
       "questionId": "Q-LONG2",
@@ -1133,11 +1157,11 @@
       "difficulty": "AVERAGE",
       "questionType": "LONG",
       "marks": 8,
-      "questionText": "Q6 — (a) For A={1,2,3,4} and B={3,4,5}, find A∪B and A∩B. (b) If f(x)=x²−1, find f(−3) and f(2).",
-      "answerText": "(a) A∪B={1,2,3,4,5}; A∩B={3,4}. (b) f(−3)=9−1=8; f(2)=4−1=3.",
+      "questionText": "Q6 — (a) For A={1,2,3,4} and B={3,4,5}, find A∪B and A∩B. (b) Factorize x⁴−5x²+4.",
+      "answerText": "(a) A∪B={1,2,3,4,5}; A∩B={3,4}. (b) Put y=x²: y²−5y+4=(y−1)(y−4), so (x²−1)(x²−4)=(x−1)(x+1)(x−2)(x+2).",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "long2-q6-a-for-a-1-2-3-4-and-b-3-4-5-find-a-b-and-a-b-b-if-f-x-x-1-find-f-3-and-f-2-"
+      "semanticFingerprint": "long2-q6-a-for-a-1-2-3-4-and-b-3-4-5-find-a-b-and-a-b-b-factorize-x-5x-4-"
     },
     {
       "questionId": "Q-LONG3",
@@ -1148,11 +1172,11 @@
       "difficulty": "AVERAGE",
       "questionType": "LONG",
       "marks": 8,
-      "questionText": "Q7 — (a) Solve 2(3x−1)=4x+8. (b) Solve 3x+2<14 and represent the solution interval.",
-      "answerText": "(a) 6x−2=4x+8 ⇒ 2x=10 ⇒ x=5. (b) 3x<12 ⇒ x<4; interval (−∞,4).",
+      "questionText": "Q7 — (a) Solve 2x−3≤7 and represent the solution interval. (b) Prove (tanθ+cotθ)²=sec²θ cosec²θ.",
+      "answerText": "(a) 2x≤10, x≤5; interval (−∞,5]. (b) tanθ+cotθ=(sin²θ+cos²θ)/(sinθcosθ)=1/(sinθcosθ); squaring gives sec²θ cosec²θ.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "long3-q7-a-solve-2-3x-1-4x-8-b-solve-3x-2-14-and-represent-the-solution-interval-"
+      "semanticFingerprint": "long3-q7-a-solve-2x-3-7-and-represent-the-solution-interval-b-prove-tan-cot-sec-cosec-"
     },
     {
       "questionId": "Q-LONG4",
@@ -1163,11 +1187,11 @@
       "difficulty": "AVERAGE",
       "questionType": "LONG",
       "marks": 8,
-      "questionText": "Q8 — (a) Find the equation of the line through (0,−2) with slope 4. (b) Determine whether (2,6) lies on this line.",
-      "answerText": "(a) y=mx+c, so y=4x−2. (b) At x=2, y=8−2=6; hence (2,6) lies on the line.",
+      "questionText": "Q8 — (a) Find the distance between A(0,2) and B(3,6), and state the slope of AB. (b) Two similar triangles have corresponding sides 6 cm and 9 cm. If the area of the smaller is 24 cm², find the area of the larger.",
+      "answerText": "(a) Distance=√[(3−0)²+(6−2)²]=5; slope=(6−2)/(3−0)=4/3. (b) Side ratio=2:3, area ratio=4:9; larger area=24×9/4=54 cm².",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "long4-q8-a-find-the-equation-of-the-line-through-0-2-with-slope-4-b-determine-whether-2-6-lies-on-this-line-"
+      "semanticFingerprint": "long4-q8-a-find-the-distance-between-a-0-2-and-b-3-6-and-state-the-slope-of-ab-b-two-similar-triangles-have-corresponding-sides-6-cm-and-9-cm-if-the-area-of-the-smaller-is-24-cm-find-the-area-of-the-larger-"
     },
     {
       "questionId": "Q-LONG5",
@@ -1178,11 +1202,11 @@
       "difficulty": "AVERAGE",
       "questionType": "LONG",
       "marks": 8,
-      "questionText": "Q9 — (a) Explain the construction idea for the perpendicular bisector of AB using equal-radius arcs. (b) Explain why any point on it is equidistant from A and B.",
-      "answerText": "(a) With radius greater than half AB, draw arcs from A and B above and below the segment; join their intersections. (b) The intersection points are each equidistant from A and B, so their joining line is the perpendicular bisector; every point on it is equidistant from A and B.",
+      "questionText": "Q9 — (a) For 4, 6, 6, 8, 10, find mean, median and mode. (b) A bag has 3 red and 2 blue balls. Find the probability of selecting a blue ball.",
+      "answerText": "(a) Mean=34/5=6.8; median=6; mode=6. (b) P(blue)=2/(3+2)=2/5.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "long5-q9-a-explain-the-construction-idea-for-the-perpendicular-bisector-of-ab-using-equal-radius-arcs-b-explain-why-any-point-on-it-is-equidistant-from-a-and-b-"
+      "semanticFingerprint": "long5-q9-a-for-4-6-6-8-10-find-mean-median-and-mode-b-a-bag-has-3-red-and-2-blue-balls-find-the-probability-of-selecting-a-blue-ball-"
     }
   ]
 }
