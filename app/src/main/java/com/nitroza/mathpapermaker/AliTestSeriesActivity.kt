@@ -429,7 +429,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 Text("CHAPTER: $questionChapter")
                             }
                             DropdownMenu(expanded = chapterMenuExpanded, onDismissRequest = { chapterMenuExpanded = false }) {
-                                (1..if (grade == 9) 13 else 12).forEach { chapter ->
+                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
                                     DropdownMenuItem(text = { Text("CH$chapter") }, onClick = {
                                         questionChapter = "CH$chapter"
                                         chapterMenuExpanded = false
