@@ -165,7 +165,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         file.isFile &&
                             (file.name.startsWith("ali-import-class") ||
                                 file.name.startsWith("ali-bundled-class")) &&
-                            file.extension.equals("pdf", ignoreCase = true)
+                            file.extension.equals("pdf", ignoreCase = true) &&
+                            System.currentTimeMillis() - file.lastModified() > 24L * 60L * 60L * 1000L
                     }
                     ?.forEach { it.delete() }
             }
