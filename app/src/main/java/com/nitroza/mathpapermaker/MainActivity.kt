@@ -53,6 +53,8 @@ class MainActivity : ComponentActivity() {
         var subject by remember { mutableStateOf("Mathematics") }
         var session by remember { mutableStateOf("2026-27") }
         var mode by remember { mutableStateOf(GenerationMode.PRACTICE) }
+        var availableChapters by remember { mutableStateOf<List<String>>(emptyList()) }
+        var selectedChapters by remember { mutableStateOf<Set<String>>(emptySet()) }
         var notice by remember { mutableStateOf("Loading bundled offline content…") }
         var questionCount by remember { mutableIntStateOf(0) }
         var patternCount by remember { mutableIntStateOf(0) }
@@ -82,6 +84,13 @@ class MainActivity : ComponentActivity() {
         var pendingPatterns by remember { mutableStateOf<List<PaperPatternEntity>>(emptyList()) }
         var pendingQuestions by remember { mutableStateOf<List<QuestionEntity>>(emptyList()) }
         var reviewHistory by remember { mutableStateOf<List<ReviewAuditEntity>>(emptyList()) }
+
+        LaunchedEffect(board, grade, stream, subject, session) {
+            val rows = runCatching { database.contentDao().findQuestions(board, grade, stream, subject, session) }.getOrDefault(emptyList())
+            val chapters = rows.map { it.chapterId }.filter { it.isNotBlank() }.distinct().sorted()
+            availableChapters = chapters
+            selectedChapters = chapters.toSet()
+        }
 
         val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             if (uri != null) lifecycleScope.launch {
@@ -461,6 +470,32 @@ class MainActivity : ComponentActivity() {
                     OutlinedTextField(session, { session = it }, label = { Text("Exam session (e.g. 2026-27)") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
                     ChoiceField("Generation mode", listOf("PRACTICE", "OFFICIAL"), mode.name) { mode = GenerationMode.valueOf(it) }
                     Card {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text("CHAPTERS TO INCLUDE", style = MaterialTheme.typography.titleMedium)
+                            Text("Only questions from checked chapters can be selected. The chosen board's pattern and marks distribution stay unchanged.", style = MaterialTheme.typography.bodySmall)
+                            if (availableChapters.isEmpty()) {
+                                Text("No chapter data is available for this exact board, class, subject and session yet.", style = MaterialTheme.typography.bodySmall)
+                            } else {
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                    Text("${selectedChapters.size} of ${availableChapters.size} selected", style = MaterialTheme.typography.labelMedium)
+                                    TextButton(onClick = { selectedChapters = availableChapters.toSet() }) { Text("ALL") }
+                                    TextButton(onClick = { selectedChapters = emptySet() }) { Text("NONE") }
+                                }
+                                availableChapters.forEach { chapterId ->
+                                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                        Checkbox(
+                                            checked = chapterId in selectedChapters,
+                                            onCheckedChange = { checked ->
+                                                selectedChapters = if (checked) selectedChapters + chapterId else selectedChapters - chapterId
+                                            }
+                                        )
+                                        Text(chapterId, modifier = Modifier.weight(1f))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Card {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text("ON-DEVICE CONTENT", style = MaterialTheme.typography.titleMedium)
                             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("Question records"); Text(questionCount.toString(), color = MaterialTheme.colorScheme.primary) }
@@ -479,12 +514,14 @@ class MainActivity : ComponentActivity() {
                             if (mode == GenerationMode.OFFICIAL && (pattern.verificationStatus != "VERIFIED_OFFICIAL" || source?.verificationStatus != "VERIFIED_OFFICIAL")) {
                                 notice = "Official generation blocked: pattern/source has not been independently verified. Choose Practice mode or complete content review."; return@launch
                             }
+                            if (selectedChapters.isEmpty()) { notice = "Select at least one chapter before generating the paper."; return@launch }
                             val questionRows = dao.findQuestions(board, grade, stream, subject, session)
+                            if (questionRows.isEmpty()) { notice = "No questions exist for this exact board, class, stream, subject and session."; return@launch }
                             val syllabusExclusions = dao.findSyllabusExclusions(pattern.patternId)
                             val excludedChapters = syllabusExclusions.filter { it.exclusionType == "CHAPTER" }.map { it.value }.toSet()
                             val excludedSlos = syllabusExclusions.filter { it.exclusionType == "SLO" }.map { it.value }.toSet()
                             val eligibleQuestionRows = questionRows.filter { q ->
-                                q.chapterId !in excludedChapters && q.sloId !in excludedSlos
+                                q.chapterId in selectedChapters && q.chapterId !in excludedChapters && q.sloId !in excludedSlos
                             }
                             val excludedQuestionCount = questionRows.size - eligibleQuestionRows.size
                             val candidates = eligibleQuestionRows.map { q ->
@@ -493,6 +530,7 @@ class MainActivity : ComponentActivity() {
                             }
                             if (eligibleQuestionRows.isEmpty()) { notice = "Generation blocked: all local questions are excluded by this pattern's syllabus rules."; return@launch }
                             val storedSlots = dao.findSlots(pattern.patternId)
+                            if (storedSlots.isEmpty()) { notice = "The selected board pattern has no configured question slots."; return@launch }
                             val storedGroups = dao.findChoiceGroups(pattern.patternId)
                             val storedQuotas = dao.findPatternQuotas(pattern.patternId)
                             val seed = System.currentTimeMillis()
