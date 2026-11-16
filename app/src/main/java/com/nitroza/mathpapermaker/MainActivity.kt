@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.data.AppDatabase
 import com.nitroza.mathpapermaker.data.PackageImporter
 import com.nitroza.mathpapermaker.data.BundledBookPdfReader
+import com.nitroza.mathpapermaker.data.BundledBookManifestReader
 import com.nitroza.mathpapermaker.data.TextbookExerciseParser
 import com.nitroza.mathpapermaker.data.SavedPaperDraftEntity
 import com.nitroza.mathpapermaker.data.QuestionSourceEntity
@@ -93,7 +94,12 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(board, grade, stream, subject, session) {
             val rows = runCatching { database.contentDao().findQuestions(board, grade, stream, subject, session) }.getOrDefault(emptyList())
-            val chapters = rows.map { it.chapterId }.filter { it.isNotBlank() }.distinct().sorted()
+            val questionChapters = rows.map { it.chapterId }.filter { it.isNotBlank() }
+            val bookChapters = runCatching {
+                BundledBookManifestReader.chaptersFor(this@MainActivity, board, grade, stream, subject, session)
+                    .map { it.id }
+            }.getOrDefault(emptyList())
+            val chapters = (questionChapters + bookChapters).distinct().sorted()
             availableChapters = chapters
             selectedChapters = chapters.toSet()
         }
@@ -108,7 +114,12 @@ class MainActivity : ComponentActivity() {
                     questionCount = database.contentDao().questionCount()
                     patternCount = database.contentDao().patternCount()
                     val refreshedRows = database.contentDao().findQuestions(board, grade, stream, subject, session)
-                    availableChapters = refreshedRows.map { it.chapterId }.filter { it.isNotBlank() }.distinct().sorted()
+                    val questionChapters = refreshedRows.map { it.chapterId }.filter { it.isNotBlank() }
+                    val bookChapters = runCatching {
+                        BundledBookManifestReader.chaptersFor(this@MainActivity, board, grade, stream, subject, session)
+                            .map { it.id }
+                    }.getOrDefault(emptyList())
+                    availableChapters = (questionChapters + bookChapters).distinct().sorted()
                     selectedChapters = availableChapters.toSet()
                     "Imported ${parsed.questions.size} questions. Package content is marked NEEDS_REVIEW; it cannot be used for an official paper until independently verified." +
                         if (parsed.warnings.isEmpty()) "" else " Review warnings: ${parsed.warnings.joinToString(" ")}"
