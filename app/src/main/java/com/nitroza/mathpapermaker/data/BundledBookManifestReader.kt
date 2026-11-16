@@ -62,55 +62,55 @@ object BundledBookManifestReader {
         val json = JSONObject(rawJson)
         require(json.optInt("manifestVersion", -1) == 1) { "Unsupported textbook manifest version." }
         val books = json.optJSONArray("books") ?: return emptyList()
-        val chapters = mutableListOf<Chapter>()
-
-        for (index in 0 until books.length()) {
-            val item = books.optJSONObject(index) ?: continue
-            val file = item.optString("file")
-            if (file !in bundledPdfs) continue
-            if (item.optString("board") != board ||
-                item.optInt("grade", -1) != grade ||
-                item.optString("stream") != stream ||
-                item.optString("subject") != subject ||
-                item.optString("session") != session
-            ) continue
-
-            // A publicly downloadable PDF is not automatically licensed for redistribution.
-            if (item.optString("licenseOrPermission") != "REDISTRIBUTION_CONFIRMED") continue
-            if (item.optString("edition").isBlank() ||
-                item.optString("language").isBlank() ||
-                item.optString("publisher").isBlank() ||
-                !item.optString("sourceUrl").startsWith("https://")
-            ) continue
-            val declaredPageCount = item.optInt("pageCount", -1)
-            if (declaredPageCount < 1) continue
-            val declaredHash = item.optString("sha256").lowercase()
-            if (!declaredHash.matches(Regex("[0-9a-f]{64}")) ||
-                actualSha256[file]?.lowercase() != declaredHash
-            ) continue
-
-            val chapterArray = item.optJSONArray("chapters") ?: continue
-            val bookChapters = mutableListOf<Chapter>()
-            for (chapterIndex in 0 until chapterArray.length()) {
-                val chapter = chapterArray.optJSONObject(chapterIndex) ?: continue
-                val id = chapter.optString("chapterId").trim()
-                val title = chapter.optString("title").trim()
-                val start = chapter.optInt("startPage", -1)
-                val end = chapter.optInt("endPage", -1)
-                if (id.isBlank() || title.isBlank() || start < 1 || end < start || end > declaredPageCount) continue
-                bookChapters += Chapter(id, title, start, end)
+        // A single board/class/subject/session must resolve to exactly one PDF.
+        // Merging two matching records can silently combine unrelated chapter maps.
+        val matchingBooks = (0 until books.length()).mapNotNull { books.optJSONObject(it) }
+            .filter { item ->
+                item.optString("board") == board &&
+                    item.optInt("grade", -1) == grade &&
+                    item.optString("stream") == stream &&
+                    item.optString("subject") == subject &&
+                    item.optString("session") == session
             }
+        if (matchingBooks.size != 1) return emptyList()
+        val item = matchingBooks.single()
+        val file = item.optString("file")
+        if (file !in bundledPdfs) return emptyList()
 
-            // Ambiguous ranges can silently assign a question to the wrong chapter.
-            // Reject this book's chapter map instead of choosing whichever range appears first.
-            val orderedRanges = bookChapters.sortedBy { it.startPage }
-            val hasDuplicateIds = bookChapters.map { it.id }.distinct().size != bookChapters.size
-            val hasOverlaps = orderedRanges.zipWithNext().any { (first, second) ->
-                second.startPage <= first.endPage
-            }
-            if (hasDuplicateIds || hasOverlaps || bookChapters.isEmpty()) continue
-            chapters += bookChapters
+        // A publicly downloadable PDF is not automatically licensed for redistribution.
+        if (item.optString("licenseOrPermission") != "REDISTRIBUTION_CONFIRMED") return emptyList()
+        if (item.optString("edition").isBlank() ||
+            item.optString("language").isBlank() ||
+            item.optString("publisher").isBlank() ||
+            !item.optString("sourceUrl").startsWith("https://")
+        ) return emptyList()
+        val declaredPageCount = item.optInt("pageCount", -1)
+        if (declaredPageCount < 1) return emptyList()
+        val declaredHash = item.optString("sha256").lowercase()
+        if (!declaredHash.matches(Regex("[0-9a-f]{64}")) ||
+            actualSha256[file]?.lowercase() != declaredHash
+        ) return emptyList()
+
+        val chapterArray = item.optJSONArray("chapters") ?: return emptyList()
+        val bookChapters = mutableListOf<Chapter>()
+        for (chapterIndex in 0 until chapterArray.length()) {
+            val chapter = chapterArray.optJSONObject(chapterIndex) ?: continue
+            val id = chapter.optString("chapterId").trim()
+            val title = chapter.optString("title").trim()
+            val start = chapter.optInt("startPage", -1)
+            val end = chapter.optInt("endPage", -1)
+            if (id.isBlank() || title.isBlank() || start < 1 || end < start || end > declaredPageCount) continue
+            bookChapters += Chapter(id, title, start, end)
         }
-        return chapters.distinctBy { it.id }.sortedBy { it.id.toIntOrNull() ?: Int.MAX_VALUE }
+
+        // Ambiguous ranges can silently assign a question to the wrong chapter.
+        // Reject the chapter map instead of choosing whichever range appears first.
+        val orderedRanges = bookChapters.sortedBy { it.startPage }
+        val hasDuplicateIds = bookChapters.map { it.id }.distinct().size != bookChapters.size
+        val hasOverlaps = orderedRanges.zipWithNext().any { (first, second) ->
+            second.startPage <= first.endPage
+        }
+        if (hasDuplicateIds || hasOverlaps || bookChapters.isEmpty()) return emptyList()
+        return bookChapters.sortedBy { it.id.toIntOrNull() ?: Int.MAX_VALUE }
     }
 }
