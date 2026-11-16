@@ -26,7 +26,8 @@ object BundledBookPdfReader {
         val bookFile: String,
         val pageCount: Int,
         val pages: List<PageText>,
-        val pagesNeedingOcr: List<Int>
+        val pagesNeedingOcr: List<Int>,
+        val readError: String? = null
     )
 
     suspend fun readAll(context: Context): List<BookIndex> = withContext(Dispatchers.IO) {
@@ -38,27 +39,38 @@ object BundledBookPdfReader {
             .sorted()
 
         bookFiles.map { fileName ->
-            assetManager.open("books/$fileName").use { input ->
-                PDDocument.load(input).use { document ->
-                    val stripper = PDFTextStripper().apply { sortByPosition = true }
-                    val pages = (1..document.numberOfPages).map { pageNumber ->
-                        stripper.startPage = pageNumber
-                        stripper.endPage = pageNumber
-                        val extracted = stripper.getText(document).trim()
-                        PageText(
+            runCatching {
+                assetManager.open("books/$fileName").use { input ->
+                    PDDocument.load(input).use { document ->
+                        val stripper = PDFTextStripper().apply { sortByPosition = true }
+                        val pages = (1..document.numberOfPages).map { pageNumber ->
+                            stripper.startPage = pageNumber
+                            stripper.endPage = pageNumber
+                            val extracted = stripper.getText(document).trim()
+                            PageText(
+                                bookFile = fileName,
+                                pageNumber = pageNumber,
+                                text = extracted,
+                                needsOcr = extracted.length < MIN_TEXT_CHARACTERS
+                            )
+                        }
+                        BookIndex(
                             bookFile = fileName,
-                            pageNumber = pageNumber,
-                            text = extracted,
-                            needsOcr = extracted.length < MIN_TEXT_CHARACTERS
+                            pageCount = document.numberOfPages,
+                            pages = pages,
+                            pagesNeedingOcr = pages.filter { it.needsOcr }.map { it.pageNumber }
                         )
                     }
-                    BookIndex(
-                        bookFile = fileName,
-                        pageCount = document.numberOfPages,
-                        pages = pages,
-                        pagesNeedingOcr = pages.filter { it.needsOcr }.map { it.pageNumber }
-                    )
                 }
+            }.getOrElse { error ->
+                // One damaged/unsupported PDF must not prevent other bundled books from loading.
+                BookIndex(
+                    bookFile = fileName,
+                    pageCount = 0,
+                    pages = emptyList(),
+                    pagesNeedingOcr = emptyList(),
+                    readError = error.message?.take(180) ?: error::class.java.simpleName
+                )
             }
         }
     }
