@@ -236,11 +236,11 @@ class AliTestSeriesActivity : ComponentActivity() {
             val file = pdfFile ?: return@LaunchedEffect
             cropRect = null
             pageBitmap = null
-            pageBitmap = withContext(Dispatchers.IO) {
+            val renderedPage = withContext(Dispatchers.IO) {
                 runCatching {
                     ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
                         PdfRenderer(descriptor).use { renderer ->
-                            require(pageIndex in 0 until renderer.pageCount)
+                            require(pageIndex in 0 until renderer.pageCount) { "PDF page is out of range." }
                             renderer.openPage(pageIndex).use { page ->
                                 val width = 1400
                                 val height = (width.toFloat() * page.height / page.width).toInt().coerceAtLeast(1)
@@ -250,7 +250,11 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                         }
                     }
-                }.getOrNull()
+                }
+            }
+            pageBitmap = renderedPage.getOrNull()
+            renderedPage.exceptionOrNull()?.let { error ->
+                notice = "Could not render PDF page: ${error.message ?: "unknown error"}"
             }
         }
 
