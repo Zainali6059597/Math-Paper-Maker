@@ -139,6 +139,12 @@ class CompositePatternEngineTest {
         )
         val result = CompositePatternEngine.generate(pattern, bank, GenerationMode.OFFICIAL, 9)
         assertTrue(result is CompositeSelectionResult.Blocked)
-        assertEquals("NO_CANDIDATE_FOR_SLOT", (result as CompositeSelectionResult.Blocked).code)
+        assertEquals("QUOTA_UNSATISFIABLE", (result as CompositeSelectionResult.Blocked).code)
+        val validBank = listOf(
+            QuestionCandidate("Q2-ONLY", identity, "CH1", "S", "SHORT", 1, true, ContentStatus.VERIFIED_OFFICIAL),
+            QuestionCandidate("Q3-ONLY", identity, "CH2", "S", "SHORT", 1, true, ContentStatus.VERIFIED_OFFICIAL)
+        )
+        val valid = CompositePatternEngine.generate(pattern, validBank, GenerationMode.OFFICIAL, 9)
+        assertTrue(valid is CompositeSelectionResult.Success)
     }
 }
