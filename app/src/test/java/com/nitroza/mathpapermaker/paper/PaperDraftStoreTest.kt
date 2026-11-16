@@ -80,6 +80,22 @@ class PaperDraftStoreTest {
         assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
     }
 
+
+    @Test fun tooManyQuestionsAreRejected() {
+        val questions = Array(53) { index -> question(id = index + 1L) }
+        assertNull(PaperDraftStore.parseSnapshot(draft(*questions), filesDir))
+    }
+
+    @Test fun invalidSectionIdentifierIsRejected() {
+        val invalid = question().put("sectionId", "Q10")
+        assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
+    }
+
+    @Test fun oversizedQuestionTextIsRejected() {
+        val invalid = question().put("text", "x".repeat(100_001))
+        assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
+    }
+
     @Test fun imagePathOutsideAppOwnedFolderIsRejected() {
         val outside = File(filesDir, "not-question-images/ali_question_1.png").absolutePath
         assertNull(PaperDraftStore.parseSnapshot(draft(question(imageFile = outside)), filesDir))
