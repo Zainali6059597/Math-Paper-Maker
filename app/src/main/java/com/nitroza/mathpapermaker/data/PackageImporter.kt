@@ -90,6 +90,10 @@ object PackageImporter {
         }
         require(quotas.all { it.dimension in setOf("CHAPTER", "SLO", "COGNITIVE_LEVEL", "DIFFICULTY", "CHAPTER_IN_GROUP") && it.value.isNotBlank() && it.minimum >= 0 && it.maximum >= it.minimum && it.maximum <= slots.size }) { "Invalid pattern metadata quota." }
         require(quotas.all { it.dimension != "CHAPTER_IN_GROUP" || it.value.matches(Regex("[A-Za-z0-9_-]+\\|CH[0-9]+")) }) { "Group-scoped chapter quotas must use GROUP_ID|CHAPTER_ID values." }
+        require(quotas.filter { it.dimension == "CHAPTER_IN_GROUP" }.all { quota ->
+            val groupId = quota.value.substringBefore("|")
+            choiceGroups.any { it.groupId == groupId }
+        }) { "Every group-scoped chapter quota must reference a declared choice group." }
         require(quotas.map { it.dimension to it.value }.distinct().size == quotas.size) { "Duplicate pattern metadata quota." }
         val exclusionsJson = patternJson.optJSONArray("exclusions")
         val exclusions = if (exclusionsJson == null) emptyList() else (0 until exclusionsJson.length()).map { i ->
