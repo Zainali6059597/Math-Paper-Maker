@@ -805,7 +805,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                     TextButton(enabled = (questionText.text.isNotBlank() || pendingImageFile != null) &&
                         normalizedNumber.isNotBlank() && !duplicateNumber &&
-                        PunjabBoardPattern.isValidChapter(grade, questionChapter) &&
+                        PunjabBoardPattern.isValidChapter(grade, questionChapter) && questionChapter in selectedChapters &&
                         questionMarks.toIntOrNull() == requiredMarks && !atKindLimit, onClick = {
                         selected = selected + SelectedQuestion(
                             nextId++, questionNumber.trim(), selectedQuestionText(questionText), questionKind,
@@ -828,7 +828,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         if (showDetectedQuestions) {
             val maxForKind = when (detectedQuestionKind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
             val alreadySelected = selected.count { it.kind == detectedQuestionKind }
-            val allChaptersSelected = selectedChapters.size == if (grade == 9) 13 else 12
+            val allChaptersSelected = selectedChapters.size == (if (grade == 9) 13 else 12)
             val chapterReady = if (allChaptersSelected && paperMode == "CUSTOM") true
                 else PunjabBoardPattern.isValidChapter(grade, detectedQuestionChapter) && detectedQuestionChapter in selectedChapters
             val canAddChecked = checkedDetectedQuestions.isNotEmpty() && chapterReady &&
@@ -982,7 +982,7 @@ class AliTestSeriesActivity : ComponentActivity() {
             val missingImageCount = selected.count { item ->
                 item.imageFile != null && !File(item.imageFile).isFile
             }
-            val allChaptersSelected = selectedChapters.size == if (grade == 9) 13 else 12
+            val allChaptersSelected = selectedChapters.size == (if (grade == 9) 13 else 12)
             val questionsInChapterScope = allChaptersSelected || selected.all { it.chapterId in selectedChapters }
             val boardReady = paperMode != "BOARD" || (allChaptersSelected && PunjabBoardPattern.isComplete(grade, paperQuestions))
             AlertDialog(
