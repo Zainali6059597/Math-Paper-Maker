@@ -41,14 +41,18 @@ object TextbookExerciseParser {
                 if (exerciseMatch != null) {
                     flush(); exercise = exerciseMatch.groupValues[1]; continue
                 }
-                val questionMatch = questionPattern.matchEntire(line)
+                val questionMatch = questionStartPattern.matchEntire(line)
                 if (questionMatch != null && exercise != "UNMAPPED") {
                     flush()
-                    current = MutableCandidate(chapter, exercise, questionMatch.groupValues[1],
-                        page.pageNumber, mutableListOf(questionMatch.groupValues[2]))
+                    val firstLine = questionMatch.groupValues.getOrNull(2).orEmpty().trim()
+                    current = MutableCandidate(
+                        chapter, exercise, questionMatch.groupValues[1],
+                        page.pageNumber, mutableListOf<String>().apply {
+                            if (firstLine.isNotBlank()) add(firstLine)
+                        }
+                    )
                 } else if (current != null && line.length < 240 &&
-                    !questionPattern.matches(line) && !chapterPattern.matches(line) &&
-                    !exercisePattern.matches(line)
+                    !chapterPattern.matches(line) && !exercisePattern.matches(line)
                 ) current!!.lines += line
             }
             flush()
