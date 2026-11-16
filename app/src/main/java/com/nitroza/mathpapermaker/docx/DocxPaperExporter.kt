@@ -24,7 +24,7 @@ object DocxPaperExporter {
         questions: List<PaperQuestion>
     ) {
         require(grade == 9 || grade == 10) { "Choose Class 9 or Class 10." }
-        require(PunjabBoardPattern.isComplete(questions)) {
+        require(PunjabBoardPattern.isComplete(grade, questions)) {
             "The Punjab Board pattern needs 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts, with unique numbering."
         }
         questions.filter { it.imageFile != null }.forEach {
