@@ -27,6 +27,8 @@ interface LocalContentDao {
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertPatterns(items: List<PaperPatternEntity>)
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertSlots(items: List<PatternSlotEntity>)
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertChoiceGroups(items: List<ChoiceGroupEntity>)
+    @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertBundleChoiceGroups(items: List<BundleChoiceGroupEntity>)
+    @Query("SELECT * FROM bundle_choice_groups WHERE patternId=:patternId ORDER BY displayOrder, groupId") suspend fun findBundleChoiceGroups(patternId: String): List<BundleChoiceGroupEntity>
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertPatternQuotas(items: List<PatternQuotaEntity>)
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertSyllabusExclusions(items: List<SyllabusExclusionEntity>)
     @Query("SELECT * FROM syllabus_exclusions WHERE patternId=:patternId ORDER BY exclusionType, value") suspend fun findSyllabusExclusions(patternId: String): List<SyllabusExclusionEntity>
@@ -72,8 +74,8 @@ interface LocalContentDao {
 }
 
 @Database(
-    entities = [QuestionSourceEntity::class, QuestionEntity::class, PaperPatternEntity::class, PatternSlotEntity::class, ChoiceGroupEntity::class, SavedPaperDraftEntity::class, ReviewAuditEntity::class, PatternQuotaEntity::class, SyllabusExclusionEntity::class, TextbookCandidateEntity::class],
-    version = 10,
+    entities = [QuestionSourceEntity::class, QuestionEntity::class, PaperPatternEntity::class, PatternSlotEntity::class, ChoiceGroupEntity::class, SavedPaperDraftEntity::class, ReviewAuditEntity::class, PatternQuotaEntity::class, SyllabusExclusionEntity::class, TextbookCandidateEntity::class, BundleChoiceGroupEntity::class],
+    version = 11,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -135,10 +137,17 @@ abstract class AppDatabase : RoomDatabase() {
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_textbook_candidates_bookFile_chapterId_exerciseId ON textbook_candidates(bookFile, chapterId, exerciseId)")
             }
         }
+        private val MIGRATION_10_11 = object : Migration(10, 11) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE pattern_slots ADD COLUMN bundleChoiceGroupId TEXT")
+                db.execSQL("CREATE TABLE IF NOT EXISTS bundle_choice_groups (patternId TEXT NOT NULL, groupId TEXT NOT NULL, offeredBundleCount INTEGER NOT NULL, attemptBundleCount INTEGER NOT NULL, marksPerBundle INTEGER NOT NULL, bundleIdsJson TEXT NOT NULL, displayOrder INTEGER NOT NULL, PRIMARY KEY(patternId, groupId), FOREIGN KEY(patternId) REFERENCES paper_patterns(patternId) ON UPDATE NO ACTION ON DELETE RESTRICT)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_bundle_choice_groups_patternId ON bundle_choice_groups(patternId)")
+            }
+        }
         @Volatile private var INSTANCE: AppDatabase? = null
         fun get(context: Context): AppDatabase = INSTANCE ?: synchronized(this) {
             INSTANCE ?: Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "maths-paper-maker.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10).build().also { INSTANCE = it }
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11).build().also { INSTANCE = it }
         }
     }
 }
@@ -150,7 +159,8 @@ suspend fun AppDatabase.importPackage(
     questions: List<QuestionEntity>,
     choiceGroups: List<ChoiceGroupEntity> = emptyList(),
     quotas: List<PatternQuotaEntity> = emptyList(),
-    exclusions: List<SyllabusExclusionEntity> = emptyList()
+    exclusions: List<SyllabusExclusionEntity> = emptyList(),
+    bundleChoiceGroups: List<BundleChoiceGroupEntity> = emptyList()
 ) = withTransaction {
     require(slots.isNotEmpty()) { "Pattern has no slots." }
     require(questions.isNotEmpty()) { "Question bank is empty." }
