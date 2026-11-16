@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         var subject by remember { mutableStateOf("Mathematics") }
         var session by remember { mutableStateOf("2026-27") }
         var mode by remember { mutableStateOf(GenerationMode.PRACTICE) }
-        var notice by remember { mutableStateOf("Import a locally prepared content package to begin. No internet connection is used.") }
+        var notice by remember { mutableStateOf("Loading bundled offline content…") }
         var questionCount by remember { mutableIntStateOf(0) }
         var patternCount by remember { mutableIntStateOf(0) }
         var draft by remember { mutableStateOf<List<PaperPdfExporter.Item>>(emptyList()) }
@@ -111,10 +111,38 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(Unit) {
             runCatching {
+                // Bundled JSON packs are imported on first launch, so the core
+                // question bank can ship inside the APK without network access.
+                val bundledFiles = assets.list("content-packs")
+                    ?.filter { it.endsWith(".json", ignoreCase = true) }
+                    .orEmpty()
+                var loadedPackages = 0
+                var loadedQuestions = 0
+                for (fileName in bundledFiles) {
+                    val raw = assets.open("content-packs/$fileName")
+                        .bufferedReader()
+                        .use { it.readText() }
+                    val parsed = PackageImporter.parse(raw)
+                    // Avoid duplicate-key failures when the app is opened again.
+                    if (database.contentDao().findPatternById(parsed.pattern.patternId) == null) {
+                        database.importPackage(
+                            parsed.source, parsed.pattern, parsed.slots, parsed.questions,
+                            parsed.choiceGroups, parsed.quotas, parsed.exclusions
+                        )
+                        loadedPackages++
+                        loadedQuestions += parsed.questions.size
+                    }
+                }
                 questionCount = database.contentDao().questionCount()
                 patternCount = database.contentDao().patternCount()
                 savedDrafts = database.contentDao().listDrafts()
-            }.onFailure { notice = "Local database could not be opened: ${it.message}" }
+                notice = when {
+                    loadedPackages > 0 -> "Loaded $loadedPackages bundled offline package(s) and $loadedQuestions questions. Content is NEEDS_REVIEW until independently checked."
+                    bundledFiles.isNotEmpty() -> "Bundled offline content is already loaded. Content remains local; no internet is used."
+                    questionCount > 0 -> "Local question bank ready. No internet connection is used."
+                    else -> "No bundled content packs are present yet. The app is offline, but its question bank is empty; do not generate a paper until verified packs are bundled."
+                }
+            }.onFailure { notice = "Local database or bundled content error: ${it.message}" }
         }
 
         var screen by remember { mutableStateOf("home") }
