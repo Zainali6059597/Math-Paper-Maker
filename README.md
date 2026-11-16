@@ -1,55 +1,57 @@
 # Ali Test Series
 
-**Android-only, offline-first Punjab Board Mathematics paper preparation app.**
+**Native Android · Offline-first · Class 9 & 10 Punjab Board Mathematics**
 
-Ali Test Series lets a teacher manually choose questions from Class 9 or Class 10 Mathematics PDFs, review and reorder them, edit paper numbering, and export a printable Microsoft Word document.
+Ali Test Series lets a teacher manually select questions from a local Mathematics textbook PDF, arrange them into a Punjab Board paper, and export a printable Word document.
 
-## Locked product scope
+## What is implemented
 
-- Class 9 and Class 10 Mathematics.
-- PDF reader with page navigation.
-- Manual text selection for text-based PDFs.
-- Manual rectangle crop selection for scanned PDFs.
-- Selected-question review, reorder, remove and editable numbering.
-- Punjab Board paper counts, marks and section instructions.
-- Genuine DOCX export: extracted text remains editable and scanned question crops are embedded as images.
-- Offline core workflow; no account or cloud backend.
+- Choose Class 9 or Class 10 and open a PDF from device storage.
+- Navigate PDF pages.
+- Select text from text-based PDFs or draw a crop around a scanned question.
+- Edit question text, numbering, chapter, question type and marks.
+- Review, reorder and remove selected questions.
+- Automatically save the working paper locally and restore it on the next launch.
+- Validate Punjab Board 2026–27 counts, marks, chapter distribution, section membership and long-question pairings.
+- Export DOCX with editable extracted text and embedded PNGs for scanned questions.
+- No account, cloud backend or INTERNET permission.
 
-**Explicitly excluded:** AI question generation, automatic question selection, automatic paper generation and template builder.
+## Locked scope
 
-## Current implementation checkpoint
-
-Implemented in source:
-- New AliTestSeriesActivity is the launcher screen.
-- Class selection and local PDF opening through Android's document picker.
-- Local PDF rendering and page navigation.
-- PDFBox text extraction for the current page; teacher can long-press and select the exact question text using selection handles.
-- Local draft persistence; scanned crops are stored in app-private files.
-- Bundled textbook loading and page-to-chapter auto-fill are enabled when the actual PDFs and a valid, permission-confirmed SHA-256 manifest are supplied.
-- Drag-to-select crop for scanned/image pages.
-- Question list with remove, reorder and editable question labels.
-- Class-specific Punjab Board 2026–27 MCQ chapter distribution, short-section chapter distribution, and long-question chapter pairing validation, alongside the 15 × 1-mark MCQ, 27 × 2-mark short and 10 × 4-mark long-part counts (109 offered marks; 75 attempted marks). Teachers choose chapter IDs from a class-specific picker; verified bundled books can prefill them from page ranges.
-- OOXML DOCX writer with editable text and embedded PNG question crops.
-- Pattern rule unit tests added, including grade-specific chapter limits and manual numbering independent of section membership.
-
-Not yet verified:
-- Android Gradle/KSP/Compose build after the new app entry point.
-- Actual Word document opening/printing in Microsoft Word and compatible office apps.
-- Real Class 9 and Class 10 PDFs, chapter-aware slot mapping, and bundled offline book loading.
-- Physical-device memory/performance and scanned crop quality.
+Manual question selection only. No AI question generation, automatic question selection, automatic paper generation or template builder.
 
 ## Repository layout
 
-- AliTestSeriesActivity.kt — new manual workflow.
-- PunjabBoardPattern.kt — offered/attempted paper structure.
-- DocxPaperExporter.kt — Word document generation.
-- app/src/main/assets/books/ — reserved for licensed textbook PDFs once supplied.
-- docs/ALI_TEST_SERIES_SCOPE.md — locked scope and exclusions.
+- `app/src/main/java/com/nitroza/mathpapermaker/AliTestSeriesActivity.kt` — primary app workflow and launcher.
+- `paper/PunjabBoardPattern.kt` — paper structure and validation.
+- `paper/PaperDraftStore.kt` — local draft save/restore.
+- `docx/DocxPaperExporter.kt` — Word document export.
+- `app/src/test/` — unit tests.
+- `.github/workflows/unit-tests-only.yml` — CI tests without APK assembly.
+- `.github/workflows/android.yml` — manual test + APK build workflow.
 
-## Technical foundation
+## Current verification
 
-Kotlin, Jetpack Compose, Android PdfRenderer, PDFBox Android, local file storage and a small OOXML/ZIP DOCX writer. The app does not require an online backend.
+The test-only GitHub Actions run for source commit `e3ff9412d4c65aa38d7abcb252cf64e353159113` passed. The current verified suite contains 102 unit tests, and the offline manifest check passed. Documentation updates are also being checked by CI.
 
-## Textbook licensing
+This does not claim physical-device acceptance or visual verification of DOCX files in Microsoft Word. Those checks require an Android phone and an office app.
 
-Only bundle PDFs when their redistribution permission is confirmed. A publicly downloadable textbook is not automatically licensed for redistribution inside an app.
+## Build the debug APK
+
+1. Open the repository's **Actions** tab.
+2. Select **Test and Build Ali Test Series**.
+3. Choose **Run workflow** on `main`.
+4. Wait for tests and APK assembly to pass.
+5. Download the `maths-paper-maker-debug-apk` artifact.
+
+The workflow runs tests before assembling the APK. No signing key is needed for a debug APK.
+
+## Textbook files and licensing
+
+The official Class 9 and Class 10 PDFs are not bundled. Open the correct textbook PDF from the phone. Chapter labels are selected manually for imported PDFs. Automatic page-to-chapter mapping is enabled only when a licensed textbook and verified page manifest are supplied. Public availability does not automatically grant redistribution rights.
+
+## Known limitations before release
+
+- Real-phone testing is still needed for PDF rendering/cropping, large-file memory use, draft restoration and airplane-mode behaviour.
+- DOCX must be opened and visually inspected in Word or a compatible office app.
+- Complex Urdu shaping, embedded-font guarantees and advanced equation/diagram reconstruction are not guaranteed.
