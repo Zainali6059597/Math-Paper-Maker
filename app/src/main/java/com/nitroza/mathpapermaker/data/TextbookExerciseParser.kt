@@ -20,7 +20,7 @@ object TextbookExerciseParser {
         var current: MutableCandidate? = null
         fun flush() {
             current?.let { item ->
-                val text = item.lines.joinToString(" ").replace(Regex("\s+"), " ").trim()
+                val text = item.lines.joinToString(" ").replace(Regex("""\s+"""), " ").trim()
                 if (text.length >= 8) candidates += Candidate(
                     book.bookFile, item.chapter, item.exercise, item.number, text, item.page
                 )
