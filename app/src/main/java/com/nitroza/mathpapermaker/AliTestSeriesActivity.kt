@@ -518,7 +518,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                 copy[index] = next
                                                 selected = copy
                                             }) { Text("DOWN") }
-                                            TextButton(onClick = { selected = selected.filterNot { it.id == item.id } }) { Text("REMOVE") }
+                                            TextButton(onClick = {
+                                                item.imageFile?.let { File(it).delete() }
+                                                selected = selected.filterNot { it.id == item.id }
+                                            }) { Text("REMOVE") }
                                         }
                                     }
                                 }
@@ -548,6 +551,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 text = { Text("This clears the current selected questions and paper details from this device.") },
                 confirmButton = {
                     TextButton(onClick = {
+                        selected.forEach { it.imageFile?.let { path -> File(path).delete() } }
                         selected = emptyList()
                         nextId = 1L
                         schoolName = ""
