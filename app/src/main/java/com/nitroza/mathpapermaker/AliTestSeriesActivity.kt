@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.TextFieldValue
 import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.docx.DocxPaperExporter
 import com.nitroza.mathpapermaker.paper.PaperQuestion
@@ -78,7 +79,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var nextId by remember { mutableLongStateOf(1L) }
         var notice by remember { mutableStateOf("Choose Class 9 or Class 10, then open its Mathematics PDF.") }
         var showQuestionEditor by remember { mutableStateOf(false) }
-        var questionText by remember { mutableStateOf("") }
+        var questionText by remember { mutableStateOf(TextFieldValue("")) }
         var questionKind by remember { mutableStateOf("SHORT") }
         var questionMarks by remember { mutableStateOf("2") }
         var questionNumber by remember { mutableStateOf("") }
@@ -303,7 +304,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         }
                                     }.getOrElse { "" }
                                 }
-                                questionText = text
+                                questionText = TextFieldValue(text)
                                 pendingImageFile = null
                                 questionNumber = suggestedNumber(questionKind, selected)
                                 questionChapter = "CH1"
@@ -326,7 +327,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     val image = File(imageDirectory, "ali_question_${nextId}.png")
                                     FileOutputStream(image).use { output -> crop.compress(Bitmap.CompressFormat.PNG, 100, output) }
                                     pendingImageFile = image.absolutePath
-                                    questionText = ""
+                                    questionText = TextFieldValue("")
                                     questionNumber = suggestedNumber(questionKind, selected)
                                     questionChapter = "CH1"
                                     showQuestionEditor = true
@@ -351,13 +352,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                 text = {
                     Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            if (pendingImageFile == null) "Trim the extracted page text so only your chosen question remains."
+                            if (pendingImageFile == null) "Long-press and drag the text selection handles over the exact question. If no text is selected, the full edited text will be used."
                             else "The selected page area will be embedded as an image in the Word document.",
                             style = MaterialTheme.typography.bodySmall
                         )
                         if (pendingImageFile == null) {
                             OutlinedTextField(questionText, { questionText = it }, modifier = Modifier.fillMaxWidth(),
-                                minLines = 8, label = { Text("Question text") })
+                                minLines = 8, label = { Text("Select the question text") })
                         } else {
                             Text("Scanned crop ready · PDF page ${pageIndex + 1}", color = MaterialTheme.colorScheme.primary)
                         }
@@ -380,10 +381,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                 },
                 confirmButton = {
-                    TextButton(enabled = (questionText.isNotBlank() || pendingImageFile != null) &&
+                    TextButton(enabled = (questionText.text.isNotBlank() || pendingImageFile != null) &&
                         questionNumber.isNotBlank() && questionChapter.matches(Regex("CH([1-9]|1[0-3])")) && (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
                         selected = selected + SelectedQuestion(
-                            nextId++, questionNumber.trim(), questionText.trim(), questionKind,
+                            nextId++, questionNumber.trim(), selectedQuestionText(questionText), questionKind,
                             questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter
                         )
                         showQuestionEditor = false
@@ -473,4 +474,11 @@ private fun roman(value: Int): String = when (value) {
     1 -> "i"; 2 -> "ii"; 3 -> "iii"; 4 -> "iv"; 5 -> "v"
     6 -> "vi"; 7 -> "vii"; 8 -> "viii"; 9 -> "ix"
     else -> value.toString()
+}
+
+private fun selectedQuestionText(value: TextFieldValue): String {
+    val selection = value.selection
+    return if (!selection.collapsed && selection.min >= 0 && selection.max <= value.text.length) {
+        value.text.substring(selection.min, selection.max).trim()
+    } else value.text.trim()
 }
