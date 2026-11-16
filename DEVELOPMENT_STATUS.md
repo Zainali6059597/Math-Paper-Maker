@@ -123,3 +123,15 @@ Latest checkpoint update (2026-11-13): added a pure-Kotlin board-pattern complia
 - Added composite-engine unit tests for mixed fixed/paired/choice assignment, unique question use, ambiguous slot rejection and attempted-mark mismatch.
 - Checks performed in this workspace: all pure Kotlin domain sources compile with `kotlinc`; a standalone mixed-pattern smoke test passed (16 offered marks, 14 attempted marks, six unique questions).
 - Still unverified: Android Gradle/KSP/Compose build, Room import/migration on-device, UI flow and PDF rendering for a real mixed-pattern package.
+
+## Offline textbook ingestion continuation — 2026-11-16
+
+- Fixed the Kotlin whitespace-regex compile error in the textbook exercise parser; GitHub Actions run #38 completed successfully before this continuation.
+- Parser now accepts textbook layouts where a question number (for example, `1.`) is on its own line, and joins wrapped continuation lines while retaining the original PDF page number.
+- Added a regression test for standalone question markers, wrapped text, page provenance and the `NEEDS_REVIEW` state.
+- Added per-file PDF failure isolation: one malformed/unsupported bundled PDF is reported as a scan warning and no longer aborts scanning of every other book.
+- Added a regression test for unreadable-PDF warning behavior.
+- Added an offline manifest reader. Only chapters whose PDF is physically bundled and whose board, grade, stream, subject and session match the selected paper identity are exposed in the chapter selector. No cross-board manifest fallback is allowed.
+- Updated the books folder instructions: copy the example to `book-manifest.json`, and provide exact chapter page ranges and source metadata.
+- Standalone Kotlin smoke test passed for standalone markers, wrapped question text, page provenance, `NEEDS_REVIEW`, and isolated unreadable-book warnings.
+- **Not done yet:** actual textbook PDFs and a real manifest are still absent; OCR is not implemented; detected candidates are not yet approved or imported into the live question bank; textbook-derived questions do not yet feed paper generation. No APK was built during this continuation.
