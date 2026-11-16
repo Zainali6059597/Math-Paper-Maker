@@ -1,6 +1,7 @@
 package com.nitroza.mathpapermaker.domain
 
 import kotlin.random.Random
+import kotlin.math.ln
 
 /** Bounded backtracking matcher. Prevents a greedy early pick from starving a constrained slot. */
 internal object UniqueQuestionAssignment {
@@ -15,12 +16,17 @@ internal object UniqueQuestionAssignment {
         maxNodes: Int = 50_000
     ): Result<T> {
         if (slots.isEmpty() || maxNodes <= 0) return Result(null, 0, false)
+        if (candidates.any { !it.selectionWeight.isFinite() || it.selectionWeight <= 0.0 }) return Result(null, 0, false)
         val pools = slots.associate { slot -> slotId(slot) to candidates.filter { matches(it, slot) } }
         if (pools.values.any { it.isEmpty() }) return Result(null, 0, false)
         val ordered = slots.sortedWith(compareBy<T> { pools.getValue(slotId(it)).size }.thenBy { slotId(it) })
         val randomized = ordered.associate { slot ->
             val id = slotId(slot)
-            id to pools.getValue(id).shuffled(Random(seed xor id.hashCode().toLong()))
+            val random = Random(seed xor id.hashCode().toLong())
+            // Weighted random ordering without replacement (exponential-race sampling).
+            id to pools.getValue(id).sortedBy { candidate ->
+                -ln(random.nextDouble().coerceAtLeast(1e-12)) / candidate.selectionWeight
+            }
         }
         val used = mutableSetOf<String>()
         val selected = mutableMapOf<String, Pair<T, QuestionCandidate>>()
