@@ -33,6 +33,9 @@ import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.docx.DocxPaperExporter
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
+import com.nitroza.mathpapermaker.paper.PaperDraftStore
+import com.nitroza.mathpapermaker.paper.PaperDraftSnapshot
+import com.nitroza.mathpapermaker.paper.StoredPaperQuestion
 import com.nitroza.mathpapermaker.ui.MathPaperMakerTheme
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -85,6 +88,29 @@ class AliTestSeriesActivity : ComponentActivity() {
         var showQuestions by remember { mutableStateOf(false) }
         var examTitle by remember { mutableStateOf("Mathematics Examination") }
         var schoolName by remember { mutableStateOf("") }
+        var draftLoaded by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            PaperDraftStore.load(this@AliTestSeriesActivity)?.let { saved ->
+                grade = saved.grade
+                examTitle = saved.examTitle
+                schoolName = saved.schoolName
+                selected = saved.questions.map { q ->
+                    SelectedQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId)
+                }
+                nextId = (selected.maxOfOrNull { it.id } ?: 0L) + 1L
+            }
+            draftLoaded = true
+        }
+
+        LaunchedEffect(grade, selected, examTitle, schoolName, draftLoaded) {
+            if (draftLoaded) {
+                PaperDraftStore.save(this@AliTestSeriesActivity, PaperDraftSnapshot(
+                    grade, examTitle, schoolName,
+                    selected.map { q -> StoredPaperQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId) }
+                ))
+            }
+        }
 
         fun suggestedNumber(kind: String, current: List<SelectedQuestion>): String {
             return when (kind) {
@@ -123,7 +149,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                         pageCount = count
                         pageIndex = 0
                         cropRect = null
-                        selected = emptyList()
                         notice = "PDF opened. Select question text or draw a box around a scanned question."
                     }.onFailure { notice = "Could not open PDF: ${it.message}" }
                 }
@@ -200,6 +225,11 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Button(onClick = { openPdf.launch(arrayOf("application/pdf")) }, modifier = Modifier.fillMaxWidth()) {
                                 Text("OPEN CLASS $grade PDF")
                             }
+                        }
+                    }
+                    if (selected.isNotEmpty()) {
+                        OutlinedButton(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
+                            Text("REVIEW SAVED PAPER (${selected.size} QUESTIONS)")
                         }
                     }
                     Text(notice, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
@@ -292,7 +322,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     val right = (rect.right * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
                                     val bottom = (rect.bottom * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
                                     val crop = Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
-                                    val image = File(cacheDir, "ali_question_${nextId}.png")
+                                    val imageDirectory = File(filesDir, "question_images").apply { mkdirs() }
+                                    val image = File(imageDirectory, "ali_question_${nextId}.png")
                                     FileOutputStream(image).use { output -> crop.compress(Bitmap.CompressFormat.PNG, 100, output) }
                                     pendingImageFile = image.absolutePath
                                     questionText = ""
