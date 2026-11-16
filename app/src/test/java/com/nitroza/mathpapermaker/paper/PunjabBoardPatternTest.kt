@@ -73,6 +73,14 @@ class PunjabBoardPatternTest {
         assertFalse(PunjabBoardPattern.isComplete(9, questions))
     }
 
+    @Test fun manualRenumberingDoesNotChangeSectionMembership() {
+        val questions = fullPaper(9).mapIndexed { index, item ->
+            item.copy(number = "TeacherLabel-${index + 1}")
+        }
+        assertTrue(PunjabBoardPattern.isComplete(9, questions))
+        assertEquals(3, PunjabBoardPattern.sections(questions).count { it.heading.contains("SHORT QUESTIONS") })
+    }
+
     @Test fun boardSectionsIncludeThreeShortGroupsAndFiveLongQuestions() {
         val sections = PunjabBoardPattern.sections(fullPaper(9))
         assertEquals(1, sections.count { it.heading.contains("MULTIPLE CHOICE") })
