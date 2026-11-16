@@ -403,7 +403,20 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Text("CLASS $grade MATHEMATICS", style = MaterialTheme.typography.titleSmall)
                             Text(pdfName, style = MaterialTheme.typography.labelSmall, maxLines = 1)
                         }
-                        TextButton(onClick = { pdfFile = null; pageBitmap = null }) { Text("CHANGE PDF") }
+                        TextButton(onClick = {
+                            // Release the previous imported/bundled PDF immediately.
+                            // Textbooks can be hundreds of megabytes; waiting for the
+                            // next app launch's stale-cache cleanup wastes device storage.
+                            pdfFile?.delete()
+                            pdfFile = null
+                            pageBitmap = null
+                            pdfName = ""
+                            pageCount = 0
+                            pageIndex = 0
+                            pageJumpText = "1"
+                            cropRect = null
+                            useManifestChapters = false
+                        }) { Text("CHANGE PDF") }
                     }
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                         TextButton(enabled = pageIndex > 0, onClick = { pageIndex-- }) { Text("PREVIOUS") }
