@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.data.AppDatabase
 import com.nitroza.mathpapermaker.data.PackageImporter
+import com.nitroza.mathpapermaker.data.BundledBookPdfReader
+import com.nitroza.mathpapermaker.data.TextbookExerciseParser
 import com.nitroza.mathpapermaker.data.SavedPaperDraftEntity
 import com.nitroza.mathpapermaker.data.QuestionSourceEntity
 import com.nitroza.mathpapermaker.data.PaperPatternEntity
@@ -84,6 +86,10 @@ class MainActivity : ComponentActivity() {
         var pendingPatterns by remember { mutableStateOf<List<PaperPatternEntity>>(emptyList()) }
         var pendingQuestions by remember { mutableStateOf<List<QuestionEntity>>(emptyList()) }
         var reviewHistory by remember { mutableStateOf<List<ReviewAuditEntity>>(emptyList()) }
+        var bookScanRunning by remember { mutableStateOf(false) }
+        var scannedBooks by remember { mutableStateOf<List<BundledBookPdfReader.BookIndex>>(emptyList()) }
+        var bookCandidates by remember { mutableStateOf<List<TextbookExerciseParser.Candidate>>(emptyList()) }
+        var bookScanWarnings by remember { mutableStateOf<List<String>>(emptyList()) }
 
         LaunchedEffect(board, grade, stream, subject, session) {
             val rows = runCatching { database.contentDao().findQuestions(board, grade, stream, subject, session) }.getOrDefault(emptyList())
@@ -463,6 +469,44 @@ class MainActivity : ComponentActivity() {
                             Text("Build a better paper.", style = MaterialTheme.typography.headlineMedium)
                             Text("Create, review and export printable mathematics examinations — directly on this device.", style = MaterialTheme.typography.bodyMedium)
                             Text("100% LOCAL     •     A4 PDF     •     NO SIGN-IN", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                        }
+                    }
+                    Card {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("TEXTBOOK LIBRARY", style = MaterialTheme.typography.titleMedium)
+                            Text("Books are read only from PDFs bundled inside this APK. Scanned pages are reported separately; detected exercises stay NEEDS_REVIEW and are never added to the live question bank automatically.", style = MaterialTheme.typography.bodySmall)
+                            OutlinedButton(
+                                enabled = !bookScanRunning,
+                                onClick = {
+                                    bookScanRunning = true
+                                    lifecycleScope.launch {
+                                        runCatching {
+                                            val books = BundledBookPdfReader.readAll(this@MainActivity)
+                                            val parsed = books.map { TextbookExerciseParser.parse(it) }
+                                            scannedBooks = books
+                                            bookCandidates = parsed.flatMap { it.candidates }
+                                            bookScanWarnings = parsed.flatMap { it.warnings }.distinct()
+                                            notice = if (books.isEmpty()) "No textbook PDFs bundled yet. Add licensed PDFs to app/src/main/assets/books/ and rebuild the APK."
+                                                else "Scanned ${books.size} bundled book(s); found ${bookCandidates.size} exercise candidates. All candidates require manual review."
+                                        }.onFailure { notice = "Textbook scan failed: ${it.message}" }
+                                        bookScanRunning = false
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) { Text(if (bookScanRunning) "SCANNING BOOKS…" else "SCAN BUNDLED TEXTBOOKS") }
+                            if (scannedBooks.isEmpty()) {
+                                Text("No textbook PDFs bundled yet.", style = MaterialTheme.typography.bodyMedium)
+                            } else {
+                                Text("${scannedBooks.size} book(s) • ${scannedBooks.sumOf { it.pageCount }} pages • ${scannedBooks.sumOf { it.pagesNeedingOcr.size }} pages need OCR", style = MaterialTheme.typography.labelMedium)
+                                Text("${bookCandidates.size} numbered exercise candidate(s) detected", style = MaterialTheme.typography.labelMedium)
+                                bookScanWarnings.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) }
+                                bookCandidates.take(30).forEach { candidate ->
+                                    Text("${candidate.chapterId} · Ex ${candidate.exerciseId} · Q${candidate.questionNumber} · p.${candidate.sourcePage}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                                    Text(candidate.text, style = MaterialTheme.typography.bodySmall)
+                                    Text("NEEDS REVIEW", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error)
+                                }
+                                if (bookCandidates.size > 30) Text("Showing first 30 of ${bookCandidates.size} candidates.", style = MaterialTheme.typography.bodySmall)
+                            }
                         }
                     }
                     Text("PAPER CONFIGURATION", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
