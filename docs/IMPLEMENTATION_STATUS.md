@@ -14,15 +14,15 @@ Status: active development; not a verified release.
 - PDFBox Android extracts text from the current page. Teacher trims the extracted text manually to retain only the intended question.
 - Scanned-page selection rectangle and crop-to-PNG workflow.
 - Selected question list supports reorder, remove and manually editable question labels.
-- Punjab Board paper count/marks gate: 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts; 109 offered marks, 75 attempted marks, 150 minutes.
+- Class-specific Punjab Board 2026–27 validation for MCQ chapter distribution, all three short-question chapter groups, and the five long-question chapter pairings; also enforces 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts (109 offered marks, 75 attempted marks, 150 minutes). Teachers currently enter/select each question's chapter ID manually.
 - DOCX exporter writes a minimal OOXML Word package with editable text, A4 page settings, section instructions and embedded PNG question crops.
 - Unit tests added for paper counts, marks, numbering uniqueness and section-choice instructions.
 - Locked scope documented in docs/ALI_TEST_SERIES_SCOPE.md.
 
 ## Still required
 
-1. Integrate the complete class-specific chapter distribution and long-question chapter pairings from the official Punjab Board patterns.
-2. Improve PDF text selection so teacher can select question blocks directly rather than trimming the extracted page text manually.
+1. Use the supplied textbook PDFs to map page ranges to chapters so the app can prefill chapter IDs instead of requiring manual chapter entry.
+2. Improve selection handling for multi-column pages, math symbols and questions spanning multiple pages.
 3. Persist selections/drafts across app restarts.
 4. Integrate licensed Class 9 and Class 10 Mathematics PDFs under app/src/main/assets/books/, with book metadata and page-to-chapter mapping.
 5. Verify scanned crop coordinates on different screen sizes and PDF page aspect ratios.
