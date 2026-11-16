@@ -5,7 +5,7 @@ import kotlin.math.ln
 
 enum class QuotaDimension { CHAPTER, SLO, COGNITIVE_LEVEL, DIFFICULTY }
 
-data class MetadataQuota(val dimension: QuotaDimension, val value: String, val minimum: Int, val maximum: Int)
+data class MetadataQuota(val dimension: QuotaDimension, val value: String, val minimum: Int, val maximum: Int, val groupId: String? = null)
 data class QuotaSelectionRequest(
     val identity: PaperIdentity,
     val slots: List<QuestionSlot>,
@@ -81,7 +81,7 @@ object QuotaAwareSelectionEngine {
             val slot = ordered[index]
             for (candidate in shuffled.getValue(slot.slotId)) {
                 if (candidate.id in used) continue
-                val hit = request.quotas.filter { value(candidate, it.dimension) == it.value }
+                val hit = request.quotas.filter { value(candidate, it.dimension) == it.value && (it.groupId == null || it.groupId == slot.groupId) }
                 if (hit.any { counts.getValue(it) >= it.maximum }) continue
                 used += candidate.id
                 chosen[slot.slotId] = candidate
