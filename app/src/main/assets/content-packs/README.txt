@@ -15,3 +15,5 @@ IMPORTANT:
 - Do not reuse question IDs, source IDs, pattern IDs, or semantic fingerprints across packages.
 - Use UTF-8 JSON and the schema supported by PackageImporter (currently schema versions 1–5).
 - Never put credentials, private data, or network-dependent assets in these packs.
+
+FBISE Grade 9 Functional Mathematics (2025 curriculum / 2026-27): 34 original practice questions; 75-mark structure of 15 compulsory MCQs, 9 of 14 short questions at 4 marks, and 3 of 5 extended questions at 8 marks. This is Functional Mathematics, not legacy General Mathematics. All imported records remain NEEDS_REVIEW.
