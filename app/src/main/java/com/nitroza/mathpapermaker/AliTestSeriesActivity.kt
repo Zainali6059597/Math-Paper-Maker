@@ -100,6 +100,17 @@ class AliTestSeriesActivity : ComponentActivity() {
         var chapterRanges by remember { mutableStateOf<List<BundledBookManifestReader.Chapter>>(emptyList()) }
         var useManifestChapters by remember { mutableStateOf(false) }
 
+        // Release the previous rendered page only after Compose has switched away
+        // from it; this prevents page navigation from retaining large bitmaps.
+        DisposableEffect(pageBitmap) {
+            val bitmapToRelease = pageBitmap
+            onDispose {
+                if (bitmapToRelease != null && !bitmapToRelease.isRecycled) {
+                    bitmapToRelease.recycle()
+                }
+            }
+        }
+
         LaunchedEffect(grade) {
             val expectedFile = "Punjab_Grade${grade}_Mathematics.pdf"
             val result = withContext(Dispatchers.IO) {
