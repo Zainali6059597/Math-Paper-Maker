@@ -461,26 +461,34 @@ class AliTestSeriesActivity : ComponentActivity() {
                         OutlinedButton(onClick = {
                             lifecycleScope.launch {
                                 val file = pdfFile ?: return@launch
-                                val text = withContext(Dispatchers.IO) {
+                                val extraction = withContext(Dispatchers.IO) {
                                     runCatchingCancellable {
                                         PDFBoxResourceLoader.init(applicationContext)
                                         // Keep PDFBox stream buffering on disk instead of retaining a large textbook in heap.
                                         PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
-                                            PDFTextStripper().apply {
+                                            val extracted = PDFTextStripper().apply {
                                                 sortByPosition = true
                                                 startPage = pageIndex + 1
                                                 endPage = pageIndex + 1
                                             }.getText(document)
+                                            require(extracted.length <= 100_000) {
+                                                "This page contains too much extractable text. Select a smaller page region or use the scanned-question crop."
+                                            }
+                                            extracted
                                         }
-                                    }.getOrElse { "" }
+                                    }
                                 }
-                                questionText = TextFieldValue(text)
-                                pendingImageFile = null
-                                questionNumber = suggestedNumber(questionKind, selected)
-                                questionSection = questionNumber.substringBefore("(")
-                                questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
-                                if (text.isBlank()) notice = "This page has no extractable text. Draw a box around the scanned question."
-                                else showQuestionEditor = true
+                                extraction.onSuccess { text ->
+                                    questionText = TextFieldValue(text)
+                                    pendingImageFile = null
+                                    questionNumber = suggestedNumber(questionKind, selected)
+                                    questionSection = questionNumber.substringBefore("(")
+                                    questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
+                                    if (text.isBlank()) notice = "This page has no extractable text. Draw a box around the scanned question."
+                                    else showQuestionEditor = true
+                                }.onFailure { error ->
+                                    notice = "Could not extract this PDF page: ${error.message ?: "unknown error"}"
+                                }
                             }
                         }, modifier = Modifier.weight(1f)) { Text("SELECT TEXT") }
                         Button(
