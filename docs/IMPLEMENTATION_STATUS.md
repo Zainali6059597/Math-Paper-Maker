@@ -9,7 +9,7 @@ Status: development build; **not a production release**
 - Native Kotlin + Jetpack Compose Android app; Room-backed offline data store; no WebView runtime or internet dependency for paper generation.
 - Room schema **v12**, with sources, questions, exact-identity paper patterns, fixed slots, single-question choice groups, optional paired-bundle choice groups, allowed chapter alternatives, quotas, syllabus exclusions, saved drafts, textbook candidates and review audit.
 - Package schema **v5** with strict identity/provenance checks; imports are transaction-safe and always enter `NEEDS_REVIEW`.
-- Pattern-only packages are supported: a board pattern can be imported before its local question bank is ready. Generation remains blocked until enough eligible local questions exist.
+- Pattern-only packages are supported: a board pattern can be imported before its local question bank is ready. Generation remains blocked until enough eligible local questions exist.\n- Importing a newer version for the same exact board/session now marks the superseded pattern, its source and its questions CONFLICTED inside the same transaction; the new version becomes the exact-session default. Re-importing the same pattern ID is idempotent.
 - Deterministic unique-question assignment with exact board/grade/stream/subject/session matching; no cross-board or cross-session fallback.
 - Equal-mark short-question choice groups; required multi-part questions; optional choice among whole paired multi-part questions.
 - Strict allowed-chapter alternatives per slot (e.g. Chapter 8 OR Chapter 11); alternatives are persisted, imported, used by selection and retained in saved drafts.
