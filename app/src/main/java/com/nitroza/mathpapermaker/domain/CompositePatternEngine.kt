@@ -18,7 +18,8 @@ data class CompositePaperPattern(
     val expectedAttemptedMarks: Int,
     val slots: List<OfferedQuestionSlot>,
     val groups: List<ChoiceGroupRule>,
-    val bundleGroups: List<BundleChoiceGroupRule> = emptyList()
+    val bundleGroups: List<BundleChoiceGroupRule> = emptyList(),
+    val quotas: List<MetadataQuota> = emptyList()
 )
 
 data class CompositePaperSelection(
@@ -98,10 +99,23 @@ object CompositePatternEngine {
             return blocked("ATTEMPTED_TOTAL_MISMATCH", "Fixed and paired slots plus attempted choice marks total $calculated, but the pattern declares ${pattern.expectedAttemptedMarks}.")
 
         val slots = pattern.slots.map { QuestionSlot(it.slotId, it.chapterId, it.sloId, it.questionType, it.marks, it.allowedChapterIds) }
-        val result = LocalSelectionEngine.select(SelectionRequest(pattern.identity, slots, mode, seed), bank)
-        if (result is SelectionResult.Blocked)
-            return CompositeSelectionResult.Blocked(result.code, result.message, result.affectedSlots)
-        val picked = (result as SelectionResult.Success).selected.associate { it.first.slotId to it.second }
+        val picked: Map<String, QuestionCandidate> = if (pattern.quotas.isNotEmpty()) {
+            when (val quotaResult = QuotaAwareSelectionEngine.select(
+                QuotaSelectionRequest(pattern.identity, slots, pattern.quotas, mode, seed), bank
+            )) {
+                is QuotaSelectionResult.Blocked ->
+                    return CompositeSelectionResult.Blocked(quotaResult.code, quotaResult.message, quotaResult.affectedSlots)
+                is QuotaSelectionResult.Success ->
+                    quotaResult.selected.associate { it.first.slotId to it.second }
+            }
+        } else {
+            when (val result = LocalSelectionEngine.select(SelectionRequest(pattern.identity, slots, mode, seed), bank)) {
+                is SelectionResult.Blocked ->
+                    return CompositeSelectionResult.Blocked(result.code, result.message, result.affectedSlots)
+                is SelectionResult.Success ->
+                    result.selected.associate { it.first.slotId to it.second }
+            }
+        }
         return CompositeSelectionResult.Success(
             CompositePaperSelection(picked, pattern.slots.sortedBy { slot -> pattern.slots.indexOf(slot) },
                 pattern.slots.sumOf { it.marks }, calculated, seed)
