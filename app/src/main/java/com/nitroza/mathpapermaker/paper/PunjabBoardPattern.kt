@@ -91,7 +91,11 @@ object PunjabBoardPattern {
         val labels = questions.map { it.number.trim() }
         if (labels.any { it.isEmpty() }) errors += "Every selected question needs a paper number."
         if (labels.distinct().size != labels.size) errors += "Paper question numbers must be unique."
-        if (questions.any { !it.chapterId.matches(Regex("CH([1-9]|1[0-3])")) }) {
+        val maxChapter = if (grade == 9) 13 else 12
+        if (questions.any { chapter ->
+                val number = chapter.chapterId.removePrefix("CH").toIntOrNull()
+                number == null || number !in 1..maxChapter
+            }) {
             errors += "Choose the correct chapter (CH1, CH2, etc.) for every question."
             return errors
         }
