@@ -79,6 +79,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var pdfName by remember { mutableStateOf("") }
         var pageIndex by remember { mutableIntStateOf(0) }
         var pageCount by remember { mutableIntStateOf(0) }
+        var pageJumpText by remember { mutableStateOf("1") }
         var pageBitmap by remember { mutableStateOf<Bitmap?>(null) }
         var selected by remember { mutableStateOf<List<SelectedQuestion>>(emptyList()) }
         var nextId by remember { mutableLongStateOf(1L) }
@@ -298,6 +299,10 @@ class AliTestSeriesActivity : ComponentActivity() {
             }
         }
 
+        LaunchedEffect(pageIndex) {
+            pageJumpText = (pageIndex + 1).toString()
+        }
+
         LaunchedEffect(pdfFile, pageIndex) {
             val file = pdfFile ?: return@LaunchedEffect
             cropRect = null
@@ -399,6 +404,20 @@ class AliTestSeriesActivity : ComponentActivity() {
                         TextButton(enabled = pageIndex > 0, onClick = { pageIndex-- }) { Text("PREVIOUS") }
                         Text("PAGE ${pageIndex + 1} / $pageCount", style = MaterialTheme.typography.labelLarge)
                         TextButton(enabled = pageIndex < pageCount - 1, onClick = { pageIndex++ }) { Text("NEXT") }
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(
+                            value = pageJumpText,
+                            onValueChange = { pageJumpText = it.filter(Char::isDigit).take(9) },
+                            modifier = Modifier.width(132.dp),
+                            label = { Text("Go to page") },
+                            singleLine = true
+                        )
+                        Button(
+                            enabled = (pageJumpText.toIntOrNull() ?: 0) in 1..pageCount,
+                            onClick = { pageIndex = (pageJumpText.toIntOrNull() ?: 1) - 1 }
+                        ) { Text("GO") }
+                        Text("of $pageCount", style = MaterialTheme.typography.labelSmall)
                     }
                     Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                         pageBitmap?.let { bitmap ->
