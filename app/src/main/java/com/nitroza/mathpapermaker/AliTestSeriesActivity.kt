@@ -160,16 +160,20 @@ class AliTestSeriesActivity : ComponentActivity() {
             ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
         ) { uri: Uri? ->
             if (uri != null) {
-                runCatching {
-                    DocxPaperExporter.write(
-                        this@AliTestSeriesActivity, uri, grade, examTitle, schoolName,
-                        PunjabBoardPattern.DURATION_MINUTES,
-                        selected.map { item ->
-                            PaperQuestion(item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile, item.chapterId)
+                lifecycleScope.launch {
+                    runCatching {
+                        withContext(Dispatchers.IO) {
+                            DocxPaperExporter.write(
+                                this@AliTestSeriesActivity, uri, grade, examTitle, schoolName,
+                                PunjabBoardPattern.DURATION_MINUTES,
+                                selected.map { item ->
+                                    PaperQuestion(item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile, item.chapterId)
+                                }
+                            )
                         }
-                    )
-                }.onSuccess { notice = "Word paper exported. Open the DOCX in Word or another office app to review and print." }
-                    .onFailure { notice = "Word export failed: ${it.message}" }
+                    }.onSuccess { notice = "Word paper exported. Open the DOCX in Word or another office app to review and print." }
+                        .onFailure { notice = "Word export failed: ${it.message}" }
+                }
             }
         }
 
