@@ -367,7 +367,9 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }.toSet()
                                 val sections = if (groups.isNotEmpty()) {
-                                    groups.map { ComplianceSection(it.groupId, it.offeredCount, it.attemptCount, it.marksPerQuestion) }
+                                    groups.map { ComplianceSection(it.groupId, it.offeredCount, it.attemptCount, it.marksPerQuestion) } +
+                                        slots.filter { it.groupId == null && it.bundleId == null }
+                                            .map { ComplianceSection(it.slotId, 1, 1, it.marks) }
                                 } else {
                                     slots.map { ComplianceSection(it.slotId, 1, 1, it.marks) }
                                 }
@@ -378,8 +380,9 @@ class MainActivity : ComponentActivity() {
                                     val sectionId = if (slotId == null) {
                                         if (!customDraft) error("Question ${item.number} has no matching pattern slot.") else "__CUSTOM_UNASSIGNED__"
                                     } else if (groups.isNotEmpty()) {
-                                        slots.firstOrNull { it.slotId == slotId }?.groupId
-                                            ?: if (customDraft) "__CUSTOM_UNASSIGNED__" else error("Question ${item.number} has no valid choice-group assignment.")
+                                        val matchedSlot = slots.firstOrNull { it.slotId == slotId }
+                                        matchedSlot?.groupId ?: matchedSlot?.slotId
+                                            ?: if (customDraft) "__CUSTOM_UNASSIGNED__" else error("Question ${item.number} has no valid pattern-slot assignment.")
                                     } else slotId
                                     ComplianceQuestion(
                                         id = row.questionId,
