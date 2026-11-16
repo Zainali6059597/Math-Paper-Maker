@@ -94,6 +94,7 @@ class MainActivity : ComponentActivity() {
         var bookCandidates by remember { mutableStateOf<List<TextbookExerciseParser.Candidate>>(emptyList()) }
         var textbookReviewRows by remember { mutableStateOf<List<TextbookCandidateEntity>>(emptyList()) }
         var bookScanWarnings by remember { mutableStateOf<List<String>>(emptyList()) }
+        var classificationCandidate by remember { mutableStateOf<TextbookCandidateEntity?>(null) }
 
         LaunchedEffect(board, grade, stream, subject, session) {
             val rows = runCatching { database.contentDao().findQuestions(board, grade, stream, subject, session) }.getOrDefault(emptyList())
@@ -540,6 +541,9 @@ class MainActivity : ComponentActivity() {
                                         Text(candidate.questionText, style = MaterialTheme.typography.bodySmall)
                                         Text(candidate.reviewStatus.replace('_', ' '), style = MaterialTheme.typography.labelMedium, color = if (candidate.reviewStatus == "NEEDS_REVIEW") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
                                         if (candidate.reviewNote.isNotBlank()) Text(candidate.reviewNote, style = MaterialTheme.typography.bodySmall)
+                                        if (candidate.reviewStatus == "ACCEPTED_FOR_CLASSIFICATION") {
+                                            TextButton(onClick = { classificationCandidate = candidate }) { Text("CLASSIFY AS DRAFT QUESTION") }
+                                        }
                                         if (candidate.reviewStatus == "NEEDS_REVIEW") {
                                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                                 TextButton(onClick = {
@@ -835,6 +839,31 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        classificationCandidate?.let { candidate ->
+            TextbookClassificationDialog(
+                candidate = candidate, boards = boards, initialBoard = board,
+                initialGrade = grade, initialStream = stream, initialSubject = subject,
+                initialSession = session, onDismiss = { classificationCandidate = null },
+                onSave = { classification ->
+                    lifecycleScope.launch {
+                        runCatching {
+                            val draftRecord = com.nitroza.mathpapermaker.data.TextbookDraftFactory.create(candidate, classification)
+                            database.withTransaction {
+                                val dao = database.contentDao()
+                                dao.insertSources(listOf(draftRecord.source))
+                                dao.insertQuestions(listOf(draftRecord.question))
+                                dao.updateTextbookCandidateReview(candidate.candidateId, "DRAFT_CREATED", "Saved as NEEDS_REVIEW question ${draftRecord.question.questionId}; not approved for generation.")
+                            }
+                            pendingQuestions = database.contentDao().pendingQuestions()
+                            questionCount = database.contentDao().questionCount()
+                            textbookReviewRows = database.contentDao().allTextbookCandidates()
+                            notice = "Draft question saved. It remains NEEDS_REVIEW and cannot enter a paper until separately approved."
+                            classificationCandidate = null
+                        }.onFailure { notice = "Could not save textbook draft: ${it.message}" }
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -1107,4 +1136,65 @@ private fun decodeSlots(raw: String): List<OfferedQuestionSlot> {
 private fun encodeStrings(values: List<String>): String = JSONArray(values).toString()
 private fun decodeStrings(raw: String): List<String> {
     val array = JSONArray(raw); return (0 until array.length()).map { array.getString(it) }
+}
+
+
+@Composable
+private fun TextbookClassificationDialog(
+    candidate: TextbookCandidateEntity,
+    boards: List<String>,
+    initialBoard: String,
+    initialGrade: Int,
+    initialStream: String,
+    initialSubject: String,
+    initialSession: String,
+    onDismiss: () -> Unit,
+    onSave: (com.nitroza.mathpapermaker.data.TextbookDraftFactory.Classification) -> Unit
+) {
+    var board by remember(candidate.candidateId) { mutableStateOf(initialBoard) }
+    var grade by remember(candidate.candidateId) { mutableStateOf(initialGrade) }
+    var stream by remember(candidate.candidateId) { mutableStateOf(initialStream) }
+    var subject by remember(candidate.candidateId) { mutableStateOf(initialSubject) }
+    var session by remember(candidate.candidateId) { mutableStateOf(initialSession) }
+    var chapter by remember(candidate.candidateId) { mutableStateOf(candidate.chapterId) }
+    var topic by remember(candidate.candidateId) { mutableStateOf("") }
+    var type by remember(candidate.candidateId) { mutableStateOf("SHORT") }
+    var marks by remember(candidate.candidateId) { mutableStateOf("2") }
+    var cognitive by remember(candidate.candidateId) { mutableStateOf("UNDERSTANDING") }
+    var difficulty by remember(candidate.candidateId) { mutableStateOf("MEDIUM") }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("CLASSIFY TEXTBOOK QUESTION") },
+        text = {
+            Column(Modifier.heightIn(max = 560.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(candidate.questionText, style = MaterialTheme.typography.bodyMedium)
+                Text("Source: ${candidate.bookFile} · page ${candidate.sourcePage} · chapter ${candidate.chapterId} · exercise ${candidate.exerciseId}", style = MaterialTheme.typography.bodySmall)
+                Text("Confirm all metadata from the textbook and your intended syllabus. Nothing is inferred as official.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                ChoiceField("Board", boards, board) { board = it }
+                ChoiceField("Class", listOf("9", "10"), grade.toString()) { grade = it.toInt() }
+                ChoiceField("Stream", listOf("MATHEMATICS", "GENERAL_MATHEMATICS"), stream) { stream = it }
+                OutlinedTextField(subject, { subject = it }, label = { Text("Subject") }, singleLine = true)
+                OutlinedTextField(session, { session = it }, label = { Text("Session") }, singleLine = true)
+                OutlinedTextField(chapter, { chapter = it }, label = { Text("Chapter ID") }, singleLine = true)
+                OutlinedTextField(topic, { topic = it }, label = { Text("Topic (required)") }, singleLine = true)
+                ChoiceField("Question type", listOf("MCQ", "SHORT", "LONG"), type) { type = it }
+                OutlinedTextField(marks, { marks = it.filter(Char::isDigit).take(2) }, label = { Text("Marks") }, singleLine = true)
+                ChoiceField("Cognitive level", listOf("KNOWLEDGE", "UNDERSTANDING", "APPLICATION", "ANALYSIS"), cognitive) { cognitive = it }
+                ChoiceField("Difficulty", listOf("EASY", "MEDIUM", "HARD"), difficulty) { difficulty = it }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                enabled = subject.isNotBlank() && session.isNotBlank() && chapter.isNotBlank() &&
+                    topic.isNotBlank() && (marks.toIntOrNull() ?: 0) > 0,
+                onClick = {
+                    onSave(com.nitroza.mathpapermaker.data.TextbookDraftFactory.Classification(
+                        board, grade, stream, subject.trim(), session.trim(), chapter.trim(), topic.trim(),
+                        type, marks.toInt(), cognitive, difficulty
+                    ))
+                }
+            ) { Text("SAVE DRAFT FOR REVIEW") }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("CANCEL") } }
+    )
 }
