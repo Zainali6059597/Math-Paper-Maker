@@ -165,17 +165,15 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         fun suggestedNumber(kind: String, current: List<SelectedQuestion>): String {
-            return when (kind) {
-                "MCQ" -> "Q1(${roman(current.count { it.kind == "MCQ" } + 1)})"
-                "SHORT" -> {
-                    val index = current.count { it.kind == "SHORT" }
-                    "Q${2 + index / 9}(${roman(index % 9 + 1)})"
+            val existing = current.map { it.number }.toSet()
+            val limit = when (kind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
+            return (1..limit).asSequence().map { index ->
+                when (kind) {
+                    "MCQ" -> "Q1(${roman(index)})"
+                    "SHORT" -> "Q${2 + (index - 1) / 9}(${roman((index - 1) % 9 + 1)})"
+                    else -> "Q${5 + (index - 1) / 2}(${if (index % 2 == 1) "a" else "b"})"
                 }
-                else -> {
-                    val index = current.count { it.kind == "LONG" }
-                    "Q${5 + index / 2}(${if (index % 2 == 0) "a" else "b"})"
-                }
-            }
+            }.firstOrNull { it !in existing } ?: ""
         }
 
         val openPdf = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
