@@ -162,3 +162,5 @@ Latest checkpoint update (2026-11-13): added a pure-Kotlin board-pattern complia
 - **No compilation, Gradle build, CI workflow, APK assembly, or Ramus testing was started.** All changes above are source-only and remain uncompiled/unverified, as requested.
 
 - Added in-place text correction in the checkbox review list, so teachers can fix OCR/extraction mistakes before adding a candidate to the paper.
+
+- Expanded editable Word maths output to cover absolute-value delimiters, sin/cos/tan/log functions and rectangular matrices. The matrix editor template starts with blank cells, and incomplete/non-rectangular matrix text falls back to editable text rather than generating malformed equation markup.
