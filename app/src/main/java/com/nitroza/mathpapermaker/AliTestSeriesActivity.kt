@@ -94,6 +94,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var bundledBookReady by remember { mutableStateOf(false) }
         var bundledBookFile by remember { mutableStateOf("") }
         var chapterRanges by remember { mutableStateOf<List<BundledBookManifestReader.Chapter>>(emptyList()) }
+        var useManifestChapters by remember { mutableStateOf(false) }
 
         LaunchedEffect(grade) {
             val expectedFile = "Punjab_Grade${grade}_Mathematics.pdf"
@@ -127,6 +128,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                     pdfFile = file
                     pdfName = bundledBookFile
+                    useManifestChapters = true
                     pageCount = count
                     pageIndex = 0
                     cropRect = null
@@ -135,7 +137,7 @@ class AliTestSeriesActivity : ComponentActivity() {
             }
         }
 
-        fun chapterForPage(page: Int): String? = chapterRanges.firstOrNull { page in it.startPage..it.endPage }?.id
+        fun chapterForPage(page: Int): String? = if (useManifestChapters) chapterRanges.firstOrNull { page in it.startPage..it.endPage }?.id else null
 
         LaunchedEffect(Unit) {
             PaperDraftStore.load(this@AliTestSeriesActivity)?.let { saved ->
@@ -193,6 +195,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                         pdfFile = file
                         pdfName = uri.lastPathSegment?.substringAfterLast('/') ?: "Mathematics.pdf"
+                        useManifestChapters = false
                         pageCount = count
                         pageIndex = 0
                         cropRect = null
