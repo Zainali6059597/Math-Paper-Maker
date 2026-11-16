@@ -45,7 +45,7 @@ class MathOoxmlFormatterTest {
     }
 
     @Test fun lineBreaksStayInsideTheQuestionParagraph() {
-        val xml = MathOoxmlFormatter.inlineRuns("First line\\nSecond line")
+        val xml = MathOoxmlFormatter.inlineRuns("First line\nSecond line")
         assertTrue(xml.contains("<w:br/>"))
         assertTrue(xml.contains("First line"))
         assertTrue(xml.contains("Second line"))
