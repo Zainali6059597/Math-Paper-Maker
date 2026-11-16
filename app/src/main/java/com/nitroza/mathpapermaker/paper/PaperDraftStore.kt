@@ -12,7 +12,8 @@ data class StoredPaperQuestion(
     val marks: Int,
     val sourcePage: Int,
     val imageFile: String?,
-    val chapterId: String
+    val chapterId: String,
+    val sectionId: String
 )
 
 data class PaperDraftSnapshot(
@@ -38,7 +39,8 @@ object PaperDraftStore {
                     .put("marks", q.marks)
                     .put("sourcePage", q.sourcePage)
                     .put("imageFile", q.imageFile ?: JSONObject.NULL)
-                    .put("chapterId", q.chapterId))
+                    .put("chapterId", q.chapterId)
+                    .put("sectionId", q.sectionId))
             }
         }
         val json = JSONObject()
@@ -66,7 +68,8 @@ object PaperDraftStore {
                 item.getInt("marks"),
                 item.getInt("sourcePage"),
                 item.optString("imageFile").takeIf { it.isNotBlank() && it != "null" },
-                item.optString("chapterId")
+                item.optString("chapterId"),
+                item.optString("sectionId", item.getString("number").substringBefore("("))
             )
         }
             PaperDraftSnapshot(
