@@ -34,7 +34,6 @@ Not yet verified:
 - Android Gradle/KSP/Compose build after the new app entry point.
 - Actual Word document opening/printing in Microsoft Word and compatible office apps.
 - Real Class 9 and Class 10 PDFs, chapter-aware slot mapping, and bundled offline book loading.
-- Complete chapter-specific Punjab pairing and MCQ/short distribution validation.
 - Physical-device memory/performance and scanned crop quality.
 
 ## Repository layout
