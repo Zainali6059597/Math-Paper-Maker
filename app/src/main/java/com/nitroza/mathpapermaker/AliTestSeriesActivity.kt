@@ -897,10 +897,12 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        if (!chapterReady && checkedDetectedQuestions.isNotEmpty()) {
-                            Text("Select the correct chapter before adding these questions in Board Pattern mode.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-                        } else if (!chapterReady && checkedDetectedQuestions.isNotEmpty()) {
-                            Text("The detected page chapter is outside your selected chapter scope. Choose a page from an included chapter or change the scope.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        if (!chapterReady && checkedDetectedQuestions.isNotEmpty() &&
+                            !PunjabBoardPattern.isValidChapter(grade, detectedQuestionChapter)) {
+                            Text("Select a valid chapter before adding these questions.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        } else if (!chapterReady && checkedDetectedQuestions.isNotEmpty() &&
+                            detectedQuestionChapter !in selectedChapters) {
+                            Text("This page belongs to a chapter outside your selected scope. Choose an included chapter or update the scope.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         } else if (alreadySelected + checkedDetectedQuestions.size > maxForKind && paperMode == "BOARD") {
                             Text("This selection exceeds the remaining $detectedQuestionKind slots in Board Pattern mode.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
