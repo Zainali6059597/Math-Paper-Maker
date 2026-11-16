@@ -36,6 +36,14 @@ class MathOoxmlFormatterTest {
         assertTrue(subscript.contains("<m:sub>"))
     }
 
+    @Test fun matrixTemplateBecomesEditableWordMatrix() {
+        val xml = MathOoxmlFormatter.inlineRuns("matrix(a,b;c,d)")
+        assertTrue(xml.contains("<m:m>"))
+        assertTrue(xml.contains("<m:mr>"))
+        assertTrue(xml.contains("a"))
+        assertTrue(xml.contains("d"))
+    }
+
     @Test fun absoluteValueAndTrigonometricTemplatesBecomeWordMath() {
         val absolute = MathOoxmlFormatter.inlineRuns("|x+1|")
         val sine = MathOoxmlFormatter.inlineRuns("sin(θ)")
