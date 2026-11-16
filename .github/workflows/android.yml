@@ -134,8 +134,20 @@ jobs:
       - name: Run unit tests
         run: gradle --no-daemon --stacktrace testDebugUnitTest
 
-      # No APK build here: coding checks and unit tests only, as requested.
-      # 10. Preserve test reports, even if tests fail
+      # 10. Build the installable debug APK only after all tests pass
+      - name: Build debug APK
+        run: gradle --no-daemon --stacktrace assembleDebug
+
+      # 11. Publish the APK as a downloadable workflow artifact
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: maths-paper-maker-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      # 12. Preserve test reports, even if tests fail
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
