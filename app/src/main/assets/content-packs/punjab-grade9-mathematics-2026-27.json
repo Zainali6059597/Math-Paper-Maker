@@ -8,7 +8,7 @@
     "session": "2026-27"
   },
   "source": {
-    "sourceId": "PECTAA-PUNJAB-G9-MATH-2026-27-1238",
+    "sourceId": "PECTAA-PUNJAB-G9-MATH-2026-27-NOTIFICATION-1238-V2",
     "issuer": "Punjab Education, Curriculum, Training and Assessment Authority (PECTAA)",
     "title": "Smart Syllabus (ALP / Deleted Topics and Exercise Questions), Pairing Schemes and Model Papers for Grade 9, Academic Session 2026–27 and BISE Annual Examination 2027 (PECTAA Notification No. PECTAA/C&C Unit/2026/1238, dated 6 November 2026)",
     "sourceUrl": "https://pectaa.edu.pk/wp-content/uploads/2026/11/ALP-9-Notification-06.11.2026-F.pdf",
@@ -17,8 +17,8 @@
     "pageReference": "Annex-A, Mathematics Grade-9 section. The notification applies across Punjab BISEs; practice questions in this package are independently authored."
   },
   "pattern": {
-    "patternId": "punjab-grade9-mathematics-2026-27-pectaa-1238-v1",
-    "version": 1,
+    "patternId": "punjab-grade9-mathematics-2026-27-pectaa-1238-v2",
+    "version": 2,
     "totalMarks": 75,
     "durationMinutes": 150,
     "sourcePage": "PECTAA Notification No. 1238, Grade 9 Mathematics pairing scheme: Q1–Q9.",
@@ -554,7 +554,7 @@
   },
   "questions": [
     {
-      "questionId": "PUNJAB-G9-Q-MCQ01",
+      "questionId": "PUNJAB-G9-Q-MCQ01-V2",
       "chapterId": "CH1",
       "topic": "Original practice question",
       "sloId": "",
@@ -569,7 +569,7 @@
       "semanticFingerprint": "punjab-g9-mcq01-which-of-the-following-is-irrational-a-0-25-b-2-c-3-4-d-0-5"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ02",
+      "questionId": "PUNJAB-G9-Q-MCQ02-V2",
       "chapterId": "CH2",
       "topic": "Original practice question",
       "sloId": "",
@@ -584,7 +584,7 @@
       "semanticFingerprint": "punjab-g9-mcq02-the-value-of-log-1000-is-a-1-b-2-c-3-d-10"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ03",
+      "questionId": "PUNJAB-G9-Q-MCQ03-V2",
       "chapterId": "CH3",
       "topic": "Original practice question",
       "sloId": "",
@@ -599,7 +599,7 @@
       "semanticFingerprint": "punjab-g9-mcq03-if-a-1-2-3-and-b-3-4-then-a-b-is-a-1-2-b-3-c-1-2-3-4-d-4-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ04",
+      "questionId": "PUNJAB-G9-Q-MCQ04-V2",
       "chapterId": "CH3",
       "topic": "Original practice question",
       "sloId": "",
@@ -614,7 +614,7 @@
       "semanticFingerprint": "punjab-g9-mcq04-the-power-set-of-a-b-contains-how-many-subsets-a-2-b-3-c-4-d-5"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ05",
+      "questionId": "PUNJAB-G9-Q-MCQ05-V2",
       "chapterId": "CH4",
       "topic": "Original practice question",
       "sloId": "",
@@ -629,7 +629,7 @@
       "semanticFingerprint": "punjab-g9-mcq05-a-factor-of-x-9-is-a-x-9-b-x-9-c-x-3-d-x-3"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ06",
+      "questionId": "PUNJAB-G9-Q-MCQ06-V2",
       "chapterId": "CH4",
       "topic": "Original practice question",
       "sloId": "",
@@ -644,7 +644,7 @@
       "semanticFingerprint": "punjab-g9-mcq06-the-common-factor-of-6x-and-9x-is-a-3x-b-6x-c-9x-d-3x-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ07",
+      "questionId": "PUNJAB-G9-Q-MCQ07-V2",
       "chapterId": "CH5",
       "topic": "Original practice question",
       "sloId": "",
@@ -659,7 +659,7 @@
       "semanticFingerprint": "punjab-g9-mcq07-the-solution-of-2x-5-13-is-a-3-b-4-c-5-d-9"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ08",
+      "questionId": "PUNJAB-G9-Q-MCQ08-V2",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -674,7 +674,7 @@
       "semanticFingerprint": "punjab-g9-mcq08-sin-30-equals-a-0-b-1-2-c-3-2-d-1"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ09",
+      "questionId": "PUNJAB-G9-Q-MCQ09-V2",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -689,7 +689,7 @@
       "semanticFingerprint": "punjab-g9-mcq09-the-value-of-sin-cos-is-a-0-b-1-c-tan-d-2"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ10",
+      "questionId": "PUNJAB-G9-Q-MCQ10-V2",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -704,7 +704,7 @@
       "semanticFingerprint": "punjab-g9-mcq10-the-slope-of-the-line-y-5x-3-is-a-3-b-3-c-5-d-5"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ11",
+      "questionId": "PUNJAB-G9-Q-MCQ11-V2",
       "chapterId": "CH9",
       "topic": "Original practice question",
       "sloId": "",
@@ -719,7 +719,7 @@
       "semanticFingerprint": "punjab-g9-mcq11-if-the-corresponding-sides-of-two-triangles-are-proportional-and-their-corresponding-angles-are-equal-the-triangles-are-a-congruent-only-b-similar-c-always-right-angled-d-unequal"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ12",
+      "questionId": "PUNJAB-G9-Q-MCQ12-V2",
       "chapterId": "CH10",
       "topic": "Original practice question",
       "sloId": "",
@@ -734,7 +734,7 @@
       "semanticFingerprint": "punjab-g9-mcq12-the-graph-of-y-2x-1-is-a-a-circle-b-straight-line-c-parabola-d-pair-of-parallel-lines"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ13",
+      "questionId": "PUNJAB-G9-Q-MCQ13-V2",
       "chapterId": "CH11",
       "topic": "Original practice question",
       "sloId": "",
@@ -749,7 +749,7 @@
       "semanticFingerprint": "punjab-g9-mcq13-the-locus-of-points-equidistant-from-the-endpoints-of-a-segment-is-its-a-angle-bisector-b-perpendicular-bisector-c-median-d-altitude"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ14",
+      "questionId": "PUNJAB-G9-Q-MCQ14-V2",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
@@ -764,7 +764,7 @@
       "semanticFingerprint": "punjab-g9-mcq14-the-arithmetic-mean-of-2-4-and-6-is-a-3-b-4-c-5-d-6"
     },
     {
-      "questionId": "PUNJAB-G9-Q-MCQ15",
+      "questionId": "PUNJAB-G9-Q-MCQ15-V2",
       "chapterId": "CH13",
       "topic": "Original practice question",
       "sloId": "",
@@ -779,7 +779,7 @@
       "semanticFingerprint": "punjab-g9-mcq15-the-probability-of-getting-a-head-when-a-fair-coin-is-tossed-is-a-0-b-1-4-c-1-2-d-1"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT01",
+      "questionId": "PUNJAB-G9-Q-SHORT01-V2",
       "chapterId": "CH1",
       "topic": "Original practice question",
       "sloId": "",
@@ -794,7 +794,7 @@
       "semanticFingerprint": "punjab-g9-short01-express-0-375-as-a-fraction-in-lowest-terms-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT02",
+      "questionId": "PUNJAB-G9-Q-SHORT02-V2",
       "chapterId": "CH1",
       "topic": "Original practice question",
       "sloId": "",
@@ -809,7 +809,7 @@
       "semanticFingerprint": "punjab-g9-short02-classify-49-and-7-as-rational-or-irrational-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT03",
+      "questionId": "PUNJAB-G9-Q-SHORT03-V2",
       "chapterId": "CH2",
       "topic": "Original practice question",
       "sloId": "",
@@ -824,7 +824,7 @@
       "semanticFingerprint": "punjab-g9-short03-evaluate-log-32-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT04",
+      "questionId": "PUNJAB-G9-Q-SHORT04-V2",
       "chapterId": "CH2",
       "topic": "Original practice question",
       "sloId": "",
@@ -839,7 +839,7 @@
       "semanticFingerprint": "punjab-g9-short04-find-the-characteristic-of-log-0-00056-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT05",
+      "questionId": "PUNJAB-G9-Q-SHORT05-V2",
       "chapterId": "CH3",
       "topic": "Original practice question",
       "sloId": "",
@@ -854,7 +854,7 @@
       "semanticFingerprint": "punjab-g9-short05-find-a-b-if-a-a-b-c-and-b-b-d-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT06",
+      "questionId": "PUNJAB-G9-Q-SHORT06-V2",
       "chapterId": "CH3",
       "topic": "Original practice question",
       "sloId": "",
@@ -869,7 +869,7 @@
       "semanticFingerprint": "punjab-g9-short06-write-the-power-set-of-p-q-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT07",
+      "questionId": "PUNJAB-G9-Q-SHORT07-V2",
       "chapterId": "CH4",
       "topic": "Original practice question",
       "sloId": "",
@@ -884,7 +884,7 @@
       "semanticFingerprint": "punjab-g9-short07-factorize-x-5x-6-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT08",
+      "questionId": "PUNJAB-G9-Q-SHORT08-V2",
       "chapterId": "CH4",
       "topic": "Original practice question",
       "sloId": "",
@@ -899,7 +899,7 @@
       "semanticFingerprint": "punjab-g9-short08-factorize-4a-25-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT09",
+      "questionId": "PUNJAB-G9-Q-SHORT09-V2",
       "chapterId": "CH5",
       "topic": "Original practice question",
       "sloId": "",
@@ -914,7 +914,7 @@
       "semanticFingerprint": "punjab-g9-short09-solve-3-x-2-12-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT10",
+      "questionId": "PUNJAB-G9-Q-SHORT10-V2",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -929,7 +929,7 @@
       "semanticFingerprint": "punjab-g9-short10-convert-150-into-radians-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT11",
+      "questionId": "PUNJAB-G9-Q-SHORT11-V2",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -944,7 +944,7 @@
       "semanticFingerprint": "punjab-g9-short11-find-the-arc-length-when-r-6-cm-and-3-radians-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT12",
+      "questionId": "PUNJAB-G9-Q-SHORT12-V2",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -959,7 +959,7 @@
       "semanticFingerprint": "punjab-g9-short12-evaluate-2cos-6-sin-6-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT13",
+      "questionId": "PUNJAB-G9-Q-SHORT13-V2",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -974,7 +974,7 @@
       "semanticFingerprint": "punjab-g9-short13-find-the-distance-between-0-3-and-2-4-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT14",
+      "questionId": "PUNJAB-G9-Q-SHORT14-V2",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -989,7 +989,7 @@
       "semanticFingerprint": "punjab-g9-short14-find-the-slope-joining-3-2-and-2-7-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT15",
+      "questionId": "PUNJAB-G9-Q-SHORT15-V2",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -1004,7 +1004,7 @@
       "semanticFingerprint": "punjab-g9-short15-write-the-equation-of-the-horizontal-line-through-7-9-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT16",
+      "questionId": "PUNJAB-G9-Q-SHORT16-V2",
       "chapterId": "CH9",
       "topic": "Original practice question",
       "sloId": "",
@@ -1019,7 +1019,7 @@
       "semanticFingerprint": "punjab-g9-short16-two-similar-triangles-have-corresponding-sides-in-ratio-2-3-find-the-ratio-of-their-areas-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT17",
+      "questionId": "PUNJAB-G9-Q-SHORT17-V2",
       "chapterId": "CH9",
       "topic": "Original practice question",
       "sloId": "",
@@ -1034,7 +1034,7 @@
       "semanticFingerprint": "punjab-g9-short17-if-two-corresponding-angles-of-two-triangles-are-equal-and-their-third-angles-are-also-equal-what-can-be-concluded-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT18",
+      "questionId": "PUNJAB-G9-Q-SHORT18-V2",
       "chapterId": "CH9",
       "topic": "Original practice question",
       "sloId": "",
@@ -1049,7 +1049,7 @@
       "semanticFingerprint": "punjab-g9-short18-the-sides-of-two-similar-triangles-are-in-ratio-3-5-if-a-side-of-the-smaller-is-9-cm-find-the-corresponding-larger-side-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT19",
+      "questionId": "PUNJAB-G9-Q-SHORT19-V2",
       "chapterId": "CH10",
       "topic": "Original practice question",
       "sloId": "",
@@ -1064,7 +1064,7 @@
       "semanticFingerprint": "punjab-g9-short19-find-y-when-x-3-in-y-2x-1-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT20",
+      "questionId": "PUNJAB-G9-Q-SHORT20-V2",
       "chapterId": "CH10",
       "topic": "Original practice question",
       "sloId": "",
@@ -1079,7 +1079,7 @@
       "semanticFingerprint": "punjab-g9-short20-give-two-points-that-lie-on-y-x-2-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT21",
+      "questionId": "PUNJAB-G9-Q-SHORT21-V2",
       "chapterId": "CH11",
       "topic": "Original practice question",
       "sloId": "",
@@ -1094,7 +1094,7 @@
       "semanticFingerprint": "punjab-g9-short21-define-the-perpendicular-bisector-of-a-line-segment-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT22",
+      "questionId": "PUNJAB-G9-Q-SHORT22-V2",
       "chapterId": "CH11",
       "topic": "Original practice question",
       "sloId": "",
@@ -1109,7 +1109,7 @@
       "semanticFingerprint": "punjab-g9-short22-what-is-the-locus-of-points-at-a-fixed-distance-from-a-fixed-point-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT23",
+      "questionId": "PUNJAB-G9-Q-SHORT23-V2",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
@@ -1124,7 +1124,7 @@
       "semanticFingerprint": "punjab-g9-short23-find-the-arithmetic-mean-of-4-6-8-and-10-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT24",
+      "questionId": "PUNJAB-G9-Q-SHORT24-V2",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
@@ -1139,7 +1139,7 @@
       "semanticFingerprint": "punjab-g9-short24-find-the-mode-of-3-5-5-6-7-5-8-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT25",
+      "questionId": "PUNJAB-G9-Q-SHORT25-V2",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
@@ -1154,7 +1154,7 @@
       "semanticFingerprint": "punjab-g9-short25-find-the-median-of-2-4-7-9-12-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT26",
+      "questionId": "PUNJAB-G9-Q-SHORT26-V2",
       "chapterId": "CH13",
       "topic": "Original practice question",
       "sloId": "",
@@ -1169,7 +1169,7 @@
       "semanticFingerprint": "punjab-g9-short26-a-fair-die-is-rolled-find-the-probability-of-getting-an-even-number-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-SHORT27",
+      "questionId": "PUNJAB-G9-Q-SHORT27-V2",
       "chapterId": "CH13",
       "topic": "Original practice question",
       "sloId": "",
@@ -1184,7 +1184,7 @@
       "semanticFingerprint": "punjab-g9-short27-define-sample-space-for-a-single-coin-toss-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-LONG1",
+      "questionId": "PUNJAB-G9-Q-LONG1-V2",
       "chapterId": "CH1",
       "topic": "Original practice question",
       "sloId": "",
@@ -1199,7 +1199,7 @@
       "semanticFingerprint": "punjab-g9-long1-q5-a-simplify-50-8-b-solve-log-x-2-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-LONG2",
+      "questionId": "PUNJAB-G9-Q-LONG2-V2",
       "chapterId": "CH3",
       "topic": "Original practice question",
       "sloId": "",
@@ -1214,7 +1214,7 @@
       "semanticFingerprint": "punjab-g9-long2-q6-a-for-a-1-2-3-4-and-b-3-4-5-find-a-b-and-a-b-b-factorize-x-5x-4-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-LONG3",
+      "questionId": "PUNJAB-G9-Q-LONG3-V2",
       "chapterId": "CH5",
       "topic": "Original practice question",
       "sloId": "",
@@ -1229,7 +1229,7 @@
       "semanticFingerprint": "punjab-g9-long3-q7-a-solve-2x-3-7-and-represent-the-solution-interval-b-prove-tan-cot-sec-cosec-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-LONG4",
+      "questionId": "PUNJAB-G9-Q-LONG4-V2",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -1244,7 +1244,7 @@
       "semanticFingerprint": "punjab-g9-long4-q8-a-find-the-distance-between-a-0-2-and-b-3-6-and-state-the-slope-of-ab-b-two-similar-triangles-have-corresponding-sides-6-cm-and-9-cm-if-the-area-of-the-smaller-is-24-cm-find-the-area-of-the-larger-"
     },
     {
-      "questionId": "PUNJAB-G9-Q-LONG5",
+      "questionId": "PUNJAB-G9-Q-LONG5-V2",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
