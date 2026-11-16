@@ -79,6 +79,30 @@ class PunjabGrade9OfficialPatternTest {
         assertEquals("CH12", (0 until slots.length()).map { slots.getJSONObject(it) }.single { it.getString("slotId") == "Q9_A" }.getString("chapterId"))
     }
 
+    @Test fun mcqAndShortQuestionChapterDistributionsMatchNotification1238() {
+        val pattern = pack().getJSONObject("pattern")
+        val slots = pattern.getJSONArray("slots")
+        val mcqCounts = mutableMapOf<String, Int>()
+        val shortCounts = mutableMapOf<String, MutableMap<String, Int>>()
+        for (i in 0 until slots.length()) {
+            val slot = slots.getJSONObject(i)
+            val chapter = slot.optString("chapterId")
+            when (slot.optString("questionType")) {
+                "MCQ" -> mcqCounts[chapter] = (mcqCounts[chapter] ?: 0) + 1
+                "SHORT" -> {
+                    val group = slot.getString("groupId")
+                    val counts = shortCounts.getOrPut(group) { mutableMapOf() }
+                    counts[chapter] = (counts[chapter] ?: 0) + 1
+                }
+            }
+        }
+        assertEquals(mapOf("CH1" to 1, "CH2" to 1, "CH3" to 2, "CH4" to 2, "CH5" to 1,
+            "CH6" to 2, "CH7" to 1, "CH9" to 1, "CH10" to 1, "CH11" to 1, "CH12" to 1, "CH13" to 1), mcqCounts)
+        assertEquals(mapOf("CH1" to 2, "CH2" to 2, "CH3" to 2, "CH4" to 2, "CH5" to 1), shortCounts["Q2"])
+        assertEquals(mapOf("CH6" to 3, "CH7" to 3, "CH9" to 3), shortCounts["Q3"])
+        assertEquals(mapOf("CH10" to 2, "CH11" to 2, "CH12" to 3, "CH13" to 2), shortCounts["Q4"])
+    }
+
     @Test fun correctedGrade9PackageImportsWholePairedBundlesAndAlternatives() {
         val parsed = PackageImporter.parse(pack().toString())
         assertEquals(52, parsed.slots.size)
