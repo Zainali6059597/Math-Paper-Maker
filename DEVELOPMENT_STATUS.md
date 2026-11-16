@@ -160,3 +160,5 @@ Latest checkpoint update (2026-11-13): added a pure-Kotlin board-pattern complia
 - DOCX equation text now preserves explicit line breaks and filters XML-invalid control/noncharacter code points before writing.
 - **OCR limitation:** the bundled recognizer is Latin-script; Urdu-script OCR is not included. OCR may misread mathematical notation, so every candidate must be reviewed and corrected before adding it. It only proposes clearly numbered question candidates; it does not auto-generate or auto-approve questions.
 - **No compilation, Gradle build, CI workflow, APK assembly, or Ramus testing was started.** All changes above are source-only and remain uncompiled/unverified, as requested.
+
+- Added in-place text correction in the checkbox review list, so teachers can fix OCR/extraction mistakes before adding a candidate to the paper.
