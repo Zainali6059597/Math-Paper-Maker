@@ -65,9 +65,9 @@ object PunjabBoardPattern {
     )
 
     fun isValidChapter(grade: Int, chapterId: String): Boolean {
-        if (grade !in 9..10) return false
-        val chapter = chapterId.removePrefix("CH").toIntOrNull() ?: return false
-        return chapter in 1..if (grade == 9) 13 else 12
+        if (grade !in 9..10 || !chapterId.matches(Regex("CH(?:[1-9]|1[0-3])"))) return false
+        val chapter = chapterId.removePrefix("CH").toInt()
+        return chapter <= if (grade == 9) 13 else 12
     }
 
     fun count(questions: List<PaperQuestion>, kind: String): Int =
