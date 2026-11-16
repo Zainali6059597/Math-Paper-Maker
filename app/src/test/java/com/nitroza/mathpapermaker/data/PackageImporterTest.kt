@@ -24,9 +24,12 @@ class PackageImporterTest {
         val parsed = PackageImporter.parse(packageJson())
         assertTrue(parsed.questions.isEmpty())
         assertEquals("Q2", parsed.choiceGroups.single().groupId)
-        assertEquals(setOf("CH8", "CH11"),
-            (0 until org.json.JSONArray(parsed.slots.single().allowedChapterIdsJson).length())
-                .map { org.json.JSONArray(parsed.slots.single().allowedChapterIdsJson).getString(it) }.toSet())
+        assertTrue(parsed.slots.all { slot ->
+            assertEquals(setOf("CH8", "CH11"),
+                (0 until org.json.JSONArray(slot.allowedChapterIdsJson).length())
+                    .map { org.json.JSONArray(slot.allowedChapterIdsJson).getString(it) }.toSet())
+            true
+        })
         assertEquals("CHAPTER_IN_GROUP", parsed.quotas.single().dimension)
         assertEquals("Q2|CH1", parsed.quotas.single().value)
     }
