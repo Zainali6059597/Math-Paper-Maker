@@ -54,9 +54,14 @@ object PaperDraftStore {
     }
 
     fun load(context: Context): PaperDraftSnapshot? {
-        val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getString(KEY_DRAFT, null) ?: return null
-        return parseSnapshot(raw, context.filesDir)
+        val preferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        val raw = preferences.getString(KEY_DRAFT, null) ?: return null
+        val restored = parseSnapshot(raw, context.filesDir)
+        if (restored == null) {
+            // Drop an unreadable/corrupt draft once, rather than parsing it on every launch.
+            preferences.edit().remove(KEY_DRAFT).apply()
+        }
+        return restored
     }
 
     internal fun parseSnapshot(raw: String, filesDir: File): PaperDraftSnapshot? {
