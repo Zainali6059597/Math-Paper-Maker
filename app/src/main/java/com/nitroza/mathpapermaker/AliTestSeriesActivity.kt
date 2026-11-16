@@ -271,8 +271,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Text("Prepare a paper. Choose every question yourself.", style = MaterialTheme.typography.headlineSmall)
                     Text("SELECT CLASS", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        FilterChip(selected = grade == 9, onClick = { grade = 9 }, label = { Text("CLASS 9") })
-                        FilterChip(selected = grade == 10, onClick = { grade = 10 }, label = { Text("CLASS 10") })
+                        FilterChip(selected = grade == 9, enabled = selected.isEmpty() || grade == 9, onClick = { grade = 9 }, label = { Text("CLASS 9") })
+                        FilterChip(selected = grade == 10, enabled = selected.isEmpty() || grade == 10, onClick = { grade = 10 }, label = { Text("CLASS 10") })
                     }
                     Card {
                         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
