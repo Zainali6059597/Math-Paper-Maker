@@ -9,7 +9,9 @@ data class OfferedQuestionSlot(
     val sloId: String? = null,
     val questionType: String? = null,
     val bundleId: String? = null,
-    val groupId: String? = null
+    val groupId: String? = null,
+    /** Optional group for choosing whole paired multi-part questions. */
+    val bundleChoiceGroupId: String? = null
 )
 
 /** All questions in a choice group carry the same marks; students attempt only attemptCount. */
