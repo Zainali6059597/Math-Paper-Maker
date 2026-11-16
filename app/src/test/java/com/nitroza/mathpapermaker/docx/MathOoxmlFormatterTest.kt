@@ -55,6 +55,13 @@ class MathOoxmlFormatterTest {
         assertTrue(logarithm.contains("<m:func>"))
     }
 
+    @Test fun incompleteMatrixTemplateIsNotMisrepresentedAsEquation() {
+        val xml = MathOoxmlFormatter.inlineRuns("matrix(a,b;c)")
+        assertTrue(xml.contains("<w:r>"))
+        assertTrue(!xml.contains("<m:m>"))
+        assertTrue(xml.contains("matrix(a,b;c)"))
+    }
+
     @Test fun nestedTemplatesRemainNestedAndEditable() {
         val xml = MathOoxmlFormatter.inlineRuns("√((a)/(b))")
         assertTrue(xml.contains("<m:rad>"))
