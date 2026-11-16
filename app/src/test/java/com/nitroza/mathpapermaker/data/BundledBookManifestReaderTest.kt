@@ -64,7 +64,7 @@ class BundledBookManifestReaderTest {
         )
         requests.forEach { request ->
             val chapters = BundledBookManifestReader.parseManifest(
-                manifest, setOf("maths9.pdf", "fbise9.pdf"),
+                manifest, setOf("maths9.pdf"),
                 request[0] as String, request[1] as Int, request[2] as String,
                 request[3] as String, request[4] as String
             )
