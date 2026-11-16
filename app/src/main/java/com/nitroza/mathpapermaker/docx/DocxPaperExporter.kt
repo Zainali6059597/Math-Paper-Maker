@@ -60,12 +60,14 @@ object DocxPaperExporter {
         require(questions.sumOf { it.text.length.toLong() } <= MAX_TOTAL_TEXT_CHARS) {
             "The selected question text is too large for one paper."
         }
-        questions.filter { it.imageFile != null && it.text.isBlank() }.forEach {
+        questions.filter { it.imageFile != null }.forEach {
             require(File(it.imageFile!!).isFile) { "A selected scanned-question image is missing. Re-select that question." }
         }
 
+        // Preserve a scanned crop even when the teacher also typed or corrected
+        // editable text for the same question. The DOCX can contain both.
         val imageEntries = questions.mapIndexedNotNull { index, q ->
-            if (q.text.isNotBlank()) null else q.imageFile?.let { index to File(it) }
+            q.imageFile?.let { index to File(it) }
         }
         require(imageEntries.all { (_, file) -> file.isFile && file.length() in 24L..MAX_IMAGE_BYTES }) {
             "A scanned question image is missing or exceeds the per-image size limit."
