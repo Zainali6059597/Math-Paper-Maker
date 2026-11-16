@@ -7,6 +7,7 @@ Ali Test Series lets a teacher manually select questions from a local Mathematic
 ## What is implemented
 
 - Choose Class 9 or Class 10 and open a PDF from device storage.
+- Open the official PECTAA-linked Class 9/10 textbook source from the app; download it in the external browser, then import it for offline use.
 - Navigate PDF pages.
 - Select text from text-based PDFs or draw a crop around a scanned question.
 - Edit question text, numbering, chapter, question type and marks.
