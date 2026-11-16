@@ -187,6 +187,12 @@ suspend fun AppDatabase.importPackage(
         it.chapterId.isNotBlank() && it.questionType.isNotBlank() && it.semanticFingerprint.isNotBlank() }) {
         "Every question must match the pattern identity and imported source, with required metadata."
     }
+    require(slots.all { slot ->
+        val ids = org.json.JSONArray(slot.allowedChapterIdsJson)
+        val values = (0 until ids.length()).map { ids.getString(it) }
+        values.all { it.isNotBlank() } && values.distinct().size == values.size &&
+            (values.isEmpty() || slot.chapterId == null)
+    }) { "Allowed chapter alternatives must be valid, unique and mutually exclusive with a fixed chapter." }
     require(slots.all { it.marks > 0 }) { "All pattern slot marks must be positive." }
     val requiredBundles = slots.filter { it.bundleId != null }.groupBy { it.bundleId!! }
     require(requiredBundles.keys.all { it.isNotBlank() } && requiredBundles.values.all { it.size >= 2 }) {
