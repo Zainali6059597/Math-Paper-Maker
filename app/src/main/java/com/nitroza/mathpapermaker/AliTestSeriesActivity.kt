@@ -485,6 +485,9 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         if (showQuestions) {
+            val missingImageCount = selected.count { item ->
+                item.imageFile != null && !File(item.imageFile).isFile
+            }
             AlertDialog(
                 onDismissRequest = { showQuestions = false },
                 title = { Text("SELECTED QUESTIONS (${selected.size})") },
@@ -496,9 +499,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("Paper title") }, singleLine = true)
                         Text(PunjabBoardPattern.status(paperQuestions), style = MaterialTheme.typography.labelMedium)
                         val patternErrors = PunjabBoardPattern.validationErrors(grade, paperQuestions)
-                        val missingImageCount = selected.count { item ->
-                            item.imageFile != null && !File(item.imageFile).isFile
-                        }
                         patternErrors.forEach { error ->
                             Text("• $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
