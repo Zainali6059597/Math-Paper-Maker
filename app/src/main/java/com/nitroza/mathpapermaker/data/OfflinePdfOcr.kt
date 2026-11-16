@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.math.min
@@ -58,20 +59,32 @@ object OfflinePdfOcr {
             }
 
             val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-            try {
-                suspendCancellableCoroutine { continuation ->
+            suspendCancellableCoroutine { continuation ->
+                val released = AtomicBoolean(false)
+                fun releaseResources() {
+                    if (released.compareAndSet(false, true)) {
+                        recognizer.close()
+                        if (!bitmap.isRecycled) bitmap.recycle()
+                    }
+                }
+
+                try {
                     val task = recognizer.process(InputImage.fromBitmap(bitmap, 0))
                     task.addOnSuccessListener { result ->
                         if (continuation.isActive) continuation.resume(result.text)
+                        releaseResources()
                     }
                     task.addOnFailureListener { error ->
                         if (continuation.isActive) continuation.resumeWithException(error)
+                        releaseResources()
                     }
-                    continuation.invokeOnCancellation { recognizer.close() }
+                    // ML Kit's Task cannot be cancelled. Keep the bitmap alive until
+                    // its callback completes, even if the calling coroutine is cancelled.
+                    continuation.invokeOnCancellation { /* completion callback owns cleanup */ }
+                } catch (error: Throwable) {
+                    releaseResources()
+                    if (continuation.isActive) continuation.resumeWithException(error)
                 }
-            } finally {
-                recognizer.close()
-                if (!bitmap.isRecycled) bitmap.recycle()
             }
         }
 }
