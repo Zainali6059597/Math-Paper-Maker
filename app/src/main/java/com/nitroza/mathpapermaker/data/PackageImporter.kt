@@ -103,7 +103,8 @@ object PackageImporter {
                 summative = q.optBoolean("summative", false), verificationStatus = "NEEDS_REVIEW",
                 copyrightStatus = q.optString("copyrightStatus", "UNKNOWN"), sourceId = sourceId,
                 sourcePage = q.optString("sourcePage").takeIf { it.isNotBlank() },
-                semanticFingerprint = q.optString("semanticFingerprint", q.getString("questionText").trim().lowercase().hashCode().toString())
+                semanticFingerprint = q.optString("semanticFingerprint", q.getString("questionText").trim().lowercase().hashCode().toString()),
+                selectionWeight = q.optDouble("selectionWeight", 1.0)
             )
         }
         require(slots.map { it.slotId }.distinct().size == slots.size) { "Duplicate pattern slot IDs." }
@@ -132,6 +133,7 @@ object PackageImporter {
                 "Pattern totalMarks must equal required fixed/paired marks plus attempted choice-group marks."
             }
         }
+        require(questions.all { it.selectionWeight.isFinite() && it.selectionWeight in 0.1..10.0 }) { "Question selectionWeight must be a finite value from 0.1 to 10.0." }
         require(questions.map { it.questionId }.distinct().size == questions.size) { "Duplicate question IDs." }
         require(pattern.totalMarks > 0 && pattern.version > 0) { "Invalid pattern marks or version." }
         require(listOf(board, stream, subject, session, sourceId).all { it.isNotBlank() }) { "Identity and source identifiers cannot be blank." }
