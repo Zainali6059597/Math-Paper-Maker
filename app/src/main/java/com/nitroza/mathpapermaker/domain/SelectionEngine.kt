@@ -22,7 +22,8 @@ data class QuestionCandidate(
     val summative: Boolean,
     val status: ContentStatus,
     val cognitiveLevel: String = "",
-    val difficulty: String = ""
+    val difficulty: String = "",
+    val selectionWeight: Double = 1.0
 )
 
 data class QuestionSlot(
