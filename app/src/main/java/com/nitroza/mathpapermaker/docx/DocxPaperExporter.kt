@@ -61,11 +61,17 @@ object DocxPaperExporter {
                     if (relId != null) {
                         val imageFile = imageEntries.first { it.first == index }.second
                         val dimensions = imageDimensions(imageFile)
+                        // Word drawing extents use EMUs, not raw pixels (96 DPI = 9,525 EMUs/px).
+                        val rawWidthEmu = dimensions.first.toLong() * 9_525L
+                        val rawHeightEmu = dimensions.second.toLong() * 9_525L
                         val maxWidth = 5_800_000L
                         val maxHeight = 6_800_000L
-                        val scale = min(maxWidth.toDouble() / dimensions.first, maxHeight.toDouble() / dimensions.second).coerceAtMost(1.0)
-                        val cx = (dimensions.first * scale).toLong().coerceAtLeast(1L)
-                        val cy = (dimensions.second * scale).toLong().coerceAtLeast(1L)
+                        val scale = min(
+                            maxWidth.toDouble() / rawWidthEmu,
+                            maxHeight.toDouble() / rawHeightEmu
+                        ).coerceAtMost(1.0)
+                        val cx = (rawWidthEmu * scale).toLong().coerceAtLeast(1L)
+                        val cy = (rawHeightEmu * scale).toLong().coerceAtLeast(1L)
                         append(imageParagraph(relId, index + 1, cx, cy))
                     }
                     paragraph(" ", size = 12)
