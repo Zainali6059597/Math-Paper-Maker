@@ -198,24 +198,67 @@ suspend fun AppDatabase.importPackage(
     require(choiceGroups.all { it.patternId == pattern.patternId && it.groupId.isNotBlank() && it.displayOrder >= 0 && it.offeredCount > 0 && it.attemptCount in 1..it.offeredCount && it.marksPerQuestion > 0 }) { "Choice group rules are invalid." }
     require(choiceGroups.map { it.groupId }.distinct().size == choiceGroups.size) { "Choice group IDs must be unique." }
     require(slots.all { it.groupId == null || choiceGroups.any { group -> group.groupId == it.groupId } }) { "A slot refers to an unknown choice group." }
-    if (choiceGroups.isNotEmpty()) {
-        choiceGroups.forEach { group ->
-            val groupSlots = slots.filter { it.groupId == group.groupId }
-            require(groupSlots.size == group.offeredCount) { "Choice group ${group.groupId} offered count does not match its slots." }
-            require(groupSlots.all { it.marks == group.marksPerQuestion }) { "Choice group slot marks must match the group's marks per question." }
+    choiceGroups.forEach { group ->
+        val groupSlots = slots.filter { it.groupId == group.groupId }
+        require(groupSlots.size == group.offeredCount) {
+            "Choice group ${group.groupId} offered count does not match its slots."
         }
-        val requiredMarks = slots.filter { it.groupId == null }.sumOf { it.marks }
-        val attemptedChoiceMarks = choiceGroups.sumOf { it.attemptCount * it.marksPerQuestion }
-        require(requiredMarks + attemptedChoiceMarks == pattern.totalMarks) {
-            "Pattern total must equal required fixed/paired marks plus attempted choice-group marks."
+        require(groupSlots.all { it.marks == group.marksPerQuestion }) {
+            "Choice group slot marks must match the group's marks per question."
         }
-    } else {
-        require(pattern.totalMarks == slots.sumOf { it.marks }) { "Legacy required-slot patterns must sum to totalMarks." }
+    }
+    require(slots.none { it.groupId != null && (it.bundleId != null || it.bundleChoiceGroupId != null) }) {
+        "A slot cannot belong to both a single-question choice group and a paired-question bundle."
+    }
+    require(bundleChoiceGroups.all { it.patternId == pattern.patternId &&
+        it.groupId.isNotBlank() && it.displayOrder >= 0 && it.offeredBundleCount > 0 &&
+        it.attemptBundleCount in 1..it.offeredBundleCount && it.marksPerBundle > 0 }) {
+        "Paired-question choice group rules are invalid."
+    }
+    require(bundleChoiceGroups.map { it.groupId }.distinct().size == bundleChoiceGroups.size) {
+        "Paired-question choice group IDs must be unique."
+    }
+    val parsedBundleIds = bundleChoiceGroups.associate { group ->
+        val idsJson = org.json.JSONArray(group.bundleIdsJson)
+        val ids = (0 until idsJson.length()).map { idsJson.getString(it) }
+        require(ids.size == group.offeredBundleCount && ids.all { it.isNotBlank() } && ids.distinct().size == ids.size) {
+            "Paired-question choice group ${group.groupId} must declare exactly offeredBundleCount unique bundle IDs."
+        }
+        group.groupId to ids.toSet()
+    }
+    require(slots.all { slot -> slot.bundleChoiceGroupId == null ||
+        (slot.bundleId != null && bundleChoiceGroups.any { it.groupId == slot.bundleChoiceGroupId }) }) {
+        "A slot refers to an unknown paired-question choice group or has no bundle ID."
+    }
+    val allOptionalBundleIds = parsedBundleIds.values.flatten()
+    require(allOptionalBundleIds.distinct().size == allOptionalBundleIds.size) {
+        "A paired bundle cannot belong to multiple optional choice groups."
+    }
+    bundleChoiceGroups.forEach { group ->
+        val expectedIds = parsedBundleIds.getValue(group.groupId)
+        val groupSlots = slots.filter { it.bundleChoiceGroupId == group.groupId }
+        require(groupSlots.mapNotNull { it.bundleId }.toSet() == expectedIds) {
+            "Every offered paired question in ${group.groupId} must have its declared bundle parts."
+        }
+        require(groupSlots.groupBy { it.bundleId }.values.all { parts ->
+            parts.size >= 2 && parts.sumOf { it.marks } == group.marksPerBundle
+        }) {
+            "Each offered paired question in ${group.groupId} must contain at least two parts and match marksPerBundle."
+        }
+    }
+
+    val fixedMarks = slots.filter { it.groupId == null && it.bundleChoiceGroupId == null }.sumOf { it.marks }
+    val attemptedSingleChoiceMarks = choiceGroups.sumOf { it.attemptCount * it.marksPerQuestion }
+    val attemptedBundleChoiceMarks = bundleChoiceGroups.sumOf { it.attemptBundleCount * it.marksPerBundle }
+    val attemptedTotal = fixedMarks + attemptedSingleChoiceMarks + attemptedBundleChoiceMarks
+    require(attemptedTotal == pattern.totalMarks) {
+        "Fixed marks plus attempted single and paired choice marks total $attemptedTotal, not ${pattern.totalMarks}."
     }
     contentDao().insertSources(listOf(source))
     contentDao().insertPatterns(listOf(pattern))
     contentDao().insertSlots(slots)
     if (choiceGroups.isNotEmpty()) contentDao().insertChoiceGroups(choiceGroups)
+    if (bundleChoiceGroups.isNotEmpty()) contentDao().insertBundleChoiceGroups(bundleChoiceGroups)
     if (quotas.isNotEmpty()) contentDao().insertPatternQuotas(quotas)
     require(exclusions.all { it.patternId == pattern.patternId && it.exclusionType in setOf("CHAPTER", "SLO") && it.value.isNotBlank() }) { "Syllabus exclusions are invalid." }
     require(exclusions.map { it.exclusionType to it.value }.distinct().size == exclusions.size) { "Duplicate syllabus exclusions." }
