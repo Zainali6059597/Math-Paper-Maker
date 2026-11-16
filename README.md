@@ -23,10 +23,10 @@ Implemented in source:
 - New AliTestSeriesActivity is the launcher screen.
 - Class selection and local PDF opening through Android's document picker.
 - Local PDF rendering and page navigation.
-- PDFBox text extraction for the current page; teacher trims the extracted page text to the desired question.
+- PDFBox text extraction for the current page; teacher can long-press and select the exact question text using selection handles.
 - Drag-to-select crop for scanned/image pages.
 - Question list with remove, reorder and editable question labels.
-- Punjab Board 2026–27 common counts and marks gate: 15 × 1-mark MCQs, 27 × 2-mark short questions, and 10 × 4-mark long-question parts (109 offered marks; 75 attempted marks).
+- Class-specific Punjab Board 2026–27 MCQ chapter distribution, short-section chapter distribution, and long-question chapter pairing validation, alongside the 15 × 1-mark MCQ, 27 × 2-mark short and 10 × 4-mark long-part counts (109 offered marks; 75 attempted marks). Chapter ID is currently selected manually for each question.
 - OOXML DOCX writer with editable text and embedded PNG question crops.
 - Pattern rule unit tests added.
 
