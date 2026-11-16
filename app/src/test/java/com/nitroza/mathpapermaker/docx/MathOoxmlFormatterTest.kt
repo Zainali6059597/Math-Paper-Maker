@@ -20,6 +20,13 @@ class MathOoxmlFormatterTest {
         assertTrue(xml.contains("x+1"))
     }
 
+    @Test fun cubeRootTemplateKeepsItsIndexEditable() {
+        val xml = MathOoxmlFormatter.inlineRuns("∛(x+1)")
+        assertTrue(xml.contains("<m:rad>"))
+        assertTrue(xml.contains("<m:deg>"))
+        assertTrue(xml.contains("<m:t>3</m:t>"))
+    }
+
     @Test fun powerAndSubscriptTemplatesBecomeWordStructures() {
         val power = MathOoxmlFormatter.inlineRuns("x^(n+1)")
         val subscript = MathOoxmlFormatter.inlineRuns("a_(2)")
