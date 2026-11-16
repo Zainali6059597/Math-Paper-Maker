@@ -11,7 +11,7 @@ object TextbookExerciseParser {
 
     private val chapterPattern = Regex("""(?i)^\s*(?:chapter|unit)\s+([0-9]{1,2}|[ivxlcdm]+)\b.*$""")
     private val exercisePattern = Regex("""(?i)^\s*(?:exercise|ex\.?|review exercise)\s*([0-9]+(?:\.[0-9]+)?)\b.*$""")
-    private val questionPattern = Regex("""^\s*(?:Q\.?\s*)?([0-9]{1,2})(?:\s*[.)])\s+(.+)$""")
+    private val questionStartPattern = Regex("""^\s*(?:Q\.?\s*)?([0-9]{1,2})(?:\s*[.)])(?:\s+(.*))?$""")
 
     fun parse(book: BundledBookPdfReader.BookIndex): ParseResult {
         var chapter = "UNMAPPED"
