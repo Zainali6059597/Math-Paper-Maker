@@ -100,9 +100,14 @@ class MainActivity : ComponentActivity() {
         val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri: Uri? ->
             if (uri != null && draft.isNotEmpty()) {
                 runCatching {
+                    val pdfInstructions = buildString {
+                        if (mode == GenerationMode.PRACTICE) append("PRACTICE COPY — NOT AN OFFICIAL BOARD PAPER. Source, pattern and questions remain NEEDS_REVIEW until independently approved.\\n\\n")
+                        if (customDraft) append("CUSTOM DRAFT — verify all edits, question order and marks before use.\\n\\n")
+                        append(instructions)
+                    }
                     PaperPdfExporter.write(this@MainActivity, uri, PaperPdfExporter.Paper(
                         school, title, draftIdentity.board, draftIdentity.grade, draftIdentity.subject,
-                        draftIdentity.session, instructions, draft, totalMarks, choiceInstructions, customDraft, activeDurationMinutes
+                        draftIdentity.session, pdfInstructions, draft, totalMarks, choiceInstructions, customDraft, activeDurationMinutes
                     ))
                 }.onSuccess { notice = "PDF exported successfully. Check your selected destination." }
                     .onFailure { notice = "PDF export failed: ${it.message}" }
@@ -126,7 +131,11 @@ class MainActivity : ComponentActivity() {
                     PaperPdfExporter.write(this@MainActivity, uri, PaperPdfExporter.Paper(
                         school, "Answer Key — ${title.ifBlank { "Mathematics Examination" }}",
                         draftIdentity.board, draftIdentity.grade, draftIdentity.subject, draftIdentity.session,
-                        "TEACHER COPY — Suggested answers for the generated paper. Check working and marking against the applicable board guidance.",
+                        when {
+                            mode == GenerationMode.PRACTICE -> "PRACTICE / UNVERIFIED CONTENT — TEACHER COPY. Suggested answers; verify against the current official textbook and marking guidance."
+                            customDraft -> "CUSTOM DRAFT — TEACHER COPY. Verify edited questions and suggested answers before use."
+                            else -> "TEACHER COPY — Suggested answers for the generated paper. Check working and marking against the applicable board guidance."
+                        },
                         answerItems, totalMarks, choiceInstructions, customDraft, activeDurationMinutes
                     ))
                 }.onSuccess { notice = "Answer-key PDF exported. Check the selected destination." }
@@ -411,12 +420,18 @@ class MainActivity : ComponentActivity() {
                                 }
                                 if (criticalCustomErrors.isNotEmpty()) error("Export blocked by critical content-integrity issue(s): ${criticalCustomErrors.joinToString(" ")}")
                                 if (!customDraft && !report.passed) error("Pre-export compliance failed: ${report.errors.joinToString(" ")}")
-                                notice = if (customDraft) {
-                                    "Custom/non-standard draft: pattern audit ${if (report.passed) "passed" else "found issues"}. PDF will be labelled CUSTOM. ${report.errors.joinToString(" ")}".take(1200)
-                                } else "Pre-export audit passed: ${report.offeredMarks} offered marks; ${report.attemptedMarks} attempted marks. Preparing PDF…"
+                                notice = when {
+                                    customDraft -> "Custom/non-standard draft: pattern audit ${if (report.passed) "passed" else "found issues"}. PDF will be labelled CUSTOM. ${report.errors.joinToString(" ")}".take(1200)
+                                    mode == GenerationMode.PRACTICE -> "Practice audit passed: ${report.offeredMarks} offered marks; ${report.attemptedMarks} attempted marks. PDF will be marked PRACTICE; content remains NEEDS_REVIEW."
+                                    else -> "Pre-export audit passed: ${report.offeredMarks} offered marks; ${report.attemptedMarks} attempted marks. Preparing PDF…"
+                                }
                                 exportLauncher.launch("Maths-Paper-${draftIdentity.grade}.pdf")
                             }.onFailure { notice = "PDF export blocked: ${it.message}" }
                         }
+                    }, exportLabel = when {
+                        customDraft -> "EXPORT CUSTOM PRACTICE PDF"
+                        mode == GenerationMode.OFFICIAL -> "APPROVE & EXPORT A4 PDF"
+                        else -> "EXPORT PRACTICE A4 PDF"
                     }, onBack = { screen = "home" }
                 )
                 else -> Column(
@@ -702,7 +717,7 @@ private fun EditorScreen(
     onDismissReplacement: () -> Unit,
     onMove: (Int, Int) -> Unit, onRemove: (Int) -> Unit,
     onEdit: (Int, String) -> Unit, onRevert: () -> Unit, onSave: () -> Unit, onExport: () -> Unit,
-    onExportAnswerKey: () -> Unit, onBack: () -> Unit
+    onExportAnswerKey: () -> Unit, exportLabel: String, onBack: () -> Unit
 ) {
     Column(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("FINALIZE YOUR PAPER", style = MaterialTheme.typography.titleLarge)
@@ -739,7 +754,7 @@ private fun EditorScreen(
             }
         }
         OutlinedButton(onClick = onSave, enabled = draft.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text("SAVE DRAFT ON THIS DEVICE") }
-        Button(onClick = onExport, enabled = draft.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text("APPROVE & EXPORT A4 PDF") }
+        Button(onClick = onExport, enabled = draft.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text(exportLabel) }
         OutlinedButton(onClick = onExportAnswerKey, enabled = draft.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text("EXPORT ANSWER KEY PDF") }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) { Text("BACK TO SETUP") }
         if (replacementTarget >= 0) {
