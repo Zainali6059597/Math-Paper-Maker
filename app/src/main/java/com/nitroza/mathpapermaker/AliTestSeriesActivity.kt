@@ -1068,7 +1068,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                 },
                 confirmButton = {
-                    Button(enabled = manualQuestionText.text.isNotBlank() && manualQuestionNumber.isNotBlank() && (manualQuestionMarks.toIntOrNull() ?: 0) in 1..100,
+                    val manualMarks = manualQuestionMarks.toIntOrNull()
+                    val boardManualMarksValid = paperMode == "CUSTOM" || (
+                        manualMarks == when (manualQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 } &&
+                            PunjabBoardPattern.isValidChapter(grade, manualQuestionChapter)
+                    )
+                    Button(enabled = manualQuestionText.text.isNotBlank() && manualQuestionNumber.isNotBlank() &&
+                        (manualMarks ?: 0) in 1..100 && boardManualMarksValid,
                         onClick = {
                             val number = manualQuestionNumber.trim()
                             if (selected.any { it.number.trim().equals(number, ignoreCase = true) }) {
