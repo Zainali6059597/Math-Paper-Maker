@@ -18,7 +18,7 @@ Status: development build; **not a production release**
 - Question replacement constrained by identity, marks, chapter/allowed chapters, SLO, type and duplicate exclusion.
 - Draft editor with reorder/remove/edit/revert, save/reopen/delete, and pinned pattern identity/version/source.
 - A4 PDF export with pagination, section instructions and marks.
-- Textbook PDF reader, conservative exercise parser, page provenance and persistent candidate-review workflow. Candidate text remains quarantined until classification and review; it is not silently promoted into the live bank.
+- Textbook PDF reader, conservative exercise parser, page provenance and persistent candidate-review workflow. Candidate text remains quarantined until classification and review; it is not silently promoted into the live bank. The manifest reader now refuses to expose chapters unless redistribution permission is explicitly confirmed, required edition/publisher/language/source metadata exists, declared page ranges are valid, and the bundled PDF SHA-256 matches.
 
 ## Official Punjab pattern work
 
