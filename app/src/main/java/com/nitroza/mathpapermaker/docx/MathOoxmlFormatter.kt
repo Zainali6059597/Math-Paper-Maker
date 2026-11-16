@@ -44,6 +44,24 @@ object MathOoxmlFormatter {
     private data class Parsed(val endExclusive: Int, val xml: String)
 
     private fun parseConstruct(source: String, start: Int): Parsed? {
+        if (source.startsWith("matrix(", start)) {
+            val openIndex = start + "matrix".length
+            val end = matchingParen(source, openIndex) ?: return null
+            val contents = source.substring(openIndex + 1, end)
+            val rows = splitTopLevel(contents, ';')
+            if (rows.isNotEmpty() && rows.all { it.isNotBlank() }) {
+                val rowXml = rows.joinToString("") { row ->
+                    val cells = splitTopLevel(row, ',')
+                    if (cells.isEmpty() || cells.any { it.isBlank() }) return null
+                    "<m:mr>" + cells.joinToString("") { cell -> "<m:e>${mathContent(cell.trim())}</m:e>" } + "</m:mr>"
+                }
+                return Parsed(
+                    end + 1,
+                    "<m:m><m:mPr><m:baseJc m:val=\"center\"/></m:mPr>$rowXml</m:m>"
+                )
+            }
+        }
+
         listOf("sin", "cos", "tan", "log").firstOrNull { source.startsWith("$it(", start) }?.let { function ->
             val openIndex = start + function.length
             val end = matchingParen(source, openIndex) ?: return null
@@ -113,6 +131,24 @@ object MathOoxmlFormatter {
             }
         }
         return null
+    }
+
+    private fun splitTopLevel(value: String, separator: Char): List<String> {
+        val parts = mutableListOf<String>()
+        var depth = 0
+        var start = 0
+        value.forEachIndexed { index, character ->
+            when (character) {
+                '(' -> depth++
+                ')' -> depth--
+                separator -> if (depth == 0) {
+                    parts += value.substring(start, index)
+                    start = index + 1
+                }
+            }
+        }
+        parts += value.substring(start)
+        return parts
     }
 
     private fun matchingParen(source: String, openIndex: Int): Int? {
