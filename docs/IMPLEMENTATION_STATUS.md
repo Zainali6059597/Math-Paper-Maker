@@ -14,17 +14,17 @@ Status: active development; not a verified release.
 - PDFBox Android extracts text from the current page; Compose text-selection handles let the teacher select the exact question text.
 - Scanned-page selection rectangle and crop-to-PNG workflow.
 - Selected question list supports reorder, remove and manually editable question labels. Current paper metadata and selections are saved locally across app restarts; scanned crops are stored in app-private files.
-- Class-specific Punjab Board 2026–27 validation for MCQ chapter distribution, all three short-question chapter groups, and the five long-question chapter pairings; also enforces 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts (109 offered marks, 75 attempted marks, 150 minutes). Teachers can enter chapter IDs manually for an external PDF; a bundled PDF can prefill chapter IDs from its verified page-range manifest.
+- Class-specific Punjab Board 2026–27 validation for MCQ chapter distribution, all three short-question chapter groups, and the five long-question chapter pairings; also enforces 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts (109 offered marks, 75 attempted marks, 150 minutes). Teachers choose chapter IDs from a class-specific picker for external PDFs; a bundled PDF can prefill chapter IDs from its verified page-range manifest.
 - DOCX exporter writes a minimal OOXML Word package with editable text, A4 page settings, section instructions and embedded PNG question crops.
-- Unit tests added for paper counts, marks, numbering uniqueness and section-choice instructions.
+- Unit tests added for paper counts, marks, numbering uniqueness, section membership independent of manual labels, and class-specific chapter limits.
 - Locked scope documented in docs/ALI_TEST_SERIES_SCOPE.md.
 
 ## Still required
 
 1. Supply the Class 9 and Class 10 PDFs, confirm redistribution rights before bundling, and fill the real SHA-256, page count and chapter page ranges in the textbook manifest.
 2. Improve selection handling for multi-column pages, math symbols and questions spanning multiple pages.
-3. Verify scanned crop coordinates on different screen sizes and PDF page aspect ratios.
-4. Verify DOCX structure and image embedding by opening exported files in Microsoft Word and another office application; inspect A4 printing.
+3. Verify scanned crop coordinates on different screen sizes and PDF page aspect ratios; cancelled crops are now cleaned up.
+4. Verify DOCX structure and image embedding by opening exported files in Microsoft Word and another office application; inspect A4 printing. Duplicate identical questions now retain their own corresponding crop images.
 5. Run unit tests and Android Gradle/KSP/Compose build after the new activity/exporter changes.
 6. Test on a physical low-end Android phone, including offline mode, large PDFs, memory use and export.
 7. Produce the APK only after the above checks pass.
