@@ -226,9 +226,16 @@ class AliTestSeriesActivity : ComponentActivity() {
         fun chapterForPage(page: Int): String? = if (useManifestChapters) chapterRanges.firstOrNull { page in it.startPage..it.endPage }?.id else null
 
         LaunchedEffect(Unit) {
-            // PDF imports are cache-only working copies. Remove leftovers from previous
-            // process runs so repeated imports cannot quietly fill the app cache.
+            // Keep completed textbook imports in the offline Book Library. Only remove
+            // abandoned partial imports and stale rendered/export working files.
             withContext(Dispatchers.IO) {
+                val libraryDirectory = File(filesDir, "books")
+                libraryDirectory.listFiles()
+                    ?.filter { file ->
+                        file.isFile && file.name.startsWith("ali-book-import-class") &&
+                            System.currentTimeMillis() - file.lastModified() > 24L * 60L * 60L * 1000L
+                    }
+                    ?.forEach { it.delete() }
                 cacheDir.listFiles()
                     ?.filter { file ->
                         file.isFile &&
