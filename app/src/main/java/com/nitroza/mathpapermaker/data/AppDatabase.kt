@@ -203,7 +203,8 @@ suspend fun AppDatabase.importPackage(
     }
     require(questions.all { it.marks > 0 && it.questionText.isNotBlank() }) { "Question rows contain invalid marks or blank text." }
     require(questions.all { it.sourceId == source.sourceId }) { "Every question must point to the package source." }
-    require(quotas.all { it.patternId == pattern.patternId && it.dimension in setOf("CHAPTER", "SLO", "COGNITIVE_LEVEL", "DIFFICULTY") && it.value.isNotBlank() && it.minimum >= 0 && it.maximum >= it.minimum && it.maximum <= slots.size }) { "Pattern quotas are invalid." }
+    require(quotas.all { it.patternId == pattern.patternId && it.dimension in setOf("CHAPTER", "SLO", "COGNITIVE_LEVEL", "DIFFICULTY", "CHAPTER_IN_GROUP") && it.value.isNotBlank() && it.minimum >= 0 && it.maximum >= it.minimum && it.maximum <= slots.size }) { "Pattern quotas are invalid." }
+    require(quotas.all { it.dimension != "CHAPTER_IN_GROUP" || it.value.matches(Regex("[A-Za-z0-9_-]+\\|CH[0-9]+")) }) { "Group-scoped chapter quotas must use GROUP_ID|CHAPTER_ID values." }
     require(quotas.map { it.dimension to it.value }.distinct().size == quotas.size) { "Pattern quota keys must be unique." }
     require(choiceGroups.all { it.patternId == pattern.patternId && it.groupId.isNotBlank() && it.displayOrder >= 0 && it.offeredCount > 0 && it.attemptCount in 1..it.offeredCount && it.marksPerQuestion > 0 }) { "Choice group rules are invalid." }
     require(choiceGroups.map { it.groupId }.distinct().size == choiceGroups.size) { "Choice group IDs must be unique." }
