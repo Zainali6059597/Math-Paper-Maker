@@ -709,8 +709,13 @@ class MainActivity : ComponentActivity() {
                                         group.attemptBundleCount, group.marksPerBundle, ids)
                                 }
                                 val quotaRules = storedQuotas.mapNotNull { quota -> runCatching {
-                                    QuotaDimension.valueOf(quota.dimension)
-                                }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
+                                    if (quota.dimension == "CHAPTER_IN_GROUP") QuotaDimension.CHAPTER else QuotaDimension.valueOf(quota.dimension)
+                                }.getOrNull()?.let { dim ->
+                                        if (quota.dimension == "CHAPTER_IN_GROUP") {
+                                            val pieces = quota.value.split("|", limit = 2)
+                                            if (pieces.size == 2) MetadataQuota(QuotaDimension.CHAPTER, pieces[1], quota.minimum, quota.maximum, pieces[0]) else null
+                                        } else MetadataQuota(dim, quota.value, quota.minimum, quota.maximum)
+                                    } }
                                 val compositePattern = CompositePaperPattern(identity, pattern.totalMarks,
                                     compositeSlots, compositeGroups, compositeBundleGroups, quotaRules)
                                 generatedSlotOrder = compositeSlots
@@ -783,7 +788,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             } else {
-                                val slots = storedSlots.map { s -> QuestionSlot(s.slotId, s.chapterId, s.sloId, s.questionType, s.marks, decodeChapterAlternatives(s.allowedChapterIdsJson)) }
+                                val slots = storedSlots.map { s -> QuestionSlot(s.slotId, s.chapterId, s.sloId, s.questionType, s.marks, decodeChapterAlternatives(s.allowedChapterIdsJson), s.groupId) }
                                 generatedSlotOrder = storedSlots.map { s -> OfferedQuestionSlot(s.slotId, s.marks, s.chapterId, s.sloId, s.questionType, s.bundleId, allowedChapterIds = decodeChapterAlternatives(s.allowedChapterIdsJson)) }
                                 if (storedSlots.any { it.bundleId != null }) {
                                     val bundles = storedSlots.groupBy { it.bundleId ?: "SINGLE_${it.slotId}" }
