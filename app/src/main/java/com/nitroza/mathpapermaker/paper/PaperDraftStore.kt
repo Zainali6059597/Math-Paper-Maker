@@ -33,6 +33,13 @@ object PaperDraftStore {
     private const val MAX_QUESTION_TEXT_CHARS = 100_000
 
     fun save(context: Context, draft: PaperDraftSnapshot) {
+        // Reject oversized in-memory input before building a second JSON copy of it.
+        if (draft.grade !in 9..10 || draft.questions.size > MAX_QUESTIONS ||
+            draft.examTitle.length > 500 || draft.schoolName.length > 500 ||
+            draft.questions.any { it.text.length > MAX_QUESTION_TEXT_CHARS } ||
+            draft.questions.sumOf { it.text.length.toLong() } > MAX_DRAFT_CHARS.toLong()
+        ) return
+
         val questions = JSONArray().apply {
             draft.questions.forEach { q ->
                 put(JSONObject()
@@ -54,11 +61,7 @@ object PaperDraftStore {
             .put("questions", questions)
         val serialized = json.toString()
         // A draft is local recovery data, not an unbounded document store.
-        if (draft.grade !in 9..10 || draft.questions.size > MAX_QUESTIONS ||
-            draft.examTitle.length > 500 || draft.schoolName.length > 500 ||
-            draft.questions.any { it.text.length > MAX_QUESTION_TEXT_CHARS } ||
-            serialized.length > MAX_DRAFT_CHARS
-        ) return
+        if (serialized.length > MAX_DRAFT_CHARS) return
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .edit().putString(KEY_DRAFT, serialized).apply()
     }
