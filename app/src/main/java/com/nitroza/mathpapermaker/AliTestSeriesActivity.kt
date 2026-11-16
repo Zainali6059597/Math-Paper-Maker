@@ -1,5 +1,6 @@
 package com.nitroza.mathpapermaker
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
@@ -198,6 +199,19 @@ class AliTestSeriesActivity : ComponentActivity() {
                     cropRect = null
                     notice = "Bundled textbook opened. Chapter IDs are filled from the verified book manifest."
                 }.onFailure { notice = "Could not open bundled textbook: ${it.message}" }
+            }
+        }
+
+        fun openOfficialBookSource() {
+            val sourceUrl = when (grade) {
+                9 -> "https://drive.google.com/file/d/1qJF9YsdVpOKk-HzRUwftZZzINLmVkJv3/view?usp=sharing"
+                10 -> "https://drive.google.com/file/d/1MKYcHg2WdNDIjqeD2JFKpcs_79oZ_3fq/view?usp=drive_link"
+                else -> return
+            }
+            runCatching {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(sourceUrl)))
+            }.onFailure {
+                notice = "Could not open the official textbook source. Check that a browser or PDF app is installed."
             }
         }
 
@@ -543,7 +557,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                                 Text("Verified book manifest found · chapter labels will be filled automatically.", style = MaterialTheme.typography.bodySmall)
                             }
-                            Text("Import a textbook PDF once to keep a private offline copy in the Book Library. Open from Device remains available.", style = MaterialTheme.typography.bodyMedium)
+                            Text("Official textbook downloads open in your browser. Download the PDF, return here, and import it for offline use.", style = MaterialTheme.typography.bodyMedium)
+                            OutlinedButton(onClick = { openOfficialBookSource() }, modifier = Modifier.fillMaxWidth()) {
+                                Text("GET OFFICIAL CLASS $grade TEXTBOOK")
+                            }
                             OutlinedButton(onClick = { openPdf.launch(arrayOf("application/pdf")) }, modifier = Modifier.fillMaxWidth()) {
                                 Text("IMPORT PDF TO BOOK LIBRARY")
                             }
