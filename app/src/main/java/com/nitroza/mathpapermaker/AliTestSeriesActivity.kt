@@ -120,17 +120,24 @@ class AliTestSeriesActivity : ComponentActivity() {
             lifecycleScope.launch {
                 runCatching {
                     val file = withContext(Dispatchers.IO) {
-                        val target = File(filesDir, bundledBookFile)
-                        assets.open("books/$bundledBookFile").use { input ->
-                            FileOutputStream(target).use { output -> input.copyTo(output) }
+                        val target = File.createTempFile("ali-bundled-class$grade-", ".pdf", cacheDir)
+                        try {
+                            assets.open("books/$bundledBookFile").use { input ->
+                                FileOutputStream(target).use { output -> input.copyTo(output) }
+                            }
+                            require(target.length() > 0L) { "The bundled textbook file is empty." }
+                            target
+                        } catch (error: Throwable) {
+                            target.delete()
+                            throw error
                         }
-                        target
                     }
                     val count = withContext(Dispatchers.IO) {
                         ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
                             PdfRenderer(descriptor).use { it.pageCount }
                         }
                     }
+                    require(count > 0) { "The bundled textbook has no readable pages." }
                     require(chapterRanges.all { it.startPage >= 1 && it.endPage <= count }) {
                         "The bundled book manifest contains chapter pages outside the actual PDF."
                     }
@@ -190,17 +197,24 @@ class AliTestSeriesActivity : ComponentActivity() {
                             contentResolver.takePersistableUriPermission(uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         val file = withContext(Dispatchers.IO) {
-                            val target = File(cacheDir, "ali-test-series-class$grade.pdf")
-                            contentResolver.openInputStream(uri)?.use { input ->
-                                FileOutputStream(target).use { output -> input.copyTo(output) }
-                            } ?: error("PDF file could not be opened.")
-                            target
+                            val target = File.createTempFile("ali-import-class$grade-", ".pdf", cacheDir)
+                            try {
+                                contentResolver.openInputStream(uri)?.use { input ->
+                                    FileOutputStream(target).use { output -> input.copyTo(output) }
+                                } ?: error("PDF file could not be opened.")
+                                require(target.length() > 0L) { "The selected PDF is empty." }
+                                target
+                            } catch (error: Throwable) {
+                                target.delete()
+                                throw error
+                            }
                         }
                         val count = withContext(Dispatchers.IO) {
                             ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
                                 PdfRenderer(descriptor).use { it.pageCount }
                             }
                         }
+                        require(count > 0) { "The selected PDF has no readable pages." }
                         pdfFile = file
                         pageBitmap = null
                         pdfName = uri.lastPathSegment?.substringAfterLast('/') ?: "Mathematics.pdf"
