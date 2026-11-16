@@ -168,7 +168,6 @@ suspend fun AppDatabase.importPackage(
     bundleChoiceGroups: List<BundleChoiceGroupEntity> = emptyList()
 ) = withTransaction {
     require(slots.isNotEmpty()) { "Pattern has no slots." }
-    require(questions.isNotEmpty()) { "Question bank is empty." }
     require(source.sourceId.isNotBlank() && source.issuer.isNotBlank() && source.title.isNotBlank() && source.sourceType.isNotBlank()) {
         "Source ID, issuer, title and source type are required."
     }
