@@ -17,7 +17,8 @@ data class CompliancePattern(
     val sections: List<ComplianceSection>,
     val sourceStatus: ContentStatus,
     val patternStatus: ContentStatus,
-    val hasUnresolvedSourceConflict: Boolean = false
+    val hasUnresolvedSourceConflict: Boolean = false,
+    val metadataQuotas: List<MetadataQuota> = emptyList()
 )
 
 data class ComplianceQuestion(
@@ -28,7 +29,10 @@ data class ComplianceQuestion(
     val sloId: String,
     val marks: Int,
     val status: ContentStatus,
-    val summative: Boolean
+    val summative: Boolean,
+    val cognitiveLevel: String = "",
+    val difficulty: String = "",
+    val allowedChapterIds: Set<String> = emptySet()
 )
 
 data class SyllabusExclusion(val chapterId: String? = null, val sloId: String? = null)
@@ -91,6 +95,9 @@ object BoardPatternCompliance {
             val rule = sectionById[q.sectionId]
             if (rule != null && !rule.allowVariableQuestionMarks && q.marks != rule.marksPerQuestion) errors += "Question ${q.id} has ${q.marks} marks; section ${q.sectionId} requires ${rule.marksPerQuestion}."
             if (q.chapterId.isBlank() || q.sloId.isBlank()) warnings += "Question ${q.id} is missing chapter or SLO metadata."
+            if (q.allowedChapterIds.isNotEmpty() && q.chapterId !in q.allowedChapterIds) {
+                errors += "Question ${q.id} uses chapter ${q.chapterId}; its slot allows only ${q.allowedChapterIds.sorted().joinToString(" or ")}."
+            }
             if (exclusions.any { ex -> (ex.chapterId != null && ex.chapterId == q.chapterId) || (ex.sloId != null && ex.sloId == q.sloId) }) {
                 errors += "Question ${q.id} belongs to an excluded syllabus chapter/SLO."
             }
@@ -102,6 +109,24 @@ object BoardPatternCompliance {
         sections.forEach { rule ->
             val actual = grouped[rule.id].orEmpty().size
             if (actual != rule.offeredCount) errors += "Section ${rule.id} requires ${rule.offeredCount} offered questions; received $actual."
+        }
+        pattern.metadataQuotas.forEach { quota ->
+            if (quota.groupId != null && quota.groupId !in sectionById) {
+                errors += "Metadata quota refers to unknown section ${quota.groupId}."
+            } else {
+                val matching = offeredQuestions.count { q ->
+                    (quota.groupId == null || q.sectionId == quota.groupId) && when (quota.dimension) {
+                        QuotaDimension.CHAPTER -> q.chapterId == quota.value
+                        QuotaDimension.SLO -> q.sloId == quota.value
+                        QuotaDimension.COGNITIVE_LEVEL -> q.cognitiveLevel == quota.value
+                        QuotaDimension.DIFFICULTY -> q.difficulty == quota.value
+                    }
+                }
+                if (matching !in quota.minimum..quota.maximum) {
+                    val scope = quota.groupId?.let { " in section $it" } ?: ""
+                    errors += "Quota ${quota.dimension}=${quota.value}$scope requires ${quota.minimum}..${quota.maximum}; paper has $matching."
+                }
+            }
         }
         if (officialMode && warnings.isNotEmpty()) warnings += "Metadata warnings should be resolved before approving a production content pack."
         return ComplianceReport(errors.isEmpty(), offered, attempted, errors.distinct(), warnings.distinct())
