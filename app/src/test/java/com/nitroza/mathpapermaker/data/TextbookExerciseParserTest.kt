@@ -61,4 +61,18 @@ class TextbookExerciseParserTest {
         assertTrue(result.candidates.all { it.verificationStatus == "NEEDS_REVIEW" })
     }
 
+    @Test fun reportsUnreadableBookWithoutCreatingCandidates() {
+        val book = BundledBookPdfReader.BookIndex(
+            bookFile = "broken.pdf",
+            pageCount = 0,
+            pages = emptyList(),
+            pagesNeedingOcr = emptyList(),
+            readError = "Invalid PDF header"
+        )
+        val result = TextbookExerciseParser.parse(book)
+        assertTrue(result.candidates.isEmpty())
+        assertTrue(result.warnings.any { it.contains("broken.pdf") && it.contains("Invalid PDF header") })
+        assertTrue(result.warnings.none { it == "No readable pages were found." })
+    }
+
 }
