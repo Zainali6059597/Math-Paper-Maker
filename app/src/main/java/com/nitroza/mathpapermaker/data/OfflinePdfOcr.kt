@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.concurrent.CancellationException
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -63,8 +64,11 @@ object OfflinePdfOcr {
                 val released = AtomicBoolean(false)
                 fun releaseResources() {
                     if (released.compareAndSet(false, true)) {
-                        recognizer.close()
-                        if (!bitmap.isRecycled) bitmap.recycle()
+                        try {
+                            recognizer.close()
+                        } finally {
+                            if (!bitmap.isRecycled) bitmap.recycle()
+                        }
                     }
                 }
 
@@ -76,6 +80,10 @@ object OfflinePdfOcr {
                     }
                     task.addOnFailureListener { error ->
                         if (continuation.isActive) continuation.resumeWithException(error)
+                        releaseResources()
+                    }
+                    task.addOnCanceledListener {
+                        if (continuation.isActive) continuation.resumeWithException(CancellationException("Offline OCR was cancelled."))
                         releaseResources()
                     }
                     // ML Kit's Task cannot be cancelled. Keep the bitmap alive until
