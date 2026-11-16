@@ -1148,7 +1148,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         Text("MATHS EQUATION TEMPLATES", style = MaterialTheme.typography.labelLarge)
                         val templates = listOf(
                             "FRACTION" to ("(" to ")/( )"),
-                            "MATRIX 2×2" to ("matrix(" to "a,b;c,d)"),
+                            "MATRIX 2×2" to ("matrix(" to " , ; , )"),
                             "ROOT" to ("√(" to ")"),
                             "CUBE ROOT" to ("∛(" to ")"),
                             "POWER" to ("x^(" to ")"),
