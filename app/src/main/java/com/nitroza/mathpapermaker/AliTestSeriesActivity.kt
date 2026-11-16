@@ -47,6 +47,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.ensureActive
+import kotlin.coroutines.coroutineContext
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.max
@@ -54,6 +56,9 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 class AliTestSeriesActivity : ComponentActivity() {
+    companion object {
+        const val MAX_TEXTBOOK_PDF_BYTES = 250L * 1024L * 1024L
+    }
     private data class SelectedQuestion(
         val id: Long,
         val number: String,
@@ -138,7 +143,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         val target = File.createTempFile("ali-bundled-class$grade-", ".pdf", cacheDir)
                         try {
                             assets.open("books/$bundledBookFile").use { input ->
-                                FileOutputStream(target).use { output -> input.copyTo(output) }
+                                FileOutputStream(target).use { output -> copyPdfBounded(input, output) }
                             }
                             require(target.length() > 0L) { "The bundled textbook file is empty." }
                             val pageTotal = ParcelFileDescriptor.open(
@@ -249,7 +254,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             val target = File.createTempFile("ali-import-class$grade-", ".pdf", cacheDir)
                             try {
                                 contentResolver.openInputStream(uri)?.use { input ->
-                                    FileOutputStream(target).use { output -> input.copyTo(output) }
+                                    FileOutputStream(target).use { output -> copyPdfBounded(input, output) }
                                 } ?: error("PDF file could not be opened.")
                                 require(target.length() > 0L) { "The selected PDF is empty." }
                                 val pageTotal = ParcelFileDescriptor.open(
@@ -717,6 +722,22 @@ class AliTestSeriesActivity : ComponentActivity() {
             )
         }
     }
+}
+
+private suspend fun copyPdfBounded(input: java.io.InputStream, output: java.io.OutputStream) {
+    val buffer = ByteArray(64 * 1024)
+    var total = 0L
+    while (true) {
+        coroutineContext.ensureActive()
+        val read = input.read(buffer)
+        if (read < 0) break
+        total += read.toLong()
+        require(total <= AliTestSeriesActivity.MAX_TEXTBOOK_PDF_BYTES) {
+            "This PDF is larger than the 250 MB import limit. Choose a smaller textbook file."
+        }
+        output.write(buffer, 0, read)
+    }
+    output.flush()
 }
 
 private fun roman(value: Int): String = when (value) {
