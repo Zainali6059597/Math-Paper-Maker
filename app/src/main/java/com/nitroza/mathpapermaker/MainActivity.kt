@@ -794,7 +794,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             } else {
                                 val slots = storedSlots.map { s -> QuestionSlot(s.slotId, s.chapterId, s.sloId, s.questionType, s.marks, decodeChapterAlternatives(s.allowedChapterIdsJson)) }
-                                generatedSlotOrder = storedSlots.map { s -> OfferedQuestionSlot(s.slotId, s.marks, s.chapterId, s.sloId, s.questionType, s.bundleId) }
+                                generatedSlotOrder = storedSlots.map { s -> OfferedQuestionSlot(s.slotId, s.marks, s.chapterId, s.sloId, s.questionType, s.bundleId, allowedChapterIds = decodeChapterAlternatives(s.allowedChapterIdsJson)) }
                                 if (storedSlots.any { it.bundleId != null }) {
                                     val bundles = storedSlots.groupBy { it.bundleId ?: "SINGLE_${it.slotId}" }
                                         .map { (bundleId, parts) ->
