@@ -90,6 +90,7 @@ object BundledBookManifestReader {
             ) continue
 
             val chapterArray = item.optJSONArray("chapters") ?: continue
+            val bookChapters = mutableListOf<Chapter>()
             for (chapterIndex in 0 until chapterArray.length()) {
                 val chapter = chapterArray.optJSONObject(chapterIndex) ?: continue
                 val id = chapter.optString("chapterId").trim()
@@ -97,8 +98,18 @@ object BundledBookManifestReader {
                 val start = chapter.optInt("startPage", -1)
                 val end = chapter.optInt("endPage", -1)
                 if (id.isBlank() || title.isBlank() || start < 1 || end < start || end > declaredPageCount) continue
-                chapters += Chapter(id, title, start, end)
+                bookChapters += Chapter(id, title, start, end)
             }
+
+            // Ambiguous ranges can silently assign a question to the wrong chapter.
+            // Reject this book's chapter map instead of choosing whichever range appears first.
+            val orderedRanges = bookChapters.sortedBy { it.startPage }
+            val hasDuplicateIds = bookChapters.map { it.id }.distinct().size != bookChapters.size
+            val hasOverlaps = orderedRanges.zipWithNext().any { (first, second) ->
+                second.startPage <= first.endPage
+            }
+            if (hasDuplicateIds || hasOverlaps || bookChapters.isEmpty()) continue
+            chapters += bookChapters
         }
         return chapters.distinctBy { it.id }.sortedBy { it.id.toIntOrNull() ?: Int.MAX_VALUE }
     }
