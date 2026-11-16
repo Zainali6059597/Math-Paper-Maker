@@ -44,6 +44,13 @@ class MathOoxmlFormatterTest {
         assertTrue(xml.contains("<m:den>"))
     }
 
+    @Test fun lineBreaksStayInsideTheQuestionParagraph() {
+        val xml = MathOoxmlFormatter.inlineRuns("First line\\nSecond line")
+        assertTrue(xml.contains("<w:br/>"))
+        assertTrue(xml.contains("First line"))
+        assertTrue(xml.contains("Second line"))
+    }
+
     @Test fun ordinaryTextIsKeptEditableAndXmlEscaped() {
         val xml = MathOoxmlFormatter.inlineRuns("Find x < 5 & y > 2")
         assertTrue(xml.contains("<w:r>"))
