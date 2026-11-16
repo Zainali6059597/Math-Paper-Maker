@@ -15,6 +15,16 @@ This catalogue records the upstream documents used by the offline paper generato
 
 The current Grade 9 2026–27 notification explicitly states a 75-mark Mathematics paper, 15 objective marks plus 60 subjective marks, and 2 hours 30 minutes total (20 minutes objective + 2 hours 10 minutes subjective). Its paper instructions and pairing scheme are the authority for the Punjab Grade 9 2027 template. Do not silently reuse the 2025–26 template.
 
+The exact Grade 9 Mathematics pairing map appears in the same notification under “Instructions for Preparation of Exam Paper of Smart / Reduced Syllabus of Mathematics Grade-9” (Annual Exam-2027):
+
+- Q1: 15 MCQs — one each from Chapters 1, 2, 5, 7, 9, 10, 11, 12 and 13; two each from Chapters 3, 4 and 6.
+- Q2: 9 short questions, attempt 6 — two each from Chapters 1–4 and one from Chapter 5.
+- Q3: 9 short questions, attempt 6 — three each from Chapters 6, 7 and 9.
+- Q4: 9 short questions, attempt 6 — two each from Chapters 10, 11 and 13, and three from Chapter 12.
+- Q5: two 4-mark parts, Chapters 1 and 2; Q6: Chapters 3 and 4; Q7: Chapters 5 and 6. Attempt two of Q5–Q7 (16 marks).
+- Q8: part (a) from Chapter 7 OR 10, part (b) from Chapter 9. Q9: part (a) from Chapter 12, part (b) from Chapter 11 OR 13. Attempt one of Q8–Q9 (8 marks).
+- Total: 15 + 36 + 16 + 8 = 75 marks; 150 minutes.
+
 The current Grade 10 Mathematics pairing-scheme PDF is the separate 14 November 2026 PECTAA document ending in `1257.pdf`. It specifies a 75-mark paper (15 MCQ + 60 subjective), 150 minutes, 15 MCQs distributed across chapters 1–12, three short-question groups (each 6 of 9 at 2 marks), and three long questions each split into two 4-mark parts, with students attempting two of the three (16 marks). The official Grade 10 smart-syllabus document is a separate PDF; its exclusions must be read together with this pairing scheme, not mistaken for it.
 
 ### Exact Grade 10 Mathematics pairing map (PECTAA Notification 1257, Annex-A)
@@ -59,8 +69,8 @@ The current Grade 10 Mathematics pairing-scheme PDF is the separate 14 November 
 - [ ] Confirm PECTAA/PCTB redistribution permission for bundling textbooks in a paid app.
 - [ ] Complete an independent line-by-line audit of every Grade 9 and Grade 10 2026–27 Mathematics section against the full official PDF.\n- [x] Encode the Grade 10 Q1–Q9 chapter distribution, section-scoped short-question minimums, paired long-question choices and chapter alternatives in a separate pattern-only package.
 - [x] Extract the headline Grade 10 2026–27 Mathematics marks, timing, and section structure from its official pairing-scheme PDF.
-- [ ] Extend pattern schema/generator to support optional paired multi-chapter long-question bundles (Q5–Q9).
-- [ ] Encode and test the Grade 10 pattern as a separate exact-identity pack.
+- [x] Extend pattern schema/generator to support optional paired multi-chapter long-question bundles (Q5–Q9).
+- [x] Encode the Grade 10 pattern as a separate exact-identity pattern-only pack.\n- [x] Correct the Grade 9 long-question pairing into paired 4-mark parts and encode its official chapter alternatives.
 - [ ] Bundle licensed PDFs and generate the matching book manifest.
 - [ ] Run extraction/OCR quality checks on every bundled book and retain page provenance.
 
