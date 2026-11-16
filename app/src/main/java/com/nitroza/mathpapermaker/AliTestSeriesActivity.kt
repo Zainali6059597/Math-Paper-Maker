@@ -618,13 +618,18 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                 },
                 confirmButton = {
+                    val requiredMarks = when (questionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }
+                    val normalizedNumber = questionNumber.trim()
+                    val duplicateNumber = selected.any { it.number.equals(normalizedNumber, ignoreCase = true) }
+                    val atKindLimit = selected.count { it.kind == questionKind } >= when (questionKind) {
+                        "MCQ" -> 15
+                        "SHORT" -> 27
+                        else -> 10
+                    }
                     TextButton(enabled = (questionText.text.isNotBlank() || pendingImageFile != null) &&
-                        questionNumber.isNotBlank() && PunjabBoardPattern.isValidChapter(grade, questionChapter) && (questionMarks.toIntOrNull() ?: 0) > 0 &&
-                        selected.count { it.kind == questionKind } < when (questionKind) {
-                            "MCQ" -> 15
-                            "SHORT" -> 27
-                            else -> 10
-                        }, onClick = {
+                        normalizedNumber.isNotBlank() && !duplicateNumber &&
+                        PunjabBoardPattern.isValidChapter(grade, questionChapter) &&
+                        questionMarks.toIntOrNull() == requiredMarks && !atKindLimit, onClick = {
                         selected = selected + SelectedQuestion(
                             nextId++, questionNumber.trim(), selectedQuestionText(questionText), questionKind,
                             questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter, questionSection
