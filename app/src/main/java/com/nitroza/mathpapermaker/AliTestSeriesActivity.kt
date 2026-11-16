@@ -654,6 +654,7 @@ class AliTestSeriesActivity : ComponentActivity() {
             val missingImageCount = selected.count { item ->
                 item.imageFile != null && !File(item.imageFile).isFile
             }
+            val boardReady = paperMode != "BOARD" || PunjabBoardPattern.isComplete(grade, paperQuestions)
             AlertDialog(
                 onDismissRequest = { showQuestions = false },
                 title = { Text("SELECTED QUESTIONS (${selected.size})") },
@@ -814,7 +815,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        val boardReady = paperMode != "BOARD" || PunjabBoardPattern.isComplete(grade, paperQuestions)
                         if (!boardReady) {
                             Text("Board-pattern export requires the official counts, numbering, marks and chapter distribution. Switch to Custom to export a manually arranged paper.",
                                 color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
