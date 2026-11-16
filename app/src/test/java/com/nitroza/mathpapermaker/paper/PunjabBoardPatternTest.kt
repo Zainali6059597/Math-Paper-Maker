@@ -47,6 +47,14 @@ class PunjabBoardPatternTest {
         return mcqs + shorts + longs
     }
 
+    @Test fun classTenChapterPickerValidationRejectsChapterThirteen() {
+        assertTrue(PunjabBoardPattern.isValidChapter(9, "CH13"))
+        assertFalse(PunjabBoardPattern.isValidChapter(10, "CH13"))
+        assertTrue(PunjabBoardPattern.isValidChapter(10, "CH12"))
+        assertFalse(PunjabBoardPattern.isValidChapter(10, "CH0"))
+        assertFalse(PunjabBoardPattern.isValidChapter(8, "CH1"))
+    }
+
     @Test fun classNineMatchesOfficialCountsMarksAndChapterDistribution() {
         val questions = fullPaper(9)
         assertEquals(15, PunjabBoardPattern.count(questions, "MCQ"))
