@@ -1,0 +1,542 @@
+{
+  "schemaVersion": 5,
+  "identity": {
+    "board": "PUNJAB",
+    "grade": 10,
+    "stream": "MATHEMATICS",
+    "subject": "Mathematics",
+    "session": "2026-27"
+  },
+  "source": {
+    "sourceId": "PECTAA-PUNJAB-G10-MATH-2026-27-NOTIFICATION-1257",
+    "issuer": "Punjab Education, Curriculum, Training and Assessment Authority (PECTAA)",
+    "title": "Grade 10 ALP, Pairing Scheme and Model Paper Notification No. 1257 (14 November 2026)",
+    "sourceUrl": "https://pectaa.edu.pk/wp-content/uploads/2026/11/ALPs-Notification-14.11.2026-1257.pdf",
+    "sourceType": "OFFICIAL_PAIRING_SCHEME",
+    "session": "2026-27",
+    "pageReference": "Grade 10 Mathematics section, Questions 1–9 pairing scheme."
+  },
+  "pattern": {
+    "patternId": "punjab-grade10-mathematics-2026-27-pectaa-1257-v1",
+    "version": 1,
+    "totalMarks": 75,
+    "durationMinutes": 150,
+    "sourcePage": "PECTAA Notification No. 1257, Grade 10 Mathematics paper pattern.",
+    "slots": [
+      {
+        "slotId": "MCQ01",
+        "marks": 1,
+        "displayOrder": 0,
+        "chapterId": "CH1",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ02",
+        "marks": 1,
+        "displayOrder": 1,
+        "chapterId": "CH2",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ03",
+        "marks": 1,
+        "displayOrder": 2,
+        "chapterId": "CH3",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ04",
+        "marks": 1,
+        "displayOrder": 3,
+        "chapterId": "CH4",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ05",
+        "marks": 1,
+        "displayOrder": 4,
+        "chapterId": "CH5",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ06",
+        "marks": 1,
+        "displayOrder": 5,
+        "chapterId": "CH6",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ07",
+        "marks": 1,
+        "displayOrder": 6,
+        "chapterId": "CH7",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ08",
+        "marks": 1,
+        "displayOrder": 7,
+        "chapterId": "CH8",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ09",
+        "marks": 1,
+        "displayOrder": 8,
+        "chapterId": "CH10",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ10",
+        "marks": 1,
+        "displayOrder": 9,
+        "chapterId": "CH9",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ11",
+        "marks": 1,
+        "displayOrder": 10,
+        "chapterId": "CH9",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ12",
+        "marks": 1,
+        "displayOrder": 11,
+        "chapterId": "CH11",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ13",
+        "marks": 1,
+        "displayOrder": 12,
+        "chapterId": "CH11",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ14",
+        "marks": 1,
+        "displayOrder": 13,
+        "chapterId": "CH12",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "MCQ15",
+        "marks": 1,
+        "displayOrder": 14,
+        "chapterId": "CH12",
+        "questionType": "MCQ"
+      },
+      {
+        "slotId": "Q2_SHORT01",
+        "marks": 2,
+        "displayOrder": 15,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT02",
+        "marks": 2,
+        "displayOrder": 16,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT03",
+        "marks": 2,
+        "displayOrder": 17,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT04",
+        "marks": 2,
+        "displayOrder": 18,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT05",
+        "marks": 2,
+        "displayOrder": 19,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT06",
+        "marks": 2,
+        "displayOrder": 20,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT07",
+        "marks": 2,
+        "displayOrder": 21,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT08",
+        "marks": 2,
+        "displayOrder": 22,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q2_SHORT09",
+        "marks": 2,
+        "displayOrder": 23,
+        "questionType": "SHORT",
+        "groupId": "Q2"
+      },
+      {
+        "slotId": "Q3_SHORT01",
+        "marks": 2,
+        "displayOrder": 24,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT02",
+        "marks": 2,
+        "displayOrder": 25,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT03",
+        "marks": 2,
+        "displayOrder": 26,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT04",
+        "marks": 2,
+        "displayOrder": 27,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT05",
+        "marks": 2,
+        "displayOrder": 28,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT06",
+        "marks": 2,
+        "displayOrder": 29,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT07",
+        "marks": 2,
+        "displayOrder": 30,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT08",
+        "marks": 2,
+        "displayOrder": 31,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q3_SHORT09",
+        "marks": 2,
+        "displayOrder": 32,
+        "questionType": "SHORT",
+        "groupId": "Q3"
+      },
+      {
+        "slotId": "Q4_SHORT01",
+        "marks": 2,
+        "displayOrder": 33,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT02",
+        "marks": 2,
+        "displayOrder": 34,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT03",
+        "marks": 2,
+        "displayOrder": 35,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT04",
+        "marks": 2,
+        "displayOrder": 36,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT05",
+        "marks": 2,
+        "displayOrder": 37,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT06",
+        "marks": 2,
+        "displayOrder": 38,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT07",
+        "marks": 2,
+        "displayOrder": 39,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT08",
+        "marks": 2,
+        "displayOrder": 40,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q4_SHORT09",
+        "marks": 2,
+        "displayOrder": 41,
+        "questionType": "SHORT",
+        "groupId": "Q4"
+      },
+      {
+        "slotId": "Q5_A",
+        "marks": 4,
+        "displayOrder": 42,
+        "chapterId": "CH1",
+        "questionType": "LONG",
+        "bundleId": "Q5",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q5_B",
+        "marks": 4,
+        "displayOrder": 43,
+        "chapterId": "CH2",
+        "questionType": "LONG",
+        "bundleId": "Q5",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q6_A",
+        "marks": 4,
+        "displayOrder": 44,
+        "chapterId": "CH3",
+        "questionType": "LONG",
+        "bundleId": "Q6",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q6_B",
+        "marks": 4,
+        "displayOrder": 45,
+        "chapterId": "CH4",
+        "questionType": "LONG",
+        "bundleId": "Q6",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q7_A",
+        "marks": 4,
+        "displayOrder": 46,
+        "chapterId": "CH5",
+        "questionType": "LONG",
+        "bundleId": "Q7",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q7_B",
+        "marks": 4,
+        "displayOrder": 47,
+        "chapterId": "CH7",
+        "questionType": "LONG",
+        "bundleId": "Q7",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q8_A",
+        "marks": 4,
+        "displayOrder": 48,
+        "chapterId": "CH6",
+        "questionType": "LONG",
+        "bundleId": "Q8",
+        "bundleChoiceGroupId": "Q8-Q9"
+      },
+      {
+        "slotId": "Q8_B",
+        "marks": 4,
+        "displayOrder": 49,
+        "allowedChapterIds": [
+          "CH8",
+          "CH11"
+        ],
+        "questionType": "LONG",
+        "bundleId": "Q8",
+        "bundleChoiceGroupId": "Q8-Q9"
+      },
+      {
+        "slotId": "Q9_A",
+        "marks": 4,
+        "displayOrder": 50,
+        "chapterId": "CH10",
+        "questionType": "LONG",
+        "bundleId": "Q9",
+        "bundleChoiceGroupId": "Q8-Q9"
+      },
+      {
+        "slotId": "Q9_B",
+        "marks": 4,
+        "displayOrder": 51,
+        "allowedChapterIds": [
+          "CH9",
+          "CH12"
+        ],
+        "questionType": "LONG",
+        "bundleId": "Q9",
+        "bundleChoiceGroupId": "Q8-Q9"
+      }
+    ],
+    "choiceGroups": [
+      {
+        "groupId": "Q2",
+        "offeredCount": 9,
+        "attemptCount": 6,
+        "marksPerQuestion": 2,
+        "displayOrder": 0
+      },
+      {
+        "groupId": "Q3",
+        "offeredCount": 9,
+        "attemptCount": 6,
+        "marksPerQuestion": 2,
+        "displayOrder": 1
+      },
+      {
+        "groupId": "Q4",
+        "offeredCount": 9,
+        "attemptCount": 6,
+        "marksPerQuestion": 2,
+        "displayOrder": 2
+      }
+    ],
+    "bundleChoiceGroups": [
+      {
+        "groupId": "Q5-Q7",
+        "offeredBundleCount": 3,
+        "attemptBundleCount": 2,
+        "marksPerBundle": 8,
+        "bundleIds": [
+          "Q5",
+          "Q6",
+          "Q7"
+        ],
+        "displayOrder": 3
+      },
+      {
+        "groupId": "Q8-Q9",
+        "offeredBundleCount": 2,
+        "attemptBundleCount": 1,
+        "marksPerBundle": 8,
+        "bundleIds": [
+          "Q8",
+          "Q9"
+        ],
+        "displayOrder": 4
+      }
+    ],
+    "quotas": [
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q2|CH1",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q2|CH2",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q2|CH3",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q2|CH4",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q3|CH5",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q3|CH6",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q3|CH7",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q3|CH8",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q4|CH9",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q4|CH10",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q4|CH11",
+        "minimum": 2,
+        "maximum": 3
+      },
+      {
+        "dimension": "CHAPTER_IN_GROUP",
+        "value": "Q4|CH12",
+        "minimum": 2,
+        "maximum": 3
+      }
+    ],
+    "exclusions": []
+  },
+  "questions": []
+}
