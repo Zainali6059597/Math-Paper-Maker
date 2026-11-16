@@ -123,6 +123,8 @@ class AliTestSeriesActivity : ComponentActivity() {
         var draftLoaded by remember { mutableStateOf(false) }
         var bundledBookReady by remember { mutableStateOf(false) }
         var bundledBookFile by remember { mutableStateOf("") }
+        var savedBookPath by remember { mutableStateOf("") }
+        var pdfIsPersistent by remember { mutableStateOf(false) }
         var chapterRanges by remember { mutableStateOf<List<BundledBookManifestReader.Chapter>>(emptyList()) }
         var useManifestChapters by remember { mutableStateOf(false) }
 
@@ -145,12 +147,14 @@ class AliTestSeriesActivity : ComponentActivity() {
                     val chapters = BundledBookManifestReader.chaptersFor(
                         this@AliTestSeriesActivity, "Punjab", grade, "MATHEMATICS", "Mathematics", "2026-27"
                     )
-                    available to chapters
-                }.getOrDefault(false to emptyList())
+                    val savedPath = File(filesDir, "books/Punjab_Grade${grade}_Mathematics.pdf")
+                    Triple(available, chapters, savedPath.takeIf { it.isFile }?.absolutePath.orEmpty())
+                }.getOrDefault(Triple(false, emptyList(), ""))
             }
             bundledBookFile = expectedFile
             bundledBookReady = result.first && result.second.isNotEmpty()
             chapterRanges = if (bundledBookReady) result.second else emptyList()
+            savedBookPath = result.third
         }
 
         fun openBundledBook() {
@@ -178,8 +182,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                     require(chapterRanges.all { it.startPage >= 1 && it.endPage <= count }) {
                         "The bundled book manifest contains chapter pages outside the actual PDF."
                     }
-                    pdfFile?.takeIf { it != file }?.delete()
+                    pdfFile?.takeIf { it != file && !pdfIsPersistent }?.delete()
                     pdfFile = file
+                    pdfIsPersistent = false
                     pageBitmap = null
                     pdfName = bundledBookFile
                     useManifestChapters = true
@@ -188,6 +193,33 @@ class AliTestSeriesActivity : ComponentActivity() {
                     cropRect = null
                     notice = "Bundled textbook opened. Chapter IDs are filled from the verified book manifest."
                 }.onFailure { notice = "Could not open bundled textbook: ${it.message}" }
+            }
+        }
+
+        fun openSavedBook() {
+            val path = savedBookPath
+            if (path.isBlank()) return
+            lifecycleScope.launch {
+                runCatchingCancellable {
+                    val file = File(path)
+                    require(file.isFile && file.length() > 0L) { "The saved textbook is missing. Import it again from your device." }
+                    val count = withContext(Dispatchers.IO) {
+                        ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
+                            PdfRenderer(descriptor).use { it.pageCount }
+                        }
+                    }
+                    require(count > 0) { "The saved textbook has no readable pages." }
+                    pdfFile?.takeIf { it != file && !pdfIsPersistent }?.delete()
+                    pdfFile = file
+                    pdfIsPersistent = true
+                    pageBitmap = null
+                    pdfName = file.name
+                    useManifestChapters = false
+                    pageCount = count
+                    pageIndex = 0
+                    cropRect = null
+                    notice = "Saved local textbook opened. It is available offline; confirm its edition before using Board Pattern mode."
+                }.onFailure { notice = "Could not open saved textbook: ${it.message}" }
             }
         }
 
@@ -268,7 +300,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                             contentResolver.takePersistableUriPermission(uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         val (file, count) = withContext(Dispatchers.IO) {
-                            val target = File.createTempFile("ali-import-class$grade-", ".pdf", cacheDir)
+                            val bookDirectory = File(filesDir, "books").apply { mkdirs() }
+                            val target = File.createTempFile("ali-book-import-class$grade-", ".pdf", bookDirectory)
                             try {
                                 contentResolver.openInputStream(uri)?.use { input ->
                                     FileOutputStream(target).use { output -> copyPdfBounded(input, output) }
@@ -280,14 +313,22 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     PdfRenderer(descriptor).use { it.pageCount }
                                 }
                                 require(pageTotal > 0) { "The selected PDF has no readable pages." }
-                                target to pageTotal
+                                val savedFile = File(bookDirectory, "Punjab_Grade${grade}_Mathematics.pdf")
+                                if (savedFile.exists()) check(savedFile.delete()) { "The previous saved textbook could not be replaced." }
+                                if (!target.renameTo(savedFile)) {
+                                    target.copyTo(savedFile, overwrite = true)
+                                    target.delete()
+                                }
+                                savedFile to pageTotal
                             } catch (error: Throwable) {
                                 target.delete()
                                 throw error
                             }
                         }
-                        pdfFile?.takeIf { it != file }?.delete()
+                        pdfFile?.takeIf { it != file && !pdfIsPersistent }?.delete()
                         pdfFile = file
+                        pdfIsPersistent = true
+                        savedBookPath = file.absolutePath
                         pageBitmap = null
                         pdfName = uri.lastPathSegment?.substringAfterLast('/') ?: "Mathematics.pdf"
                         useManifestChapters = false
@@ -441,15 +482,21 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Card {
                         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Text("Mathematics textbook PDF", style = MaterialTheme.typography.titleMedium)
+                            if (savedBookPath.isNotBlank()) {
+                                Button(onClick = { openSavedBook() }, modifier = Modifier.fillMaxWidth()) {
+                                    Text("OPEN SAVED CLASS $grade BOOK · OFFLINE")
+                                }
+                                Text("A local copy is stored inside the app and remains available offline.", style = MaterialTheme.typography.bodySmall)
+                            }
                             if (bundledBookReady) {
                                 Button(onClick = { openBundledBook() }, modifier = Modifier.fillMaxWidth()) {
                                     Text("OPEN BUNDLED CLASS $grade BOOK")
                                 }
                                 Text("Verified book manifest found · chapter labels will be filled automatically.", style = MaterialTheme.typography.bodySmall)
                             }
-                            Text("You can also open a local PDF from your device.", style = MaterialTheme.typography.bodyMedium)
+                            Text("Import a textbook PDF once to keep a private offline copy in the Book Library. Open from Device remains available.", style = MaterialTheme.typography.bodyMedium)
                             OutlinedButton(onClick = { openPdf.launch(arrayOf("application/pdf")) }, modifier = Modifier.fillMaxWidth()) {
-                                Text("CHOOSE PDF FROM DEVICE")
+                                Text("IMPORT PDF TO BOOK LIBRARY")
                             }
                         }
                     }
@@ -473,8 +520,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                             // Release the previous imported/bundled PDF immediately.
                             // Textbooks can be hundreds of megabytes; waiting for the
                             // next app launch's stale-cache cleanup wastes device storage.
-                            pdfFile?.delete()
+                            if (!pdfIsPersistent) pdfFile?.delete()
                             pdfFile = null
+                            pdfIsPersistent = false
                             pageBitmap = null
                             pdfName = ""
                             pageCount = 0
