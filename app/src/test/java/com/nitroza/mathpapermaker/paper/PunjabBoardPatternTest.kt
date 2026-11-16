@@ -67,6 +67,12 @@ class PunjabBoardPatternTest {
         assertFalse(PunjabBoardPattern.isComplete(9, wrongMarks))
     }
 
+    @Test fun classTenCannotUseClassNineOnlyChapterThirteen() {
+        val questions = fullPaper(10).toMutableList()
+        questions[0] = questions[0].copy(chapterId = "CH13")
+        assertFalse(PunjabBoardPattern.isComplete(10, questions))
+    }
+
     @Test fun duplicateManualNumberingCannotExport() {
         val questions = fullPaper(9).toMutableList()
         questions[1] = questions[1].copy(number = questions[0].number)
