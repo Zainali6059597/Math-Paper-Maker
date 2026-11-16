@@ -253,8 +253,14 @@ class MainActivity : ComponentActivity() {
                                     val slots = dao.findSlots(item.patternId)
                                     require(slots.isNotEmpty() && slots.all { it.marks > 0 }) { "Pattern slots are missing or invalid." }
                                     val groups = dao.findChoiceGroups(item.patternId)
-                                    if (groups.isEmpty()) require(slots.sumOf { it.marks } == item.totalMarks) { "Required-slot marks do not match total marks." }
-                                    else require(groups.sumOf { it.attemptCount * it.marksPerQuestion } == item.totalMarks) { "Attempted choice marks do not match total marks." }
+                                    val bundleGroups = dao.findBundleChoiceGroups(item.patternId)
+                                    val fixedMarks = slots.filter { it.groupId == null && it.bundleChoiceGroupId == null }.sumOf { it.marks }
+                                    val attemptedMarks = fixedMarks +
+                                        groups.sumOf { it.attemptCount * it.marksPerQuestion } +
+                                        bundleGroups.sumOf { it.attemptBundleCount * it.marksPerBundle }
+                                    require(attemptedMarks == item.totalMarks) {
+                                        "Fixed and attempted choice-group marks total $attemptedMarks, not the declared ${item.totalMarks}."
+                                    }
                                     dao.setPatternStatus(itemId, "VERIFIED_OFFICIAL")
                                     dao.insertReviewAudit(ReviewAuditEntity(UUID.randomUUID().toString(), itemType, itemId, item.verificationStatus, "VERIFIED_OFFICIAL", checklistJson, note, now))
                                 }
@@ -409,10 +415,42 @@ class MainActivity : ComponentActivity() {
                                         else -> null
                                     }
                                 }.toSet()
-                                val sections = if (groups.isNotEmpty()) {
-                                    groups.map { ComplianceSection(it.groupId, it.offeredCount, it.attemptCount, it.marksPerQuestion) } +
-                                        slots.filter { it.groupId == null && it.bundleId == null }
-                                            .map { ComplianceSection(it.slotId, 1, 1, it.marks) }
+                                val bundleGroups = dao.findBundleChoiceGroups(pattern.patternId)
+                                val sections = if (groups.isNotEmpty() || bundleGroups.isNotEmpty()) {
+                                    val singleChoiceSections = groups.map {
+                                        ComplianceSection(it.groupId, it.offeredCount, it.attemptCount, it.marksPerQuestion)
+                                    }
+                                    val fixedSections = slots.filter {
+                                        it.groupId == null && it.bundleChoiceGroupId == null && it.bundleId == null
+                                    }.map { ComplianceSection(it.slotId, 1, 1, it.marks) }
+                                    val requiredBundleSections = slots.filter {
+                                        it.bundleId != null && it.bundleChoiceGroupId == null
+                                    }.groupBy { it.bundleId!! }.values.map { parts ->
+                                        val marks = parts.sumOf { it.marks }
+                                        ComplianceSection(
+                                            id = "BUNDLE_${parts.first().bundleId}",
+                                            offeredCount = parts.size,
+                                            attemptCount = parts.size,
+                                            marksPerQuestion = parts.first().marks,
+                                            offeredMarksOverride = marks,
+                                            attemptedMarksOverride = marks,
+                                            allowVariableQuestionMarks = true
+                                        )
+                                    }
+                                    val optionalBundleSections = bundleGroups.map { group ->
+                                        val memberSlots = slots.filter { it.bundleChoiceGroupId == group.groupId }
+                                        val offeredMarks = group.offeredBundleCount * group.marksPerBundle
+                                        ComplianceSection(
+                                            id = group.groupId,
+                                            offeredCount = memberSlots.size,
+                                            attemptCount = memberSlots.size,
+                                            marksPerQuestion = memberSlots.firstOrNull()?.marks ?: 1,
+                                            offeredMarksOverride = offeredMarks,
+                                            attemptedMarksOverride = group.attemptBundleCount * group.marksPerBundle,
+                                            allowVariableQuestionMarks = true
+                                        )
+                                    }
+                                    singleChoiceSections + fixedSections + requiredBundleSections + optionalBundleSections
                                 } else {
                                     slots.map { ComplianceSection(it.slotId, 1, 1, it.marks) }
                                 }
@@ -422,9 +460,12 @@ class MainActivity : ComponentActivity() {
                                     val slotId = draftSlots.getOrNull(index)?.slotId
                                     val sectionId = if (slotId == null) {
                                         if (!customDraft) error("Question ${item.number} has no matching pattern slot.") else "__CUSTOM_UNASSIGNED__"
-                                    } else if (groups.isNotEmpty()) {
+                                    } else if (groups.isNotEmpty() || bundleGroups.isNotEmpty()) {
                                         val matchedSlot = slots.firstOrNull { it.slotId == slotId }
-                                        matchedSlot?.groupId ?: matchedSlot?.slotId
+                                        matchedSlot?.bundleChoiceGroupId
+                                            ?: matchedSlot?.groupId
+                                            ?: matchedSlot?.bundleId?.let { "BUNDLE_$it" }
+                                            ?: matchedSlot?.slotId
                                             ?: if (customDraft) "__CUSTOM_UNASSIGNED__" else error("Question ${item.number} has no valid pattern-slot assignment.")
                                     } else slotId
                                     ComplianceQuestion(
@@ -695,10 +736,9 @@ class MainActivity : ComponentActivity() {
                                 if (selectedBySlot == null) null else {
                                     choiceInstructions = compositeGroups.map { group ->
                                         "${group.groupId}: Attempt any ${group.attemptCount} of ${group.offeredCount} questions. Each question carries ${group.marksPerQuestion} marks."
-                                    } + storedSlots.filter { it.bundleId != null }.groupBy { it.bundleId!! }.values
-                                        .filter { it.size > 1 }.map { parts ->
-                                            "${parts.first().bundleId}: Answer all ${parts.size} paired parts."
-                                        }
+                                    } + compositeBundleGroups.map { group ->
+                                        "${group.groupId}: Attempt any ${group.attemptBundleCount} of ${group.offeredBundleCount} paired questions. Each complete paired question carries ${group.marksPerBundle} marks; answer every part of each selected pair."
+                                    }
                                     val bundlePartIndexes = storedSlots.filter { it.bundleId != null }
                                         .groupBy { it.bundleId!! }.mapValues { (_, parts) -> parts.sortedBy { it.displayOrder } }
                                     storedSlots.sortedBy { it.displayOrder }.mapIndexed { index, slot ->
