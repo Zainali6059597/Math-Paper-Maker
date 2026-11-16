@@ -109,6 +109,31 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val answerKeyLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri: Uri? ->
+            if (uri != null && draft.isNotEmpty()) {
+                runCatching {
+                    val questionsById = draftQuestionRows.associateBy { it.questionId }
+                    val answerItems = draft.mapIndexed { index, item ->
+                        val question = questionsById[item.questionId]
+                            ?: error("The original question record for ${item.number} is missing.")
+                        require(item.text.trim() == question.questionText.trim()) {
+                            "Question ${item.number} was edited. Restore its original text before exporting a matching answer key."
+                        }
+                        val answer = question.answerText?.takeIf { it.isNotBlank() }
+                            ?: error("No answer is available for question ${item.number}.")
+                        PaperPdfExporter.Item(index + 1, answer, item.marks, item.questionId, item.displayLabel)
+                    }
+                    PaperPdfExporter.write(this@MainActivity, uri, PaperPdfExporter.Paper(
+                        school, "Answer Key — ${title.ifBlank { "Mathematics Examination" }}",
+                        draftIdentity.board, draftIdentity.grade, draftIdentity.subject, draftIdentity.session,
+                        "TEACHER COPY — Suggested answers for the generated paper. Check working and marking against the applicable board guidance.",
+                        answerItems, totalMarks, choiceInstructions, customDraft, activeDurationMinutes
+                    ))
+                }.onSuccess { notice = "Answer-key PDF exported. Check the selected destination." }
+                    .onFailure { notice = "Answer-key export failed: ${it.message}" }
+            }
+        }
+
         LaunchedEffect(Unit) {
             runCatching {
                 // Bundled JSON packs are imported on first launch, so the core
@@ -268,6 +293,7 @@ class MainActivity : ComponentActivity() {
                         replacementOptions = emptyList()
                     },
                     onDismissReplacement = { replacementTarget = -1; replacementOptions = emptyList() },
+                    onExportAnswerKey = { answerKeyLauncher.launch("Maths-Answer-Key-Class-${draftIdentity.grade}.pdf") },
                     onMove = { from, to ->
                         if (to in draft.indices && from in draft.indices) {
                             draft = draft.toMutableList().also { list ->
@@ -672,7 +698,8 @@ private fun EditorScreen(
     onChooseReplacement: (com.nitroza.mathpapermaker.data.QuestionEntity) -> Unit,
     onDismissReplacement: () -> Unit,
     onMove: (Int, Int) -> Unit, onRemove: (Int) -> Unit,
-    onEdit: (Int, String) -> Unit, onRevert: () -> Unit, onSave: () -> Unit, onExport: () -> Unit, onBack: () -> Unit
+    onEdit: (Int, String) -> Unit, onRevert: () -> Unit, onSave: () -> Unit, onExport: () -> Unit,
+    onExportAnswerKey: () -> Unit, onBack: () -> Unit
 ) {
     Column(modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("FINALIZE YOUR PAPER", style = MaterialTheme.typography.titleLarge)
@@ -710,6 +737,7 @@ private fun EditorScreen(
         }
         OutlinedButton(onClick = onSave, enabled = draft.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text("SAVE DRAFT ON THIS DEVICE") }
         Button(onClick = onExport, enabled = draft.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text("APPROVE & EXPORT A4 PDF") }
+        OutlinedButton(onClick = onExportAnswerKey, enabled = draft.isNotEmpty(), modifier = Modifier.fillMaxWidth()) { Text("EXPORT ANSWER KEY PDF") }
         OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth()) { Text("BACK TO SETUP") }
         if (replacementTarget >= 0) {
             AlertDialog(
