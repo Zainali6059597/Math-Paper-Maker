@@ -7,6 +7,7 @@ import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
 import java.io.File
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import java.util.zip.ZipFile
 import kotlin.math.min
 
 /**
@@ -108,6 +109,28 @@ object DocxPaperExporter {
                         zip.putNextEntry(ZipEntry("word/media/image${index + 1}.png"))
                         file.inputStream().use { it.copyTo(zip) }
                         zip.closeEntry()
+                    }
+                }
+            }
+            // Re-open the finished package and read every entry before export.
+            // ZipFile verifies the central directory and entry CRCs during reads.
+            ZipFile(stagedDocx).use { archive ->
+                val requiredEntries = listOf(
+                    "[Content_Types].xml",
+                    "_rels/.rels",
+                    "word/document.xml",
+                    "word/_rels/document.xml.rels",
+                    "word/styles.xml"
+                )
+                requiredEntries.forEach { name ->
+                    require(archive.getEntry(name) != null) { "The generated Word file is incomplete." }
+                }
+                val buffer = ByteArray(16 * 1024)
+                val entries = archive.entries()
+                while (entries.hasMoreElements()) {
+                    val entry = entries.nextElement()
+                    archive.getInputStream(entry).use { input ->
+                        while (input.read(buffer) != -1) Unit
                     }
                 }
             }
