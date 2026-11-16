@@ -72,7 +72,7 @@ class BoardPatternComplianceTest {
 
     @Test fun optionalPairedBundleSectionsAuditOfferedAndAttemptedMarksSeparately() {
         val multi = pattern.copy(
-            declaredAttemptedMarks = 16,
+            declaredAttemptedMarks = 20,
             sections = listOf(
                 ComplianceSection("SHORT", 3, 2, 2),
                 ComplianceSection(
