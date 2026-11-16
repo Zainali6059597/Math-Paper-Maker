@@ -40,6 +40,7 @@ import com.nitroza.mathpapermaker.paper.PaperDraftSnapshot
 import com.nitroza.mathpapermaker.paper.StoredPaperQuestion
 import com.nitroza.mathpapermaker.ui.MathPaperMakerTheme
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import com.tom_roush.pdfbox.io.MemoryUsageSetting
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
 import kotlinx.coroutines.CancellationException
@@ -444,7 +445,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 val text = withContext(Dispatchers.IO) {
                                     runCatchingCancellable {
                                         PDFBoxResourceLoader.init(applicationContext)
-                                        PDDocument.load(file).use { document ->
+                                        // Keep PDFBox stream buffering on disk instead of retaining a large textbook in heap.
+                                        PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
                                             PDFTextStripper().apply {
                                                 sortByPosition = true
                                                 startPage = pageIndex + 1
