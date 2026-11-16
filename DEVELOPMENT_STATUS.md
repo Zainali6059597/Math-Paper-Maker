@@ -150,3 +150,13 @@ Latest checkpoint update (2026-11-13): added a pure-Kotlin board-pattern complia
 - Added a local offline Book Library: imported Class 9/10 PDFs are copied into app-private storage, can be reopened offline, and are retained when changing the active PDF. Open from Device remains available; abandoned partial imports are cleaned up.
 - Added a custom vector launcher icon and connected it in the Android manifest.
 - Remaining limitations: checkbox segmentation only works on extractable text and only detects clear numbered line starts; scanned pages still require crop selection; OCR is not implemented; complex equations are inserted as editable text templates, not Word equation objects; one-tap PECTAA/PCTB server downloads are still outstanding because the official e-books page is currently returning bot verification and exact direct PDF URLs have not been verified. No textbooks are bundled.
+
+
+## Source-only continuation — offline OCR and editable Word maths — 2026-11-17
+
+- Added bundled ML Kit Latin-script text recognition and a memory-bounded PDF-page renderer. A teacher can run **OCR SCANNED PAGE · OFFLINE** on the current page; OCR text is passed into the same conservative numbered-question segmenter and checkbox review flow.
+- OCR uses an approximately 2-megapixel render cap and releases the bitmap/recognizer after processing. The progress state is reset even if the operation is cancelled.
+- Added a Word OMML formatter for the maths keyboard's fraction, square-root, cube-root, power and subscript templates. Recognized structures export as editable Word equations; other content stays editable text. Added tests for equation structures, nested templates and XML escaping.
+- DOCX equation text now preserves explicit line breaks and filters XML-invalid control/noncharacter code points before writing.
+- **OCR limitation:** the bundled recognizer is Latin-script; Urdu-script OCR is not included. OCR may misread mathematical notation, so every candidate must be reviewed and corrected before adding it. It only proposes clearly numbered question candidates; it does not auto-generate or auto-approve questions.
+- **No compilation, Gradle build, CI workflow, APK assembly, or Ramus testing was started.** All changes above are source-only and remain uncompiled/unverified, as requested.
