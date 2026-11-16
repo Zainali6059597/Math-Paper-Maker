@@ -30,6 +30,7 @@ import com.nitroza.mathpapermaker.data.QuestionSourceEntity
 import com.nitroza.mathpapermaker.data.PaperPatternEntity
 import com.nitroza.mathpapermaker.data.QuestionEntity
 import com.nitroza.mathpapermaker.data.ReviewAuditEntity
+import com.nitroza.mathpapermaker.data.TextbookCandidateEntity
 import com.nitroza.mathpapermaker.data.importPackage
 import com.nitroza.mathpapermaker.domain.*
 import com.nitroza.mathpapermaker.pdf.PaperPdfExporter
@@ -91,6 +92,7 @@ class MainActivity : ComponentActivity() {
         var bookScanRunning by remember { mutableStateOf(false) }
         var scannedBooks by remember { mutableStateOf<List<BundledBookPdfReader.BookIndex>>(emptyList()) }
         var bookCandidates by remember { mutableStateOf<List<TextbookExerciseParser.Candidate>>(emptyList()) }
+        var textbookReviewRows by remember { mutableStateOf<List<TextbookCandidateEntity>>(emptyList()) }
         var bookScanWarnings by remember { mutableStateOf<List<String>>(emptyList()) }
 
         LaunchedEffect(board, grade, stream, subject, session) {
@@ -200,6 +202,7 @@ class MainActivity : ComponentActivity() {
                 questionCount = database.contentDao().questionCount()
                 patternCount = database.contentDao().patternCount()
                 savedDrafts = database.contentDao().listDrafts()
+                textbookReviewRows = database.contentDao().allTextbookCandidates()
                 notice = when {
                     loadedPackages > 0 -> "Loaded $loadedPackages bundled offline package(s) and $loadedQuestions questions. Content is NEEDS_REVIEW until independently checked."
                     bundledFiles.isNotEmpty() -> "Bundled offline content is already loaded. Content remains local; no internet is used."
@@ -497,9 +500,24 @@ class MainActivity : ComponentActivity() {
                                             val parsed = books.map { TextbookExerciseParser.parse(it) }
                                             scannedBooks = books
                                             bookCandidates = parsed.flatMap { it.candidates }
+                                            val now = System.currentTimeMillis()
+                                            val records = bookCandidates.map { candidate ->
+                                                TextbookCandidateEntity(
+                                                    candidateId = textbookCandidateId(candidate),
+                                                    bookFile = candidate.bookFile,
+                                                    chapterId = candidate.chapterId,
+                                                    exerciseId = candidate.exerciseId,
+                                                    questionNumber = candidate.questionNumber,
+                                                    questionText = candidate.text,
+                                                    sourcePage = candidate.sourcePage,
+                                                    detectedAt = now
+                                                )
+                                            }
+                                            if (records.isNotEmpty()) database.contentDao().insertTextbookCandidates(records)
+                                            textbookReviewRows = database.contentDao().allTextbookCandidates()
                                             bookScanWarnings = parsed.flatMap { it.warnings }.distinct()
                                             notice = if (books.isEmpty()) "No textbook PDFs bundled yet. Add licensed PDFs to app/src/main/assets/books/ and rebuild the APK."
-                                                else "Scanned ${books.size} bundled book(s); found ${bookCandidates.size} exercise candidates. All candidates require manual review."
+                                                else "Scanned ${books.size} bundled book(s); found ${bookCandidates.size} exercise candidates. Review decisions are saved on this device."
                                         }.onFailure { notice = "Textbook scan failed: ${it.message}" }
                                         bookScanRunning = false
                                     }
@@ -510,14 +528,34 @@ class MainActivity : ComponentActivity() {
                                 Text("No textbook PDFs bundled yet.", style = MaterialTheme.typography.bodyMedium)
                             } else {
                                 Text("${scannedBooks.size} book(s) • ${scannedBooks.sumOf { it.pageCount }} pages • ${scannedBooks.sumOf { it.pagesNeedingOcr.size }} pages need OCR", style = MaterialTheme.typography.labelMedium)
-                                Text("${bookCandidates.size} numbered exercise candidate(s) detected", style = MaterialTheme.typography.labelMedium)
+                                Text("${bookCandidates.size} new scan candidate(s) • ${textbookReviewRows.count { it.reviewStatus == "NEEDS_REVIEW" }} awaiting review in saved queue", style = MaterialTheme.typography.labelMedium)
                                 bookScanWarnings.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) }
-                                bookCandidates.take(30).forEach { candidate ->
-                                    Text("${candidate.chapterId} · Ex ${candidate.exerciseId} · Q${candidate.questionNumber} · p.${candidate.sourcePage}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
-                                    Text(candidate.text, style = MaterialTheme.typography.bodySmall)
-                                    Text("NEEDS REVIEW", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.error)
+                                textbookReviewRows.take(40).forEach { candidate ->
+                                    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+                                        Column(Modifier.fillMaxWidth().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                                            Text("${candidate.bookFile} · Ch ${candidate.chapterId} · Ex ${candidate.exerciseId} · Q${candidate.questionNumber} · p.${candidate.sourcePage}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                                            Text(candidate.questionText, style = MaterialTheme.typography.bodySmall)
+                                            Text(candidate.reviewStatus.replace('_', ' '), style = MaterialTheme.typography.labelMedium, color = if (candidate.reviewStatus == "NEEDS_REVIEW") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+                                            if (candidate.reviewStatus == "NEEDS_REVIEW") {
+                                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                    TextButton(onClick = {
+                                                        lifecycleScope.launch {
+                                                            database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "ACCEPTED_FOR_CLASSIFICATION", "Human accepted candidate for metadata classification; not yet a live question.")
+                                                            textbookReviewRows = database.contentDao().allTextbookCandidates()
+                                                        }
+                                                    }) { Text("ACCEPT FOR CLASSIFICATION") }
+                                                    TextButton(onClick = {
+                                                        lifecycleScope.launch {
+                                                            database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "REJECTED", "Rejected during textbook candidate review.")
+                                                            textbookReviewRows = database.contentDao().allTextbookCandidates()
+                                                        }
+                                                    }) { Text("REJECT") }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                if (bookCandidates.size > 30) Text("Showing first 30 of ${bookCandidates.size} candidates.", style = MaterialTheme.typography.bodySmall)
+                                if (textbookReviewRows.size > 40) Text("Showing first 40 saved candidates.", style = MaterialTheme.typography.bodySmall)
                             }
                         }
                     }
