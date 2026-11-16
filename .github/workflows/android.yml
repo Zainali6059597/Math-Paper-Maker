@@ -76,7 +76,47 @@ jobs:
           fi
           echo "Offline-only manifest verified."
 
-      # 8. Run unit tests
+      # 8. Validate every bundled offline content pack before compilation
+      - name: Validate bundled question banks
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          files = sorted(Path("app/src/main/assets/content-packs").glob("*.json"))
+          if not files:
+              raise SystemExit("No bundled JSON content packs found.")
+          for path in files:
+              pack = json.loads(path.read_text(encoding="utf-8"))
+              identity = pack["identity"]
+              pattern = pack["pattern"]
+              slots = pattern["slots"]
+              questions = pack["questions"]
+              groups = pattern.get("choiceGroups", [])
+              assert identity["grade"] in (9, 10), f"{path}: unsupported grade"
+              assert len(slots) == len(questions) > 0, f"{path}: slot/question count mismatch"
+              assert len({s["slotId"] for s in slots}) == len(slots), f"{path}: duplicate slot IDs"
+              assert len({q["questionId"] for q in questions}) == len(questions), f"{path}: duplicate question IDs"
+              question_map = {q["questionId"]: q for q in questions}
+              for slot in slots:
+                  question = question_map.get("Q-" + slot["slotId"])
+                  assert question is not None, f"{path}: missing question for {slot['slotId']}"
+                  assert question["marks"] == slot["marks"], f"{path}: marks mismatch at {slot['slotId']}"
+                  assert question["questionType"] == slot["questionType"], f"{path}: type mismatch at {slot['slotId']}"
+                  assert question.get("answerText"), f"{path}: missing answer at {slot['slotId']}"
+              attempted = sum(s["marks"] for s in slots if not s.get("groupId"))
+              for group in groups:
+                  members = [s for s in slots if s.get("groupId") == group["groupId"]]
+                  assert len(members) == group["offeredCount"], f"{path}: offered count mismatch in {group['groupId']}"
+                  assert all(s["marks"] == group["marksPerQuestion"] for s in members), f"{path}: inconsistent marks in {group['groupId']}"
+                  attempted += group["attemptCount"] * group["marksPerQuestion"]
+              assert attempted == pattern["totalMarks"], f"{path}: attempted marks do not equal totalMarks"
+              assert not any(q["chapterId"] == "CH8" for q in questions), f"{path}: excluded Chapter 8 content found"
+              print(f"Validated {path.name}: {len(questions)} answered questions, {pattern['totalMarks']} attempted marks.")
+          PY
+
+      # 9. Run unit tests
       - name: Run unit tests
         run: gradle --no-daemon --stacktrace testDebugUnitTest
 
