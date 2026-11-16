@@ -15,6 +15,8 @@ This catalogue records the upstream documents used by the offline paper generato
 
 The current Grade 9 2026–27 notification explicitly states a 75-mark Mathematics paper, 15 objective marks plus 60 subjective marks, and 2 hours 30 minutes total (20 minutes objective + 2 hours 10 minutes subjective). Its paper instructions and pairing scheme are the authority for the Punjab Grade 9 2027 template. Do not silently reuse the 2025–26 template.
 
+The current Grade 10 Mathematics pairing-scheme PDF is the separate 14 November 2026 PECTAA document ending in `1257.pdf`. It specifies a 75-mark paper (15 MCQ + 60 subjective), 150 minutes, 15 MCQs distributed across chapters 1–12, three short-question groups (each 6 of 9 at 2 marks), and three long questions each split into two 4-mark parts, with students attempting two of the three (16 marks). The official Grade 10 smart-syllabus document is a separate PDF; its exclusions must be read together with this pairing scheme, not mistaken for it.
+
 ## PECTAA / PCTB — textbooks
 
 - Official PECTAA E-Books page (includes Class IX and Class X Mathematics, English and Urdu-medium links): https://pectaa.edu.pk/curriculum-compliance/
@@ -41,6 +43,8 @@ The current Grade 9 2026–27 notification explicitly states a 75-mark Mathemati
 - [ ] Download and inspect the actual current Mathematics PDFs.
 - [ ] Confirm PECTAA/PCTB redistribution permission for bundling textbooks in a paid app.
 - [ ] Validate every Grade 9 and Grade 10 2026–27 Mathematics pattern section and encode only source-backed rules.
+- [x] Extract the headline Grade 10 2026–27 Mathematics marks, timing, and section structure from its official pairing-scheme PDF.
+- [ ] Encode and test the Grade 10 pattern as a separate exact-identity pack.
 - [ ] Bundle licensed PDFs and generate the matching book manifest.
 - [ ] Run extraction/OCR quality checks on every bundled book and retain page provenance.
 
