@@ -110,4 +110,15 @@ class CompositePatternEngineTest {
         assertEquals("INCOMPLETE_BUNDLE_GROUP", (result as CompositeSelectionResult.Blocked).code)
     }
 
+    @Test fun chapterAlternativeSlotAcceptsOnlyDeclaredChapters() {
+        val slot = OfferedQuestionSlot("Q8_B", 4, questionType = "LONG", allowedChapterIds = setOf("CH8", "CH11"))
+        val pattern = CompositePaperPattern(identity, 4, listOf(slot), emptyList())
+        val allowed = QuestionCandidate("ALLOWED", identity, "CH11", "SLO", "LONG", 4, true, ContentStatus.VERIFIED_OFFICIAL)
+        val blocked = QuestionCandidate("WRONG", identity, "CH9", "SLO", "LONG", 4, true, ContentStatus.VERIFIED_OFFICIAL)
+        val accepted = CompositePatternEngine.generate(pattern, listOf(allowed), GenerationMode.OFFICIAL, 1)
+        assertTrue(accepted is CompositeSelectionResult.Success)
+        val rejected = CompositePatternEngine.generate(pattern, listOf(blocked), GenerationMode.OFFICIAL, 1)
+        assertTrue(rejected is CompositeSelectionResult.Blocked)
+        assertEquals("NO_CANDIDATE_FOR_SLOT", (rejected as CompositeSelectionResult.Blocked).code)
+    }
 }
