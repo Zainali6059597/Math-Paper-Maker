@@ -108,6 +108,8 @@ class AliTestSeriesActivity : ComponentActivity() {
         var checkedDetectedQuestions by remember { mutableStateOf<Set<Int>>(emptySet()) }
         var detectedQuestionPage by remember { mutableIntStateOf(1) }
         var detectedQuestionKind by remember { mutableStateOf("SHORT") }
+        var detectedQuestionChapter by remember { mutableStateOf("") }
+        var detectedChapterMenuExpanded by remember { mutableStateOf(false) }
         var showDetectedQuestions by remember { mutableStateOf(false) }
         var manualQuestionText by remember { mutableStateOf(TextFieldValue("")) }
         var manualQuestionNumber by remember { mutableStateOf("") }
@@ -397,6 +399,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     detectedQuestions = found
                     checkedDetectedQuestions = emptySet()
                     detectedQuestionPage = pageIndex + 1
+                    detectedQuestionChapter = chapterForPage(pageIndex + 1).orEmpty()
                     if (found.isEmpty()) {
                         notice = "No clearly numbered text questions were detected on this page. Use SELECT TEXT, ADD BOX CROP, or the manual editor."
                     } else {
@@ -717,7 +720,8 @@ class AliTestSeriesActivity : ComponentActivity() {
         if (showDetectedQuestions) {
             val maxForKind = when (detectedQuestionKind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
             val alreadySelected = selected.count { it.kind == detectedQuestionKind }
-            val canAddChecked = checkedDetectedQuestions.isNotEmpty() &&
+            val chapterReady = paperMode == "CUSTOM" || PunjabBoardPattern.isValidChapter(grade, detectedQuestionChapter)
+            val canAddChecked = checkedDetectedQuestions.isNotEmpty() && chapterReady &&
                 (paperMode == "CUSTOM" || alreadySelected + checkedDetectedQuestions.size <= maxForKind)
             AlertDialog(
                 onDismissRequest = { showDetectedQuestions = false },
@@ -734,7 +738,26 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 FilterChip(selected = detectedQuestionKind == kind, onClick = { detectedQuestionKind = kind }, label = { Text(kind) })
                             }
                         }
-                        Text("They will be added as $detectedQuestionKind questions (${when (detectedQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }} marks each). Edit chapter, numbering and marks in Review.", style = MaterialTheme.typography.bodySmall)
+                        Box {
+                            OutlinedButton(onClick = { detectedChapterMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                                Text(if (detectedQuestionChapter.isBlank()) "SELECT CHAPTER" else "CHAPTER: $detectedQuestionChapter")
+                            }
+                            DropdownMenu(expanded = detectedChapterMenuExpanded, onDismissRequest = { detectedChapterMenuExpanded = false }) {
+                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
+                                    DropdownMenuItem(text = { Text("CH$chapter") }, onClick = {
+                                        detectedQuestionChapter = "CH$chapter"
+                                        detectedChapterMenuExpanded = false
+                                    })
+                                }
+                                if (paperMode == "CUSTOM") {
+                                    DropdownMenuItem(text = { Text("No chapter (Custom only)") }, onClick = {
+                                        detectedQuestionChapter = ""
+                                        detectedChapterMenuExpanded = false
+                                    })
+                                }
+                            }
+                        }
+                        Text("They will be added as $detectedQuestionKind questions (${when (detectedQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }} marks each). Edit numbering and marks in Review.", style = MaterialTheme.typography.bodySmall)
                         LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             itemsIndexed(detectedQuestions) { index, candidate ->
                                 Card {
@@ -753,7 +776,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        if (!canAddChecked && checkedDetectedQuestions.isNotEmpty()) {
+                        if (!chapterReady && checkedDetectedQuestions.isNotEmpty()) {
+                            Text("Select the correct chapter before adding these questions in Board Pattern mode.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        } else if (alreadySelected + checkedDetectedQuestions.size > maxForKind && paperMode == "BOARD") {
                             Text("This selection exceeds the remaining $detectedQuestionKind slots in Board Pattern mode.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
                     }
@@ -775,7 +800,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     id = nextId++, number = number, text = candidate.text,
                                     kind = detectedQuestionKind, marks = marks,
                                     sourcePage = detectedQuestionPage, imageFile = null,
-                                    chapterId = chapterForPage(detectedQuestionPage).orEmpty(),
+                                    chapterId = detectedQuestionChapter,
                                     sectionId = number.substringBefore("(")
                                 )
                             }
