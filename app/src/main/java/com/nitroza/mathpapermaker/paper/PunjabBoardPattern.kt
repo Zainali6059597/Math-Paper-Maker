@@ -97,7 +97,7 @@ object PunjabBoardPattern {
         val labels = questions.map { it.number.trim() }
         if (labels.any { it.isEmpty() }) errors += "Every selected question needs a paper number."
         if (labels.distinct().size != labels.size) errors += "Paper question numbers must be unique."
-        if (questions.any { it.sourcePage < 1 }) errors += "Every question must have a valid source PDF page."
+        if (questions.any { it.sourcePage < 0 }) errors += "Question source page cannot be negative; manually written questions may use page 0."
         if (questions.any { it.text.isBlank() && it.imageFile.isNullOrBlank() }) {
             errors += "Every question must contain selected text or a saved scanned-question image."
         }
