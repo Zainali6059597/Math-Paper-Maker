@@ -47,6 +47,12 @@ object DocxPaperExporter {
             require(questions.map { it.number.trim().lowercase() }.distinct().size == questions.size) {
                 "Custom question numbers must be unique."
             }
+            require(questions.all { it.sourcePage >= 0 && (it.sourcePage != 0 || it.text.isNotBlank()) }) {
+                "Each custom question needs a valid PDF page, or editable text if it was typed manually."
+            }
+            require(questions.all { it.text.isNotBlank() || !it.imageFile.isNullOrBlank() }) {
+                "Every custom question must contain editable text or a saved scanned-question image."
+            }
         }
         require(examTitle.length <= MAX_HEADER_CHARS && schoolName.length <= MAX_HEADER_CHARS) {
             "Paper title or school name is too long."
