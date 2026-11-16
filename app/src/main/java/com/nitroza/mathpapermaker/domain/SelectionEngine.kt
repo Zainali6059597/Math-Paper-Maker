@@ -32,7 +32,8 @@ data class QuestionSlot(
     val sloId: String? = null,
     val questionType: String? = null,
     val marks: Int,
-    val allowedChapterIds: Set<String> = emptySet()
+    val allowedChapterIds: Set<String> = emptySet(),
+    val groupId: String? = null
 )
 
 data class SelectionRequest(
