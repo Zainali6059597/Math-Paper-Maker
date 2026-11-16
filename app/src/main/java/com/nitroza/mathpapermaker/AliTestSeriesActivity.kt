@@ -141,6 +141,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     require(chapterRanges.all { it.startPage >= 1 && it.endPage <= count }) {
                         "The bundled book manifest contains chapter pages outside the actual PDF."
                     }
+                    pdfFile?.takeIf { it != file }?.delete()
                     pdfFile = file
                     pageBitmap = null
                     pdfName = bundledBookFile
@@ -156,6 +157,18 @@ class AliTestSeriesActivity : ComponentActivity() {
         fun chapterForPage(page: Int): String? = if (useManifestChapters) chapterRanges.firstOrNull { page in it.startPage..it.endPage }?.id else null
 
         LaunchedEffect(Unit) {
+            // PDF imports are cache-only working copies. Remove leftovers from previous
+            // process runs so repeated imports cannot quietly fill the app cache.
+            withContext(Dispatchers.IO) {
+                cacheDir.listFiles()
+                    ?.filter { file ->
+                        file.isFile &&
+                            (file.name.startsWith("ali-import-class") ||
+                                file.name.startsWith("ali-bundled-class")) &&
+                            file.extension.equals("pdf", ignoreCase = true)
+                    }
+                    ?.forEach { it.delete() }
+            }
             PaperDraftStore.load(this@AliTestSeriesActivity)?.let { saved ->
                 grade = saved.grade
                 examTitle = saved.examTitle
@@ -231,6 +244,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                         }
                         require(count > 0) { "The selected PDF has no readable pages." }
+                        pdfFile?.takeIf { it != file }?.delete()
                         pdfFile = file
                         pageBitmap = null
                         pdfName = uri.lastPathSegment?.substringAfterLast('/') ?: "Mathematics.pdf"
