@@ -875,7 +875,18 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         )
                                         Column(Modifier.weight(1f).padding(top = 10.dp)) {
                                             Text("PDF Q${candidate.sourceNumber}", style = MaterialTheme.typography.labelLarge)
-                                            Text(candidate.text, style = MaterialTheme.typography.bodySmall)
+                                            OutlinedTextField(
+                                                value = candidate.text,
+                                                onValueChange = { edited ->
+                                                    detectedQuestions = detectedQuestions.toMutableList().also { list ->
+                                                        list[index] = candidate.copy(text = edited)
+                                                    }
+                                                },
+                                                modifier = Modifier.fillMaxWidth(),
+                                                minLines = 2,
+                                                maxLines = 5,
+                                                label = { Text("Review / correct question text") }
+                                            )
                                         }
                                     }
                                 }
