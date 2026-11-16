@@ -1,12 +1,7 @@
 name: Build Android APK
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  # Development commits must not trigger APK builds automatically.
   workflow_dispatch:
 
 permissions:
