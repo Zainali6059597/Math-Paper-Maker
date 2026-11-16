@@ -276,6 +276,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 questionText = text
                                 pendingImageFile = null
                                 questionNumber = suggestedNumber(questionKind, selected)
+                                questionChapter = "CH1"
                                 if (text.isBlank()) notice = "This page has no extractable text. Draw a box around the scanned question."
                                 else showQuestionEditor = true
                             }
