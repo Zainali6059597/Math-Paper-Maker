@@ -121,4 +121,24 @@ class CompositePatternEngineTest {
         assertTrue(rejected is CompositeSelectionResult.Blocked)
         assertEquals("NO_CANDIDATE_FOR_SLOT", (rejected as CompositeSelectionResult.Blocked).code)
     }
+    @Test fun chapterQuotaIsScopedToItsOwnQuestionSection() {
+        val slots = listOf(
+            OfferedQuestionSlot("Q2_1", 1, questionType = "SHORT", groupId = "Q2"),
+            OfferedQuestionSlot("Q3_1", 1, questionType = "SHORT", groupId = "Q3")
+        )
+        val groups = listOf(
+            ChoiceGroupRule("Q2", 1, 1, 1, listOf(slots[0])),
+            ChoiceGroupRule("Q3", 1, 1, 1, listOf(slots[1]))
+        )
+        val pattern = CompositePaperPattern(identity, 2, slots, groups, quotas = listOf(
+            MetadataQuota(QuotaDimension.CHAPTER, "CH1", 1, 1, "Q2")
+        ))
+        val bank = listOf(
+            QuestionCandidate("Q2-WRONG", identity, "CH2", "S", "SHORT", 1, true, ContentStatus.VERIFIED_OFFICIAL),
+            QuestionCandidate("Q3-ONLY", identity, "CH1", "S", "SHORT", 1, true, ContentStatus.VERIFIED_OFFICIAL)
+        )
+        val result = CompositePatternEngine.generate(pattern, bank, GenerationMode.OFFICIAL, 9)
+        assertTrue(result is CompositeSelectionResult.Blocked)
+        assertEquals("NO_CANDIDATE_FOR_SLOT", (result as CompositeSelectionResult.Blocked).code)
+    }
 }
