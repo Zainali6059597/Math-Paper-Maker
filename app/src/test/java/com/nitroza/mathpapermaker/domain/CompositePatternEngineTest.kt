@@ -51,4 +51,63 @@ class CompositePatternEngineTest {
         assertTrue(result is CompositeSelectionResult.Blocked)
         assertEquals("ATTEMPTED_TOTAL_MISMATCH", (result as CompositeSelectionResult.Blocked).code)
     }
+
+    @Test fun optionalPairedLongQuestionsAreSelectedAsWholeEightMarkBundles() {
+        val slots = mutableListOf<OfferedQuestionSlot>()
+        val bank = mutableListOf<QuestionCandidate>()
+        repeat(15) { i ->
+            slots += OfferedQuestionSlot("MCQ$i", 1, questionType = "MCQ")
+            bank += QuestionCandidate("M$i", identity, "CH1", "SLO", "MCQ", 1, true, ContentStatus.VERIFIED_OFFICIAL)
+        }
+        val shortGroups = listOf("Q2" to 1..9, "Q3" to 10..18, "Q4" to 19..27)
+        shortGroups.forEach { (group, range) ->
+            range.forEach { i ->
+                slots += OfferedQuestionSlot("S$i", 2, questionType = "SHORT", groupId = group)
+                bank += QuestionCandidate("S$i", identity, "CH1", "SLO", "SHORT", 2, true, ContentStatus.VERIFIED_OFFICIAL)
+            }
+        }
+        val choiceGroups = shortGroups.map { (group, range) ->
+            ChoiceGroupRule(group, 9, 6, 2, slots.filter { it.groupId == group })
+        }
+        val bundleIds = listOf("Q5", "Q6", "Q7", "Q8", "Q9")
+        bundleIds.forEach { bundle ->
+            listOf("a", "b").forEach { part ->
+                slots += OfferedQuestionSlot("${bundle}_$part", 4, questionType = "LONG",
+                    bundleId = bundle, bundleChoiceGroupId = if (bundle in setOf("Q5", "Q6", "Q7")) "Q5-Q7" else "Q8-Q9")
+                bank += QuestionCandidate("${bundle}_$part", identity, "CH1", "SLO", "LONG", 4, true, ContentStatus.VERIFIED_OFFICIAL)
+            }
+        }
+        val pattern = CompositePaperPattern(
+            identity = identity,
+            expectedAttemptedMarks = 75,
+            slots = slots,
+            groups = choiceGroups,
+            bundleGroups = listOf(
+                BundleChoiceGroupRule("Q5-Q7", 3, 2, 8, setOf("Q5", "Q6", "Q7")),
+                BundleChoiceGroupRule("Q8-Q9", 2, 1, 8, setOf("Q8", "Q9"))
+            )
+        )
+        val result = CompositePatternEngine.generate(pattern, bank, GenerationMode.OFFICIAL, 2027)
+        assertTrue(result.toString(), result is CompositeSelectionResult.Success)
+        val paper = (result as CompositeSelectionResult.Success).paper
+        assertEquals(75, paper.attemptedMarks)
+        assertEquals(62 + 40, paper.offeredMarks)
+        assertEquals(52, paper.selectedBySlot.size)
+    }
+
+    @Test fun optionalPairedGroupRejectsAnIncompleteQuestionBundle() {
+        val slots = listOf(
+            OfferedQuestionSlot("Q5_a", 4, questionType = "LONG", bundleId = "Q5", bundleChoiceGroupId = "Q5-Q7"),
+            OfferedQuestionSlot("Q6_a", 4, questionType = "LONG", bundleId = "Q6", bundleChoiceGroupId = "Q5-Q7")
+        )
+        val pattern = CompositePaperPattern(identity, 8, slots, emptyList(),
+            listOf(BundleChoiceGroupRule("Q5-Q7", 2, 1, 8, setOf("Q5", "Q6"))))
+        val result = CompositePatternEngine.generate(pattern, listOf(
+            QuestionCandidate("A", identity, "CH1", "SLO", "LONG", 4, true, ContentStatus.VERIFIED_OFFICIAL),
+            QuestionCandidate("B", identity, "CH1", "SLO", "LONG", 4, true, ContentStatus.VERIFIED_OFFICIAL)
+        ), GenerationMode.PRACTICE, 1)
+        assertTrue(result is CompositeSelectionResult.Blocked)
+        assertEquals("INVALID_BUNDLE", (result as CompositeSelectionResult.Blocked).code)
+    }
+
 }
