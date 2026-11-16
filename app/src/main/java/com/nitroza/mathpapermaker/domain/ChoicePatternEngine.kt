@@ -11,7 +11,8 @@ data class OfferedQuestionSlot(
     val bundleId: String? = null,
     val groupId: String? = null,
     /** Optional group for choosing whole paired multi-part questions. */
-    val bundleChoiceGroupId: String? = null
+    val bundleChoiceGroupId: String? = null,
+    val allowedChapterIds: Set<String> = emptySet()
 )
 
 /** All questions in a choice group carry the same marks; students attempt only attemptCount. */
@@ -117,7 +118,7 @@ object ChoicePatternEngine {
 
     private fun QuestionCandidate.matches(slot: OfferedQuestionSlot): Boolean =
         marks == slot.marks &&
-            (slot.chapterId == null || chapterId == slot.chapterId) &&
+            (if (slot.allowedChapterIds.isNotEmpty()) chapterId in slot.allowedChapterIds else slot.chapterId == null || chapterId == slot.chapterId) &&
             (slot.sloId == null || sloId == slot.sloId) &&
             (slot.questionType == null || questionType == slot.questionType)
 
