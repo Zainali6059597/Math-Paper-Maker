@@ -212,6 +212,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.padding(padding), draft = draft, school = school, onSchool = { school = it },
                     title = title, onTitle = { title = it }, instructions = instructions, onInstructions = { instructions = it },
                     totalMarks = totalMarks, offeredMarks = offeredMarks, custom = customDraft,
+                    replacementTarget = replacementTarget,
                     replacementOptions = replacementOptions,
                     onRequestReplacement = { index ->
                         if (index in draft.indices && index in draftSlots.indices) {
@@ -637,7 +638,7 @@ private fun ChoiceField(label: String, options: List<String>, selected: String, 
 private fun EditorScreen(
     modifier: Modifier, draft: List<PaperPdfExporter.Item>, school: String, onSchool: (String) -> Unit,
     title: String, onTitle: (String) -> Unit, instructions: String, onInstructions: (String) -> Unit,
-    totalMarks: Int, offeredMarks: Int, custom: Boolean,
+    totalMarks: Int, offeredMarks: Int, custom: Boolean, replacementTarget: Int,
     replacementOptions: List<com.nitroza.mathpapermaker.data.QuestionEntity>,
     onRequestReplacement: (Int) -> Unit,
     onChooseReplacement: (com.nitroza.mathpapermaker.data.QuestionEntity) -> Unit,
