@@ -9,9 +9,9 @@ object TextbookExerciseParser {
     )
     data class ParseResult(val candidates: List<Candidate>, val pagesNeedingOcr: List<Int>, val warnings: List<String>)
 
-    private val chapterPattern = Regex("""(?i)^\\s*(?:chapter|unit)\\s+([0-9]{1,2}|[ivxlcdm]+)\\b.*$""")
-    private val exercisePattern = Regex("""(?i)^\\s*(?:exercise|ex\\.?|review exercise)\\s*([0-9]+(?:\\.[0-9]+)?)\\b.*$""")
-    private val questionPattern = Regex("""^\\s*(?:Q\\.?\\s*)?([0-9]{1,2})(?:\\s*[.)])\\s+(.+)$""")
+    private val chapterPattern = Regex("""(?i)^\s*(?:chapter|unit)\s+([0-9]{1,2}|[ivxlcdm]+)\b.*$""")
+    private val exercisePattern = Regex("""(?i)^\s*(?:exercise|ex\.?|review exercise)\s*([0-9]+(?:\.[0-9]+)?)\b.*$""")
+    private val questionPattern = Regex("""^\s*(?:Q\.?\s*)?([0-9]{1,2})(?:\s*[.)])\s+(.+)$""")
 
     fun parse(book: BundledBookPdfReader.BookIndex): ParseResult {
         var chapter = "UNMAPPED"
@@ -20,7 +20,7 @@ object TextbookExerciseParser {
         var current: MutableCandidate? = null
         fun flush() {
             current?.let { item ->
-                val text = item.lines.joinToString(" ").replace(Regex("\\s+"), " ").trim()
+                val text = item.lines.joinToString(" ").replace(Regex("\s+"), " ").trim()
                 if (text.length >= 8) candidates += Candidate(
                     book.bookFile, item.chapter, item.exercise, item.number, text, item.page
                 )
