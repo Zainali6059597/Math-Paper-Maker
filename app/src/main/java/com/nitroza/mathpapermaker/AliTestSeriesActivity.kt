@@ -127,8 +127,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                         target
                     }
                     val count = withContext(Dispatchers.IO) {
-                        val descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-                        PdfRenderer(descriptor).use { it.pageCount }
+                        ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
+                            PdfRenderer(descriptor).use { it.pageCount }
+                        }
                     }
                     pdfFile = file
                     pageBitmap = null
@@ -193,8 +194,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                             target
                         }
                         val count = withContext(Dispatchers.IO) {
-                            val descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-                            PdfRenderer(descriptor).use { it.pageCount }
+                            ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
+                                PdfRenderer(descriptor).use { it.pageCount }
+                            }
                         }
                         pdfFile = file
                         pageBitmap = null
@@ -236,14 +238,15 @@ class AliTestSeriesActivity : ComponentActivity() {
             pageBitmap = null
             pageBitmap = withContext(Dispatchers.IO) {
                 runCatching {
-                    val descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-                    PdfRenderer(descriptor).use { renderer ->
-                        require(pageIndex in 0 until renderer.pageCount)
-                        renderer.openPage(pageIndex).use { page ->
-                            val width = 1400
-                            val height = (width.toFloat() * page.height / page.width).toInt().coerceAtLeast(1)
-                            Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { bitmap ->
-                                page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                    ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
+                        PdfRenderer(descriptor).use { renderer ->
+                            require(pageIndex in 0 until renderer.pageCount)
+                            renderer.openPage(pageIndex).use { page ->
+                                val width = 1400
+                                val height = (width.toFloat() * page.height / page.width).toInt().coerceAtLeast(1)
+                                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { bitmap ->
+                                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                                }
                             }
                         }
                     }
