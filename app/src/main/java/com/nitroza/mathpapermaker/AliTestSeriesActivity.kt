@@ -34,6 +34,7 @@ import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.docx.DocxPaperExporter
 import com.nitroza.mathpapermaker.data.BundledBookManifestReader
 import com.nitroza.mathpapermaker.data.QuestionTextSegmenter
+import com.nitroza.mathpapermaker.data.OfflinePdfOcr
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
 import com.nitroza.mathpapermaker.paper.PaperDraftStore
@@ -111,6 +112,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var detectedQuestionChapter by remember { mutableStateOf("") }
         var detectedChapterMenuExpanded by remember { mutableStateOf(false) }
         var showDetectedQuestions by remember { mutableStateOf(false) }
+        var isOcrRunning by remember { mutableStateOf(false) }
         var manualQuestionText by remember { mutableStateOf(TextFieldValue("")) }
         var manualQuestionNumber by remember { mutableStateOf("") }
         var manualQuestionMarks by remember { mutableStateOf("2") }
@@ -460,6 +462,40 @@ class AliTestSeriesActivity : ComponentActivity() {
             }
         }
 
+        fun recognizeScannedQuestionsOnCurrentPage() {
+            val file = pdfFile ?: run {
+                notice = "Open a Mathematics PDF first."
+                return
+            }
+            if (isOcrRunning) return
+            isOcrRunning = true
+            lifecycleScope.launch {
+                val extraction = runCatchingCancellable {
+                    OfflinePdfOcr.readPage(this@AliTestSeriesActivity, file, pageIndex)
+                }
+                isOcrRunning = false
+                extraction.onSuccess { recognizedText ->
+                    val found = QuestionTextSegmenter.segment(recognizedText)
+                    detectedQuestions = found
+                    checkedDetectedQuestions = emptySet()
+                    detectedQuestionPage = pageIndex + 1
+                    detectedQuestionChapter = chapterForPage(pageIndex + 1).orEmpty()
+                    if (found.isEmpty()) {
+                        notice = if (recognizedText.isBlank()) {
+                            "OCR could not read text on this page. Try a clearer scan or add the question manually."
+                        } else {
+                            "OCR read the page, but no clearly numbered questions were found. Use the crop or manual editor."
+                        }
+                    } else {
+                        showDetectedQuestions = true
+                        notice = "Offline OCR found ${found.size} question candidates. Review and tick only the required questions."
+                    }
+                }.onFailure { error ->
+                    notice = "Offline OCR failed: ${error.message ?: "unknown error"}"
+                }
+            }
+        }
+
         val paperQuestions = selected.map {
             PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
         }
@@ -669,6 +705,17 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                     OutlinedButton(onClick = { findQuestionsOnCurrentPage() }, modifier = Modifier.fillMaxWidth()) {
                         Text("FIND NUMBERED QUESTIONS ON PAGE")
+                    }
+                    OutlinedButton(
+                        onClick = { recognizeScannedQuestionsOnCurrentPage() },
+                        enabled = pdfFile != null && !isOcrRunning,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        if (isOcrRunning) {
+                            CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                            Spacer(Modifier.width(8.dp))
+                            Text("READING SCANNED PAGE…")
+                        } else Text("OCR SCANNED PAGE · OFFLINE")
                     }
                     Button(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
                         Text("REVIEW SELECTED QUESTIONS (${selected.size})")
