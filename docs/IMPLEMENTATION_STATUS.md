@@ -11,25 +11,23 @@ Status: active development; not a verified release.
 - Class 9 / Class 10 choice.
 - Android document picker opens a locally stored Mathematics PDF; selected file is copied into app cache for stable page rendering.
 - Android PdfRenderer displays PDF pages with previous/next navigation.
-- PDFBox Android extracts text from the current page. Teacher trims the extracted text manually to retain only the intended question.
+- PDFBox Android extracts text from the current page; Compose text-selection handles let the teacher select the exact question text.
 - Scanned-page selection rectangle and crop-to-PNG workflow.
-- Selected question list supports reorder, remove and manually editable question labels.
-- Class-specific Punjab Board 2026–27 validation for MCQ chapter distribution, all three short-question chapter groups, and the five long-question chapter pairings; also enforces 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts (109 offered marks, 75 attempted marks, 150 minutes). Teachers currently enter/select each question's chapter ID manually.
+- Selected question list supports reorder, remove and manually editable question labels. Current paper metadata and selections are saved locally across app restarts; scanned crops are stored in app-private files.
+- Class-specific Punjab Board 2026–27 validation for MCQ chapter distribution, all three short-question chapter groups, and the five long-question chapter pairings; also enforces 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts (109 offered marks, 75 attempted marks, 150 minutes). Teachers can enter chapter IDs manually for an external PDF; a bundled PDF can prefill chapter IDs from its verified page-range manifest.
 - DOCX exporter writes a minimal OOXML Word package with editable text, A4 page settings, section instructions and embedded PNG question crops.
 - Unit tests added for paper counts, marks, numbering uniqueness and section-choice instructions.
 - Locked scope documented in docs/ALI_TEST_SERIES_SCOPE.md.
 
 ## Still required
 
-1. Use the supplied textbook PDFs to map page ranges to chapters so the app can prefill chapter IDs instead of requiring manual chapter entry.
+1. Supply the Class 9 and Class 10 PDFs, confirm redistribution rights before bundling, and fill the real SHA-256, page count and chapter page ranges in the textbook manifest.
 2. Improve selection handling for multi-column pages, math symbols and questions spanning multiple pages.
-3. Persist selections/drafts across app restarts.
-4. Integrate licensed Class 9 and Class 10 Mathematics PDFs under app/src/main/assets/books/, with book metadata and page-to-chapter mapping.
-5. Verify scanned crop coordinates on different screen sizes and PDF page aspect ratios.
-6. Verify DOCX structure and image embedding by opening exported files in Microsoft Word and another office application; inspect A4 printing.
-7. Run unit tests and Android Gradle/KSP/Compose build after the new activity/exporter changes.
-8. Test on a physical low-end Android phone, including offline mode, large PDFs, memory use and export.
-9. Produce the APK only after the above checks pass.
+3. Verify scanned crop coordinates on different screen sizes and PDF page aspect ratios.
+4. Verify DOCX structure and image embedding by opening exported files in Microsoft Word and another office application; inspect A4 printing.
+5. Run unit tests and Android Gradle/KSP/Compose build after the new activity/exporter changes.
+6. Test on a physical low-end Android phone, including offline mode, large PDFs, memory use and export.
+7. Produce the APK only after the above checks pass.
 
 ## Honest build status
 
