@@ -496,7 +496,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("Paper title") }, singleLine = true)
                         Text(PunjabBoardPattern.status(paperQuestions), style = MaterialTheme.typography.labelMedium)
                         val patternErrors = PunjabBoardPattern.validationErrors(grade, paperQuestions)
-                        if (patternErrors.isNotEmpty()) Text(patternErrors.first(), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        patternErrors.forEach { error ->
+                            Text("• $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        }
                         Text("Offered marks: ${selected.sumOf { it.marks }} / ${PunjabBoardPattern.TOTAL_OFFERED_MARKS} · Board attempted marks: ${PunjabBoardPattern.TOTAL_ATTEMPTED_MARKS}",
                             style = MaterialTheme.typography.labelSmall)
                         LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(8.dp)) {
