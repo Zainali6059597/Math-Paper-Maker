@@ -99,8 +99,8 @@ class PaperDraftStoreTest {
         assertNull(PaperDraftStore.parseSnapshot(draft(*questions), filesDir))
     }
 
-    @Test fun invalidSectionIdentifierIsRejected() {
-        val invalid = question().put("sectionId", "Q10")
+    @Test fun controlCharactersInCustomSectionAreRejected() {
+        val invalid = question().put("sectionId", "Custom\u0001Section")
         assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
     }
 
