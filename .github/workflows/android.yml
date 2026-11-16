@@ -1,9 +1,6 @@
 name: Test and Build Ali Test Series
 
 on:
-  # Build an installable APK when the release-ready source is pushed to main.
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
