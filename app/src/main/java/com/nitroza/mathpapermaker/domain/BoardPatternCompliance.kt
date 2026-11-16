@@ -5,7 +5,10 @@ data class ComplianceSection(
     val id: String,
     val offeredCount: Int,
     val attemptCount: Int,
-    val marksPerQuestion: Int
+    val marksPerQuestion: Int,
+    val offeredMarksOverride: Int? = null,
+    val attemptedMarksOverride: Int? = null,
+    val allowVariableQuestionMarks: Boolean = false
 )
 
 data class CompliancePattern(
@@ -51,8 +54,15 @@ object BoardPatternCompliance {
         val sections = pattern.sections
 
         if (sections.isEmpty()) errors += "Pattern has no sections."
-        if (sections.any { it.id.isBlank() || it.offeredCount <= 0 || it.attemptCount !in 1..it.offeredCount || it.marksPerQuestion <= 0 }) {
-            errors += "Every section must have a unique ID, positive marks/counts, and attempts no greater than offers."
+        if (sections.any {
+                it.id.isBlank() || it.offeredCount <= 0 || it.attemptCount !in 1..it.offeredCount ||
+                    it.marksPerQuestion <= 0 ||
+                    (it.offeredMarksOverride != null && it.offeredMarksOverride <= 0) ||
+                    (it.attemptedMarksOverride != null && it.attemptedMarksOverride <= 0) ||
+                    (it.offeredMarksOverride != null && it.attemptedMarksOverride != null &&
+                        it.attemptedMarksOverride > it.offeredMarksOverride)
+            }) {
+            errors += "Every section must have a unique ID, positive marks/counts, valid mark totals, and attempts no greater than offers."
         }
         if (sections.map { it.id }.distinct().size != sections.size) errors += "Pattern contains duplicate section IDs."
         if (pattern.declaredAttemptedMarks <= 0) errors += "Declared attempted total must be positive."
@@ -60,8 +70,12 @@ object BoardPatternCompliance {
         if (officialMode && pattern.sourceStatus != ContentStatus.VERIFIED_OFFICIAL) errors += "Primary source is not verified official."
         if (officialMode && pattern.patternStatus != ContentStatus.VERIFIED_OFFICIAL) errors += "Paper pattern is not verified official."
 
-        val offered = sections.sumOf { it.offeredCount.coerceAtLeast(0) * it.marksPerQuestion.coerceAtLeast(0) }
-        val attempted = sections.sumOf { it.attemptCount.coerceAtLeast(0) * it.marksPerQuestion.coerceAtLeast(0) }
+        val offered = sections.sumOf { section ->
+            section.offeredMarksOverride ?: section.offeredCount.coerceAtLeast(0) * section.marksPerQuestion.coerceAtLeast(0)
+        }
+        val attempted = sections.sumOf { section ->
+            section.attemptedMarksOverride ?: section.attemptCount.coerceAtLeast(0) * section.marksPerQuestion.coerceAtLeast(0)
+        }
         if (attempted != pattern.declaredAttemptedMarks) errors += "Attempted total mismatch: sections produce $attempted, pattern declares ${pattern.declaredAttemptedMarks}."
 
         val expectedCount = sections.sumOf { it.offeredCount.coerceAtLeast(0) }
@@ -75,7 +89,7 @@ object BoardPatternCompliance {
         offeredQuestions.forEach { q ->
             if (q.identity != pattern.identity) errors += "Question ${q.id} has a board/grade/stream/subject/session mismatch."
             val rule = sectionById[q.sectionId]
-            if (rule != null && q.marks != rule.marksPerQuestion) errors += "Question ${q.id} has ${q.marks} marks; section ${q.sectionId} requires ${rule.marksPerQuestion}."
+            if (rule != null && !rule.allowVariableQuestionMarks && q.marks != rule.marksPerQuestion) errors += "Question ${q.id} has ${q.marks} marks; section ${q.sectionId} requires ${rule.marksPerQuestion}."
             if (q.chapterId.isBlank() || q.sloId.isBlank()) warnings += "Question ${q.id} is missing chapter or SLO metadata."
             if (exclusions.any { ex -> (ex.chapterId != null && ex.chapterId == q.chapterId) || (ex.sloId != null && ex.sloId == q.sloId) }) {
                 errors += "Question ${q.id} belongs to an excluded syllabus chapter/SLO."
