@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.docx.DocxPaperExporter
+import com.nitroza.mathpapermaker.data.BundledBookManifestReader
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
 import com.nitroza.mathpapermaker.paper.PaperDraftStore
@@ -90,6 +91,51 @@ class AliTestSeriesActivity : ComponentActivity() {
         var examTitle by remember { mutableStateOf("Mathematics Examination") }
         var schoolName by remember { mutableStateOf("") }
         var draftLoaded by remember { mutableStateOf(false) }
+        var bundledBookReady by remember { mutableStateOf(false) }
+        var bundledBookFile by remember { mutableStateOf("") }
+        var chapterRanges by remember { mutableStateOf<List<BundledBookManifestReader.Chapter>>(emptyList()) }
+
+        LaunchedEffect(grade) {
+            val expectedFile = "Punjab_Grade${grade}_Mathematics.pdf"
+            val result = withContext(Dispatchers.IO) {
+                runCatching {
+                    val available = assets.list("books").orEmpty().contains(expectedFile)
+                    val chapters = BundledBookManifestReader.chaptersFor(
+                        this@AliTestSeriesActivity, "Punjab", grade, "MATHEMATICS", "Mathematics", "2026-27"
+                    )
+                    available to chapters
+                }.getOrDefault(false to emptyList())
+            }
+            bundledBookFile = expectedFile
+            bundledBookReady = result.first && result.second.isNotEmpty()
+            chapterRanges = if (bundledBookReady) result.second else emptyList()
+        }
+
+        fun openBundledBook() {
+            lifecycleScope.launch {
+                runCatching {
+                    val file = withContext(Dispatchers.IO) {
+                        val target = File(filesDir, bundledBookFile)
+                        assets.open("books/$bundledBookFile").use { input ->
+                            FileOutputStream(target).use { output -> input.copyTo(output) }
+                        }
+                        target
+                    }
+                    val count = withContext(Dispatchers.IO) {
+                        val descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+                        PdfRenderer(descriptor).use { it.pageCount }
+                    }
+                    pdfFile = file
+                    pdfName = bundledBookFile
+                    pageCount = count
+                    pageIndex = 0
+                    cropRect = null
+                    notice = "Bundled textbook opened. Chapter IDs are filled from the verified book manifest."
+                }.onFailure { notice = "Could not open bundled textbook: ${it.message}" }
+            }
+        }
+
+        fun chapterForPage(page: Int): String? = chapterRanges.firstOrNull { page in it.startPage..it.endPage }?.id
 
         LaunchedEffect(Unit) {
             PaperDraftStore.load(this@AliTestSeriesActivity)?.let { saved ->
@@ -226,9 +272,15 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Card {
                         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Text("Mathematics textbook PDF", style = MaterialTheme.typography.titleMedium)
-                            Text("Open a PDF stored on this device. The supplied Class 9 and Class 10 books can later be bundled offline.", style = MaterialTheme.typography.bodyMedium)
-                            Button(onClick = { openPdf.launch(arrayOf("application/pdf")) }, modifier = Modifier.fillMaxWidth()) {
-                                Text("OPEN CLASS $grade PDF")
+                            if (bundledBookReady) {
+                                Button(onClick = { openBundledBook() }, modifier = Modifier.fillMaxWidth()) {
+                                    Text("OPEN BUNDLED CLASS $grade BOOK")
+                                }
+                                Text("Verified book manifest found · chapter labels will be filled automatically.", style = MaterialTheme.typography.bodySmall)
+                            }
+                            Text("You can also open a local PDF from your device.", style = MaterialTheme.typography.bodyMedium)
+                            OutlinedButton(onClick = { openPdf.launch(arrayOf("application/pdf")) }, modifier = Modifier.fillMaxWidth()) {
+                                Text("CHOOSE PDF FROM DEVICE")
                             }
                         }
                     }
@@ -311,7 +363,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 questionText = TextFieldValue(text)
                                 pendingImageFile = null
                                 questionNumber = suggestedNumber(questionKind, selected)
-                                questionChapter = "CH1"
+                                questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
                                 if (text.isBlank()) notice = "This page has no extractable text. Draw a box around the scanned question."
                                 else showQuestionEditor = true
                             }
@@ -333,7 +385,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     pendingImageFile = image.absolutePath
                                     questionText = TextFieldValue("")
                                     questionNumber = suggestedNumber(questionKind, selected)
-                                    questionChapter = "CH1"
+                                    questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
                                     showQuestionEditor = true
                                 }.onFailure { notice = "Could not crop selection: ${it.message}" }
                             },
