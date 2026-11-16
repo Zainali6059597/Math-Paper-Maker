@@ -496,8 +496,18 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("Paper title") }, singleLine = true)
                         Text(PunjabBoardPattern.status(paperQuestions), style = MaterialTheme.typography.labelMedium)
                         val patternErrors = PunjabBoardPattern.validationErrors(grade, paperQuestions)
+                        val missingImageCount = selected.count { item ->
+                            item.imageFile != null && !File(item.imageFile).isFile
+                        }
                         patternErrors.forEach { error ->
                             Text("• $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        }
+                        if (missingImageCount > 0) {
+                            Text(
+                                "• $missingImageCount scanned question image(s) are missing from this device. Remove and re-add those questions before exporting.",
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
                         Text("Offered marks: ${selected.sumOf { it.marks }} / ${PunjabBoardPattern.TOTAL_OFFERED_MARKS} · Board attempted marks: ${PunjabBoardPattern.TOTAL_ATTEMPTED_MARKS}",
                             style = MaterialTheme.typography.labelSmall)
@@ -555,7 +565,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         TextButton(onClick = { showClearConfirm = true }) { Text("NEW PAPER") }
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
-                        Button(enabled = PunjabBoardPattern.isComplete(grade, paperQuestions),
+                        Button(enabled = PunjabBoardPattern.isComplete(grade, paperQuestions) && missingImageCount == 0,
                             onClick = { exportWord.launch("Ali-Test-Series-Class-$grade.docx") }) { Text("EXPORT WORD") }
                     }
                 }
