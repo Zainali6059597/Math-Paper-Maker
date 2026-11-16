@@ -1,6 +1,7 @@
 package com.nitroza.mathpapermaker.domain
 
 import kotlin.random.Random
+import kotlin.math.ln
 
 enum class QuotaDimension { CHAPTER, SLO, COGNITIVE_LEVEL, DIFFICULTY }
 
@@ -31,6 +32,7 @@ object QuotaAwareSelectionEngine {
         if (request.quotas.map { it.dimension to it.value }.distinct().size != request.quotas.size)
             return blocked("DUPLICATE_QUOTA", "A metadata value may have only one quota rule per dimension.")
 
+        if (bank.any { !it.selectionWeight.isFinite() || it.selectionWeight <= 0.0 }) return blocked("INVALID_SELECTION_WEIGHT", "Every question weight must be finite and greater than zero.")
         val exact = bank.filter { it.identity == request.identity }
         val eligible = exact.filter { q -> q.status != ContentStatus.CONFLICTED &&
             (request.mode == GenerationMode.PRACTICE || (q.status == ContentStatus.VERIFIED_OFFICIAL && q.summative)) }
@@ -49,7 +51,12 @@ object QuotaAwareSelectionEngine {
             QuotaDimension.DIFFICULTY -> candidate.difficulty
         }
         val ordered = slots.sortedBy { pools.getValue(it.slotId).size }
-        val shuffled = pools.mapValues { (_, pool) -> pool.shuffled(Random(request.seed xor pool.size.toLong())) }
+        val shuffled = pools.map { (slotId, pool) ->
+            val random = Random(request.seed xor slotId.hashCode().toLong())
+            slotId to pool.sortedBy { candidate ->
+                -ln(random.nextDouble().coerceAtLeast(1e-12)) / candidate.selectionWeight
+            }
+        }.toMap()
         val counts = request.quotas.associateWith { 0 }.toMutableMap()
         val chosen = mutableMapOf<String, QuestionCandidate>()
         val used = mutableSetOf<String>()
