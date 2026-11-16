@@ -107,7 +107,7 @@ class CompositePatternEngineTest {
             QuestionCandidate("B", identity, "CH1", "SLO", "LONG", 4, true, ContentStatus.VERIFIED_OFFICIAL)
         ), GenerationMode.PRACTICE, 1)
         assertTrue(result is CompositeSelectionResult.Blocked)
-        assertEquals("INVALID_BUNDLE", (result as CompositeSelectionResult.Blocked).code)
+        assertEquals("INCOMPLETE_BUNDLE_GROUP", (result as CompositeSelectionResult.Blocked).code)
     }
 
 }
