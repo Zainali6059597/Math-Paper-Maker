@@ -1,0 +1,21 @@
+{
+  "manifestVersion": 1,
+  "books": [
+    {
+      "file": "REPLACE_WITH_LICENSED_TEXTBOOK.pdf",
+      "board": "Punjab",
+      "grade": 9,
+      "stream": "MATHEMATICS",
+      "subject": "Mathematics",
+      "session": "2026-27",
+      "edition": "REQUIRED",
+      "language": "en",
+      "publisher": "REQUIRED",
+      "sourceUrl": "REQUIRED",
+      "licenseOrPermission": "REQUIRED",
+      "chapters": [
+        { "chapterId": "1", "title": "REQUIRED", "startPage": 1, "endPage": 10 }
+      ]
+    }
+  ]
+}
