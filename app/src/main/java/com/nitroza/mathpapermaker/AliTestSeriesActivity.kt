@@ -699,6 +699,47 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             Text("${item.sectionId} · ${item.kind} · ${item.marks} marks · page ${item.sourcePage}",
                                                 style = MaterialTheme.typography.labelMedium)
                                         }
+                                        val itemKindMenu = remember(item.id) { mutableStateOf(false) }
+                                        Box {
+                                            OutlinedButton(onClick = { itemKindMenu.value = true }) {
+                                                Text("TYPE: ${item.kind}")
+                                            }
+                                            DropdownMenu(
+                                                expanded = itemKindMenu.value,
+                                                onDismissRequest = { itemKindMenu.value = false }
+                                            ) {
+                                                listOf("MCQ", "SHORT", "LONG").forEach { kind ->
+                                                    DropdownMenuItem(
+                                                        text = { Text(kind) },
+                                                        onClick = {
+                                                            val remaining = selected.filterNot { it.id == item.id }
+                                                            val newNumber = suggestedNumber(kind, remaining)
+                                                            selected = selected.map { question ->
+                                                                if (question.id == item.id) question.copy(
+                                                                    kind = kind,
+                                                                    marks = when (kind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 },
+                                                                    number = newNumber,
+                                                                    sectionId = newNumber.substringBefore("(")
+                                                                ) else question
+                                                            }
+                                                            itemKindMenu.value = false
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        OutlinedTextField(
+                                            value = item.marks.toString(),
+                                            onValueChange = { value ->
+                                                val parsed = value.filter(Char::isDigit).take(2).toIntOrNull() ?: 0
+                                                selected = selected.map { question ->
+                                                    if (question.id == item.id) question.copy(marks = parsed) else question
+                                                }
+                                            },
+                                            modifier = Modifier.width(112.dp),
+                                            label = { Text("Marks") },
+                                            singleLine = true
+                                        )
                                         val itemChapterMenu = remember(item.id) { mutableStateOf(false) }
                                         Box {
                                             OutlinedButton(onClick = { itemChapterMenu.value = true }) {
