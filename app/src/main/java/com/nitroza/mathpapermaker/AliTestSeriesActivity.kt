@@ -42,6 +42,7 @@ import com.nitroza.mathpapermaker.ui.MathPaperMakerTheme
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -114,7 +115,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         LaunchedEffect(grade) {
             val expectedFile = "Punjab_Grade${grade}_Mathematics.pdf"
             val result = withContext(Dispatchers.IO) {
-                runCatching {
+                runCatchingCancellable {
                     val available = assets.list("books").orEmpty().contains(expectedFile)
                     val chapters = BundledBookManifestReader.chaptersFor(
                         this@AliTestSeriesActivity, "Punjab", grade, "MATHEMATICS", "Mathematics", "2026-27"
@@ -129,26 +130,26 @@ class AliTestSeriesActivity : ComponentActivity() {
 
         fun openBundledBook() {
             lifecycleScope.launch {
-                runCatching {
-                    val file = withContext(Dispatchers.IO) {
+                runCatchingCancellable {
+                    val (file, count) = withContext(Dispatchers.IO) {
                         val target = File.createTempFile("ali-bundled-class$grade-", ".pdf", cacheDir)
                         try {
                             assets.open("books/$bundledBookFile").use { input ->
                                 FileOutputStream(target).use { output -> input.copyTo(output) }
                             }
                             require(target.length() > 0L) { "The bundled textbook file is empty." }
-                            target
+                            val pageTotal = ParcelFileDescriptor.open(
+                                target, ParcelFileDescriptor.MODE_READ_ONLY
+                            ).use { descriptor ->
+                                PdfRenderer(descriptor).use { it.pageCount }
+                            }
+                            require(pageTotal > 0) { "The bundled textbook has no readable pages." }
+                            target to pageTotal
                         } catch (error: Throwable) {
                             target.delete()
                             throw error
                         }
                     }
-                    val count = withContext(Dispatchers.IO) {
-                        ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
-                            PdfRenderer(descriptor).use { it.pageCount }
-                        }
-                    }
-                    require(count > 0) { "The bundled textbook has no readable pages." }
                     require(chapterRanges.all { it.startPage >= 1 && it.endPage <= count }) {
                         "The bundled book manifest contains chapter pages outside the actual PDF."
                     }
@@ -233,29 +234,29 @@ class AliTestSeriesActivity : ComponentActivity() {
         val openPdf = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             if (uri != null) {
                 lifecycleScope.launch {
-                    runCatching {
+                    runCatchingCancellable {
                         runCatching {
                             contentResolver.takePersistableUriPermission(uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
-                        val file = withContext(Dispatchers.IO) {
+                        val (file, count) = withContext(Dispatchers.IO) {
                             val target = File.createTempFile("ali-import-class$grade-", ".pdf", cacheDir)
                             try {
                                 contentResolver.openInputStream(uri)?.use { input ->
                                     FileOutputStream(target).use { output -> input.copyTo(output) }
                                 } ?: error("PDF file could not be opened.")
                                 require(target.length() > 0L) { "The selected PDF is empty." }
-                                target
+                                val pageTotal = ParcelFileDescriptor.open(
+                                    target, ParcelFileDescriptor.MODE_READ_ONLY
+                                ).use { descriptor ->
+                                    PdfRenderer(descriptor).use { it.pageCount }
+                                }
+                                require(pageTotal > 0) { "The selected PDF has no readable pages." }
+                                target to pageTotal
                             } catch (error: Throwable) {
                                 target.delete()
                                 throw error
                             }
                         }
-                        val count = withContext(Dispatchers.IO) {
-                            ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
-                                PdfRenderer(descriptor).use { it.pageCount }
-                            }
-                        }
-                        require(count > 0) { "The selected PDF has no readable pages." }
                         pdfFile?.takeIf { it != file }?.delete()
                         pdfFile = file
                         pageBitmap = null
@@ -275,7 +276,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         ) { uri: Uri? ->
             if (uri != null) {
                 lifecycleScope.launch {
-                    runCatching {
+                    runCatchingCancellable {
                         withContext(Dispatchers.IO) {
                             DocxPaperExporter.write(
                                 this@AliTestSeriesActivity, uri, grade, examTitle, schoolName,
@@ -296,7 +297,7 @@ class AliTestSeriesActivity : ComponentActivity() {
             cropRect = null
             pageBitmap = null
             val renderedPage = withContext(Dispatchers.IO) {
-                runCatching {
+                runCatchingCancellable {
                     ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
                         PdfRenderer(descriptor).use { renderer ->
                             require(pageIndex in 0 until renderer.pageCount) { "PDF page is out of range." }
@@ -429,7 +430,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             lifecycleScope.launch {
                                 val file = pdfFile ?: return@launch
                                 val text = withContext(Dispatchers.IO) {
-                                    runCatching {
+                                    runCatchingCancellable {
                                         PDFBoxResourceLoader.init(applicationContext)
                                         PDDocument.load(file).use { document ->
                                             PDFTextStripper().apply {
@@ -688,4 +689,11 @@ private fun selectedQuestionText(value: TextFieldValue): String {
     return if (!selection.collapsed && selection.min >= 0 && selection.max <= value.text.length) {
         value.text.substring(selection.min, selection.max).trim()
     } else value.text.trim()
+}
+private suspend fun <T> runCatchingCancellable(block: suspend () -> T): Result<T> = try {
+    Result.success(block())
+} catch (cancelled: CancellationException) {
+    throw cancelled
+} catch (error: Throwable) {
+    Result.failure(error)
 }
