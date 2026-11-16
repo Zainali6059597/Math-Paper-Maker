@@ -78,6 +78,20 @@ class PunjabGrade9OfficialPatternTest {
         assertEquals("CH12", (0 until slots.length()).map { slots.getJSONObject(it) }.single { it.getString("slotId") == "Q9_A" }.getString("chapterId"))
     }
 
+    @Test fun correctedGrade9PackageImportsWholePairedBundlesAndAlternatives() {
+        val parsed = PackageImporter.parse(pack().toString())
+        assertEquals(52, parsed.slots.size)
+        assertEquals(3, parsed.choiceGroups.size)
+        assertEquals(2, parsed.bundleChoiceGroups.size)
+        assertEquals(47, parsed.questions.size)
+        val q8a = parsed.slots.single { it.slotId == "Q8_A" }
+        val q9b = parsed.slots.single { it.slotId == "Q9_B" }
+        assertEquals(setOf("CH7", "CH10"),
+            (0 until org.json.JSONArray(q8a.allowedChapterIdsJson).length()).map { org.json.JSONArray(q8a.allowedChapterIdsJson).getString(it) }.toSet())
+        assertEquals(setOf("CH11", "CH13"),
+            (0 until org.json.JSONArray(q9b.allowedChapterIdsJson).length()).map { org.json.JSONArray(q9b.allowedChapterIdsJson).getString(it) }.toSet())
+    }
+
     @Test fun excludedChapterEightNeverAppearsInGenerationSlots() {
         val pattern = pack().getJSONObject("pattern")
         val slots = pattern.getJSONArray("slots")
