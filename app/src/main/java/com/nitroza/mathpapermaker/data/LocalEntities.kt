@@ -89,7 +89,8 @@ data class PatternSlotEntity(
     val marks: Int,
     val displayOrder: Int,
     val groupId: String? = null,
-    val bundleId: String? = null
+    val bundleId: String? = null,
+    val bundleChoiceGroupId: String? = null
 )
 
 @Entity(
@@ -108,6 +109,22 @@ data class ChoiceGroupEntity(
 )
 
 
+
+@Entity(
+    tableName = "bundle_choice_groups",
+    primaryKeys = ["patternId", "groupId"],
+    foreignKeys = [ForeignKey(entity = PaperPatternEntity::class, parentColumns = ["patternId"], childColumns = ["patternId"], onDelete = ForeignKey.RESTRICT)],
+    indices = [Index(value = ["patternId"])]
+)
+data class BundleChoiceGroupEntity(
+    val patternId: String,
+    val groupId: String,
+    val offeredBundleCount: Int,
+    val attemptBundleCount: Int,
+    val marksPerBundle: Int,
+    val bundleIdsJson: String,
+    val displayOrder: Int
+)
 
 @Entity(
     tableName = "pattern_quotas",
