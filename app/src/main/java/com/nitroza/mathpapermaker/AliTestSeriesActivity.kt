@@ -369,6 +369,13 @@ class AliTestSeriesActivity : ComponentActivity() {
             manualQuestionText = TextFieldValue(updated, androidx.compose.ui.text.TextRange(cursor))
         }
 
+        fun insertMathTemplate(prefix: String, suffix: String) {
+            val start = manualQuestionText.selection.min.coerceIn(0, manualQuestionText.text.length)
+            val end = manualQuestionText.selection.max.coerceIn(start, manualQuestionText.text.length)
+            val updated = manualQuestionText.text.replaceRange(start, end, prefix + suffix)
+            manualQuestionText = TextFieldValue(updated, androidx.compose.ui.text.TextRange(start + prefix.length))
+        }
+
         fun findQuestionsOnCurrentPage() {
             lifecycleScope.launch {
                 val file = pdfFile ?: return@launch
@@ -717,6 +724,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                 text = {
                     Column(Modifier.heightIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Page $detectedQuestionPage · Select the exact questions. Wrapped lines are grouped with their numbered question. Scanned pages still need a crop.", style = MaterialTheme.typography.bodySmall)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            TextButton(onClick = { checkedDetectedQuestions = detectedQuestions.indices.toSet() }) { Text("SELECT ALL") }
+                            TextButton(onClick = { checkedDetectedQuestions = emptySet() }) { Text("CLEAR") }
+                        }
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             listOf("MCQ", "SHORT", "LONG").forEach { kind ->
                                 FilterChip(selected = detectedQuestionKind == kind, onClick = { detectedQuestionKind = kind }, label = { Text(kind) })
@@ -992,8 +1003,29 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Column(Modifier.heightIn(max = 560.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Write the missed question. Use the maths symbol pad for common mathematical notation; the question remains editable in Word.", style = MaterialTheme.typography.bodySmall)
                         OutlinedTextField(manualQuestionText, { manualQuestionText = it }, modifier = Modifier.fillMaxWidth(), minLines = 5, label = { Text("Question") })
+                        Text("MATHS EQUATION TEMPLATES", style = MaterialTheme.typography.labelLarge)
+                        val templates = listOf(
+                            "FRACTION" to ("(" to ")/( )"),
+                            "ROOT" to ("√(" to ")"),
+                            "CUBE ROOT" to ("∛(" to ")"),
+                            "POWER" to ("x^(" to ")"),
+                            "SUBSCRIPT" to ("x_(" to ")"),
+                            "ABSOLUTE" to ("|" to "|"),
+                            "LOG" to ("log(" to ")"),
+                            "SIN" to ("sin(" to ")"),
+                            "COS" to ("cos(" to ")"),
+                            "TAN" to ("tan(" to ")")
+                        )
+                        templates.chunked(2).forEach { line ->
+                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                                line.forEach { (label, parts) ->
+                                    OutlinedButton(onClick = { insertMathTemplate(parts.first, parts.second) }, modifier = Modifier.weight(1f), contentPadding = PaddingValues(4.dp)) { Text(label) }
+                                }
+                                if (line.size == 1) Spacer(Modifier.weight(1f))
+                            }
+                        }
                         Text("MATHS SYMBOL PAD", style = MaterialTheme.typography.labelLarge)
-                        val symbols = listOf("√", "π", "θ", "∞", "≤", "≥", "≠", "±", "×", "÷", "∑", "∫", "∠", "°", "²", "³", "½", "¼", "(", ")", "^", "_", "=", "→")
+                        val symbols = listOf("√", "∛", "π", "θ", "α", "β", "γ", "Δ", "∞", "≤", "≥", "≠", "≈", "∝", "±", "×", "÷", "∑", "∫", "∂", "∠", "°", "²", "³", "⁴", "½", "¼", "⅓", "⅔", "∈", "∉", "∩", "∪", "⊥", "∥", "∴", "∵", "↔", "′", "″", "(", ")", "^", "_", "=", "→")
                         symbols.chunked(4).forEach { line ->
                             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
                                 line.forEach { symbol ->
