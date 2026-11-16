@@ -465,7 +465,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 },
                 confirmButton = {
                     TextButton(enabled = (questionText.text.isNotBlank() || pendingImageFile != null) &&
-                        questionNumber.isNotBlank() && questionChapter.matches(Regex("CH([1-9]|1[0-3])")) && (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
+                        questionNumber.isNotBlank() && questionChapter.matches(Regex(if (grade == 9) "CH([1-9]|1[0-3])" else "CH([1-9]|1[0-2])")) && (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
                         selected = selected + SelectedQuestion(
                             nextId++, questionNumber.trim(), selectedQuestionText(questionText), questionKind,
                             questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter, questionSection
