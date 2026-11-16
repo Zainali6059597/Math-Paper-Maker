@@ -101,6 +101,9 @@ class MainActivity : ComponentActivity() {
                     database.importPackage(parsed.source, parsed.pattern, parsed.slots, parsed.questions, parsed.choiceGroups, parsed.quotas, parsed.exclusions)
                     questionCount = database.contentDao().questionCount()
                     patternCount = database.contentDao().patternCount()
+                    val refreshedRows = database.contentDao().findQuestions(board, grade, stream, subject, session)
+                    availableChapters = refreshedRows.map { it.chapterId }.filter { it.isNotBlank() }.distinct().sorted()
+                    selectedChapters = availableChapters.toSet()
                     "Imported ${parsed.questions.size} questions. Package content is marked NEEDS_REVIEW; it cannot be used for an official paper until independently verified." +
                         if (parsed.warnings.isEmpty()) "" else " Review warnings: ${parsed.warnings.joinToString(" ")}"
                 }.onSuccess { notice = it }.onFailure { notice = "Import failed: ${it.message}" }
@@ -895,7 +898,7 @@ private fun ContentReviewScreen(
                 Card { Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text("${item.board} · Class ${item.grade} · ${item.chapterId} · ${item.marks} marks", style = MaterialTheme.typography.titleSmall)
                     Text(item.questionText, maxLines = 4, style = MaterialTheme.typography.bodyMedium)
-                    Text("${item.stream} · ${item.questionType} · SLO ${item.sloId.ifBlank { "missing" }} · ${if (item.summative) "Summative" else "Not summative"}", style = MaterialTheme.typography.bodySmall)
+                    Text("${item.stream} · ${item.questionType} · SLO ${item.sloId.ifBlank { "missing" }} · ${if (item.summative) "Summative" else "Not summative"} · Selection weight ×${item.selectionWeight}", style = MaterialTheme.typography.bodySmall)
                     Button(onClick = { targetType = "QUESTION"; targetId = item.questionId; targetTitle = "Question ${item.questionId}"; targetSourceId = item.sourceId; note = "" }) { Text("REVIEW QUESTION") }
                 } }
             }
