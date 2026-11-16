@@ -526,7 +526,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     questionText = TextFieldValue("")
                                     questionNumber = suggestedNumber(questionKind, selected)
                                     questionSection = questionNumber.substringBefore("(")
-                                    questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
+                                    questionChapter = chapterForPage(pageIndex + 1).orEmpty()
                                     showQuestionEditor = true
                                 }.onFailure { notice = "Could not crop selection: ${it.message}" }
                             },
