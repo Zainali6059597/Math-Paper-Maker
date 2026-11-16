@@ -75,6 +75,14 @@ object PaperDraftStore {
                 )
                 val imageFile = item.optString("imageFile")
                     .takeIf { it.isNotBlank() && it != "null" }
+                imageFile?.let { path ->
+                    val image = File(path).canonicalFile
+                    val imageDirectory = File(context.filesDir, "question_images").canonicalFile
+                    require(image.parentFile == imageDirectory && image.name.startsWith("ali_question_") &&
+                        image.extension.equals("png", ignoreCase = true)) {
+                        "Saved question image path is outside the app image folder."
+                    }
+                }
 
                 require(item.getLong("id") > 0L) { "Invalid saved question ID." }
                 require(number.isNotBlank()) { "Saved question number is blank." }
