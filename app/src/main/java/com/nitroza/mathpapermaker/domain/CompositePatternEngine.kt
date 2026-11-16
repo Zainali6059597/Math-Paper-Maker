@@ -1,11 +1,24 @@
 package com.nitroza.mathpapermaker.domain
 
+/**
+ * An optional group of complete multi-part questions. Each bundle is offered in full,
+ * but the candidate attempts only attemptBundleCount whole bundles.
+ */
+data class BundleChoiceGroupRule(
+    val groupId: String,
+    val offeredBundleCount: Int,
+    val attemptBundleCount: Int,
+    val marksPerBundle: Int,
+    val bundleIds: Set<String>
+)
+
 /** A paper may contain fixed slots, required paired bundles and optional choice groups together. */
 data class CompositePaperPattern(
     val identity: PaperIdentity,
     val expectedAttemptedMarks: Int,
     val slots: List<OfferedQuestionSlot>,
-    val groups: List<ChoiceGroupRule>
+    val groups: List<ChoiceGroupRule>,
+    val bundleGroups: List<BundleChoiceGroupRule> = emptyList()
 )
 
 data class CompositePaperSelection(
@@ -42,6 +55,32 @@ object CompositePatternEngine {
             return blocked("UNKNOWN_GROUP", "A slot refers to a choice group that does not exist.")
         if (pattern.slots.any { it.groupId != null && it.bundleId != null })
             return blocked("AMBIGUOUS_SLOT", "A slot cannot be both optional-choice and part of a required paired bundle.")
+        if (pattern.bundleGroups.map { it.groupId }.distinct().size != pattern.bundleGroups.size ||
+            pattern.bundleGroups.any { g ->
+                g.groupId.isBlank() || g.offeredBundleCount <= 0 ||
+                    g.attemptBundleCount !in 1..g.offeredBundleCount ||
+                    g.marksPerBundle <= 0 || g.bundleIds.size != g.offeredBundleCount ||
+                    g.bundleIds.any { it.isBlank() }
+            }) return blocked("INVALID_BUNDLE_GROUP", "Optional paired-question group metadata is invalid.")
+        if (pattern.slots.any { it.bundleChoiceGroupId != null &&
+                (it.bundleId == null || pattern.bundleGroups.none { g -> g.groupId == it.bundleChoiceGroupId }) })
+            return blocked("UNKNOWN_BUNDLE_GROUP", "A slot refers to an unknown paired-question choice group.")
+        if (pattern.slots.any { it.bundleChoiceGroupId != null && it.groupId != null })
+            return blocked("AMBIGUOUS_BUNDLE_GROUP", "A paired-question choice slot cannot also belong to a single-question choice group.")
+        val bundleChoiceIds = pattern.bundleGroups.flatMap { it.bundleIds }.toSet()
+        if (pattern.bundleGroups.sumOf { it.bundleIds.size } != bundleChoiceIds.size)
+            return blocked("DUPLICATE_BUNDLE_CHOICE", "A paired question bundle cannot belong to multiple choice groups.")
+        for (group in pattern.bundleGroups) {
+            val memberSlots = pattern.slots.filter { it.bundleChoiceGroupId == group.groupId }
+            val actualBundles = memberSlots.mapNotNull { it.bundleId }.toSet()
+            if (actualBundles != group.bundleIds)
+                return blocked("INCOMPLETE_BUNDLE_GROUP", "Every offered paired question must have all its parts represented.")
+            val invalidBundle = memberSlots.groupBy { it.bundleId!! }.values.any { parts ->
+                parts.size < 2 || parts.sumOf { it.marks } != group.marksPerBundle
+            }
+            if (invalidBundle)
+                return blocked("INVALID_BUNDLE_MARKS", "Each offered paired question must contain at least two parts and match marksPerBundle.")
+        }
         if (pattern.groups.any { group ->
                 val members = pattern.slots.filter { it.groupId == group.groupId }
                 members.size != group.offeredCount || members.any { it.marks != group.marksPerQuestion }
@@ -50,8 +89,10 @@ object CompositePatternEngine {
         if (bundles.keys.any { it.isBlank() } || bundles.values.any { it.size < 2 })
             return blocked("INVALID_BUNDLE", "Every required paired bundle needs a nonblank ID and at least two parts.")
 
-        val requiredMarks = pattern.slots.filter { it.groupId == null }.sumOf { it.marks }
-        val choiceAttemptedMarks = pattern.groups.sumOf { it.attemptCount * it.marksPerQuestion }
+        val optionalBundleSlots = pattern.slots.filter { it.bundleChoiceGroupId != null }.toSet()
+        val requiredMarks = pattern.slots.filter { it.groupId == null && it !in optionalBundleSlots }.sumOf { it.marks }
+        val choiceAttemptedMarks = pattern.groups.sumOf { it.attemptCount * it.marksPerQuestion } +
+            pattern.bundleGroups.sumOf { it.attemptBundleCount * it.marksPerBundle }
         val calculated = requiredMarks + choiceAttemptedMarks
         if (calculated != pattern.expectedAttemptedMarks)
             return blocked("ATTEMPTED_TOTAL_MISMATCH", "Fixed and paired slots plus attempted choice marks total $calculated, but the pattern declares ${pattern.expectedAttemptedMarks}.")
