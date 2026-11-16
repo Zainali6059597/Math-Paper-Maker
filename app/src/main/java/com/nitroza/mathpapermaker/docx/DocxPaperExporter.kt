@@ -78,7 +78,7 @@ object DocxPaperExporter {
         val consumedQuestionIndices = mutableSetOf<Int>()
         val document = buildString {
             append("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
-            append("""<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><w:body>""")
+            append("""<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"><w:body>""")
             paragraph(escape(schoolName.ifBlank { "ALI TEST SERIES" }), bold = true, centered = true, size = 30)
             paragraph("CLASS $grade · MATHEMATICS", bold = true, centered = true, size = 26)
             paragraph(escape(examTitle.ifBlank { "Mathematics Examination" }), bold = true, centered = true, size = 24)
@@ -96,7 +96,7 @@ object DocxPaperExporter {
                     } ?: error("A selected question could not be matched to its export entry.")
                     consumedQuestionIndices += index
                     val questionText = q.text.ifBlank { "[Scanned question]" }
-                    paragraph(escape("${q.number}. ${questionText} [${q.marks} marks]"), size = 21)
+                    questionParagraph(q.number, questionText, q.marks)
                     val relId = imageRelIds[index]
                     if (relId != null) {
                         val imageFile = imageEntries.first { it.first == index }.second
@@ -186,6 +186,14 @@ object DocxPaperExporter {
         putNextEntry(ZipEntry(path))
         write(text.toByteArray(Charsets.UTF_8))
         closeEntry()
+    }
+
+
+    private fun questionParagraph(number: String, text: String, marks: Int): String {
+        val prefix = MathOoxmlFormatter.inlineRuns("$number. ")
+        val body = MathOoxmlFormatter.inlineRuns(text)
+        val suffix = MathOoxmlFormatter.inlineRuns(" [$marks marks]")
+        return """<w:p><w:pPr><w:spacing w:after="100"/></w:pPr>$prefix$body$suffix</w:p>"""
     }
 
     private fun paragraph(text: String, bold: Boolean = false, centered: Boolean = false, size: Int = 22): String {
