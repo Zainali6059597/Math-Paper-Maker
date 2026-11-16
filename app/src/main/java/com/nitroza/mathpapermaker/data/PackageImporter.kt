@@ -157,22 +157,21 @@ object PackageImporter {
         require(slots.mapNotNull { it.groupId }.all { id -> choiceGroups.any { it.groupId == id } }) {
             "A slot references an unknown choice group."
         }
-        if (choiceGroups.isEmpty()) {
-            require(slots.all { it.groupId == null }) { "Slots cannot reference groups unless choiceGroups are defined." }
-            require(pattern.totalMarks == slots.sumOf { it.marks }) { "Required-slot patterns must sum slot marks to totalMarks." }
-        } else {
-            require(choiceGroups.map { it.groupId }.distinct().size == choiceGroups.size) { "Duplicate choice group IDs." }
-            require(choiceGroups.all { it.groupId.isNotBlank() && it.offeredCount > 0 && it.attemptCount in 1..it.offeredCount && it.marksPerQuestion > 0 }) { "Invalid choice group counts or marks." }
-            choiceGroups.forEach { group ->
-                val groupSlots = slots.filter { it.groupId == group.groupId }
-                require(groupSlots.size == group.offeredCount) { "Group ${group.groupId}: offeredCount does not match its slots." }
-                require(groupSlots.all { it.marks == group.marksPerQuestion }) { "Group ${group.groupId}: slot marks differ from marksPerQuestion." }
-            }
-            val fixedAndPairedMarks = slots.filter { it.groupId == null }.sumOf { it.marks }
-            val attemptedChoiceMarks = choiceGroups.sumOf { it.attemptCount * it.marksPerQuestion }
-            require(fixedAndPairedMarks + attemptedChoiceMarks == pattern.totalMarks) {
-                "Pattern totalMarks must equal required fixed/paired marks plus attempted choice-group marks."
-            }
+        require(choiceGroups.map { it.groupId }.distinct().size == choiceGroups.size) { "Duplicate choice group IDs." }
+        require(choiceGroups.all { it.groupId.isNotBlank() && it.offeredCount > 0 && it.attemptCount in 1..it.offeredCount && it.marksPerQuestion > 0 }) { "Invalid choice group counts or marks." }
+        choiceGroups.forEach { group ->
+            val groupSlots = slots.filter { it.groupId == group.groupId }
+            require(groupSlots.size == group.offeredCount) { "Group ${group.groupId}: offeredCount does not match its slots." }
+            require(groupSlots.all { it.marks == group.marksPerQuestion }) { "Group ${group.groupId}: slot marks differ from marksPerQuestion." }
+        }
+        require(slots.all { it.groupId == null || choiceGroups.any { group -> group.groupId == it.groupId } }) {
+            "Slots cannot reference groups unless matching choiceGroups are defined."
+        }
+        val fixedMarks = slots.filter { it.groupId == null && it.bundleChoiceGroupId == null }.sumOf { it.marks }
+        val attemptedSingleChoiceMarks = choiceGroups.sumOf { it.attemptCount * it.marksPerQuestion }
+        val attemptedBundleChoiceMarks = bundleChoiceGroups.sumOf { it.attemptBundleCount * it.marksPerBundle }
+        require(fixedMarks + attemptedSingleChoiceMarks + attemptedBundleChoiceMarks == pattern.totalMarks) {
+            "Pattern totalMarks must equal fixed marks plus attempted single-question and paired-question choice marks."
         }
         require(questions.all { it.selectionWeight.isFinite() && it.selectionWeight in 0.1..10.0 }) { "Question selectionWeight must be a finite value from 0.1 to 10.0." }
         require(questions.map { it.questionId }.distinct().size == questions.size) { "Duplicate question IDs." }
