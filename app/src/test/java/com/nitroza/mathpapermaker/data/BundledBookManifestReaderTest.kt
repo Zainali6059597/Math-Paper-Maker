@@ -5,6 +5,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class BundledBookManifestReaderTest {
+    private val hash = "a".repeat(64)
+    private val hashes = mapOf("maths9.pdf" to hash, "fbise9.pdf" to hash)
     private val manifest = """
         {
           "manifestVersion": 1,
@@ -16,6 +18,9 @@ class BundledBookManifestReaderTest {
               "stream": "MATHEMATICS",
               "subject": "Mathematics",
               "session": "2026-27",
+              "edition": "2025-26", "language": "en", "publisher": "PECTAA",
+              "sourceUrl": "https://pectaa.edu.pk/math9.pdf", "licenseOrPermission": "REDISTRIBUTION_CONFIRMED",
+              "pageCount": 20, "sha256": "$hash",
               "chapters": [
                 {"chapterId":"2","title":"Real Numbers","startPage":10,"endPage":18},
                 {"chapterId":"1","title":"Matrices","startPage":2,"endPage":9},
@@ -29,6 +34,9 @@ class BundledBookManifestReaderTest {
               "stream": "MATHEMATICS",
               "subject": "Mathematics",
               "session": "2026-27",
+              "edition": "2025-26", "language": "en", "publisher": "PECTAA",
+              "sourceUrl": "https://pectaa.edu.pk/fbise9.pdf", "licenseOrPermission": "REDISTRIBUTION_CONFIRMED",
+              "pageCount": 20, "sha256": "$hash",
               "chapters": [
                 {"chapterId":"1","title":"FBISE Chapter","startPage":1,"endPage":5}
               ]
@@ -40,7 +48,7 @@ class BundledBookManifestReaderTest {
     @Test fun returnsOnlyBundledExactIdentityChaptersInNumericOrder() {
         val chapters = BundledBookManifestReader.parseManifest(
             manifest, setOf("maths9.pdf", "fbise9.pdf"),
-            "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27"
+            "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27", hashes
         )
         assertEquals(listOf("1", "2"), chapters.map { it.id })
         assertEquals(listOf("Matrices", "Real Numbers"), chapters.map { it.title })
@@ -49,7 +57,7 @@ class BundledBookManifestReaderTest {
     @Test fun ignoresManifestBooksWhosePdfIsNotBundled() {
         val chapters = BundledBookManifestReader.parseManifest(
             manifest, setOf("fbise9.pdf"),
-            "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27"
+            "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27", mapOf("fbise9.pdf" to hash)
         )
         assertTrue(chapters.isEmpty())
     }
@@ -66,10 +74,23 @@ class BundledBookManifestReaderTest {
             val chapters = BundledBookManifestReader.parseManifest(
                 manifest, setOf("maths9.pdf"),
                 request[0] as String, request[1] as Int, request[2] as String,
-                request[3] as String, request[4] as String
+                request[3] as String, request[4] as String, hashes
             )
             assertTrue(chapters.isEmpty())
         }
+    }
+
+    @Test fun ignoresBooksWithoutConfirmedRedistributionPermissionOrMatchingHash() {
+        val unlicensed = manifest.replace("REDISTRIBUTION_CONFIRMED", "PUBLIC_DOWNLOAD_ONLY")
+        val denied = BundledBookManifestReader.parseManifest(
+            unlicensed, setOf("maths9.pdf"), "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27", hashes
+        )
+        assertTrue(denied.isEmpty())
+        val wrongHash = BundledBookManifestReader.parseManifest(
+            manifest, setOf("maths9.pdf"), "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27",
+            mapOf("maths9.pdf" to "b".repeat(64))
+        )
+        assertTrue(wrongHash.isEmpty())
     }
 
     @Test fun rejectsUnsupportedManifestVersion() {
