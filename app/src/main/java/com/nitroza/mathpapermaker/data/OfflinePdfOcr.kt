@@ -3,7 +3,6 @@ package com.nitroza.mathpapermaker.data
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
-import android.content.Context
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -27,7 +26,7 @@ object OfflinePdfOcr {
     private const val MAX_PIXELS = 2_000_000L
     private const val MAX_WIDTH = 1800f
 
-    suspend fun readPage(context: Context, pdfFile: File, zeroBasedPage: Int): String =
+    suspend fun readPage(pdfFile: File, zeroBasedPage: Int): String =
         withContext(Dispatchers.IO) {
             require(pdfFile.isFile && pdfFile.length() > 0L) { "The PDF file is missing or empty." }
             require(zeroBasedPage >= 0) { "Choose a valid PDF page." }
