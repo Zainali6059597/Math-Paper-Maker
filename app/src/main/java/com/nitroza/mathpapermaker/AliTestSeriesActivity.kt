@@ -165,6 +165,22 @@ class AliTestSeriesActivity : ComponentActivity() {
                 }
                 nextId = (selected.maxOfOrNull { it.id } ?: 0L) + 1L
             }
+            // A crop can be left behind if Android kills the app while the question editor is open.
+            // Keep only images referenced by the restored draft; remove abandoned app-owned crops.
+            withContext(Dispatchers.IO) {
+                val imageDirectory = File(filesDir, "question_images")
+                val referencedImages = selected.mapNotNull { it.imageFile }
+                    .mapNotNull { path -> runCatching { File(path).canonicalPath }.getOrNull() }
+                    .toSet()
+                imageDirectory.listFiles()
+                    ?.filter { file ->
+                        file.isFile &&
+                            file.name.startsWith("ali_question_") &&
+                            file.extension.equals("png", ignoreCase = true) &&
+                            runCatching { file.canonicalPath !in referencedImages }.getOrDefault(false)
+                    }
+                    ?.forEach { it.delete() }
+            }
             draftLoaded = true
         }
 
