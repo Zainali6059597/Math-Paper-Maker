@@ -95,6 +95,40 @@ class PunjabBoardPatternTest {
         assertEquals(3, PunjabBoardPattern.sections(questions).count { it.heading.contains("SHORT QUESTIONS") })
     }
 
+    @Test fun chapterIdsMustUseCanonicalUppercaseFormat() {
+        assertFalse(PunjabBoardPattern.isValidChapter(9, "ch1"))
+        assertFalse(PunjabBoardPattern.isValidChapter(9, "CH01"))
+        assertFalse(PunjabBoardPattern.isValidChapter(9, "CH14"))
+        assertFalse(PunjabBoardPattern.isValidChapter(9, "CH1x"))
+        assertTrue(PunjabBoardPattern.isValidChapter(9, "CH13"))
+    }
+
+    @Test fun misplacedMcqSectionCannotExport() {
+        val questions = fullPaper(9).toMutableList()
+        questions[0] = questions[0].copy(sectionId = "Q2")
+        assertFalse(PunjabBoardPattern.isComplete(9, questions))
+    }
+
+    @Test fun shortQuestionCannotBeMovedIntoWrongSection() {
+        val questions = fullPaper(9).toMutableList()
+        val index = questions.indexOfFirst { it.kind == "SHORT" && it.sectionId == "Q2" }
+        questions[index] = questions[index].copy(sectionId = "Q3")
+        assertFalse(PunjabBoardPattern.isComplete(9, questions))
+    }
+
+    @Test fun longQuestionPairingMustMatchBoardRules() {
+        val questions = fullPaper(9).toMutableList()
+        val index = questions.indexOfFirst { it.sectionId == "Q5" && it.kind == "LONG" }
+        questions[index] = questions[index].copy(chapterId = "CH13")
+        assertFalse(PunjabBoardPattern.isComplete(9, questions))
+    }
+
+    @Test fun unsupportedQuestionKindCannotExport() {
+        val questions = fullPaper(9).toMutableList()
+        questions[0] = questions[0].copy(kind = "ESSAY")
+        assertFalse(PunjabBoardPattern.isComplete(9, questions))
+    }
+
     @Test fun boardSectionsIncludeThreeShortGroupsAndFiveLongQuestions() {
         val sections = PunjabBoardPattern.sections(fullPaper(9))
         assertEquals(1, sections.count { it.heading.contains("MULTIPLE CHOICE") })
