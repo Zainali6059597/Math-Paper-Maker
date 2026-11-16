@@ -29,8 +29,10 @@ object QuotaAwareSelectionEngine {
         if (request.maxSearchNodes <= 0) return blocked("INVALID_SEARCH_LIMIT", "Search limit must be positive.")
         if (request.quotas.any { it.value.isBlank() || it.minimum < 0 || it.maximum < it.minimum || it.maximum > slots.size })
             return blocked("INVALID_QUOTA", "Each quota needs 0 ≤ minimum ≤ maximum ≤ offered question count.")
-        if (request.quotas.map { it.dimension to it.value }.distinct().size != request.quotas.size)
-            return blocked("DUPLICATE_QUOTA", "A metadata value may have only one quota rule per dimension.")
+        if (request.quotas.map { Triple(it.dimension, it.value, it.groupId) }.distinct().size != request.quotas.size)
+            return blocked("DUPLICATE_QUOTA", "A metadata value may have only one quota rule per dimension and section.")
+        if (request.quotas.any { it.groupId != null && (it.groupId.isBlank() || slots.none { slot -> slot.groupId == it.groupId }) })
+            return blocked("UNKNOWN_QUOTA_GROUP", "A section-scoped quota refers to a question group that has no offered slots.")
 
         if (bank.any { !it.selectionWeight.isFinite() || it.selectionWeight <= 0.0 }) return blocked("INVALID_SELECTION_WEIGHT", "Every question weight must be finite and greater than zero.")
         val exact = bank.filter { it.identity == request.identity }
@@ -67,7 +69,8 @@ object QuotaAwareSelectionEngine {
             val current = counts.getValue(quota)
             if (current >= quota.minimum) true else {
                 val possibleSlots = ordered.drop(next).count { slot ->
-                    shuffled.getValue(slot.slotId).any { it.id !in used && value(it, quota.dimension) == quota.value }
+                    (quota.groupId == null || slot.groupId == quota.groupId) &&
+                        shuffled.getValue(slot.slotId).any { it.id !in used && value(it, quota.dimension) == quota.value }
                 }
                 current + possibleSlots >= quota.minimum
             }
