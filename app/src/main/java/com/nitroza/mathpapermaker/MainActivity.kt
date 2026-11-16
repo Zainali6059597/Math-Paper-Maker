@@ -539,6 +539,7 @@ class MainActivity : ComponentActivity() {
                                         Text("${candidate.bookFile} · Ch ${candidate.chapterId} · Ex ${candidate.exerciseId} · Q${candidate.questionNumber} · p.${candidate.sourcePage}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                                         Text(candidate.questionText, style = MaterialTheme.typography.bodySmall)
                                         Text(candidate.reviewStatus.replace('_', ' '), style = MaterialTheme.typography.labelMedium, color = if (candidate.reviewStatus == "NEEDS_REVIEW") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+                                        if (candidate.reviewNote.isNotBlank()) Text(candidate.reviewNote, style = MaterialTheme.typography.bodySmall)
                                         if (candidate.reviewStatus == "NEEDS_REVIEW") {
                                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                                 TextButton(onClick = {
@@ -554,6 +555,13 @@ class MainActivity : ComponentActivity() {
                                                     }
                                                 }) { Text("REJECT") }
                                             }
+                                        } else {
+                                            TextButton(onClick = {
+                                                lifecycleScope.launch {
+                                                    database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "NEEDS_REVIEW", "")
+                                                    textbookReviewRows = database.contentDao().allTextbookCandidates()
+                                                }
+                                            }) { Text("RETURN TO REVIEW") }
                                         }
                                     }
                                 }
