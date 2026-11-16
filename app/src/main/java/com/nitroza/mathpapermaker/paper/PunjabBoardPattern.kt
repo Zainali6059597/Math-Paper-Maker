@@ -64,6 +64,12 @@ object PunjabBoardPattern {
         LongPairRule(setOf("CH10"), setOf("CH9", "CH12"))
     )
 
+    fun isValidChapter(grade: Int, chapterId: String): Boolean {
+        if (grade !in 9..10) return false
+        val chapter = chapterId.removePrefix("CH").toIntOrNull() ?: return false
+        return chapter in 1..if (grade == 9) 13 else 12
+    }
+
     fun count(questions: List<PaperQuestion>, kind: String): Int =
         questions.count { it.kind.equals(kind, ignoreCase = true) }
 
@@ -91,11 +97,7 @@ object PunjabBoardPattern {
         val labels = questions.map { it.number.trim() }
         if (labels.any { it.isEmpty() }) errors += "Every selected question needs a paper number."
         if (labels.distinct().size != labels.size) errors += "Paper question numbers must be unique."
-        val maxChapter = if (grade == 9) 13 else 12
-        if (questions.any { chapter ->
-                val number = chapter.chapterId.removePrefix("CH").toIntOrNull()
-                number == null || number !in 1..maxChapter
-            }) {
+        if (questions.any { !isValidChapter(grade, it.chapterId) }) {
             errors += "Choose the correct chapter (CH1, CH2, etc.) for every question."
             return errors
         }
