@@ -16,6 +16,12 @@ import kotlin.math.min
  * scanned question crops are embedded as PNGs.
  */
 object DocxPaperExporter {
+    private const val MAX_HEADER_CHARS = 500
+    private const val MAX_QUESTION_TEXT_CHARS = 100_000
+    private const val MAX_TOTAL_TEXT_CHARS = 2_000_000L
+    private const val MAX_IMAGE_BYTES = 8L * 1024L * 1024L
+    private const val MAX_TOTAL_IMAGE_BYTES = 24L * 1024L * 1024L
+
     fun write(
         context: Context,
         destination: Uri,
@@ -29,12 +35,30 @@ object DocxPaperExporter {
         require(PunjabBoardPattern.isComplete(grade, questions)) {
             "The Punjab Board pattern needs 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts, with unique numbering."
         }
+        require(examTitle.length <= MAX_HEADER_CHARS && schoolName.length <= MAX_HEADER_CHARS) {
+            "Paper title or school name is too long."
+        }
+        require(durationMinutes == null || durationMinutes in 1..600) {
+            "Exam duration must be between 1 and 600 minutes."
+        }
+        require(questions.all { it.text.length <= MAX_QUESTION_TEXT_CHARS }) {
+            "A selected question contains too much text. Shorten it before exporting."
+        }
+        require(questions.sumOf { it.text.length.toLong() } <= MAX_TOTAL_TEXT_CHARS) {
+            "The selected question text is too large for one paper."
+        }
         questions.filter { it.imageFile != null }.forEach {
             require(File(it.imageFile!!).isFile) { "A selected scanned-question image is missing. Re-select that question." }
         }
 
         val imageEntries = questions.mapIndexedNotNull { index, q ->
             q.imageFile?.let { index to File(it) }
+        }
+        require(imageEntries.all { (_, file) -> file.isFile && file.length() in 24L..MAX_IMAGE_BYTES }) {
+            "A scanned question image is missing or exceeds the per-image size limit."
+        }
+        require(imageEntries.sumOf { (_, file) -> file.length() } <= MAX_TOTAL_IMAGE_BYTES) {
+            "Scanned question images are too large for one Word paper. Use smaller crops."
         }
         val imageRelIds = imageEntries.associate { (index, _) -> index to "rIdImage${index + 1}" }
         val sections = PunjabBoardPattern.sections(questions)
