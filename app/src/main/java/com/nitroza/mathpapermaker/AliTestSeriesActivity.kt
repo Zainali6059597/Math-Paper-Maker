@@ -59,7 +59,8 @@ class AliTestSeriesActivity : ComponentActivity() {
         val marks: Int,
         val sourcePage: Int,
         val imageFile: String? = null,
-        val chapterId: String = ""
+        val chapterId: String = "",
+        val sectionId: String = ""
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +86,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var questionMarks by remember { mutableStateOf("2") }
         var questionNumber by remember { mutableStateOf("") }
         var questionChapter by remember { mutableStateOf("CH1") }
+        var questionSection by remember { mutableStateOf("Q2") }
         var chapterMenuExpanded by remember { mutableStateOf(false) }
         var pendingImageFile by remember { mutableStateOf<String?>(null) }
         var cropRect by remember { mutableStateOf<Rect?>(null) }
@@ -148,7 +150,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 examTitle = saved.examTitle
                 schoolName = saved.schoolName
                 selected = saved.questions.map { q ->
-                    SelectedQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId)
+                    SelectedQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId, q.sectionId)
                 }
                 nextId = (selected.maxOfOrNull { it.id } ?: 0L) + 1L
             }
@@ -159,7 +161,7 @@ class AliTestSeriesActivity : ComponentActivity() {
             if (draftLoaded) {
                 PaperDraftStore.save(this@AliTestSeriesActivity, PaperDraftSnapshot(
                     grade, examTitle, schoolName,
-                    selected.map { q -> StoredPaperQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId) }
+                    selected.map { q -> StoredPaperQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId, q.sectionId) }
                 ))
             }
         }
@@ -218,7 +220,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 this@AliTestSeriesActivity, uri, grade, examTitle, schoolName,
                                 PunjabBoardPattern.DURATION_MINUTES,
                                 selected.map { item ->
-                                    PaperQuestion(item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile, item.chapterId)
+                                    PaperQuestion(item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile, item.chapterId, item.sectionId)
                                 }
                             )
                         }
@@ -250,7 +252,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         val paperQuestions = selected.map {
-            PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId)
+            PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
         }
 
         Scaffold(
@@ -369,6 +371,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 questionText = TextFieldValue(text)
                                 pendingImageFile = null
                                 questionNumber = suggestedNumber(questionKind, selected)
+                                questionSection = questionNumber.substringBefore("(")
                                 questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
                                 if (text.isBlank()) notice = "This page has no extractable text. Draw a box around the scanned question."
                                 else showQuestionEditor = true
@@ -391,6 +394,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     pendingImageFile = image.absolutePath
                                     questionText = TextFieldValue("")
                                     questionNumber = suggestedNumber(questionKind, selected)
+                                    questionSection = questionNumber.substringBefore("(")
                                     questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
                                     showQuestionEditor = true
                                 }.onFailure { notice = "Could not crop selection: ${it.message}" }
@@ -446,6 +450,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     questionKind = kind
                                     questionMarks = when (kind) { "MCQ" -> "1"; "SHORT" -> "2"; else -> "4" }
                                     questionNumber = suggestedNumber(kind, selected)
+                                    questionSection = questionNumber.substringBefore("(")
                                 }, label = { Text(kind) })
                             }
                         }
@@ -458,7 +463,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         questionNumber.isNotBlank() && questionChapter.matches(Regex("CH([1-9]|1[0-3])")) && (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
                         selected = selected + SelectedQuestion(
                             nextId++, questionNumber.trim(), selectedQuestionText(questionText), questionKind,
-                            questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter
+                            questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter, questionSection
                         )
                         showQuestionEditor = false
                         cropRect = null
@@ -499,7 +504,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                 singleLine = true
                                             )
                                             Spacer(Modifier.width(8.dp))
-                                            Text("${item.kind} · ${item.marks} marks · page ${item.sourcePage}",
+                                            Text("${item.sectionId} · ${item.kind} · ${item.marks} marks · page ${item.sourcePage}",
                                                 style = MaterialTheme.typography.labelMedium)
                                         }
                                         Text("${item.chapterId} · " + if (item.imageFile != null) "Scanned question image" else item.text,
