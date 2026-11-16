@@ -97,6 +97,40 @@ class BoardPatternComplianceTest {
         assertEquals(20, report.attemptedMarks)
     }
 
+    @Test fun chapterAlternativesAreEnforcedAtPreExport() {
+        val allowedSlot = questions().take(1).single().copy(
+            chapterId = "CH9",
+            allowedChapterIds = setOf("CH8", "CH11")
+        )
+        val report = BoardPatternCompliance.audit(pattern.copy(
+            declaredAttemptedMarks = 2,
+            sections = listOf(ComplianceSection("B", 1, 1, 2))
+        ), listOf(allowedSlot))
+        assertFalse(report.passed)
+        assertTrue(report.errors.any { it.contains("allows only") })
+    }
+
+    @Test fun sectionScopedChapterQuotaCannotBeSatisfiedByAnotherSection() {
+        val scoped = pattern.copy(
+            declaredAttemptedMarks = 2,
+            sections = listOf(ComplianceSection("Q2", 1, 1, 1), ComplianceSection("Q3", 1, 1, 1)),
+            metadataQuotas = listOf(MetadataQuota(QuotaDimension.CHAPTER, "CH1", 1, 1, "Q2"))
+        )
+        val invalid = listOf(
+            ComplianceQuestion("q2", identity, "Q2", "CH2", "s", 1, ContentStatus.NEEDS_REVIEW, true),
+            ComplianceQuestion("q3", identity, "Q3", "CH1", "s", 1, ContentStatus.NEEDS_REVIEW, true)
+        )
+        val blocked = BoardPatternCompliance.audit(scoped, invalid, officialMode = false)
+        assertFalse(blocked.passed)
+        assertTrue(blocked.errors.any { it.contains("Quota CHAPTER=CH1 in section Q2") })
+
+        val valid = listOf(
+            invalid[0].copy(chapterId = "CH1"),
+            invalid[1].copy(chapterId = "CH2")
+        )
+        assertTrue(BoardPatternCompliance.audit(scoped, valid, officialMode = false).passed)
+    }
+
     @Test fun sourceConflictBlocksEvenInPracticeMode() {
         val report = BoardPatternCompliance.audit(pattern.copy(hasUnresolvedSourceConflict = true), questions(), officialMode = false)
         assertFalse(report.passed)
