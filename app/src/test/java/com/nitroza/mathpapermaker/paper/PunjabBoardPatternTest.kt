@@ -31,17 +31,17 @@ class PunjabBoardPatternTest {
             "CH1" to "CH2", "CH3" to "CH4", "CH5" to "CH7", "CH6" to "CH8", "CH10" to "CH9"
         )
         val mcqs = mcqMap.flatMap { (chapter, count) ->
-            (1..count).map { PaperQuestion("M${chapter}_$it", "MCQ", "MCQ", 1, 1, chapterId = chapter) }
+            (1..count).map { PaperQuestion("M${chapter}_$it", "MCQ", "MCQ", 1, 1, chapterId = chapter, sectionId = "Q1") }
         }
         val shorts = shortGroups.flatMapIndexed { groupIndex, group ->
             group.flatMap { (chapter, count) ->
-                (1..count).map { PaperQuestion("S${groupIndex}_${chapter}_$it", "Short", "SHORT", 2, 2, chapterId = chapter) }
+                (1..count).map { PaperQuestion("S${groupIndex}_${chapter}_$it", "Short", "SHORT", 2, 2, chapterId = chapter, sectionId = "Q${groupIndex + 2}") }
             }
         }
         val longs = longPairs.flatMapIndexed { index, pair ->
             listOf(
-                PaperQuestion("L${index}a", "Long part a", "LONG", 4, 3, chapterId = pair.first),
-                PaperQuestion("L${index}b", "Long part b", "LONG", 4, 3, chapterId = pair.second)
+                PaperQuestion("L${index}a", "Long part a", "LONG", 4, 3, chapterId = pair.first, sectionId = "Q${index + 5}"),
+                PaperQuestion("L${index}b", "Long part b", "LONG", 4, 3, chapterId = pair.second, sectionId = "Q${index + 5}")
             )
         }
         return mcqs + shorts + longs
