@@ -106,7 +106,10 @@ object CompositePatternEngine {
                     candidate.identity == pattern.identity &&
                         candidate.status != ContentStatus.CONFLICTED &&
                         (mode == GenerationMode.PRACTICE || (candidate.status == ContentStatus.VERIFIED_OFFICIAL && candidate.summative)) &&
-                        candidate.matches(QuestionSlot(slot.slotId, slot.chapterId, slot.sloId, slot.questionType, slot.marks, slot.allowedChapterIds, slot.groupId)) &&
+                        candidate.marks == slot.marks &&
+                        (if (slot.allowedChapterIds.isNotEmpty()) candidate.chapterId in slot.allowedChapterIds else slot.chapterId == null || candidate.chapterId == slot.chapterId) &&
+                        (slot.sloId == null || candidate.sloId == slot.sloId) &&
+                        (slot.questionType == null || candidate.questionType == slot.questionType) &&
                         when (quota.dimension) {
                             QuotaDimension.CHAPTER -> candidate.chapterId == quota.value
                             QuotaDimension.SLO -> candidate.sloId == quota.value
