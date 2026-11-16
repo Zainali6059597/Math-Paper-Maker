@@ -45,17 +45,37 @@ class PunjabGrade9OfficialPatternTest {
         assertEquals(15, mcqs)
 
         val groups = pattern.getJSONArray("choiceGroups")
-        var attemptedSubjectiveMarks = 0
-        val expected = mapOf("Q2" to 12, "Q3" to 12, "Q4" to 12, "Q5-Q7" to 16, "Q8-Q9" to 8)
+        var attemptedShortMarks = 0
+        val expectedShort = mapOf("Q2" to 12, "Q3" to 12, "Q4" to 12)
         for (i in 0 until groups.length()) {
             val group = groups.getJSONObject(i)
             val id = group.getString("groupId")
             val marks = group.getInt("attemptCount") * group.getInt("marksPerQuestion")
-            assertEquals(expected[id], marks)
-            attemptedSubjectiveMarks += marks
+            assertEquals(expectedShort[id], marks)
+            attemptedShortMarks += marks
         }
-        assertEquals(60, attemptedSubjectiveMarks)
-        assertEquals(75, mcqs + attemptedSubjectiveMarks)
+        assertEquals(36, attemptedShortMarks)
+        val paired = pattern.getJSONArray("bundleChoiceGroups")
+        assertEquals(2, paired.length())
+        val attemptedLongMarks = (0 until paired.length()).sumOf { i ->
+            val group = paired.getJSONObject(i)
+            group.getInt("attemptBundleCount") * group.getInt("marksPerBundle")
+        }
+        assertEquals(24, attemptedLongMarks)
+        assertEquals(60, attemptedShortMarks + attemptedLongMarks)
+        assertEquals(75, mcqs + attemptedShortMarks + attemptedLongMarks)
+    }
+
+    @Test fun longQuestionPartsAndChapterAlternativesMatchTheOfficialPairingMap() {
+        val pattern = pack().getJSONObject("pattern")
+        val slots = pattern.getJSONArray("slots")
+        assertEquals(10, (0 until slots.length()).count { slots.getJSONObject(it).optString("questionType") == "LONG" })
+        val q8a = (0 until slots.length()).map { slots.getJSONObject(it) }.single { it.getString("slotId") == "Q8_A" }
+        val q9b = (0 until slots.length()).map { slots.getJSONObject(it) }.single { it.getString("slotId") == "Q9_B" }
+        assertEquals(setOf("CH7", "CH10"), (0 until q8a.getJSONArray("allowedChapterIds").length()).map { q8a.getJSONArray("allowedChapterIds").getString(it) }.toSet())
+        assertEquals(setOf("CH11", "CH13"), (0 until q9b.getJSONArray("allowedChapterIds").length()).map { q9b.getJSONArray("allowedChapterIds").getString(it) }.toSet())
+        assertEquals("CH9", (0 until slots.length()).map { slots.getJSONObject(it) }.single { it.getString("slotId") == "Q8_B" }.getString("chapterId"))
+        assertEquals("CH12", (0 until slots.length()).map { slots.getJSONObject(it) }.single { it.getString("slotId") == "Q9_A" }.getString("chapterId"))
     }
 
     @Test fun excludedChapterEightNeverAppearsInGenerationSlots() {
