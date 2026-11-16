@@ -1,6 +1,7 @@
 package com.nitroza.mathpapermaker.paper
 
 import android.content.Context
+import java.io.File
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -55,7 +56,10 @@ object PaperDraftStore {
     fun load(context: Context): PaperDraftSnapshot? {
         val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .getString(KEY_DRAFT, null) ?: return null
+        return parseSnapshot(raw, context.filesDir)
+    }
 
+    internal fun parseSnapshot(raw: String, filesDir: File): PaperDraftSnapshot? {
         return runCatching {
             val json = JSONObject(raw)
             val grade = json.optInt("grade", 9)
@@ -77,8 +81,9 @@ object PaperDraftStore {
                     .takeIf { it.isNotBlank() && it != "null" }
                 imageFile?.let { path ->
                     val image = File(path).canonicalFile
-                    val imageDirectory = File(context.filesDir, "question_images").canonicalFile
-                    require(image.parentFile == imageDirectory && image.name.startsWith("ali_question_") &&
+                    val imageDirectory = File(filesDir, "question_images").canonicalFile
+                    require(image.parentFile == imageDirectory &&
+                        image.name.startsWith("ali_question_") &&
                         image.extension.equals("png", ignoreCase = true)) {
                         "Saved question image path is outside the app image folder."
                     }
