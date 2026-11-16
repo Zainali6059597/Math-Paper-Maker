@@ -2,27 +2,40 @@
   "manifestVersion": 1,
   "books": [
     {
-      "file": "REPLACE_WITH_LICENSED_TEXTBOOK.pdf",
+      "file": "Punjab_Grade9_Mathematics.pdf",
       "board": "Punjab",
       "grade": 9,
       "stream": "MATHEMATICS",
       "subject": "Mathematics",
       "session": "2026-27",
-      "edition": "REQUIRED",
-      "language": "en",
-      "publisher": "REQUIRED",
-      "sourceUrl": "REQUIRED",
-      "licenseOrPermission": "REQUIRED_CONFIRMATION",
-      "chapters": [
-        {
-          "chapterId": "1",
-          "title": "REQUIRED",
-          "startPage": 1,
-          "endPage": 10
-        }
-      ],
+      "edition": "FILL_IN_EXACT_EDITION",
+      "language": "English",
+      "publisher": "FILL_IN_PUBLISHER",
+      "sourceUrl": "https://example.org/replace-with-official-source",
       "pageCount": 0,
-      "sha256": "REPLACE_WITH_REAL_64_CHARACTER_SHA256"
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "licenseOrPermission": "NOT_CONFIRMED",
+      "chapters": [
+        { "chapterId": "CH1", "title": "FILL_IN_CHAPTER_TITLE", "startPage": 1, "endPage": 1 }
+      ]
+    },
+    {
+      "file": "Punjab_Grade10_Mathematics.pdf",
+      "board": "Punjab",
+      "grade": 10,
+      "stream": "MATHEMATICS",
+      "subject": "Mathematics",
+      "session": "2026-27",
+      "edition": "FILL_IN_EXACT_EDITION",
+      "language": "English",
+      "publisher": "FILL_IN_PUBLISHER",
+      "sourceUrl": "https://example.org/replace-with-official-source",
+      "pageCount": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "licenseOrPermission": "NOT_CONFIRMED",
+      "chapters": [
+        { "chapterId": "CH1", "title": "FILL_IN_CHAPTER_TITLE", "startPage": 1, "endPage": 1 }
+      ]
     }
   ]
 }
