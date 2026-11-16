@@ -544,6 +544,9 @@ class MainActivity : ComponentActivity() {
                                         if (candidate.reviewStatus == "ACCEPTED_FOR_CLASSIFICATION") {
                                             TextButton(onClick = { classificationCandidate = candidate }) { Text("CLASSIFY AS DRAFT QUESTION") }
                                         }
+                                        if (candidate.reviewStatus == "DRAFT_CREATED") {
+                                            Text("Draft saved in the question review queue. It is not approved for paper generation.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                                        }
                                         if (candidate.reviewStatus == "NEEDS_REVIEW") {
                                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                                 TextButton(onClick = {
@@ -559,7 +562,7 @@ class MainActivity : ComponentActivity() {
                                                     }
                                                 }) { Text("REJECT") }
                                             }
-                                        } else {
+                                        } else if (candidate.reviewStatus != "DRAFT_CREATED") {
                                             TextButton(onClick = {
                                                 lifecycleScope.launch {
                                                     database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "NEEDS_REVIEW", "")
