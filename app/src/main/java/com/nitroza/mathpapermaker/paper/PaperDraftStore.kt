@@ -50,10 +50,11 @@ object PaperDraftStore {
             .edit().putString(KEY_DRAFT, json.toString()).apply()
     }
 
-    fun load(context: Context): PaperDraftSnapshot? = runCatching {
+    fun load(context: Context): PaperDraftSnapshot? {
         val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_DRAFT, null)
             ?: return null
-        val json = JSONObject(raw)
+        return runCatching {
+            val json = JSONObject(raw)
         val array = json.getJSONArray("questions")
         val questions = (0 until array.length()).map { index ->
             val item = array.getJSONObject(index)
@@ -68,11 +69,12 @@ object PaperDraftStore {
                 item.optString("chapterId")
             )
         }
-        PaperDraftSnapshot(
-            json.optInt("grade", 9).coerceIn(9, 10),
-            json.optString("examTitle", "Mathematics Examination"),
-            json.optString("schoolName"),
-            questions
-        )
-    }.getOrNull()
+            PaperDraftSnapshot(
+                json.optInt("grade", 9).coerceIn(9, 10),
+                json.optString("examTitle", "Mathematics Examination"),
+                json.optString("schoolName"),
+                questions
+            )
+        }.getOrNull()
+    }
 }
