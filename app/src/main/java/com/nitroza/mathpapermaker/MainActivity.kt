@@ -418,6 +418,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }.toSet()
                                 val bundleGroups = dao.findBundleChoiceGroups(pattern.patternId)
+                                val storedQuotas = dao.findPatternQuotas(pattern.patternId)
                                 val sections = if (groups.isNotEmpty() || bundleGroups.isNotEmpty()) {
                                     val singleChoiceSections = groups.map {
                                         ComplianceSection(it.groupId, it.offeredCount, it.attemptCount, it.marksPerQuestion)
