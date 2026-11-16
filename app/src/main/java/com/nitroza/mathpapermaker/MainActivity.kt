@@ -1060,6 +1060,16 @@ private fun SavedDraftsScreen(
     }
 }
 
+private fun textbookCandidateId(candidate: TextbookExerciseParser.Candidate): String {
+    val identity = listOf(
+        candidate.bookFile, candidate.chapterId, candidate.exerciseId,
+        candidate.questionNumber, candidate.sourcePage.toString(), candidate.text
+    ).joinToString("|")
+    val digest = java.security.MessageDigest.getInstance("SHA-256")
+        .digest(identity.toByteArray(Charsets.UTF_8))
+    return digest.joinToString("") { "%02x".format(it) }
+}
+
 private fun encodeItems(items: List<PaperPdfExporter.Item>): String = JSONArray().apply {
     items.forEach { item -> put(JSONObject().put("number", item.number).put("text", item.text).put("marks", item.marks).put("questionId", item.questionId).put("displayLabel", item.displayLabel)) }
 }.toString()
