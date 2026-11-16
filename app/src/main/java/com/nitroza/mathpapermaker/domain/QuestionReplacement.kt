@@ -23,7 +23,7 @@ data class ReplacementOptions(
 object QuestionReplacementEngine {
     fun findOptions(request: ReplacementRequest, bank: List<QuestionCandidate>): ReplacementOptions {
         val sameIdentity = bank.filter { it.identity == request.identity }
-        val matchingSlot = sameIdentity.filter { it.matches(request.slot) }
+        val matchingSlot = sameIdentity.filter { candidate -> candidate.matches(request.slot) }
         val notCurrent = matchingSlot.filter { it.id != request.currentQuestionId }
         val unused = notCurrent.filter { it.id !in request.questionIdsUsedElsewhere }
         val eligible = unused.filter { candidate ->
@@ -42,7 +42,7 @@ object QuestionReplacementEngine {
 
     private fun QuestionCandidate.matches(slot: OfferedQuestionSlot): Boolean =
         marks == slot.marks &&
-            (slot.chapterId == null || chapterId == slot.chapterId) &&
+            (if (slot.allowedChapterIds.isNotEmpty()) chapterId in slot.allowedChapterIds else slot.chapterId == null || chapterId == slot.chapterId) &&
             (slot.sloId == null || sloId == slot.sloId) &&
             (slot.questionType == null || questionType == slot.questionType)
 }
