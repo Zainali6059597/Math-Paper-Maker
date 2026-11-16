@@ -125,7 +125,7 @@ class MainActivity : ComponentActivity() {
                     chapterLabels = manifestChapters.associate { it.id to it.title }
                     availableChapters = (questionChapters + manifestChapters.map { it.id }).distinct().sorted()
                     selectedChapters = availableChapters.toSet()
-                    "Imported ${parsed.questions.size} questions. Package content is marked NEEDS_REVIEW; it cannot be used for an official paper until independently verified." +
+                    if (parsed.questions.isEmpty()) "Imported paper pattern only. Its local question bank is still empty, so generation will remain blocked until reviewed questions are added." else "Imported ${parsed.questions.size} questions. Package content is marked NEEDS_REVIEW; it cannot be used for an official paper until independently verified." +
                         if (parsed.warnings.isEmpty()) "" else " Review warnings: ${parsed.warnings.joinToString(" ")}"
                 }.onSuccess { notice = it }.onFailure { notice = "Import failed: ${it.message}" }
             }
@@ -194,7 +194,7 @@ class MainActivity : ComponentActivity() {
                     if (database.contentDao().findPatternById(parsed.pattern.patternId) == null) {
                         database.importPackage(
                             parsed.source, parsed.pattern, parsed.slots, parsed.questions,
-                            parsed.choiceGroups, parsed.quotas, parsed.exclusions
+                            parsed.choiceGroups, parsed.quotas, parsed.exclusions, parsed.bundleChoiceGroups
                         )
                         loadedPackages++
                         loadedQuestions += parsed.questions.size
