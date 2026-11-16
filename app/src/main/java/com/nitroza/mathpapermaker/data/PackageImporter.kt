@@ -69,7 +69,11 @@ object PackageImporter {
                 bundleId = if (schemaVersion >= 5) s.optString("bundleId").takeIf { it.isNotBlank() } else null,
                 bundleChoiceGroupId = s.optString("bundleChoiceGroupId").takeIf { it.isNotBlank() },
                 allowedChapterIdsJson = s.optJSONArray("allowedChapterIds")?.let { allowed ->
-                    org.json.JSONArray((0 until allowed.length()).map { allowed.getString(it) }.distinct()).toString()
+                    val ids = (0 until allowed.length()).map { allowed.getString(it) }
+                    require(ids.all { it.isNotBlank() } && ids.distinct().size == ids.size) {
+                        "Allowed chapter alternatives must be nonblank and unique."
+                    }
+                    org.json.JSONArray(ids).toString()
                 } ?: "[]"
             )
         }
