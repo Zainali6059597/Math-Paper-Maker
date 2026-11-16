@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
+import com.nitroza.mathpapermaker.paper.PaperSection
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipEntry
@@ -29,11 +30,23 @@ object DocxPaperExporter {
         examTitle: String,
         schoolName: String,
         durationMinutes: Int?,
-        questions: List<PaperQuestion>
+        questions: List<PaperQuestion>,
+        paperMode: String = "BOARD"
     ) {
         require(grade == 9 || grade == 10) { "Choose Class 9 or Class 10." }
-        require(PunjabBoardPattern.isComplete(grade, questions)) {
-            "The Punjab Board pattern needs 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts, with unique numbering."
+        require(paperMode == "CUSTOM" || paperMode == "BOARD") { "Choose Board Pattern or Custom paper mode." }
+        if (paperMode == "BOARD") {
+            require(PunjabBoardPattern.isComplete(grade, questions)) {
+                "The Punjab Board pattern needs 15 one-mark MCQs, 27 two-mark short questions and 10 four-mark long-question parts, with unique numbering."
+            }
+        } else {
+            require(questions.isNotEmpty()) { "Add at least one question before exporting." }
+            require(questions.all { it.number.isNotBlank() && it.marks in 1..100 && it.kind.uppercase() in setOf("MCQ", "SHORT", "LONG") }) {
+                "Every custom question needs a number, a question type and marks between 1 and 100."
+            }
+            require(questions.map { it.number.trim().lowercase() }.distinct().size == questions.size) {
+                "Custom question numbers must be unique."
+            }
         }
         require(examTitle.length <= MAX_HEADER_CHARS && schoolName.length <= MAX_HEADER_CHARS) {
             "Paper title or school name is too long."
@@ -61,7 +74,7 @@ object DocxPaperExporter {
             "Scanned question images are too large for one Word paper. Use smaller crops."
         }
         val imageRelIds = imageEntries.associate { (index, _) -> index to "rIdImage${index + 1}" }
-        val sections = PunjabBoardPattern.sections(questions)
+        val sections = if (paperMode == "BOARD") PunjabBoardPattern.sections(questions) else questions.groupBy { it.sectionId.ifBlank { "QUESTIONS" } }.map { (section, items) -> PaperSection(section, "Answer the following questions.", items) }
         val consumedQuestionIndices = mutableSetOf<Int>()
         val document = buildString {
             append("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
