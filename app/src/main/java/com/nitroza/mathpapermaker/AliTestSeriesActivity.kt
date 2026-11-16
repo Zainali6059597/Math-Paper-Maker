@@ -328,10 +328,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             onDragCancel = { start = null }
                                         ) { change, _ ->
                                             val origin = start ?: change.position
-                                            val left = min(origin.x, change.position.x) / size.width
-                                            val top = min(origin.y, change.position.y) / size.height
-                                            val right = max(origin.x, change.position.x) / size.width
-                                            val bottom = max(origin.y, change.position.y) / size.height
+                                            val left = (min(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
+                                            val top = (min(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
+                                            val right = (max(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
+                                            val bottom = (max(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
                                             cropRect = Rect(left, top, right, bottom)
                                             change.consume()
                                         }
