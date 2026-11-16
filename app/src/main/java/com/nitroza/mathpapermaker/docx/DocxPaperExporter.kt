@@ -36,6 +36,7 @@ object DocxPaperExporter {
         }
         val imageRelIds = imageEntries.associate { (index, _) -> index to "rIdImage${index + 1}" }
         val sections = PunjabBoardPattern.sections(questions)
+        val consumedQuestionIndices = mutableSetOf<Int>()
         val document = buildString {
             append("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
             append("""<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><w:body>""")
@@ -50,7 +51,10 @@ object DocxPaperExporter {
                 paragraph(escape(section.heading), bold = true, size = 23)
                 paragraph(escape(section.instruction), size = 19)
                 section.questions.forEach { q ->
-                    val index = questions.indexOfFirst { it.number == q.number && it.kind == q.kind && it.sourcePage == q.sourcePage && it.text == q.text }
+                    val index = questions.indices.firstOrNull { candidate ->
+                        candidate !in consumedQuestionIndices && questions[candidate] == q
+                    } ?: error("A selected question could not be matched to its export entry.")
+                    consumedQuestionIndices += index
                     val questionText = q.text.ifBlank { "[Scanned question]" }
                     paragraph(escape("${q.number}. ${questionText} [${q.marks} marks]"), size = 21)
                     val relId = imageRelIds[index]
