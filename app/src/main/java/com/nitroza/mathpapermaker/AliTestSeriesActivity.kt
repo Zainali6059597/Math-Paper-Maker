@@ -53,7 +53,8 @@ class AliTestSeriesActivity : ComponentActivity() {
         val kind: String,
         val marks: Int,
         val sourcePage: Int,
-        val imageFile: String? = null
+        val imageFile: String? = null,
+        val chapterId: String = ""
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +79,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var questionKind by remember { mutableStateOf("SHORT") }
         var questionMarks by remember { mutableStateOf("2") }
         var questionNumber by remember { mutableStateOf("") }
+        var questionChapter by remember { mutableStateOf("CH1") }
         var pendingImageFile by remember { mutableStateOf<String?>(null) }
         var cropRect by remember { mutableStateOf<Rect?>(null) }
         var showQuestions by remember { mutableStateOf(false) }
@@ -137,7 +139,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         this@AliTestSeriesActivity, uri, grade, examTitle, schoolName,
                         PunjabBoardPattern.DURATION_MINUTES,
                         selected.map { item ->
-                            PaperQuestion(item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile)
+                            PaperQuestion(item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile, item.chapterId)
                         }
                     )
                 }.onSuccess { notice = "Word paper exported. Open the DOCX in Word or another office app to review and print." }
@@ -166,7 +168,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         val paperQuestions = selected.map {
-            PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile)
+            PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId)
         }
 
         Scaffold(
@@ -294,6 +296,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     pendingImageFile = image.absolutePath
                                     questionText = ""
                                     questionNumber = suggestedNumber(questionKind, selected)
+                                    questionChapter = "CH1"
                                     showQuestionEditor = true
                                 }.onFailure { notice = "Could not crop selection: ${it.message}" }
                             },
@@ -328,6 +331,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                         OutlinedTextField(questionNumber, { questionNumber = it.take(16) },
                             label = { Text("Paper numbering (editable)") }, singleLine = true)
+                        OutlinedTextField(questionChapter, { questionChapter = it.trim().uppercase().take(4) },
+                            label = { Text("Chapter ID (e.g. CH1)") }, singleLine = true)
                         Text("Question type", style = MaterialTheme.typography.labelMedium)
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             listOf("MCQ", "SHORT", "LONG").forEach { kind ->
@@ -344,10 +349,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                 },
                 confirmButton = {
                     TextButton(enabled = (questionText.isNotBlank() || pendingImageFile != null) &&
-                        questionNumber.isNotBlank() && (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
+                        questionNumber.isNotBlank() && questionChapter.matches(Regex("CH([1-9]|1[0-3])")) && (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
                         selected = selected + SelectedQuestion(
                             nextId++, questionNumber.trim(), questionText.trim(), questionKind,
-                            questionMarks.toInt(), pageIndex + 1, pendingImageFile
+                            questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter
                         )
                         showQuestionEditor = false
                         cropRect = null
@@ -369,6 +374,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
                         Text(PunjabBoardPattern.status(paperQuestions), style = MaterialTheme.typography.labelMedium)
+                        val patternErrors = PunjabBoardPattern.validationErrors(grade, paperQuestions)
+                        if (patternErrors.isNotEmpty()) Text(patternErrors.first(), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         Text("Offered marks: ${selected.sumOf { it.marks }} / ${PunjabBoardPattern.TOTAL_OFFERED_MARKS} · Board attempted marks: ${PunjabBoardPattern.TOTAL_ATTEMPTED_MARKS}",
                             style = MaterialTheme.typography.labelSmall)
                         LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -389,7 +396,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             Text("${item.kind} · ${item.marks} marks · page ${item.sourcePage}",
                                                 style = MaterialTheme.typography.labelMedium)
                                         }
-                                        Text(if (item.imageFile != null) "Scanned question image" else item.text,
+                                        Text("${item.chapterId} · " + if (item.imageFile != null) "Scanned question image" else item.text,
                                             maxLines = 4, style = MaterialTheme.typography.bodySmall)
                                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                             TextButton(enabled = index > 0, onClick = {
@@ -412,7 +419,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        if (!PunjabBoardPattern.isComplete(paperQuestions)) {
+                        if (!PunjabBoardPattern.isComplete(grade, paperQuestions)) {
                             Text("Word export unlocks when the selected questions match the Punjab Board counts and marks.",
                                 color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
@@ -421,7 +428,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 confirmButton = {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
-                        Button(enabled = PunjabBoardPattern.isComplete(paperQuestions),
+                        Button(enabled = PunjabBoardPattern.isComplete(grade, paperQuestions),
                             onClick = { exportWord.launch("Ali-Test-Series-Class-$grade.docx") }) { Text("EXPORT WORD") }
                     }
                 }
