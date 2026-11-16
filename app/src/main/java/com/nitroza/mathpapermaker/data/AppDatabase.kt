@@ -75,7 +75,7 @@ interface LocalContentDao {
 
 @Database(
     entities = [QuestionSourceEntity::class, QuestionEntity::class, PaperPatternEntity::class, PatternSlotEntity::class, ChoiceGroupEntity::class, SavedPaperDraftEntity::class, ReviewAuditEntity::class, PatternQuotaEntity::class, SyllabusExclusionEntity::class, TextbookCandidateEntity::class, BundleChoiceGroupEntity::class],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -144,10 +144,15 @@ abstract class AppDatabase : RoomDatabase() {
                 db.execSQL("CREATE INDEX IF NOT EXISTS index_bundle_choice_groups_patternId ON bundle_choice_groups(patternId)")
             }
         }
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE pattern_slots ADD COLUMN allowedChapterIdsJson TEXT NOT NULL DEFAULT '[]'")
+            }
+        }
         @Volatile private var INSTANCE: AppDatabase? = null
         fun get(context: Context): AppDatabase = INSTANCE ?: synchronized(this) {
             INSTANCE ?: Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "maths-paper-maker.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11).build().also { INSTANCE = it }
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12).build().also { INSTANCE = it }
         }
     }
 }
