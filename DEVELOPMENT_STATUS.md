@@ -135,3 +135,16 @@ Latest checkpoint update (2026-11-13): added a pure-Kotlin board-pattern complia
 - Updated the books folder instructions: copy the example to `book-manifest.json`, and provide exact chapter page ranges and source metadata.
 - Standalone Kotlin smoke test passed for standalone markers, wrapped question text, page provenance, `NEEDS_REVIEW`, and isolated unreadable-book warnings.
 - **Not done yet:** actual textbook PDFs and a real manifest are still absent; OCR is not implemented; detected candidates are not yet approved or imported into the live question bank; textbook-derived questions do not yet feed paper generation. No APK was built during this continuation.
+
+
+
+## Latest code-only continuation — 2026-11-17
+
+- Added a conservative numbered-question segmenter for selectable-text PDF pages. It groups wrapped lines under numbered questions and leaves scanned/unnumbered pages to the existing manual text or crop path.
+- Added a checkbox review dialog for detected candidates, with select-all/clear controls and MCQ/short/long classification before adding checked items to the manual paper.
+- Added focused unit tests for wrapped question text, standalone number lines, short fragments and unnumbered pages. These tests have been authored but **not run**.
+- Expanded the manual maths editor with editable fraction/root/power/subscript/log/trigonometric templates and a larger Unicode maths symbol pad. It remains editable plain text rather than a typeset equation engine.
+- Manual text questions may use source page 0; negative pages and page-less image-only questions remain invalid. Board-mode manual questions now require a valid chapter and board marks before they can be added.
+- DOCX custom-paper header now reports the sum of the custom question marks instead of the fixed Punjab Board attempted total.
+- **No Android build, test workflow, APK assembly or Ramus session was started for this continuation, as requested.** All changes remain source-only and uncompiled/unverified.
+- Remaining limitations: checkbox segmentation only works on extractable text and only detects clear numbered line starts; scanned pages still require crop selection; OCR is not implemented; complex equations are inserted as editable text templates, not Word equation objects; actual Class 9/10 PDF downloads and book-library integration remain outstanding.
