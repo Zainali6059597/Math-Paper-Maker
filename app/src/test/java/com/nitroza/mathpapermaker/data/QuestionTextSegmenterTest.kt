@@ -44,6 +44,17 @@ class QuestionTextSegmenterTest {
         assertEquals(listOf("1", "2"), result.map { it.sourceNumber })
     }
 
+    @Test fun retainsShortMathematicsPromptsButDropsSingleCharacterNoise() {
+        val result = QuestionTextSegmenter.segment(
+            """
+            1. x = 2
+            2. x
+            3. Find x.
+            """.trimIndent()
+        )
+        assertEquals(listOf("1", "3"), result.map { it.sourceNumber })
+    }
+
     @Test fun emptyOrUnnumberedPageProducesNoCandidates() {
         assertTrue(QuestionTextSegmenter.segment("A page with ordinary text only.").isEmpty())
         assertTrue(QuestionTextSegmenter.segment("").isEmpty())
