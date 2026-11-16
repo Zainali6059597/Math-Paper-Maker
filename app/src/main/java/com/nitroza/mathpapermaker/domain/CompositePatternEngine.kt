@@ -1,0 +1,71 @@
+package com.nitroza.mathpapermaker.domain
+
+/** A paper may contain fixed slots, required paired bundles and optional choice groups together. */
+data class CompositePaperPattern(
+    val identity: PaperIdentity,
+    val expectedAttemptedMarks: Int,
+    val slots: List<OfferedQuestionSlot>,
+    val groups: List<ChoiceGroupRule>
+)
+
+data class CompositePaperSelection(
+    val selectedBySlot: Map<String, QuestionCandidate>,
+    val orderedSlots: List<OfferedQuestionSlot>,
+    val offeredMarks: Int,
+    val attemptedMarks: Int,
+    val seed: Long
+)
+
+sealed interface CompositeSelectionResult {
+    data class Success(val paper: CompositePaperSelection) : CompositeSelectionResult
+    data class Blocked(val code: String, val message: String, val affectedSlots: List<String> = emptyList()) : CompositeSelectionResult
+}
+
+/**
+ * Performs one unique assignment across every offered position. Required slots and paired
+ * bundle parts count in full; a choice group contributes only attemptCount * marksPerQuestion
+ * to attempted marks. Choice groups intentionally retain the equal-mark rule.
+ */
+object CompositePatternEngine {
+    fun generate(pattern: CompositePaperPattern, bank: List<QuestionCandidate>, mode: GenerationMode, seed: Long): CompositeSelectionResult {
+        if (pattern.expectedAttemptedMarks <= 0 || pattern.slots.isEmpty())
+            return blocked("INVALID_PATTERN", "A composite pattern needs slots and a positive attempted-mark total.")
+        if (pattern.slots.any { it.slotId.isBlank() || it.marks <= 0 } ||
+            pattern.slots.map { it.slotId }.distinct().size != pattern.slots.size)
+            return blocked("INVALID_SLOT", "All offered slots need unique IDs and positive marks.")
+        if (pattern.groups.map { it.groupId }.distinct().size != pattern.groups.size ||
+            pattern.groups.any { it.groupId.isBlank() || it.offeredCount <= 0 || it.attemptCount !in 1..it.offeredCount || it.marksPerQuestion <= 0 })
+            return blocked("INVALID_GROUP", "Choice group IDs, offered counts, attempt counts or marks are invalid.")
+
+        val groupIds = pattern.groups.map { it.groupId }.toSet()
+        if (pattern.slots.any { it.groupId != null && it.groupId !in groupIds })
+            return blocked("UNKNOWN_GROUP", "A slot refers to a choice group that does not exist.")
+        if (pattern.slots.any { it.groupId != null && it.bundleId != null })
+            return blocked("AMBIGUOUS_SLOT", "A slot cannot be both optional-choice and part of a required paired bundle.")
+        if (pattern.groups.any { group ->
+                val members = pattern.slots.filter { it.groupId == group.groupId }
+                members.size != group.offeredCount || members.any { it.marks != group.marksPerQuestion }
+            }) return blocked("INVALID_GROUP_SLOTS", "Each choice group must have exactly offeredCount slots with equal marks.")
+        val bundles = pattern.slots.filter { it.bundleId != null }.groupBy { it.bundleId!! }
+        if (bundles.keys.any { it.isBlank() } || bundles.values.any { it.size < 2 })
+            return blocked("INVALID_BUNDLE", "Every required paired bundle needs a nonblank ID and at least two parts.")
+
+        val requiredMarks = pattern.slots.filter { it.groupId == null }.sumOf { it.marks }
+        val choiceAttemptedMarks = pattern.groups.sumOf { it.attemptCount * it.marksPerQuestion }
+        val calculated = requiredMarks + choiceAttemptedMarks
+        if (calculated != pattern.expectedAttemptedMarks)
+            return blocked("ATTEMPTED_TOTAL_MISMATCH", "Fixed and paired slots plus attempted choice marks total $calculated, but the pattern declares ${pattern.expectedAttemptedMarks}.")
+
+        val slots = pattern.slots.map { QuestionSlot(it.slotId, it.chapterId, it.sloId, it.questionType, it.marks) }
+        val result = LocalSelectionEngine.select(SelectionRequest(pattern.identity, slots, mode, seed), bank)
+        if (result is SelectionResult.Blocked)
+            return CompositeSelectionResult.Blocked(result.code, result.message, result.affectedSlots)
+        val picked = (result as SelectionResult.Success).selected.associate { it.first.slotId to it.second }
+        return CompositeSelectionResult.Success(
+            CompositePaperSelection(picked, pattern.slots.sortedBy { slot -> pattern.slots.indexOf(slot) },
+                pattern.slots.sumOf { it.marks }, calculated, seed)
+        )
+    }
+
+    private fun blocked(code: String, message: String) = CompositeSelectionResult.Blocked(code, message)
+}
