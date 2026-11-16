@@ -138,6 +138,14 @@ Latest checkpoint update (2026-11-13): added a pure-Kotlin board-pattern complia
 
 
 
+## Latest code-only continuation — 2026-11-17 (continued)
+
+- Added an on-device ML Kit Latin text-recognition dependency and a memory-bounded PDF-page OCR service for scanned pages. The service renders one page at a time, caps bitmap dimensions/pixels, closes the recognizer and recycles the bitmap.
+- Connected an **OCR SCANNED PAGE · OFFLINE** action to the same checkbox review flow used by selectable PDF text. Recognized candidates can be reviewed and corrected before they are added; source page and chapter metadata are retained. OCR remains Latin-script recognition; Urdu handwriting/text and badly degraded scans are not guaranteed.
+- Added native Word OMML output for maths templates including fractions, square/cube roots, powers, subscripts, absolute values, trigonometric/log functions and matrices. Ordinary text remains editable Word text; unsupported/incomplete templates remain plain editable text. Added focused formatter tests; tests have not been run.
+- Added multi-select chapter scope to paper review. Custom papers can be restricted to chosen chapters; question entry and export validation enforce the scope. Full Punjab Board mode still requires the complete syllabus chapter set because its published distribution spans the complete pattern.
+- **No Gradle build, unit-test run, APK assembly or Ramus test was started.** GitHub Actions workflow remains disabled at the job level for source-only development.
+
 ## Latest code-only continuation — 2026-11-17
 
 - Added a conservative numbered-question segmenter for selectable-text PDF pages. It groups wrapped lines under numbered questions and leaves scanned/unnumbered pages to the existing manual text or crop path.
