@@ -75,11 +75,11 @@ object CompositePatternEngine {
             val actualBundles = memberSlots.mapNotNull { it.bundleId }.toSet()
             if (actualBundles != group.bundleIds)
                 return blocked("INCOMPLETE_BUNDLE_GROUP", "Every offered paired question must have all its parts represented.")
-            val invalidBundle = memberSlots.groupBy { it.bundleId!! }.values.any { parts ->
-                parts.size < 2 || parts.sumOf { it.marks } != group.marksPerBundle
-            }
-            if (invalidBundle)
-                return blocked("INVALID_BUNDLE_MARKS", "Each offered paired question must contain at least two parts and match marksPerBundle.")
+            val partsByBundle = memberSlots.groupBy { it.bundleId!! }
+            if (partsByBundle.values.any { parts -> parts.size < 2 })
+                return blocked("INCOMPLETE_BUNDLE_GROUP", "Every offered paired question must contain all of its parts.")
+            if (partsByBundle.values.any { parts -> parts.sumOf { it.marks } != group.marksPerBundle })
+                return blocked("INVALID_BUNDLE_MARKS", "Each offered paired question must match marksPerBundle.")
         }
         if (pattern.groups.any { group ->
                 val members = pattern.slots.filter { it.groupId == group.groupId }
