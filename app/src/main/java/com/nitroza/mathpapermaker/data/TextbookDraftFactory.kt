@@ -50,7 +50,7 @@ object TextbookDraftFactory {
             "Choose an explicit difficulty."
         }
 
-        val sourceId = "textbook-" + sha256(candidate.bookFile).take(24)
+        val sourceId = "textbook-" + sha256(candidate.bookFile + "|" + candidate.candidateId).take(24)
         val questionId = "textbook-question-" + sha256(candidate.candidateId + "|" +
             classification.board + "|" + classification.grade + "|" + classification.stream +
             "|" + classification.subject + "|" + classification.session).take(32)
