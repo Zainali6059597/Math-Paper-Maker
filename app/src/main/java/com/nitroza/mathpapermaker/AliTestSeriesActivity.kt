@@ -131,6 +131,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                             PdfRenderer(descriptor).use { it.pageCount }
                         }
                     }
+                    require(chapterRanges.all { it.startPage >= 1 && it.endPage <= count }) {
+                        "The bundled book manifest contains chapter pages outside the actual PDF."
+                    }
                     pdfFile = file
                     pageBitmap = null
                     pdfName = bundledBookFile
