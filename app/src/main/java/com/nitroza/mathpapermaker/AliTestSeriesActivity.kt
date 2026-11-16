@@ -764,9 +764,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 Text(if (questionChapter.isBlank()) "SELECT CHAPTER" else "CHAPTER: $questionChapter")
                             }
                             DropdownMenu(expanded = chapterMenuExpanded, onDismissRequest = { chapterMenuExpanded = false }) {
-                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
-                                    DropdownMenuItem(text = { Text("CH$chapter") }, onClick = {
-                                        questionChapter = "CH$chapter"
+                                selectedChapters.sortedBy { it.removePrefix("CH").toIntOrNull() ?: 0 }.forEach { chapterId ->
+                                    DropdownMenuItem(text = { Text(chapterId) }, onClick = {
+                                        questionChapter = chapterId
                                         chapterMenuExpanded = false
                                     })
                                 }
@@ -859,7 +859,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         detectedChapterMenuExpanded = false
                                     })
                                 }
-                                if (paperMode == "CUSTOM") {
+                                if (paperMode == "CUSTOM" && selectedChapters.size == (if (grade == 9) 13 else 12)) {
                                     DropdownMenuItem(text = { Text("No chapter (Custom only)") }, onClick = {
                                         detectedQuestionChapter = ""
                                         detectedChapterMenuExpanded = false
@@ -983,7 +983,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 item.imageFile != null && !File(item.imageFile).isFile
             }
             val allChaptersSelected = selectedChapters.size == if (grade == 9) 13 else 12
-            val questionsInChapterScope = selected.all { it.chapterId in selectedChapters }
+            val questionsInChapterScope = allChaptersSelected || selected.all { it.chapterId in selectedChapters }
             val boardReady = paperMode != "BOARD" || (allChaptersSelected && PunjabBoardPattern.isComplete(grade, paperQuestions))
             AlertDialog(
                 onDismissRequest = { showQuestions = false },
@@ -1101,12 +1101,12 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                 expanded = itemChapterMenu.value,
                                                 onDismissRequest = { itemChapterMenu.value = false }
                                             ) {
-                                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
+                                                selectedChapters.sortedBy { it.removePrefix("CH").toIntOrNull() ?: 0 }.forEach { chapterId ->
                                                     DropdownMenuItem(
-                                                        text = { Text("CH$chapter") },
+                                                        text = { Text(chapterId) },
                                                         onClick = {
                                                             selected = selected.map { question ->
-                                                                if (question.id == item.id) question.copy(chapterId = "CH$chapter") else question
+                                                                if (question.id == item.id) question.copy(chapterId = chapterId) else question
                                                             }
                                                             itemChapterMenu.value = false
                                                         }
@@ -1251,13 +1251,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 Text(if (manualQuestionChapter.isBlank()) "SELECT CHAPTER (REQUIRED FOR BOARD)" else "CHAPTER: $manualQuestionChapter")
                             }
                             DropdownMenu(expanded = manualChapterMenuExpanded, onDismissRequest = { manualChapterMenuExpanded = false }) {
-                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
-                                    DropdownMenuItem(text = { Text("CH$chapter") }, onClick = {
-                                        manualQuestionChapter = "CH$chapter"
+                                selectedChapters.sortedBy { it.removePrefix("CH").toIntOrNull() ?: 0 }.forEach { chapterId ->
+                                    DropdownMenuItem(text = { Text(chapterId) }, onClick = {
+                                        manualQuestionChapter = chapterId
                                         manualChapterMenuExpanded = false
                                     })
                                 }
-                                if (paperMode == "CUSTOM") {
+                                if (paperMode == "CUSTOM" && selectedChapters.size == (if (grade == 9) 13 else 12)) {
                                     DropdownMenuItem(text = { Text("No chapter (Custom only)") }, onClick = {
                                         manualQuestionChapter = ""
                                         manualChapterMenuExpanded = false
@@ -1269,12 +1269,15 @@ class AliTestSeriesActivity : ComponentActivity() {
                 },
                 confirmButton = {
                     val manualMarks = manualQuestionMarks.toIntOrNull()
+                    val manualAllChaptersSelected = selectedChapters.size == (if (grade == 9) 13 else 12)
+                    val manualChapterInScope = (paperMode == "CUSTOM" && manualAllChaptersSelected) ||
+                        (manualQuestionChapter in selectedChapters && PunjabBoardPattern.isValidChapter(grade, manualQuestionChapter))
                     val boardManualMarksValid = paperMode == "CUSTOM" || (
                         manualMarks == when (manualQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 } &&
                             PunjabBoardPattern.isValidChapter(grade, manualQuestionChapter)
                     )
                     Button(enabled = manualQuestionText.text.isNotBlank() && manualQuestionNumber.isNotBlank() &&
-                        (manualMarks ?: 0) in 1..100 && boardManualMarksValid,
+                        (manualMarks ?: 0) in 1..100 && boardManualMarksValid && manualChapterInScope,
                         onClick = {
                             val number = manualQuestionNumber.trim()
                             if (selected.any { it.number.trim().equals(number, ignoreCase = true) }) {
