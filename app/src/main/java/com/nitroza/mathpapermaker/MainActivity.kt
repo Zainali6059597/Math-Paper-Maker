@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun PaperMakerApp() {
-        val boards = listOf("Punjab", "FBISE", "Sindh", "KPK", "Balochistan", "AJK")
+        val boards = listOf("Punjab", "Punjab (Matric-Tech)", "FBISE", "Sindh", "KPK", "Balochistan", "AJK")
         var board by remember { mutableStateOf(boards[0]) }
         var grade by remember { mutableStateOf(9) }
         var stream by remember { mutableStateOf("MATHEMATICS") }
