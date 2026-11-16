@@ -1,6 +1,7 @@
 package com.nitroza.mathpapermaker
 
 import android.graphics.Bitmap
+import android.graphics.Rect as AndroidRect
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +11,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.drawWithContent
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -19,10 +22,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
+import com.nitroza.mathpapermaker.docx.DocxPaperExporter
 import com.nitroza.mathpapermaker.ui.MathPaperMakerTheme
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -32,14 +41,19 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 class AliTestSeriesActivity : ComponentActivity() {
     private data class SelectedQuestion(
         val id: Long,
+        val number: Int,
         val text: String,
         val kind: String,
         val marks: Int,
-        val sourcePage: Int
+        val sourcePage: Int,
+        val imageFile: String? = null
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,23 +70,26 @@ class AliTestSeriesActivity : ComponentActivity() {
         var pageIndex by remember { mutableIntStateOf(0) }
         var pageCount by remember { mutableIntStateOf(0) }
         var pageBitmap by remember { mutableStateOf<Bitmap?>(null) }
-        var extractedText by remember { mutableStateOf("") }
         var selected by remember { mutableStateOf<List<SelectedQuestion>>(emptyList()) }
         var nextId by remember { mutableLongStateOf(1L) }
         var notice by remember { mutableStateOf("Choose Class 9 or Class 10, then open its Mathematics PDF.") }
-        var showTextEditor by remember { mutableStateOf(false) }
+        var showQuestionEditor by remember { mutableStateOf(false) }
         var questionText by remember { mutableStateOf("") }
         var questionKind by remember { mutableStateOf("SHORT") }
         var questionMarks by remember { mutableStateOf("2") }
+        var pendingImageFile by remember { mutableStateOf<String?>(null) }
+        var cropRect by remember { mutableStateOf<Rect?>(null) }
         var showQuestions by remember { mutableStateOf(false) }
+        var examTitle by remember { mutableStateOf("Mathematics Examination") }
+        var schoolName by remember { mutableStateOf("") }
 
         val openPdf = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             if (uri != null) {
                 lifecycleScope.launch {
                     runCatching {
-                        contentResolver.takePersistableUriPermission(uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }
-                    runCatching {
+                        runCatching {
+                            contentResolver.takePersistableUriPermission(uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
                         val file = withContext(Dispatchers.IO) {
                             val target = File(cacheDir, "ali-test-series-class$grade.pdf")
                             contentResolver.openInputStream(uri)?.use { input ->
@@ -85,18 +102,38 @@ class AliTestSeriesActivity : ComponentActivity() {
                             PdfRenderer(descriptor).use { it.pageCount }
                         }
                         pdfFile = file
-                        pdfName = file.name
+                        pdfName = uri.lastPathSegment?.substringAfterLast('/') ?: "Mathematics.pdf"
                         pageCount = count
                         pageIndex = 0
+                        cropRect = null
                         selected = emptyList()
-                        notice = "PDF opened. Browse pages and manually add questions."
+                        notice = "PDF opened. Select question text or draw a box around a scanned question."
                     }.onFailure { notice = "Could not open PDF: ${it.message}" }
                 }
             }
         }
 
+        val exportWord = rememberLauncherForActivityResult(
+            ActivityResultContracts.CreateDocument("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        ) { uri: Uri? ->
+            if (uri != null) {
+                runCatching {
+                    DocxPaperExporter.write(
+                        this@AliTestSeriesActivity, uri, grade, examTitle, schoolName, 150,
+                        selected.map { item ->
+                            DocxPaperExporter.Question(
+                                item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile
+                            )
+                        }
+                    )
+                }.onSuccess { notice = "Word paper exported. Open the DOCX in Word or another office app to review and print." }
+                    .onFailure { notice = "Word export failed: ${it.message}" }
+            }
+        }
+
         LaunchedEffect(pdfFile, pageIndex) {
             val file = pdfFile ?: return@LaunchedEffect
+            cropRect = null
             pageBitmap = withContext(Dispatchers.IO) {
                 runCatching {
                     val descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
@@ -116,15 +153,13 @@ class AliTestSeriesActivity : ComponentActivity() {
 
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = {
-                        Column {
-                            Text("ALI TEST SERIES", style = MaterialTheme.typography.titleMedium)
-                            Text("PUNJAB BOARD · MATHEMATICS", style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary)
-                        }
+                TopAppBar(title = {
+                    Column {
+                        Text("ALI TEST SERIES", style = MaterialTheme.typography.titleMedium)
+                        Text("PUNJAB BOARD · MATHEMATICS", style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary)
                     }
-                )
+                })
             }
         ) { padding ->
             if (pdfFile == null) {
@@ -141,7 +176,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Card {
                         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Text("Mathematics textbook PDF", style = MaterialTheme.typography.titleMedium)
-                            Text("Open a PDF stored on this device. Bundled Class 9 and Class 10 books can be added when the files are supplied.", style = MaterialTheme.typography.bodyMedium)
+                            Text("Open a PDF stored on this device. The supplied Class 9 and Class 10 books can later be bundled offline.", style = MaterialTheme.typography.bodyMedium)
                             Button(onClick = { openPdf.launch(arrayOf("application/pdf")) }, modifier = Modifier.fillMaxWidth()) {
                                 Text("OPEN CLASS $grade PDF")
                             }
@@ -167,15 +202,47 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                     Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                         pageBitmap?.let { bitmap ->
-                            Image(bitmap.asImageBitmap(), contentDescription = "Textbook PDF page ${pageIndex + 1}",
-                                modifier = Modifier.fillMaxWidth(), contentScale = ContentScale.Fit)
+                            Box(
+                                Modifier.fillMaxWidth()
+                                    .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
+                                    .pointerInput(bitmap) {
+                                        var start: Offset? = null
+                                        detectDragGestures(
+                                            onDragStart = { start = it },
+                                            onDragEnd = { start = null },
+                                            onDragCancel = { start = null }
+                                        ) { change, _ ->
+                                            val origin = start ?: change.position
+                                            val left = min(origin.x, change.position.x) / size.width
+                                            val top = min(origin.y, change.position.y) / size.height
+                                            val right = max(origin.x, change.position.x) / size.width
+                                            val bottom = max(origin.y, change.position.y) / size.height
+                                            cropRect = Rect(left, top, right, bottom)
+                                            change.consume()
+                                        }
+                                    }
+                                    .drawWithContent {
+                                        drawContent()
+                                        cropRect?.let { r ->
+                                            drawRect(
+                                                Color.Red,
+                                                topLeft = Offset(r.left * size.width, r.top * size.height),
+                                                size = androidx.compose.ui.geometry.Size(r.width * size.width, r.height * size.height),
+                                                style = Stroke(width = 3.dp.toPx())
+                                            )
+                                        }
+                                    }
+                            ) {
+                                Image(bitmap.asImageBitmap(), contentDescription = "Textbook page ${pageIndex + 1}",
+                                    modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
+                            }
                         } ?: CircularProgressIndicator()
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                         OutlinedButton(onClick = {
                             lifecycleScope.launch {
                                 val file = pdfFile ?: return@launch
-                                extractedText = withContext(Dispatchers.IO) {
+                                val text = withContext(Dispatchers.IO) {
                                     runCatching {
                                         PDFBoxResourceLoader.init(applicationContext)
                                         PDDocument.load(file).use { document ->
@@ -186,30 +253,59 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         }
                                     }.getOrElse { "" }
                                 }
-                                questionText = extractedText
-                                if (questionText.isBlank()) notice = "No selectable text found on this page. Scanned-page box selection is the next implementation step."
-                                else showTextEditor = true
+                                questionText = text
+                                pendingImageFile = null
+                                if (text.isBlank()) notice = "This page has no extractable text. Draw a box around the scanned question."
+                                else showQuestionEditor = true
                             }
                         }, modifier = Modifier.weight(1f)) { Text("SELECT TEXT") }
-                        Button(onClick = { showQuestions = true }, modifier = Modifier.weight(1f)) {
-                            Text("SELECTED (${selected.size})")
-                        }
+                        Button(
+                            enabled = cropRect != null && pageBitmap != null,
+                            onClick = {
+                                val bitmap = pageBitmap ?: return@Button
+                                val rect = cropRect ?: return@Button
+                                runCatching {
+                                    val left = (rect.left * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
+                                    val top = (rect.top * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
+                                    val right = (rect.right * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
+                                    val bottom = (rect.bottom * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
+                                    val crop = Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
+                                    val image = File(cacheDir, "ali_question_${nextId}.png")
+                                    FileOutputStream(image).use { output -> crop.compress(Bitmap.CompressFormat.PNG, 100, output) }
+                                    pendingImageFile = image.absolutePath
+                                    questionText = ""
+                                    showQuestionEditor = true
+                                }.onFailure { notice = "Could not crop selection: ${it.message}" }
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) { Text("ADD BOX CROP") }
+                    }
+                    Button(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
+                        Text("REVIEW SELECTED QUESTIONS (${selected.size})")
                     }
                     Text(notice, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.padding(top = 6.dp))
+                        modifier = Modifier.padding(top = 4.dp))
                 }
             }
         }
 
-        if (showTextEditor) {
+        if (showQuestionEditor) {
             AlertDialog(
-                onDismissRequest = { showTextEditor = false },
-                title = { Text("SELECT QUESTION TEXT") },
+                onDismissRequest = { showQuestionEditor = false },
+                title = { Text(if (pendingImageFile == null) "SELECT QUESTION TEXT" else "ADD SCANNED QUESTION") },
                 text = {
                     Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Edit the extracted page text so only your chosen question remains.", style = MaterialTheme.typography.bodySmall)
-                        OutlinedTextField(questionText, { questionText = it }, modifier = Modifier.fillMaxWidth(), minLines = 8,
-                            label = { Text("Question text") })
+                        Text(
+                            if (pendingImageFile == null) "Trim the extracted page text so only your chosen question remains."
+                            else "The selected page area will be embedded as an image in the Word document.",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        if (pendingImageFile == null) {
+                            OutlinedTextField(questionText, { questionText = it }, modifier = Modifier.fillMaxWidth(),
+                                minLines = 8, label = { Text("Question text") })
+                        } else {
+                            Text("Scanned crop ready · PDF page ${pageIndex + 1}", color = MaterialTheme.colorScheme.primary)
+                        }
                         Text("Question type", style = MaterialTheme.typography.labelMedium)
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             listOf("MCQ", "SHORT", "LONG").forEach { kind ->
@@ -224,14 +320,18 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                 },
                 confirmButton = {
-                    TextButton(enabled = questionText.isNotBlank() && (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
-                        selected = selected + SelectedQuestion(nextId++, questionText.trim(), questionKind,
-                            questionMarks.toInt(), pageIndex + 1)
-                        showTextEditor = false
+                    TextButton(enabled = (questionText.isNotBlank() || pendingImageFile != null) &&
+                        (questionMarks.toIntOrNull() ?: 0) > 0, onClick = {
+                        selected = selected + SelectedQuestion(
+                            nextId++, (selected.maxOfOrNull { it.number } ?: 0) + 1,
+                            questionText.trim(), questionKind, questionMarks.toInt(), pageIndex + 1, pendingImageFile
+                        )
+                        showQuestionEditor = false
+                        cropRect = null
                         notice = "Question added to your manual selection."
                     }) { Text("ADD QUESTION") }
                 },
-                dismissButton = { TextButton(onClick = { showTextEditor = false }) { Text("CANCEL") } }
+                dismissButton = { TextButton(onClick = { showQuestionEditor = false }) { Text("CANCEL") } }
             )
         }
 
@@ -240,36 +340,63 @@ class AliTestSeriesActivity : ComponentActivity() {
                 onDismissRequest = { showQuestions = false },
                 title = { Text("SELECTED QUESTIONS (${selected.size})") },
                 text = {
-                    LazyColumn(Modifier.heightIn(max = 520.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        itemsIndexed(selected, key = { _, item -> item.id }) { index, item ->
-                            Card {
-                                Column(Modifier.fillMaxWidth().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                                    Text("Q${index + 1} · ${item.kind} · ${item.marks} marks · PDF page ${item.sourcePage}",
-                                        style = MaterialTheme.typography.labelMedium)
-                                    Text(item.text, maxLines = 5, style = MaterialTheme.typography.bodySmall)
-                                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                        TextButton(enabled = index > 0, onClick = {
-                                            val copy = selected.toMutableList()
-                                            val previous = copy[index - 1]
-                                            copy[index - 1] = copy[index]
-                                            copy[index] = previous
-                                            selected = copy
-                                        }) { Text("UP") }
-                                        TextButton(enabled = index < selected.lastIndex, onClick = {
-                                            val copy = selected.toMutableList()
-                                            val next = copy[index + 1]
-                                            copy[index + 1] = copy[index]
-                                            copy[index] = next
-                                            selected = copy
-                                        }) { Text("DOWN") }
-                                        TextButton(onClick = { selected = selected.filterNot { it.id == item.id } }) { Text("REMOVE") }
+                    Column(Modifier.heightIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedTextField(schoolName, { schoolName = it }, modifier = Modifier.fillMaxWidth(),
+                            label = { Text("School name (optional)") }, singleLine = true)
+                        OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
+                            label = { Text("Paper title") }, singleLine = true)
+                        LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            itemsIndexed(selected, key = { _, item -> item.id }) { index, item ->
+                                Card {
+                                    Column(Modifier.fillMaxWidth().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            OutlinedTextField(
+                                                value = item.number.toString(),
+                                                onValueChange = { value ->
+                                                    val number = value.filter(Char::isDigit).take(3).toIntOrNull()
+                                                    if (number != null) selected = selected.map { if (it.id == item.id) it.copy(number = number) else it }
+                                                },
+                                                modifier = Modifier.width(88.dp),
+                                                label = { Text("Number") },
+                                                singleLine = true
+                                            )
+                                            Spacer(Modifier.width(8.dp))
+                                            Text("${item.kind} · ${item.marks} marks · PDF page ${item.sourcePage}",
+                                                style = MaterialTheme.typography.labelMedium)
+                                        }
+                                        Text(if (item.imageFile != null) "Scanned question image" else item.text,
+                                            maxLines = 4, style = MaterialTheme.typography.bodySmall)
+                                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                            TextButton(enabled = index > 0, onClick = {
+                                                val copy = selected.toMutableList()
+                                                val previous = copy[index - 1]
+                                                copy[index - 1] = copy[index]
+                                                copy[index] = previous
+                                                selected = copy
+                                            }) { Text("UP") }
+                                            TextButton(enabled = index < selected.lastIndex, onClick = {
+                                                val copy = selected.toMutableList()
+                                                val next = copy[index + 1]
+                                                copy[index + 1] = copy[index]
+                                                copy[index] = next
+                                                selected = copy
+                                            }) { Text("DOWN") }
+                                            TextButton(onClick = { selected = selected.filterNot { it.id == item.id } }) { Text("REMOVE") }
+                                        }
                                     }
                                 }
                             }
                         }
+                        Text("Selected marks: ${selected.sumOf { it.marks }}", style = MaterialTheme.typography.labelLarge)
                     }
                 },
-                confirmButton = { TextButton(onClick = { showQuestions = false }) { Text("DONE") } }
+                confirmButton = {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        TextButton(onClick = { showQuestions = false }) { Text("DONE") }
+                        Button(enabled = selected.isNotEmpty() && selected.map { it.number }.distinct().size == selected.size,
+                            onClick = { exportWord.launch("Ali-Test-Series-Class-$grade.docx") }) { Text("EXPORT WORD") }
+                    }
+                }
             )
         }
     }
