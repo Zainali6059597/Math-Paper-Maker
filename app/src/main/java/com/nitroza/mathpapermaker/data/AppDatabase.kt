@@ -221,6 +221,10 @@ suspend fun AppDatabase.importPackage(
     require(quotas.map { it.dimension to it.value }.distinct().size == quotas.size) { "Pattern quota keys must be unique." }
     require(choiceGroups.all { it.patternId == pattern.patternId && it.groupId.isNotBlank() && it.displayOrder >= 0 && it.offeredCount > 0 && it.attemptCount in 1..it.offeredCount && it.marksPerQuestion > 0 }) { "Choice group rules are invalid." }
     require(choiceGroups.map { it.groupId }.distinct().size == choiceGroups.size) { "Choice group IDs must be unique." }
+    require(quotas.filter { it.dimension == "CHAPTER_IN_GROUP" }.all { quota ->
+        val groupId = quota.value.substringBefore("|")
+        choiceGroups.any { it.groupId == groupId }
+    }) { "Every group-scoped chapter quota must reference a declared choice group." }
     require(slots.all { it.groupId == null || choiceGroups.any { group -> group.groupId == it.groupId } }) { "A slot refers to an unknown choice group." }
     choiceGroups.forEach { group ->
         val groupSlots = slots.filter { it.groupId == group.groupId }
