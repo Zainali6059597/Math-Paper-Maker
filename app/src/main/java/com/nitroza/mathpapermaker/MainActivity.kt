@@ -185,6 +185,7 @@ class MainActivity : ComponentActivity() {
                     .orEmpty()
                 var loadedPackages = 0
                 var loadedQuestions = 0
+                var patternOnlyPackages = 0
                 for (fileName in bundledFiles) {
                     val raw = assets.open("content-packs/$fileName")
                         .bufferedReader()
@@ -198,6 +199,7 @@ class MainActivity : ComponentActivity() {
                         )
                         loadedPackages++
                         loadedQuestions += parsed.questions.size
+                        if (parsed.questions.isEmpty()) patternOnlyPackages++
                     }
                 }
                 questionCount = database.contentDao().questionCount()
@@ -205,7 +207,7 @@ class MainActivity : ComponentActivity() {
                 savedDrafts = database.contentDao().listDrafts()
                 textbookReviewRows = database.contentDao().allTextbookCandidates()
                 notice = when {
-                    loadedPackages > 0 -> "Loaded $loadedPackages bundled offline package(s) and $loadedQuestions questions. Content is NEEDS_REVIEW until independently checked."
+                    loadedPackages > 0 -> "Loaded $loadedPackages bundled offline package(s) and $loadedQuestions questions. $patternOnlyPackages pattern-only package(s) still need a reviewed local question bank before generation. Content is NEEDS_REVIEW until independently checked."
                     bundledFiles.isNotEmpty() -> "Bundled offline content is already loaded. Content remains local; no internet is used."
                     questionCount > 0 -> "Local question bank ready. No internet connection is used."
                     else -> "No bundled content packs are present yet. The app is offline, but its question bank is empty; do not generate a paper until verified packs are bundled."
