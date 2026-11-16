@@ -30,6 +30,17 @@ class PunjabGrade10OfficialPatternTest {
         assertEquals(15, (0 until pattern.getJSONArray("slots").length()).count {
             pattern.getJSONArray("slots").getJSONObject(it).optString("questionType") == "MCQ"
         })
+        val mcqCounts = mutableMapOf<String, Int>()
+        for (i in 0 until pattern.getJSONArray("slots").length()) {
+            val slot = pattern.getJSONArray("slots").getJSONObject(i)
+            if (slot.optString("questionType") == "MCQ") {
+                val chapter = slot.getString("chapterId")
+                mcqCounts[chapter] = (mcqCounts[chapter] ?: 0) + 1
+            }
+        }
+        assertEquals(mapOf("CH1" to 1, "CH2" to 1, "CH3" to 1, "CH4" to 1, "CH5" to 1,
+            "CH6" to 1, "CH7" to 1, "CH8" to 1, "CH9" to 2, "CH10" to 1,
+            "CH11" to 2, "CH12" to 2), mcqCounts)
     }
 
     @Test fun shortQuestionChapterMinimumsAreScopedToTheirOwnSection() {
