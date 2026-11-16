@@ -27,6 +27,7 @@ class PunjabGrade9OfficialPatternTest {
         assertEquals("MATHEMATICS", identity.getString("stream"))
         assertEquals("Mathematics", identity.getString("subject"))
         assertEquals("2026-27", identity.getString("session"))
+        assertEquals(2, root.getJSONObject("pattern").getInt("version"))
         assertEquals("OFFICIAL_PAIRING_SCHEME", source.getString("sourceType"))
         assertTrue(source.getString("sourceUrl").contains("pectaa.edu.pk/"))
         assertTrue(source.getString("title").contains("2026"))
