@@ -24,6 +24,8 @@ Implemented in source:
 - Class selection and local PDF opening through Android's document picker.
 - Local PDF rendering and page navigation.
 - PDFBox text extraction for the current page; teacher can long-press and select the exact question text using selection handles.
+- Local draft persistence; scanned crops are stored in app-private files.
+- Bundled textbook loading and page-to-chapter auto-fill are enabled when the actual PDFs and a valid, permission-confirmed SHA-256 manifest are supplied.
 - Drag-to-select crop for scanned/image pages.
 - Question list with remove, reorder and editable question labels.
 - Class-specific Punjab Board 2026–27 MCQ chapter distribution, short-section chapter distribution, and long-question chapter pairing validation, alongside the 15 × 1-mark MCQ, 27 × 2-mark short and 10 × 4-mark long-part counts (109 offered marks; 75 attempted marks). Chapter ID is currently selected manually for each question.
