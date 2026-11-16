@@ -176,9 +176,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                 cacheDir.listFiles()
                     ?.filter { file ->
                         file.isFile &&
-                            (file.name.startsWith("ali-import-class") ||
-                                file.name.startsWith("ali-bundled-class")) &&
-                            file.extension.equals("pdf", ignoreCase = true) &&
+                            (
+                                (file.name.startsWith("ali-import-class") ||
+                                    file.name.startsWith("ali-bundled-class")) &&
+                                    file.extension.equals("pdf", ignoreCase = true) ||
+                                file.name.startsWith("ali-test-series-") &&
+                                    file.extension.equals("docx", ignoreCase = true)
+                            ) &&
                             System.currentTimeMillis() - file.lastModified() > 24L * 60L * 60L * 1000L
                     }
                     ?.forEach { it.delete() }
