@@ -1,5 +1,6 @@
 package com.nitroza.mathpapermaker.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -48,7 +49,7 @@ data class QuestionEntity(
     val sourceId: String,
     val sourcePage: String?,
     val semanticFingerprint: String,
-    val selectionWeight: Double = 1.0
+    @ColumnInfo(defaultValue = "1.0") val selectionWeight: Double = 1.0
 )
 
 @Entity(
