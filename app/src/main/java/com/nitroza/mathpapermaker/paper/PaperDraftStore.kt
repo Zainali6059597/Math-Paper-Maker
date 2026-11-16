@@ -117,8 +117,13 @@ object PaperDraftStore {
                     "Saved question text is too long."
                 }
                 require(kind in setOf("MCQ", "SHORT", "LONG")) { "Invalid saved question type." }
-                require(marks == when (kind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 } && sourcePage > 0) {
-                    "Invalid saved question marks or page."
+                require(marks == when (kind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 } &&
+                    sourcePage >= 0 && (sourcePage > 0 || item.optString("text").isNotBlank())
+                ) {
+                    "Invalid saved question marks or page. Manually typed questions must retain editable text."
+                }
+                require(item.optString("text").isNotBlank() || !imageFile.isNullOrBlank()) {
+                    "A saved question must contain editable text or a scanned image."
                 }
                 require(PunjabBoardPattern.isValidChapter(grade, chapterId)) {
                     "Invalid saved chapter."
