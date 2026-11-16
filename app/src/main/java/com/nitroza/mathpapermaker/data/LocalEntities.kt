@@ -47,7 +47,8 @@ data class QuestionEntity(
     val copyrightStatus: String,
     val sourceId: String,
     val sourcePage: String?,
-    val semanticFingerprint: String
+    val semanticFingerprint: String,
+    val selectionWeight: Double = 1.0
 )
 
 @Entity(
