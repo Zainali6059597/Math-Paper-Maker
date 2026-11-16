@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.lifecycleScope
 import com.nitroza.mathpapermaker.docx.DocxPaperExporter
 import com.nitroza.mathpapermaker.data.BundledBookManifestReader
+import com.nitroza.mathpapermaker.data.QuestionTextSegmenter
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
 import com.nitroza.mathpapermaker.paper.PaperDraftStore
@@ -103,6 +104,11 @@ class AliTestSeriesActivity : ComponentActivity() {
         var showClearConfirm by remember { mutableStateOf(false) }
         var showManualAddPrompt by remember { mutableStateOf(false) }
         var showManualQuestionEditor by remember { mutableStateOf(false) }
+        var detectedQuestions by remember { mutableStateOf<List<QuestionTextSegmenter.Segment>>(emptyList()) }
+        var checkedDetectedQuestions by remember { mutableStateOf<Set<Int>>(emptySet()) }
+        var detectedQuestionPage by remember { mutableIntStateOf(1) }
+        var detectedQuestionKind by remember { mutableStateOf("SHORT") }
+        var showDetectedQuestions by remember { mutableStateOf(false) }
         var manualQuestionText by remember { mutableStateOf(TextFieldValue("")) }
         var manualQuestionNumber by remember { mutableStateOf("") }
         var manualQuestionMarks by remember { mutableStateOf("2") }
@@ -363,6 +369,38 @@ class AliTestSeriesActivity : ComponentActivity() {
             manualQuestionText = TextFieldValue(updated, androidx.compose.ui.text.TextRange(cursor))
         }
 
+        fun findQuestionsOnCurrentPage() {
+            lifecycleScope.launch {
+                val file = pdfFile ?: return@launch
+                val extraction = withContext(Dispatchers.IO) {
+                    runCatchingCancellable {
+                        PDFBoxResourceLoader.init(applicationContext)
+                        PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+                            PDFTextStripper().apply {
+                                sortByPosition = true
+                                startPage = pageIndex + 1
+                                endPage = pageIndex + 1
+                            }.getText(document)
+                        }
+                    }
+                }
+                extraction.onSuccess { pageText ->
+                    val found = QuestionTextSegmenter.segment(pageText)
+                    detectedQuestions = found
+                    checkedDetectedQuestions = emptySet()
+                    detectedQuestionPage = pageIndex + 1
+                    if (found.isEmpty()) {
+                        notice = "No clearly numbered text questions were detected on this page. Use SELECT TEXT, ADD BOX CROP, or the manual editor."
+                    } else {
+                        showDetectedQuestions = true
+                        notice = "Detected ${found.size} numbered question candidates. Tick only the questions you want."
+                    }
+                }.onFailure { error ->
+                    notice = "Could not scan this page: ${error.message ?: "unknown error"}"
+                }
+            }
+        }
+
         val paperQuestions = selected.map {
             PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
         }
@@ -563,6 +601,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                             modifier = Modifier.weight(1f)
                         ) { Text("ADD BOX CROP") }
                     }
+                    OutlinedButton(onClick = { findQuestionsOnCurrentPage() }, modifier = Modifier.fillMaxWidth()) {
+                        Text("FIND NUMBERED QUESTIONS ON PAGE")
+                    }
                     Button(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
                         Text("REVIEW SELECTED QUESTIONS (${selected.size})")
                     }
@@ -662,6 +703,79 @@ class AliTestSeriesActivity : ComponentActivity() {
                     pendingImageFile = null
                     showQuestionEditor = false
                 }) { Text("CANCEL") } }
+            )
+        }
+
+        if (showDetectedQuestions) {
+            val maxForKind = when (detectedQuestionKind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
+            val alreadySelected = selected.count { it.kind == detectedQuestionKind }
+            val canAddChecked = checkedDetectedQuestions.isNotEmpty() &&
+                (paperMode == "CUSTOM" || alreadySelected + checkedDetectedQuestions.size <= maxForKind)
+            AlertDialog(
+                onDismissRequest = { showDetectedQuestions = false },
+                title = { Text("TICK QUESTIONS TO ADD (${checkedDetectedQuestions.size}/${detectedQuestions.size})") },
+                text = {
+                    Column(Modifier.heightIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Page $detectedQuestionPage · Select the exact questions. Wrapped lines are grouped with their numbered question. Scanned pages still need a crop.", style = MaterialTheme.typography.bodySmall)
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            listOf("MCQ", "SHORT", "LONG").forEach { kind ->
+                                FilterChip(selected = detectedQuestionKind == kind, onClick = { detectedQuestionKind = kind }, label = { Text(kind) })
+                            }
+                        }
+                        Text("They will be added as $detectedQuestionKind questions (${when (detectedQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }} marks each). Edit chapter, numbering and marks in Review.", style = MaterialTheme.typography.bodySmall)
+                        LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            itemsIndexed(detectedQuestions) { index, candidate ->
+                                Card {
+                                    Row(Modifier.fillMaxWidth().padding(8.dp), verticalAlignment = Alignment.Top) {
+                                        Checkbox(
+                                            checked = index in checkedDetectedQuestions,
+                                            onCheckedChange = { checked ->
+                                                checkedDetectedQuestions = if (checked) checkedDetectedQuestions + index else checkedDetectedQuestions - index
+                                            }
+                                        )
+                                        Column(Modifier.weight(1f).padding(top = 10.dp)) {
+                                            Text("PDF Q${candidate.sourceNumber}", style = MaterialTheme.typography.labelLarge)
+                                            Text(candidate.text, style = MaterialTheme.typography.bodySmall)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (!canAddChecked && checkedDetectedQuestions.isNotEmpty()) {
+                            Text("This selection exceeds the remaining $detectedQuestionKind slots in Board Pattern mode.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                },
+                confirmButton = {
+                    Button(enabled = canAddChecked, onClick = {
+                        val newQuestions = selected.toMutableList()
+                        val marks = when (detectedQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }
+                        checkedDetectedQuestions.sorted().forEach { index ->
+                            val candidate = detectedQuestions[index]
+                            var number = suggestedNumber(detectedQuestionKind, newQuestions)
+                            if (number.isBlank() && paperMode == "CUSTOM") {
+                                var suffix = newQuestions.size + 1
+                                do { number = "Q$suffix"; suffix++ }
+                                while (newQuestions.any { it.number.equals(number, true) })
+                            }
+                            if (number.isNotBlank()) {
+                                newQuestions += SelectedQuestion(
+                                    id = nextId++, number = number, text = candidate.text,
+                                    kind = detectedQuestionKind, marks = marks,
+                                    sourcePage = detectedQuestionPage, imageFile = null,
+                                    chapterId = chapterForPage(detectedQuestionPage).orEmpty(),
+                                    sectionId = number.substringBefore("(")
+                                )
+                            }
+                        }
+                        val addedCount = newQuestions.size - selected.size
+                        selected = newQuestions
+                        showDetectedQuestions = false
+                        showQuestions = true
+                        notice = "Added $addedCount checked question(s). Review their chapters and numbering before export."
+                    }) { Text("ADD CHECKED QUESTIONS") }
+                },
+                dismissButton = { TextButton(onClick = { showDetectedQuestions = false }) { Text("CANCEL") } }
             )
         }
 
