@@ -27,12 +27,13 @@ object BundledBookManifestReader {
         grade: Int,
         stream: String,
         subject: String,
-        session: String,
-        actualSha256: Map<String, String> = emptyMap()
+        session: String
     ): List<Chapter> {
         val assetManager = context.applicationContext.assets
         val bundledPdfs = assetManager.list("books").orEmpty()
             .filter { it.endsWith(".pdf", ignoreCase = true) }.toSet()
+        if ("book-manifest.json" !in assetManager.list("books").orEmpty()) return emptyList()
+        val root = assetManager.open("books/book-manifest.json").bufferedReader().use { it.readText() }
         val actualHashes = bundledPdfs.associateWith { file ->
             val digest = MessageDigest.getInstance("SHA-256")
             assetManager.open("books/$file").use { input ->
@@ -45,9 +46,6 @@ object BundledBookManifestReader {
             }
             digest.digest().joinToString("") { byte -> "%02x".format(byte) }
         }
-        if ("book-manifest.json" !in assetManager.list("books").orEmpty()) return emptyList()
-
-        val root = assetManager.open("books/book-manifest.json").bufferedReader().use { it.readText() }
         return parseManifest(root, bundledPdfs, board, grade, stream, subject, session, actualHashes)
     }
 
@@ -58,7 +56,8 @@ object BundledBookManifestReader {
         grade: Int,
         stream: String,
         subject: String,
-        session: String
+        session: String,
+        actualSha256: Map<String, String> = emptyMap()
     ): List<Chapter> {
         val json = JSONObject(rawJson)
         require(json.optInt("manifestVersion", -1) == 1) { "Unsupported textbook manifest version." }
