@@ -125,7 +125,7 @@ class MainActivity : ComponentActivity() {
                     chapterLabels = manifestChapters.associate { it.id to it.title }
                     availableChapters = (questionChapters + manifestChapters.map { it.id }).distinct().sorted()
                     selectedChapters = availableChapters.toSet()
-                    if (parsed.questions.isEmpty()) "Imported paper pattern only. Its local question bank is still empty, so generation will remain blocked until reviewed questions are added." else "Imported ${parsed.questions.size} questions. Package content is marked NEEDS_REVIEW; it cannot be used for an official paper until independently verified." +
+                    (if (parsed.questions.isEmpty()) "Imported paper pattern only. Its local question bank is still empty, so generation will remain blocked until reviewed questions are added." else "Imported ${parsed.questions.size} questions. Package content is marked NEEDS_REVIEW; it cannot be used for an official paper until independently verified.") +
                         if (parsed.warnings.isEmpty()) "" else " Review warnings: ${parsed.warnings.joinToString(" ")}"
                 }.onSuccess { notice = it }.onFailure { notice = "Import failed: ${it.message}" }
             }
