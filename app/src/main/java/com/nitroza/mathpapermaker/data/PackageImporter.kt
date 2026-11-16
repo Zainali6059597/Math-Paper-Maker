@@ -67,7 +67,10 @@ object PackageImporter {
                 displayOrder = s.optInt("displayOrder", i),
                 groupId = s.optString("groupId").takeIf { it.isNotBlank() },
                 bundleId = if (schemaVersion >= 5) s.optString("bundleId").takeIf { it.isNotBlank() } else null,
-                bundleChoiceGroupId = s.optString("bundleChoiceGroupId").takeIf { it.isNotBlank() }
+                bundleChoiceGroupId = s.optString("bundleChoiceGroupId").takeIf { it.isNotBlank() },
+                allowedChapterIdsJson = s.optJSONArray("allowedChapterIds")?.let { allowed ->
+                    org.json.JSONArray((0 until allowed.length()).map { allowed.getString(it) }.distinct()).toString()
+                } ?: "[]"
             )
         }
         val choiceGroupsJson = patternJson.optJSONArray("choiceGroups")
@@ -149,6 +152,12 @@ object PackageImporter {
             )
         }
         require(slots.map { it.slotId }.distinct().size == slots.size) { "Duplicate pattern slot IDs." }
+        require(slots.all { slot ->
+            val ids = org.json.JSONArray(slot.allowedChapterIdsJson)
+            (0 until ids.length()).all { ids.getString(it).isNotBlank() } &&
+                (0 until ids.length()).map { ids.getString(it) }.distinct().size == ids.length() &&
+                (ids.length() == 0 || slot.chapterId == null)
+        }) { "Allowed chapter alternatives must be nonblank, unique, and cannot be combined with a fixed chapterId." }
         val requiredBundles = slots.filter { it.bundleId != null }.groupBy { it.bundleId!! }
         require(requiredBundles.values.all { it.size >= 2 }) { "Required paired bundles need at least two parts per bundle." }
         require(slots.none { it.groupId != null && it.bundleId != null }) {
