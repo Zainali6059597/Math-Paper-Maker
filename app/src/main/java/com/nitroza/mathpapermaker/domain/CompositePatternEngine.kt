@@ -97,7 +97,7 @@ object CompositePatternEngine {
         if (calculated != pattern.expectedAttemptedMarks)
             return blocked("ATTEMPTED_TOTAL_MISMATCH", "Fixed and paired slots plus attempted choice marks total $calculated, but the pattern declares ${pattern.expectedAttemptedMarks}.")
 
-        val slots = pattern.slots.map { QuestionSlot(it.slotId, it.chapterId, it.sloId, it.questionType, it.marks) }
+        val slots = pattern.slots.map { QuestionSlot(it.slotId, it.chapterId, it.sloId, it.questionType, it.marks, it.allowedChapterIds) }
         val result = LocalSelectionEngine.select(SelectionRequest(pattern.identity, slots, mode, seed), bank)
         if (result is SelectionResult.Blocked)
             return CompositeSelectionResult.Blocked(result.code, result.message, result.affectedSlots)
