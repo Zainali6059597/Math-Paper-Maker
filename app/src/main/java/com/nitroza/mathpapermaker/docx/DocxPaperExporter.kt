@@ -83,7 +83,8 @@ object DocxPaperExporter {
             paragraph("CLASS $grade · MATHEMATICS", bold = true, centered = true, size = 26)
             paragraph(escape(examTitle.ifBlank { "Mathematics Examination" }), bold = true, centered = true, size = 24)
             paragraph("Student Name: __________________________________    Roll No: ______________", size = 20)
-            paragraph("Time: ${durationMinutes?.let { "$it minutes" } ?: "150 minutes"}     Total Marks: ${PunjabBoardPattern.TOTAL_ATTEMPTED_MARKS}", size = 20)
+            val paperTotalMarks = if (paperMode == "BOARD") PunjabBoardPattern.TOTAL_ATTEMPTED_MARKS else questions.sumOf { it.marks }
+            paragraph("Time: ${durationMinutes?.let { "$it minutes" } ?: "150 minutes"}     Total Marks: $paperTotalMarks", size = 20)
             paragraph("Instructions: Follow the attempt choices printed with each section. Show necessary working.", size = 19)
             paragraph("", size = 16)
             sections.forEach { section ->
