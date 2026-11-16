@@ -70,6 +70,33 @@ class BoardPatternComplianceTest {
         assertEquals(10, report.attemptedMarks)
     }
 
+    @Test fun optionalPairedBundleSectionsAuditOfferedAndAttemptedMarksSeparately() {
+        val multi = pattern.copy(
+            declaredAttemptedMarks = 16,
+            sections = listOf(
+                ComplianceSection("SHORT", 3, 2, 2),
+                ComplianceSection(
+                    id = "Q5-Q7",
+                    offeredCount = 6,
+                    attemptCount = 6,
+                    marksPerQuestion = 4,
+                    offeredMarksOverride = 24,
+                    attemptedMarksOverride = 16,
+                    allowVariableQuestionMarks = true
+                )
+            )
+        )
+        val bank = (1..3).map {
+            ComplianceQuestion("s$it", identity, "SHORT", "ch1", "slo1", 2, ContentStatus.VERIFIED_OFFICIAL, true)
+        } + (1..6).map {
+            ComplianceQuestion("l$it", identity, "Q5-Q7", "ch2", "slo2", 4, ContentStatus.VERIFIED_OFFICIAL, true)
+        }
+        val report = BoardPatternCompliance.audit(multi, bank)
+        assertTrue(report.errors.joinToString(), report.passed)
+        assertEquals(30, report.offeredMarks)
+        assertEquals(20, report.attemptedMarks)
+    }
+
     @Test fun sourceConflictBlocksEvenInPracticeMode() {
         val report = BoardPatternCompliance.audit(pattern.copy(hasUnresolvedSourceConflict = true), questions(), officialMode = false)
         assertFalse(report.passed)
