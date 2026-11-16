@@ -58,7 +58,8 @@ object TextbookExerciseParser {
             flush()
         }
         val warnings = buildList {
-            if (book.pages.isEmpty()) add("No readable pages were found.")
+            if (book.readError != null) add("Could not read ${book.bookFile}: ${book.readError}")
+            if (book.pages.isEmpty() && book.readError == null) add("No readable pages were found.")
             if (book.pagesNeedingOcr.isNotEmpty()) add(
                 "${book.pagesNeedingOcr.size} scanned/image-only pages need OCR and were skipped."
             )
