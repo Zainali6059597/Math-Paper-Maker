@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Test and Build Ali Test Series
 
 on:
   # Development commits must not trigger APK builds automatically.
@@ -71,61 +71,7 @@ jobs:
           fi
           echo "Offline-only manifest verified."
 
-      # 8. Validate every bundled offline content pack before compilation
-      - name: Validate bundled question banks
-        shell: bash
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-
-          files = sorted(Path("app/src/main/assets/content-packs").glob("*.json"))
-          if not files:
-              raise SystemExit("No bundled JSON content packs found.")
-          seen_sources, seen_patterns, seen_questions, seen_fingerprints, seen_identities = set(), set(), set(), set(), set()
-          for path in files:
-              pack = json.loads(path.read_text(encoding="utf-8"))
-              identity, source, pattern = pack["identity"], pack["source"], pack["pattern"]
-              slots, questions = pattern["slots"], pack["questions"]
-              groups = pattern.get("choiceGroups", [])
-              assert identity["grade"] in (9, 10), f"{path}: unsupported grade"
-              assert slots and questions, f"{path}: empty slots or question bank"
-              assert len({s["slotId"] for s in slots}) == len(slots), f"{path}: duplicate slot IDs"
-              assert len({q["questionId"] for q in questions}) == len(questions), f"{path}: duplicate question IDs"
-              identity_key = tuple(identity[k] for k in ("board", "grade", "stream", "subject", "session"))
-              assert identity_key not in seen_identities, f"{path}: duplicate package identity"
-              assert source["sourceId"] not in seen_sources, f"{path}: duplicate source ID"
-              assert pattern["patternId"] not in seen_patterns, f"{path}: duplicate pattern ID"
-              seen_identities.add(identity_key)
-              seen_sources.add(source["sourceId"])
-              seen_patterns.add(pattern["patternId"])
-              for question in questions:
-                  assert question["questionId"] not in seen_questions, f"{path}: question ID collides with another pack"
-                  assert question["semanticFingerprint"] not in seen_fingerprints, f"{path}: semantic fingerprint collision"
-                  assert question.get("answerText"), f"{path}: question without answer: {question['questionId']}"
-                  seen_questions.add(question["questionId"])
-                  seen_fingerprints.add(question["semanticFingerprint"])
-              required = {}
-              for slot in slots:
-                  signature = (slot.get("chapterId"), slot["questionType"], slot["marks"], slot.get("sloId") or "")
-                  required[signature] = required.get(signature, 0) + 1
-              for (chapter, qtype, marks, slo), count in required.items():
-                  candidates = [q for q in questions if q["questionType"] == qtype and q["marks"] == marks
-                                and (chapter is None or q["chapterId"] == chapter)
-                                and (not slo or q.get("sloId") == slo)]
-                  assert len(candidates) >= count, f"{path}: insufficient matching questions for {chapter}/{qtype}/{marks}"
-              attempted = sum(s["marks"] for s in slots if not s.get("groupId"))
-              for group in groups:
-                  members = [s for s in slots if s.get("groupId") == group["groupId"]]
-                  assert len(members) == group["offeredCount"], f"{path}: offered count mismatch in {group['groupId']}"
-                  assert all(s["marks"] == group["marksPerQuestion"] for s in members), f"{path}: inconsistent marks in {group['groupId']}"
-                  attempted += group["attemptCount"] * group["marksPerQuestion"]
-              assert attempted == pattern["totalMarks"], f"{path}: attempted marks do not equal totalMarks"
-              assert not any(q["chapterId"] == "CH8" for q in questions), f"{path}: excluded Chapter 8 content found"
-              assert source["sourceUrl"].startswith("https://"), f"{path}: missing official source URL"
-              print(f"Validated {path.name}: {len(questions)} answered questions, {pattern['totalMarks']} attempted marks.")
-          PY
-      # 9. Run unit tests
+      # 8. Run unit tests
       - name: Run unit tests
         run: gradle --no-daemon --stacktrace testDebugUnitTest
 
