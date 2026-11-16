@@ -94,7 +94,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var questionKind by remember { mutableStateOf("SHORT") }
         var questionMarks by remember { mutableStateOf("2") }
         var questionNumber by remember { mutableStateOf("") }
-        var questionChapter by remember { mutableStateOf("CH1") }
+        var questionChapter by remember { mutableStateOf("") }
         var questionSection by remember { mutableStateOf("Q2") }
         var chapterMenuExpanded by remember { mutableStateOf(false) }
         var pendingImageFile by remember { mutableStateOf<String?>(null) }
@@ -488,7 +488,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     pendingImageFile = null
                                     questionNumber = suggestedNumber(questionKind, selected)
                                     questionSection = questionNumber.substringBefore("(")
-                                    questionChapter = chapterForPage(pageIndex + 1) ?: "CH1"
+                                    questionChapter = chapterForPage(pageIndex + 1).orEmpty()
                                     if (text.isBlank()) notice = "This page has no extractable text. Draw a box around the scanned question."
                                     else showQuestionEditor = true
                                 }.onFailure { error ->
@@ -567,7 +567,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("Paper numbering (editable)") }, singleLine = true)
                         Box {
                             OutlinedButton(onClick = { chapterMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
-                                Text("CHAPTER: $questionChapter")
+                                Text(if (questionChapter.isBlank()) "SELECT CHAPTER" else "CHAPTER: $questionChapter")
                             }
                             DropdownMenu(expanded = chapterMenuExpanded, onDismissRequest = { chapterMenuExpanded = false }) {
                                 (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
