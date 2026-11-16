@@ -91,7 +91,7 @@ data class PatternSlotEntity(
     val groupId: String? = null,
     val bundleId: String? = null,
     val bundleChoiceGroupId: String? = null,
-    val allowedChapterIdsJson: String = "[]"
+    @ColumnInfo(defaultValue = "'[]'") val allowedChapterIdsJson: String = "[]"
 )
 
 @Entity(
