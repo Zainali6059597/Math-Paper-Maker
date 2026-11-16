@@ -31,7 +31,8 @@ data class QuestionSlot(
     val chapterId: String? = null,
     val sloId: String? = null,
     val questionType: String? = null,
-    val marks: Int
+    val marks: Int,
+    val allowedChapterIds: Set<String> = emptySet()
 )
 
 data class SelectionRequest(
@@ -91,7 +92,7 @@ object LocalSelectionEngine {
 
     private fun QuestionCandidate.matches(slot: QuestionSlot): Boolean =
         marks == slot.marks &&
-            (slot.chapterId == null || chapterId == slot.chapterId) &&
+            (if (slot.allowedChapterIds.isNotEmpty()) chapterId in slot.allowedChapterIds else slot.chapterId == null || chapterId == slot.chapterId) &&
             (slot.sloId == null || sloId == slot.sloId) &&
             (slot.questionType == null || questionType == slot.questionType)
 }
