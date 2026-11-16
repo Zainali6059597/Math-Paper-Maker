@@ -90,9 +90,6 @@ object PunjabBoardPattern {
         val labels = questions.map { it.number.trim() }
         if (labels.any { it.isEmpty() }) errors += "Every selected question needs a paper number."
         if (labels.distinct().size != labels.size) errors += "Paper question numbers must be unique."
-        if (questions.any { it.chapterId !in 1..13.let { _ -> emptyList<String>() } }) {
-            // Chapter validation is handled below using normalized CH-number IDs.
-        }
         if (questions.any { !it.chapterId.matches(Regex("CH([1-9]|1[0-3])")) }) {
             errors += "Choose the correct chapter (CH1, CH2, etc.) for every question."
             return errors
