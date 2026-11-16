@@ -92,20 +92,32 @@ object DocxPaperExporter {
         val rootRels = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>"""
         val styles = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr><w:pPr><w:spacing w:after="100"/></w:pPr></w:style></w:styles>"""
 
-        context.contentResolver.openOutputStream(destination, "w")?.use { raw ->
-            ZipOutputStream(raw).use { zip ->
-                zip.putText("[Content_Types].xml", contentTypes)
-                zip.putText("_rels/.rels", rootRels)
-                zip.putText("word/document.xml", document)
-                zip.putText("word/_rels/document.xml.rels", relationships)
-                zip.putText("word/styles.xml", styles)
-                imageEntries.forEach { (index, file) ->
-                    zip.putNextEntry(ZipEntry("word/media/image${index + 1}.png"))
-                    file.inputStream().use { it.copyTo(zip) }
-                    zip.closeEntry()
+        // Finish the complete ZIP package in app cache before touching the user's
+        // destination. If packaging fails (e.g. a damaged crop), no half-built DOCX
+        // is left at the selected document URI.
+        val stagedDocx = File.createTempFile("ali-test-series-", ".docx", context.cacheDir)
+        try {
+            FileOutputStream(stagedDocx).use { staged ->
+                ZipOutputStream(staged).use { zip ->
+                    zip.putText("[Content_Types].xml", contentTypes)
+                    zip.putText("_rels/.rels", rootRels)
+                    zip.putText("word/document.xml", document)
+                    zip.putText("word/_rels/document.xml.rels", relationships)
+                    zip.putText("word/styles.xml", styles)
+                    imageEntries.forEach { (index, file) ->
+                        zip.putNextEntry(ZipEntry("word/media/image${index + 1}.png"))
+                        file.inputStream().use { it.copyTo(zip) }
+                        zip.closeEntry()
+                    }
                 }
             }
-        } ?: error("Cannot open the selected Word document destination.")
+            context.contentResolver.openOutputStream(destination, "w")?.use { output ->
+                stagedDocx.inputStream().use { it.copyTo(output) }
+                output.flush()
+            } ?: error("Cannot open the selected Word document destination.")
+        } finally {
+            stagedDocx.delete()
+        }
     }
 
     private fun ZipOutputStream.putText(path: String, text: String) {
@@ -146,6 +158,13 @@ object DocxPaperExporter {
     }
 
     private fun imageDimensions(file: File): Pair<Int, Int> {
+        require(file.isFile && file.length() >= 24L) { "Selected question image is missing or incomplete." }
+        val pngSignature = byteArrayOf(
+            0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
+        )
+        val signature = file.inputStream().use { input -> ByteArray(8).also { input.read(it) } }
+        require(signature.contentEquals(pngSignature)) { "Selected question image is not a valid PNG." }
+
         val options = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
         android.graphics.BitmapFactory.decodeFile(file.absolutePath, options)
         require(options.outWidth > 0 && options.outHeight > 0) { "Selected question image is invalid." }
