@@ -36,6 +36,17 @@ class MathOoxmlFormatterTest {
         assertTrue(subscript.contains("<m:sub>"))
     }
 
+    @Test fun absoluteValueAndTrigonometricTemplatesBecomeWordMath() {
+        val absolute = MathOoxmlFormatter.inlineRuns("|x+1|")
+        val sine = MathOoxmlFormatter.inlineRuns("sin(θ)")
+        val logarithm = MathOoxmlFormatter.inlineRuns("log(10)")
+        assertTrue(absolute.contains("<m:d>"))
+        assertTrue(absolute.contains("<m:begChr"))
+        assertTrue(sine.contains("<m:func>"))
+        assertTrue(sine.contains("sin"))
+        assertTrue(logarithm.contains("<m:func>"))
+    }
+
     @Test fun nestedTemplatesRemainNestedAndEditable() {
         val xml = MathOoxmlFormatter.inlineRuns("√((a)/(b))")
         assertTrue(xml.contains("<m:rad>"))
