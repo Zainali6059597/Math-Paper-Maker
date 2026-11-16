@@ -123,12 +123,27 @@ object DocxPaperExporter {
     private fun imageParagraph(relId: String, id: Int, cx: Long, cy: Long): String =
         """<w:p><w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="$cx" cy="$cy"/><wp:docPr id="$id" name="Question image $id"/><wp:cNvGraphicFramePr><a:graphicFrameLocks noChangeAspect="1"/></wp:cNvGraphicFramePr><a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic><pic:nvPicPr><pic:cNvPr id="$id" name="Question image $id"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="$relId"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="$cx" cy="$cy"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r></w:p>"""
 
-    private fun escape(value: String): String = value
-        .filter { it == '\n' || it == '\t' || it >= ' ' }
-        .replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        .replace("\"", "&quot;").replace("'", "&apos;")
-        .replace("\r", "")
-        .replace("\n", "</w:t></w:r></w:p><w:p><w:r><w:t xml:space=\"preserve\">")
+    private fun escape(value: String): String {
+        // XML 1.0 rejects most control characters, noncharacters U+FFFE/U+FFFF,
+        // and unpaired UTF-16 surrogates. Strip those before writing document.xml.
+        val xmlSafe = buildString(value.length) {
+            var index = 0
+            while (index < value.length) {
+                val codePoint = value.codePointAt(index)
+                val allowed = codePoint == 0x09 || codePoint == 0x0A || codePoint == 0x0D ||
+                    codePoint in 0x20..0xD7FF ||
+                    codePoint in 0xE000..0xFFFD ||
+                    codePoint in 0x10000..0x10FFFF
+                if (allowed) append(String(Character.toChars(codePoint)))
+                index += Character.charCount(codePoint)
+            }
+        }
+        return xmlSafe
+            .replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            .replace("\"", "&quot;").replace("'", "&apos;")
+            .replace("\r", "")
+            .replace("\n", "</w:t></w:r></w:p><w:p><w:r><w:t xml:space=\"preserve\">")
+    }
 
     private fun imageDimensions(file: File): Pair<Int, Int> {
         val options = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
