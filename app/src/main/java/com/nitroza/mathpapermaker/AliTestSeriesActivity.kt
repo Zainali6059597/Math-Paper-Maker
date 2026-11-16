@@ -114,6 +114,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var manualQuestionMarks by remember { mutableStateOf("2") }
         var manualQuestionKind by remember { mutableStateOf("SHORT") }
         var manualQuestionChapter by remember { mutableStateOf("") }
+        var manualChapterMenuExpanded by remember { mutableStateOf(false) }
         var examTitle by remember { mutableStateOf("Mathematics Examination") }
         var paperMode by remember { mutableStateOf("BOARD") }
         var schoolName by remember { mutableStateOf("") }
@@ -1045,7 +1046,25 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                         OutlinedTextField(manualQuestionNumber, { manualQuestionNumber = it.take(16) }, label = { Text("Question number") }, singleLine = true)
                         OutlinedTextField(manualQuestionMarks, { manualQuestionMarks = it.filter(Char::isDigit).take(2) }, label = { Text("Marks") }, singleLine = true)
-                        OutlinedTextField(manualQuestionChapter, { manualQuestionChapter = it.take(12) }, label = { Text("Chapter (optional, e.g. CH3)") }, singleLine = true)
+                        Box {
+                            OutlinedButton(onClick = { manualChapterMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                                Text(if (manualQuestionChapter.isBlank()) "SELECT CHAPTER (REQUIRED FOR BOARD)" else "CHAPTER: $manualQuestionChapter")
+                            }
+                            DropdownMenu(expanded = manualChapterMenuExpanded, onDismissRequest = { manualChapterMenuExpanded = false }) {
+                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
+                                    DropdownMenuItem(text = { Text("CH$chapter") }, onClick = {
+                                        manualQuestionChapter = "CH$chapter"
+                                        manualChapterMenuExpanded = false
+                                    })
+                                }
+                                if (paperMode == "CUSTOM") {
+                                    DropdownMenuItem(text = { Text("No chapter (Custom only)") }, onClick = {
+                                        manualQuestionChapter = ""
+                                        manualChapterMenuExpanded = false
+                                    })
+                                }
+                            }
+                        }
                     }
                 },
                 confirmButton = {
