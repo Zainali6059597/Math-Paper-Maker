@@ -34,7 +34,19 @@ object BundledBookManifestReader {
         if ("book-manifest.json" !in assetManager.list("books").orEmpty()) return emptyList()
 
         val root = assetManager.open("books/book-manifest.json").bufferedReader().use { it.readText() }
-        val json = JSONObject(root)
+        return parseManifest(root, bundledPdfs, board, grade, stream, subject, session)
+    }
+
+    internal fun parseManifest(
+        rawJson: String,
+        bundledPdfs: Set<String>,
+        board: String,
+        grade: Int,
+        stream: String,
+        subject: String,
+        session: String
+    ): List<Chapter> {
+        val json = JSONObject(rawJson)
         require(json.optInt("manifestVersion", -1) == 1) { "Unsupported textbook manifest version." }
         val books = json.optJSONArray("books") ?: return emptyList()
         val chapters = mutableListOf<Chapter>()
