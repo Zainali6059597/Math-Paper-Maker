@@ -44,7 +44,7 @@ object BundledBookManifestReader {
                     digest.update(buffer, 0, read)
                 }
             }
-            digest.digest().joinToString("") { byte -> "%02x".format(byte) }
+            digest.digest().joinToString("") { byte -> (byte.toInt() and 0xff).toString(16).padStart(2, '0') }
         }
         return parseManifest(root, bundledPdfs, board, grade, stream, subject, session, actualHashes)
     }
