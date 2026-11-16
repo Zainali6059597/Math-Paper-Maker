@@ -44,6 +44,15 @@ object MathOoxmlFormatter {
     private data class Parsed(val endExclusive: Int, val xml: String)
 
     private fun parseConstruct(source: String, start: Int): Parsed? {
+        if (source.startsWith("∛(", start)) {
+            val end = matchingParen(source, start + 1) ?: return null
+            val inner = source.substring(start + 2, end)
+            return Parsed(
+                end + 1,
+                "<m:rad><m:radPr/><m:deg><m:r><m:t>3</m:t></m:r></m:deg><m:e>${mathContent(inner)}</m:e></m:rad>"
+            )
+        }
+
         if (source.startsWith("√(", start)) {
             val end = matchingParen(source, start + 1) ?: return null
             val inner = source.substring(start + 2, end)
