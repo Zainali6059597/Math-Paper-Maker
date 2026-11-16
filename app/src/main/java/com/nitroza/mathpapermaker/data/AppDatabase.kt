@@ -14,6 +14,14 @@ import androidx.room.withTransaction
 
 @Dao
 interface LocalContentDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun insertTextbookCandidates(items: List<TextbookCandidateEntity>): List<Long>
+    @Query("SELECT * FROM textbook_candidates ORDER BY bookFile, chapterId, sourcePage, questionNumber")
+    suspend fun allTextbookCandidates(): List<TextbookCandidateEntity>
+    @Query("UPDATE textbook_candidates SET reviewStatus=:status, reviewNote=:note WHERE candidateId=:candidateId")
+    suspend fun updateTextbookCandidateReview(candidateId: String, status: String, note: String)
+    @Query("SELECT COUNT(*) FROM textbook_candidates WHERE reviewStatus='NEEDS_REVIEW'")
+    suspend fun pendingTextbookCandidateCount(): Int
+
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertQuestions(items: List<QuestionEntity>)
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertSources(items: List<QuestionSourceEntity>)
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun insertPatterns(items: List<PaperPatternEntity>)
@@ -64,8 +72,8 @@ interface LocalContentDao {
 }
 
 @Database(
-    entities = [QuestionSourceEntity::class, QuestionEntity::class, PaperPatternEntity::class, PatternSlotEntity::class, ChoiceGroupEntity::class, SavedPaperDraftEntity::class, ReviewAuditEntity::class, PatternQuotaEntity::class, SyllabusExclusionEntity::class],
-    version = 9,
+    entities = [QuestionSourceEntity::class, QuestionEntity::class, PaperPatternEntity::class, PatternSlotEntity::class, ChoiceGroupEntity::class, SavedPaperDraftEntity::class, ReviewAuditEntity::class, PatternQuotaEntity::class, SyllabusExclusionEntity::class, TextbookCandidateEntity::class],
+    version = 10,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -121,10 +129,16 @@ abstract class AppDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE questions ADD COLUMN selectionWeight REAL NOT NULL DEFAULT 1.0")
             }
         }
+        private val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS textbook_candidates (candidateId TEXT NOT NULL PRIMARY KEY, bookFile TEXT NOT NULL, chapterId TEXT NOT NULL, exerciseId TEXT NOT NULL, questionNumber TEXT NOT NULL, questionText TEXT NOT NULL, sourcePage INTEGER NOT NULL, reviewStatus TEXT NOT NULL, reviewNote TEXT NOT NULL, detectedAt INTEGER NOT NULL)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS index_textbook_candidates_bookFile_chapterId_exerciseId ON textbook_candidates(bookFile, chapterId, exerciseId)")
+            }
+        }
         @Volatile private var INSTANCE: AppDatabase? = null
         fun get(context: Context): AppDatabase = INSTANCE ?: synchronized(this) {
             INSTANCE ?: Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "maths-paper-maker.db")
-                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9).build().also { INSTANCE = it }
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10).build().also { INSTANCE = it }
         }
     }
 }
