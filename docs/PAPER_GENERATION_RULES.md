@@ -45,3 +45,12 @@ Generation creates an editable draft first. The user can inspect, edit, replace,
 ## 5. Offline books
 
 Textbook PDFs belong under `app/src/main/assets/books/` and are read on-device. Extracted text must retain book and page references. Extracted paragraphs are source material, not automatically approved exam questions. Question candidates need chapter/topic mapping and a reviewable provenance reference before they enter generation.
+
+
+## 6. Probability weights
+
+Question records may include an optional `selectionWeight` from 0.1 to 10.0 (default 1.0). The selector uses weighted random ordering without replacement. A question with weight 4 has a stronger chance to be considered before an otherwise matching question with weight 1, but it is not guaranteed to appear.
+
+Weights are metadata, not claims that an exam question is certain to appear. They should only be assigned from documented evidence such as repeated appearance in official past papers/model papers, explicit board emphasis, or teacher-reviewed importance. Do not fabricate weights from textbook page frequency alone. If no defensible evidence exists, keep weight 1.0.
+
+The exact pattern still wins over probability: a weight cannot bypass question type, marks, slot, selected chapter, board identity, or official verification.
