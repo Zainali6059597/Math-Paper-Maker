@@ -57,6 +57,7 @@ class MainActivity : ComponentActivity() {
         var session by remember { mutableStateOf("2026-27") }
         var mode by remember { mutableStateOf(GenerationMode.PRACTICE) }
         var availableChapters by remember { mutableStateOf<List<String>>(emptyList()) }
+        var chapterLabels by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
         var selectedChapters by remember { mutableStateOf<Set<String>>(emptySet()) }
         var notice by remember { mutableStateOf("Loading bundled offline content…") }
         var questionCount by remember { mutableIntStateOf(0) }
@@ -95,11 +96,11 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(board, grade, stream, subject, session) {
             val rows = runCatching { database.contentDao().findQuestions(board, grade, stream, subject, session) }.getOrDefault(emptyList())
             val questionChapters = rows.map { it.chapterId }.filter { it.isNotBlank() }
-            val bookChapters = runCatching {
+            val manifestChapters = runCatching {
                 BundledBookManifestReader.chaptersFor(this@MainActivity, board, grade, stream, subject, session)
-                    .map { it.id }
             }.getOrDefault(emptyList())
-            val chapters = (questionChapters + bookChapters).distinct().sorted()
+            chapterLabels = manifestChapters.associate { it.id to it.title }
+            val chapters = (questionChapters + manifestChapters.map { it.id }).distinct().sorted()
             availableChapters = chapters
             selectedChapters = chapters.toSet()
         }
@@ -115,11 +116,11 @@ class MainActivity : ComponentActivity() {
                     patternCount = database.contentDao().patternCount()
                     val refreshedRows = database.contentDao().findQuestions(board, grade, stream, subject, session)
                     val questionChapters = refreshedRows.map { it.chapterId }.filter { it.isNotBlank() }
-                    val bookChapters = runCatching {
+                    val manifestChapters = runCatching {
                         BundledBookManifestReader.chaptersFor(this@MainActivity, board, grade, stream, subject, session)
-                            .map { it.id }
                     }.getOrDefault(emptyList())
-                    availableChapters = (questionChapters + bookChapters).distinct().sorted()
+                    chapterLabels = manifestChapters.associate { it.id to it.title }
+                    availableChapters = (questionChapters + manifestChapters.map { it.id }).distinct().sorted()
                     selectedChapters = availableChapters.toSet()
                     "Imported ${parsed.questions.size} questions. Package content is marked NEEDS_REVIEW; it cannot be used for an official paper until independently verified." +
                         if (parsed.warnings.isEmpty()) "" else " Review warnings: ${parsed.warnings.joinToString(" ")}"
@@ -547,7 +548,7 @@ class MainActivity : ComponentActivity() {
                                                 selectedChapters = if (checked) selectedChapters + chapterId else selectedChapters - chapterId
                                             }
                                         )
-                                        Text(chapterId, modifier = Modifier.weight(1f))
+                                        Text(chapterLabels[chapterId] ?: "Chapter $chapterId", modifier = Modifier.weight(1f))
                                     }
                                 }
                             }
