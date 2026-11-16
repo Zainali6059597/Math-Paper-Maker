@@ -518,7 +518,7 @@ class MainActivity : ComponentActivity() {
                                             textbookReviewRows = database.contentDao().allTextbookCandidates()
                                             bookScanWarnings = parsed.flatMap { it.warnings }.distinct()
                                             notice = if (books.isEmpty()) "No textbook PDFs bundled yet. Add licensed PDFs to app/src/main/assets/books/ and rebuild the APK."
-                                                else "Scanned ${books.size} bundled book(s); found ${bookCandidates.size} exercise candidates. Review decisions are saved on this device."
+                                                else "Scanned ${books.size} bundled book(s); found ${detectedCandidates.size} exercise candidates. Review decisions are saved on this device."
                                         }.onFailure { notice = "Textbook scan failed: ${it.message}" }
                                         bookScanRunning = false
                                     }
