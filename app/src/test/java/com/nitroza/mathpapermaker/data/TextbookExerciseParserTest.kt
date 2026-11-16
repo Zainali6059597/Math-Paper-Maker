@@ -41,12 +41,12 @@ class TextbookExerciseParserTest {
             listOf(
                 BundledBookPdfReader.PageText(
                     "maths.pdf", 7,
-                    "Chapter 3: Sets\\nExercise 3.1\\n1.\\nDefine a set and give two examples.\\nExplain your answer.",
+                    "Chapter 3: Sets\nExercise 3.1\n1.\nDefine a set and give two examples.\nExplain your answer.",
                     false
                 ),
                 BundledBookPdfReader.PageText(
                     "maths.pdf", 8,
-                    "2.\\nWrite the following set in roster form.",
+                    "2.\nWrite the following set in roster form.",
                     false
                 )
             ),
