@@ -30,7 +30,7 @@ The current Grade 10 Mathematics pairing-scheme PDF is the separate 14 November 
 - Q9: two 4-mark parts, Chapter 10 and either Chapter 9 or Chapter 12. Attempt one of Q8–Q9 (8 marks).
 - Total: 15 + 36 + 16 + 8 = 75 marks; 20-minute objective and 2:10 subjective sections.
 
-**Important implementation constraint:** The current persisted pattern schema can express single-chapter slots and equal-mark choice groups, but cannot yet express optional *paired, mixed-chapter* long-question bundles (Q5–Q9). Do not import this Grade 10 pattern as active until the schema and generator support those bundle choices. This is a known feature gap, not a reason to approximate the official pattern.
+**Implementation status (16 November 2026):** The persisted schema and generator now support optional whole paired-question bundles, per-slot allowed chapter alternatives, and chapter minimums scoped to the individual short-question group. The separate Grade 10 pattern-only package is at `app/src/main/assets/content-packs/punjab-grade10-mathematics-2026-27.json`. It intentionally contains no questions yet, so generation remains blocked until a sufficient reviewed question bank is added. The imported pattern/source remain `NEEDS_REVIEW`; importing a source document does not self-certify it.
 
 ## PECTAA / PCTB — textbooks
 
@@ -57,7 +57,7 @@ The current Grade 10 Mathematics pairing-scheme PDF is the separate 14 November 
 - [x] Official PECTAA Class X e-book resources located.
 - [ ] Download and inspect the actual current Mathematics PDFs.
 - [ ] Confirm PECTAA/PCTB redistribution permission for bundling textbooks in a paid app.
-- [ ] Validate every Grade 9 and Grade 10 2026–27 Mathematics pattern section and encode only source-backed rules.
+- [ ] Complete an independent line-by-line audit of every Grade 9 and Grade 10 2026–27 Mathematics section against the full official PDF.\n- [x] Encode the Grade 10 Q1–Q9 chapter distribution, section-scoped short-question minimums, paired long-question choices and chapter alternatives in a separate pattern-only package.
 - [x] Extract the headline Grade 10 2026–27 Mathematics marks, timing, and section structure from its official pairing-scheme PDF.
 - [ ] Extend pattern schema/generator to support optional paired multi-chapter long-question bundles (Q5–Q9).
 - [ ] Encode and test the Grade 10 pattern as a separate exact-identity pack.
