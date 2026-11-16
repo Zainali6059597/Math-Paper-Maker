@@ -5,6 +5,7 @@ import android.net.Uri
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
 import java.io.File
+import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import java.util.zip.ZipFile
@@ -185,7 +186,16 @@ object DocxPaperExporter {
         val pngSignature = byteArrayOf(
             0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
         )
-        val signature = file.inputStream().use { input -> ByteArray(8).also { input.read(it) } }
+        val signature = file.inputStream().use { input ->
+            ByteArray(8).also { bytes ->
+                var offset = 0
+                while (offset < bytes.size) {
+                    val read = input.read(bytes, offset, bytes.size - offset)
+                    require(read > 0) { "Selected question image is truncated." }
+                    offset += read
+                }
+            }
+        }
         require(signature.contentEquals(pngSignature)) { "Selected question image is not a valid PNG." }
 
         val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
