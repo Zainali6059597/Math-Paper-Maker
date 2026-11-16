@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
                     val raw = contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
                         ?: error("Could not read the selected file.")
                     val parsed = PackageImporter.parse(raw)
-                    database.importPackage(parsed.source, parsed.pattern, parsed.slots, parsed.questions, parsed.choiceGroups, parsed.quotas, parsed.exclusions)
+                    database.importPackage(parsed.source, parsed.pattern, parsed.slots, parsed.questions, parsed.choiceGroups, parsed.quotas, parsed.exclusions, parsed.bundleChoiceGroups)
                     questionCount = database.contentDao().questionCount()
                     patternCount = database.contentDao().patternCount()
                     val refreshedRows = database.contentDao().findQuestions(board, grade, stream, subject, session)
@@ -646,6 +646,7 @@ class MainActivity : ComponentActivity() {
                             val storedSlots = dao.findSlots(pattern.patternId)
                             if (storedSlots.isEmpty()) { notice = "The selected board pattern has no configured question slots."; return@launch }
                             val storedGroups = dao.findChoiceGroups(pattern.patternId)
+                            val storedBundleGroups = dao.findBundleChoiceGroups(pattern.patternId)
                             val storedQuotas = dao.findPatternQuotas(pattern.patternId)
                             val seed = System.currentTimeMillis()
                             var generatedSlotOrder: List<OfferedQuestionSlot> = emptyList()
@@ -654,15 +655,22 @@ class MainActivity : ComponentActivity() {
                                 // Mixed pattern: one assignment covers fixed slots, paired parts and choice slots.
                                 val compositeSlots = storedSlots.sortedBy { it.displayOrder }.map { slot ->
                                     OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId,
-                                        slot.questionType, slot.bundleId, slot.groupId)
+                                        slot.questionType, slot.bundleId, slot.groupId, slot.bundleChoiceGroupId)
                                 }
                                 val compositeGroups = storedGroups.map { group ->
                                     ChoiceGroupRule(group.groupId, group.offeredCount, group.attemptCount,
                                         group.marksPerQuestion, compositeSlots.filter { it.groupId == group.groupId })
                                 }
-                                val compositePattern = CompositePaperPattern(identity, pattern.totalMarks, compositeSlots, compositeGroups)
+                                val compositeBundleGroups = storedBundleGroups.map { group ->
+                                    val idsJson = org.json.JSONArray(group.bundleIdsJson)
+                                    val ids = (0 until idsJson.length()).map { idsJson.getString(it) }.toSet()
+                                    BundleChoiceGroupRule(group.groupId, group.offeredBundleCount,
+                                        group.attemptBundleCount, group.marksPerBundle, ids)
+                                }
+                                val compositePattern = CompositePaperPattern(identity, pattern.totalMarks,
+                                    compositeSlots, compositeGroups, compositeBundleGroups)
                                 generatedSlotOrder = compositeSlots
-                                val selectedBySlot: Map<String, QuestionCandidate>? = if (storedQuotas.isNotEmpty()) {
+                                val selectedBySlot: Map<String, QuestionCandidate>? = if (storedQuotas.isNotEmpty() && storedBundleGroups.isEmpty()) {
                                     val quotaRules = storedQuotas.mapNotNull { quota -> runCatching {
                                         QuotaDimension.valueOf(quota.dimension)
                                     }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
