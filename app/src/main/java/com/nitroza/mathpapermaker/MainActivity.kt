@@ -292,7 +292,7 @@ class MainActivity : ComponentActivity() {
                             if (currentCandidate != null) {
                                 val identity = draftIdentity
                                 val bank = draftQuestionRows.map { q -> QuestionCandidate(q.questionId, identity, q.chapterId, q.sloId, q.questionType, q.marks, q.summative,
-                                    runCatching { ContentStatus.valueOf(q.verificationStatus) }.getOrDefault(ContentStatus.NEEDS_REVIEW), q.cognitiveLevel, q.difficulty) }
+                                    runCatching { ContentStatus.valueOf(q.verificationStatus) }.getOrDefault(ContentStatus.NEEDS_REVIEW), q.cognitiveLevel, q.difficulty, q.selectionWeight) }
                                 val request = ReplacementRequest(identity, draftSlots[index], mode, current.questionId,
                                     draft.mapIndexedNotNull { i, item -> if (i == index) null else item.questionId }.toSet())
                                 val eligibleIds = QuestionReplacementEngine.findOptions(request, bank).candidates.map { it.id }.toSet()
