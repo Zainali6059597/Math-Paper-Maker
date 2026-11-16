@@ -563,7 +563,11 @@ class AliTestSeriesActivity : ComponentActivity() {
                         } else {
                             Text("Scanned crop ready · PDF page ${pageIndex + 1}", color = MaterialTheme.colorScheme.primary)
                         }
-                        OutlinedTextField(questionNumber, { questionNumber = it.take(16) },
+                        OutlinedTextField(questionNumber, { value ->
+                            questionNumber = value.take(16)
+                            val candidateSection = value.trim().substringBefore("(").trim()
+                            if (candidateSection in (1..9).map { "Q$it" }) questionSection = candidateSection
+                        },
                             label = { Text("Paper numbering (editable)") }, singleLine = true)
                         Box {
                             OutlinedButton(onClick = { chapterMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
@@ -661,7 +665,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             OutlinedTextField(
                                                 value = item.number,
                                                 onValueChange = { value ->
-                                                    selected = selected.map { if (it.id == item.id) it.copy(number = value.take(16)) else it }
+                                                    val candidateSection = value.trim().substringBefore("(").trim()
+                                                    selected = selected.map { question ->
+                                                        if (question.id == item.id) question.copy(
+                                                            number = value.take(16),
+                                                            sectionId = if (candidateSection in (1..9).map { "Q$it" }) candidateSection else question.sectionId
+                                                        ) else question
+                                                    }
                                                 },
                                                 modifier = Modifier.width(132.dp),
                                                 label = { Text("Number") },
