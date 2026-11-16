@@ -1,46 +1,56 @@
-# Release readiness and final handover
+# Ali Test Series — release readiness
 
-## What this source package contains
+## Product delivered in source
 
-- Offline-first native Android application (Kotlin, Jetpack Compose, Room/SQLite).
-- Local content-package import, validation, review/approval workflow and saved drafts.
-- Deterministic paper generation for fixed required slots, equal-mark offered/attempted choice groups, required mixed-mark paired bundles, and declared count-based metadata quotas.
-- Syllabus exclusions applied to candidate filtering and pre-export audit.
-- Customization, question replacement, reorder/remove/edit, and A4 PDF export with pagination.
-- GitHub Actions workflow for unit tests and debug APK artifact creation.
+Native Android app for Class 9 and Class 10 Punjab Board Mathematics. The teacher manually selects questions from a textbook PDF and exports a printable DOCX.
 
-## Important release blockers — do not misrepresent these
+- Open a PDF from device storage using Android's document picker.
+- Navigate pages; extract selectable PDF text or draw a crop around scanned questions.
+- Edit question text, paper numbering, chapter, type and marks.
+- Review, reorder and remove questions.
+- Draft is saved locally and restored after app restart.
+- Enforce Punjab Board 2026–27 question counts, marks, chapter distribution and long-question pairings before export.
+- Export DOCX with editable extracted text and embedded PNG crops for scanned questions.
+- Offline-only app manifest; no account or cloud service.
 
-1. **No production-ready board content pack is bundled.** The app cannot generate a meaningful paper until a teacher imports a locally authored package. All imported sources, patterns and questions start in `NEEDS_REVIEW`.
-2. **No successful Android Gradle/KSP/Compose build is recorded in this workspace.** The current environment has Kotlin compiler but no Android SDK or Gradle installation. The included GitHub Actions workflow is the first supported full Android build route.
-3. **No APK or physical-device test is included.** CI build, APK installation, offline-mode testing, database migration testing on Android, PDF visual inspection and real printer-independent save/share checks remain required.
-4. **Mixed-mark optional choice groups are not supported.** Required paired bundles may have mixed marks; choice groups require equal marks per offered question. The importer rejects a package that tries to mix these structures.
-5. **ToS percentage optimization is not implemented.** The quota solver enforces explicit exact min/max question counts for chapter, SLO, cognitive level and difficulty. It does not infer counts from percentages.
-6. **PDF typography is basic.** Embedded fonts, Urdu shaping, complex equation layout and diagram rendering need real-device QA and additional implementation.
-7. **Content approvals are manual.** A local checklist and audit trail do not constitute independent certification. A reviewer must inspect the cited primary documents and resolve source conflicts.
+No AI generation, automatic question selection, automatic paper generation or template builder is included.
 
-## One-time GitHub upload
+## Verified in GitHub Actions
 
-After the release blockers are resolved, upload the *contents* of the project folder to the repository root in one commit. Keep `.github/workflows/android.yml`. Then run **Actions → Build Android APK** and download the `maths-paper-maker-debug-apk` artifact. Do not commit private keys, credentials or personal data.
+Latest source commit: `e3ff9412d4c65aa38d7abcb252cf64e353159113`
 
-## Acceptance checklist
+- Unit-test workflow completed successfully.
+- 102 unit tests passed in the preceding verified run; latest run also completed successfully.
+- Offline manifest guard passed.
+- `testDebugUnitTest` compiles the Android app's Kotlin source as part of the test task.
+- No APK was assembled as part of the test-only workflow.
 
-- [ ] GitHub Actions `testDebugUnitTest` succeeds.
-- [ ] GitHub Actions `assembleDebug` succeeds and artifact is downloadable.
-- [ ] APK installs on a real Android 9+ phone.
-- [ ] App launches and works in airplane mode.
-- [ ] JSON import success, malformed import rejection and duplicate import behavior tested.
-- [ ] Fresh install and every supported Room migration tested.
-- [ ] Practice paper generation tested for fixed slots, choice groups, paired bundles and quotas.
-- [ ] Official generation remains blocked until source, pattern and all questions are independently reviewed and approved.
-- [ ] Exclusions and unresolved conflicts block inappropriate generation/export.
-- [ ] Edit, replace, reorder, remove, revert, save and reopen tested.
-- [ ] Multi-page A4 PDF inspected for clipping, marks, labels, page numbers and time limit.
-- [ ] Urdu/English and mathematical notation requirements assessed against actual textbooks and school needs.
+## Remaining release acceptance checks
 
+These require a real Android device and actual textbook files; they cannot honestly be marked complete from source review alone.
 
-## Latest source verification (1.0.1-dev)
+1. Run **Actions → Test and Build Ali Test Series → Run workflow**. It runs unit tests, assembles the debug APK and uploads `maths-paper-maker-debug-apk`.
+2. Install that APK on Android 9 or newer.
+3. Test in airplane mode: launch, open a local PDF, navigate pages, select text, crop a scanned question, add/edit/reorder/remove questions, close and reopen the app, and confirm the draft restores.
+4. Build a complete valid Class 9 paper and a complete valid Class 10 paper; confirm invalid counts, marks, chapter distributions and pairings block export.
+5. Export both DOCX variants. Open them in Microsoft Word or another office app; inspect text editing, embedded scanned images, section instructions, page breaks and print layout.
+6. Test a large textbook PDF and a low-memory phone for import, rendering, cancellation and cache cleanup.
+7. Confirm the official textbook edition and manually verify chapter labels against the PDF. Imported PDFs are not bundled; teachers choose them from device storage.
 
-- All pure Kotlin domain sources compile with the available Kotlin compiler.
-- A targeted executable smoke test passed for backtracking assignment and duplicate-ID rejection.
-- This does not replace the required GitHub Actions Android build, instrumentation/device tests or PDF visual inspection.
+## Current limitations
+
+- The actual Class 9 and Class 10 textbooks are not bundled. This avoids distributing copyrighted material without confirmed permission and avoids shipping unverified page mappings.
+- Chapter labels for imported PDFs are selected manually; automatic chapter mapping is only enabled when a verified bundled-book manifest and licensed PDF exist.
+- DOCX output has not yet been visually inspected in Word on a physical device.
+- Urdu shaping, embedded-font guarantees, complex equation layout and diagram reconstruction are not claimed.
+- Unit tests are not a substitute for Android installation and device acceptance testing.
+
+## Build the APK yourself
+
+1. Open the repository's **Actions** tab.
+2. Select **Test and Build Ali Test Series**.
+3. Tap **Run workflow** on the `main` branch.
+4. Wait for the workflow to pass.
+5. Download the `maths-paper-maker-debug-apk` artifact from the completed run.
+
+The workflow builds only after unit tests pass. No signing key or store account is required for the debug APK.
