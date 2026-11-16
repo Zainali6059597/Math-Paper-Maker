@@ -82,6 +82,8 @@ class AliTestSeriesActivity : ComponentActivity() {
     @Composable
     private fun AliTestSeriesApp() {
         var grade by remember { mutableIntStateOf(9) }
+        var selectedChapters by remember { mutableStateOf((1..13).map { "CH$it" }.toSet()) }
+        var showChapterPicker by remember { mutableStateOf(false) }
         var pdfFile by remember { mutableStateOf<File?>(null) }
         var pdfName by remember { mutableStateOf("") }
         var pageIndex by remember { mutableIntStateOf(0) }
@@ -142,6 +144,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         LaunchedEffect(grade) {
+            selectedChapters = (1..(if (grade == 9) 13 else 12)).map { "CH$it" }.toSet()
             val expectedFile = "Punjab_Grade${grade}_Mathematics.pdf"
             val result = withContext(Dispatchers.IO) {
                 runCatchingCancellable {
@@ -825,7 +828,9 @@ class AliTestSeriesActivity : ComponentActivity() {
         if (showDetectedQuestions) {
             val maxForKind = when (detectedQuestionKind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
             val alreadySelected = selected.count { it.kind == detectedQuestionKind }
-            val chapterReady = paperMode == "CUSTOM" || PunjabBoardPattern.isValidChapter(grade, detectedQuestionChapter)
+            val allChaptersSelected = selectedChapters.size == if (grade == 9) 13 else 12
+            val chapterReady = if (allChaptersSelected && paperMode == "CUSTOM") true
+                else PunjabBoardPattern.isValidChapter(grade, detectedQuestionChapter) && detectedQuestionChapter in selectedChapters
             val canAddChecked = checkedDetectedQuestions.isNotEmpty() && chapterReady &&
                 (paperMode == "CUSTOM" || alreadySelected + checkedDetectedQuestions.size <= maxForKind)
             AlertDialog(
@@ -848,9 +853,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 Text(if (detectedQuestionChapter.isBlank()) "SELECT CHAPTER" else "CHAPTER: $detectedQuestionChapter")
                             }
                             DropdownMenu(expanded = detectedChapterMenuExpanded, onDismissRequest = { detectedChapterMenuExpanded = false }) {
-                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
-                                    DropdownMenuItem(text = { Text("CH$chapter") }, onClick = {
-                                        detectedQuestionChapter = "CH$chapter"
+                                (1..(if (grade == 9) 13 else 12)).map { "CH$it" }.filter { it in selectedChapters }.forEach { chapterId ->
+                                    DropdownMenuItem(text = { Text(chapterId) }, onClick = {
+                                        detectedQuestionChapter = chapterId
                                         detectedChapterMenuExpanded = false
                                     })
                                 }
@@ -894,6 +899,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                         if (!chapterReady && checkedDetectedQuestions.isNotEmpty()) {
                             Text("Select the correct chapter before adding these questions in Board Pattern mode.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        } else if (!chapterReady && checkedDetectedQuestions.isNotEmpty()) {
+                            Text("The detected page chapter is outside your selected chapter scope. Choose a page from an included chapter or change the scope.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         } else if (alreadySelected + checkedDetectedQuestions.size > maxForKind && paperMode == "BOARD") {
                             Text("This selection exceeds the remaining $detectedQuestionKind slots in Board Pattern mode.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
@@ -932,11 +939,52 @@ class AliTestSeriesActivity : ComponentActivity() {
             )
         }
 
+        if (showChapterPicker) {
+            val chapterCount = if (grade == 9) 13 else 12
+            AlertDialog(
+                onDismissRequest = { showChapterPicker = false },
+                title = { Text("CHOOSE CHAPTERS FOR THIS PAPER") },
+                text = {
+                    Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState())) {
+                        Text("Select one or more chapters. Questions added to this paper must belong to the included chapters.", style = MaterialTheme.typography.bodySmall)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            TextButton(onClick = { selectedChapters = (1..chapterCount).map { "CH$it" }.toSet() }) { Text("SELECT ALL") }
+                            TextButton(onClick = { selectedChapters = emptySet() }) { Text("CLEAR") }
+                        }
+                        (1..chapterCount).forEach { chapter ->
+                            val chapterId = "CH$chapter"
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(
+                                    checked = chapterId in selectedChapters,
+                                    onCheckedChange = { checked ->
+                                        selectedChapters = if (checked) selectedChapters + chapterId else selectedChapters - chapterId
+                                    }
+                                )
+                                Text("Chapter $chapter")
+                            }
+                        }
+                        if (selectedChapters.isEmpty()) {
+                            Text("Select at least one chapter to continue.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                },
+                confirmButton = {
+                    Button(enabled = selectedChapters.isNotEmpty(), onClick = { showChapterPicker = false }) { Text("APPLY CHAPTERS") }
+                },
+                dismissButton = { TextButton(onClick = {
+                    selectedChapters = (1..chapterCount).map { "CH$it" }.toSet()
+                    showChapterPicker = false
+                }) { Text("RESET ALL") } }
+            )
+        }
+
         if (showQuestions) {
             val missingImageCount = selected.count { item ->
                 item.imageFile != null && !File(item.imageFile).isFile
             }
-            val boardReady = paperMode != "BOARD" || PunjabBoardPattern.isComplete(grade, paperQuestions)
+            val allChaptersSelected = selectedChapters.size == if (grade == 9) 13 else 12
+            val questionsInChapterScope = selected.all { it.chapterId in selectedChapters }
+            val boardReady = paperMode != "BOARD" || (allChaptersSelected && PunjabBoardPattern.isComplete(grade, paperQuestions))
             AlertDialog(
                 onDismissRequest = { showQuestions = false },
                 title = { Text("SELECTED QUESTIONS (${selected.size})") },
@@ -946,6 +994,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("School name (optional)") }, singleLine = true)
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
+                        Text("CHAPTER SCOPE", style = MaterialTheme.typography.labelLarge)
+                        OutlinedButton(onClick = { showChapterPicker = true }, modifier = Modifier.fillMaxWidth()) {
+                            Text("INCLUDE CHAPTERS: ${selectedChapters.size} / ${if (grade == 9) 13 else 12}")
+                        }
+                        if (!allChaptersSelected && paperMode == "BOARD") {
+                            Text("A full Punjab Board pattern uses chapter distribution across the complete syllabus. Switch to CUSTOM for a selected-chapter paper.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        }
                         Text("PAPER FORMAT", style = MaterialTheme.typography.labelLarge)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             FilterChip(selected = paperMode == "BOARD", onClick = { paperMode = "BOARD" }, label = { Text("BOARD PATTERN") })
@@ -959,6 +1014,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                         } else {
                             Text("Custom paper · no fixed question-count or board-distribution restriction. Edit question numbers, sections, types and marks below.", style = MaterialTheme.typography.bodySmall)
                             Text("Total marks: " + paperQuestions.sumOf { it.marks }, style = MaterialTheme.typography.labelMedium)
+                        }
+                        if (!questionsInChapterScope) {
+                            Text("Some selected questions are outside the included chapters. Change their chapter or update the chapter scope before export.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
                         if (missingImageCount > 0) {
                             Text(
@@ -1105,7 +1163,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         TextButton(onClick = { showClearConfirm = true }) { Text("NEW PAPER") }
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
-                        Button(enabled = boardReady && missingImageCount == 0 && selected.isNotEmpty(),
+                        Button(enabled = boardReady && questionsInChapterScope && missingImageCount == 0 && selected.isNotEmpty(),
                             onClick = { showManualAddPrompt = true }) { Text("EXPORT WORD") }
                     }
                 }
