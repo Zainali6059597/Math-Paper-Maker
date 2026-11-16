@@ -775,22 +775,20 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             }
                                         }
                                         if (item.imageFile != null) {
-                                            Text("Scanned question image · source page ${item.sourcePage}",
-                                                style = MaterialTheme.typography.bodySmall)
-                                        } else {
-                                            OutlinedTextField(
-                                                value = item.text,
-                                                onValueChange = { value ->
-                                                    selected = selected.map { question ->
-                                                        if (question.id == item.id) question.copy(text = value.take(100_000)) else question
-                                                    }
-                                                },
-                                                modifier = Modifier.fillMaxWidth(),
-                                                label = { Text("Question text (editable)") },
-                                                minLines = 2,
-                                                maxLines = 5
-                                            )
+                                            Text("Scanned crop is retained as a reference. Type an editable version below to avoid printing the picture.", style = MaterialTheme.typography.bodySmall)
                                         }
+                                        OutlinedTextField(
+                                            value = item.text,
+                                            onValueChange = { value ->
+                                                selected = selected.map { question ->
+                                                    if (question.id == item.id) question.copy(text = value.take(100_000)) else question
+                                                }
+                                            },
+                                            modifier = Modifier.fillMaxWidth(),
+                                            label = { Text("Editable question text") },
+                                            minLines = 2,
+                                            maxLines = 5
+                                        )
                                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                             TextButton(enabled = index > 0, onClick = {
                                                 val copy = selected.toMutableList()
