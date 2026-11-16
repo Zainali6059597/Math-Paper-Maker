@@ -414,7 +414,11 @@ class AliTestSeriesActivity : ComponentActivity() {
 
         if (showQuestionEditor) {
             AlertDialog(
-                onDismissRequest = { showQuestionEditor = false },
+                onDismissRequest = {
+                    pendingImageFile?.let { File(it).delete() }
+                    pendingImageFile = null
+                    showQuestionEditor = false
+                },
                 title = { Text(if (pendingImageFile == null) "SELECT QUESTION TEXT" else "ADD SCANNED QUESTION") },
                 text = {
                     Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -467,11 +471,16 @@ class AliTestSeriesActivity : ComponentActivity() {
                             questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter, questionSection
                         )
                         showQuestionEditor = false
+                        pendingImageFile = null
                         cropRect = null
                         notice = "Question added to your manual selection."
                     }) { Text("ADD QUESTION") }
                 },
-                dismissButton = { TextButton(onClick = { showQuestionEditor = false }) { Text("CANCEL") } }
+                dismissButton = { TextButton(onClick = {
+                    pendingImageFile?.let { File(it).delete() }
+                    pendingImageFile = null
+                    showQuestionEditor = false
+                }) { Text("CANCEL") } }
             )
         }
 
