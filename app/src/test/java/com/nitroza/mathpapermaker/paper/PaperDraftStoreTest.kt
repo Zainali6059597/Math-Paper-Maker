@@ -75,8 +75,21 @@ class PaperDraftStoreTest {
         assertNull(PaperDraftStore.parseSnapshot(draft(question(imageFile = invalidPath)), filesDir))
     }
 
-    @Test fun malformedQuestionRecordIsRejected() {
-        val invalid = question().put("sourcePage", 0)
+    @Test fun manuallyTypedEditableQuestionCanBeRestored() {
+        val manual = question()
+            .put("sourcePage", 0)
+            .put("chapterId", "")
+            .put("sectionId", "Custom Section")
+            .put("number", "1")
+        val restored = PaperDraftStore.parseSnapshot(draft(manual), filesDir)
+        assertNotNull(restored)
+        assertEquals(0, restored!!.questions.single().sourcePage)
+        assertEquals("", restored.questions.single().chapterId)
+        assertEquals("Custom Section", restored.questions.single().sectionId)
+    }
+
+    @Test fun negativeSourcePageIsRejected() {
+        val invalid = question().put("sourcePage", -1)
         assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
     }
 
