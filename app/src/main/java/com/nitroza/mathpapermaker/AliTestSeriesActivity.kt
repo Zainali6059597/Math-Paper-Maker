@@ -470,10 +470,13 @@ class AliTestSeriesActivity : ComponentActivity() {
             if (isOcrRunning) return
             isOcrRunning = true
             lifecycleScope.launch {
-                val extraction = runCatchingCancellable {
-                    OfflinePdfOcr.readPage(this@AliTestSeriesActivity, file, pageIndex)
+                val extraction = try {
+                    runCatchingCancellable {
+                        OfflinePdfOcr.readPage(file, pageIndex)
+                    }
+                } finally {
+                    isOcrRunning = false
                 }
-                isOcrRunning = false
                 extraction.onSuccess { recognizedText ->
                     val found = QuestionTextSegmenter.segment(recognizedText)
                     detectedQuestions = found
