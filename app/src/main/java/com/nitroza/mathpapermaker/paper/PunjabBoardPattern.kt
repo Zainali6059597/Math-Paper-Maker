@@ -13,7 +13,8 @@ data class PaperQuestion(
     val marks: Int,
     val sourcePage: Int,
     val imageFile: String? = null,
-    val chapterId: String = ""
+    val chapterId: String = "",
+    val sectionId: String = ""
 )
 
 /** Manual-selection rules for the Punjab Board 2026-27 Class 9/10 Mathematics paper. */
@@ -95,36 +96,42 @@ object PunjabBoardPattern {
             return errors
         }
 
+        if (mcqs.any { it.sectionId != "Q1" }) errors += "All MCQs must belong to section Q1."
+
         val expectedMcqs = if (grade == 9) grade9Mcqs else grade10Mcqs
         val actualMcqs = mcqs.groupingBy { it.chapterId }.eachCount()
         if (actualMcqs != expectedMcqs) {
             errors += "MCQ chapter distribution does not match the official Class $grade pattern."
         }
 
-        if (shorts.size == SHORT_COUNT) {
-            shorts.chunked(9).forEachIndexed { index, group ->
+        (2..4).forEach { questionNumber ->
+            val group = shorts.filter { it.sectionId == "Q$questionNumber" }
+            if (group.size != 9) errors += "Section Q$questionNumber must contain exactly 9 short questions."
+            if (group.size == 9) {
                 if (grade == 9) {
-                    val expected = grade9ShortGroups[index]
+                    val expected = grade9ShortGroups[questionNumber - 2]
                     val actual = group.groupingBy { it.chapterId }.eachCount()
-                    if (actual != expected) errors += "Short-question group Q${index + 2} has the wrong chapter distribution."
+                    if (actual != expected) errors += "Short-question group Q$questionNumber has the wrong chapter distribution."
                 } else {
-                    val allowed = grade10ShortGroups[index]
+                    val allowed = grade10ShortGroups[questionNumber - 2]
                     val actual = group.groupingBy { it.chapterId }.eachCount()
                     if (allowed.any { (actual[it] ?: 0) < 2 } || actual.keys.any { it !in allowed }) {
-                        errors += "Short-question group Q${index + 2} needs at least two questions from each prescribed chapter."
+                        errors += "Short-question group Q$questionNumber needs at least two questions from each prescribed chapter."
                     }
                 }
             }
         }
 
-        if (longs.size == LONG_PART_COUNT) {
-            val rules = if (grade == 9) grade9LongPairs else grade10LongPairs
-            longs.chunked(2).forEachIndexed { index, pair ->
-                val rule = rules[index]
+        val rules = if (grade == 9) grade9LongPairs else grade10LongPairs
+        (5..9).forEach { questionNumber ->
+            val pair = longs.filter { it.sectionId == "Q$questionNumber" }
+            if (pair.size != 2) errors += "Long question Q$questionNumber must contain exactly two 4-mark parts."
+            if (pair.size == 2) {
+                val rule = rules[questionNumber - 5]
                 val chapters = pair.map { it.chapterId }
                 val valid = (chapters[0] in rule.first && chapters[1] in rule.second) ||
                     (chapters[1] in rule.first && chapters[0] in rule.second)
-                if (!valid) errors += "Long-question pair Q${index + 5} has an invalid chapter pairing."
+                if (!valid) errors += "Long-question pair Q$questionNumber has an invalid chapter pairing."
             }
         }
         return errors
@@ -134,7 +141,7 @@ object PunjabBoardPattern {
         validationErrors(grade, questions).isEmpty()
 
     fun sections(questions: List<PaperQuestion>): List<PaperSection> {
-        val mcqs = questions.filter { it.kind.equals("MCQ", true) }
+        val mcqs = questions.filter { it.kind.equals("MCQ", true) && it.sectionId == "Q1" }
         val shorts = questions.filter { it.kind.equals("SHORT", true) }
         val longs = questions.filter { it.kind.equals("LONG", true) }
         return buildList {
@@ -143,30 +150,32 @@ object PunjabBoardPattern {
                 "Attempt all 15 questions. Each question carries 1 mark.",
                 mcqs
             ))
-            shorts.chunked(9).forEachIndexed { index, group ->
-                add(PaperSection(
-                    "Q${index + 2} — SHORT QUESTIONS",
+            (2..4).forEach { questionNumber ->
+                val group = shorts.filter { it.sectionId == "Q$questionNumber" }
+                if (group.isNotEmpty()) add(PaperSection(
+                    "Q$questionNumber — SHORT QUESTIONS",
                     "Attempt any 6 of the 9 questions. Each question carries 2 marks.",
                     group
                 ))
             }
-            val bundles = longs.chunked(2)
-            bundles.take(3).forEachIndexed { index, bundle ->
-                add(PaperSection(
-                    "Q${index + 5} — LONG QUESTION",
+            (5..7).forEach { questionNumber ->
+                val bundle = longs.filter { it.sectionId == "Q$questionNumber" }
+                if (bundle.isNotEmpty()) add(PaperSection(
+                    "Q$questionNumber — LONG QUESTION",
                     "This question has two parts. Each part carries 4 marks.",
                     bundle
                 ))
             }
-            if (bundles.size >= 3) add(PaperSection("LONG QUESTION CHOICE", "Attempt any 2 of Q5, Q6 and Q7.", emptyList()))
-            bundles.drop(3).forEachIndexed { index, bundle ->
-                add(PaperSection(
-                    "Q${index + 8} — LONG QUESTION",
+            if (longs.any { it.sectionId == "Q5" }) add(PaperSection("LONG QUESTION CHOICE", "Attempt any 2 of Q5, Q6 and Q7.", emptyList()))
+            (8..9).forEach { questionNumber ->
+                val bundle = longs.filter { it.sectionId == "Q$questionNumber" }
+                if (bundle.isNotEmpty()) add(PaperSection(
+                    "Q$questionNumber — LONG QUESTION",
                     "This question has two parts. Each part carries 4 marks.",
                     bundle
                 ))
             }
-            if (bundles.size >= 5) add(PaperSection("LONG QUESTION CHOICE", "Attempt any 1 of Q8 and Q9.", emptyList()))
+            if (longs.any { it.sectionId == "Q8" }) add(PaperSection("LONG QUESTION CHOICE", "Attempt any 1 of Q8 and Q9.", emptyList()))
         }
     }
 
