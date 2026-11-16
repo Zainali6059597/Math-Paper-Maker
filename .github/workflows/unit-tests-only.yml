@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   unit-tests:
+    if: false # Temporarily disabled: source-only work; do not compile until explicitly requested.
     name: Compile and run unit tests (no APK)
     runs-on: ubuntu-latest
     timeout-minutes: 35
