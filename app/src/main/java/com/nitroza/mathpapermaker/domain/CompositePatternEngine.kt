@@ -98,7 +98,7 @@ object CompositePatternEngine {
         if (calculated != pattern.expectedAttemptedMarks)
             return blocked("ATTEMPTED_TOTAL_MISMATCH", "Fixed and paired slots plus attempted choice marks total $calculated, but the pattern declares ${pattern.expectedAttemptedMarks}.")
 
-        val slots = pattern.slots.map { QuestionSlot(it.slotId, it.chapterId, it.sloId, it.questionType, it.marks, it.allowedChapterIds) }
+        val slots = pattern.slots.map { QuestionSlot(it.slotId, it.chapterId, it.sloId, it.questionType, it.marks, it.allowedChapterIds, it.groupId) }
         val picked: Map<String, QuestionCandidate> = if (pattern.quotas.isNotEmpty()) {
             when (val quotaResult = QuotaAwareSelectionEngine.select(
                 QuotaSelectionRequest(pattern.identity, slots, pattern.quotas, mode, seed), bank
