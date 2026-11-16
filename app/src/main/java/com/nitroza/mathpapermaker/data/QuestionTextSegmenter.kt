@@ -16,7 +16,7 @@ object QuestionTextSegmenter {
         val currentLines = mutableListOf<String>()
         fun flush() {
             val body = currentLines.joinToString(" ").replace(Regex("""\s+"""), " ").trim()
-            if (!currentNumber.isNullOrBlank() && body.length >= 8) result += Segment(currentNumber!!, body)
+            if (!currentNumber.isNullOrBlank() && body.length >= 2) result += Segment(currentNumber!!, body)
             currentNumber = null
             currentLines.clear()
         }
