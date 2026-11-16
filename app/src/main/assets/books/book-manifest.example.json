@@ -12,10 +12,17 @@
       "language": "en",
       "publisher": "REQUIRED",
       "sourceUrl": "REQUIRED",
-      "licenseOrPermission": "REQUIRED",
+      "licenseOrPermission": "REQUIRED_CONFIRMATION",
       "chapters": [
-        { "chapterId": "1", "title": "REQUIRED", "startPage": 1, "endPage": 10 }
-      ]
+        {
+          "chapterId": "1",
+          "title": "REQUIRED",
+          "startPage": 1,
+          "endPage": 10
+        }
+      ],
+      "pageCount": 0,
+      "sha256": "REPLACE_WITH_REAL_64_CHARACTER_SHA256"
     }
   ]
 }
