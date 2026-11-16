@@ -50,6 +50,7 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sqrt
 
 class AliTestSeriesActivity : ComponentActivity() {
     private data class SelectedQuestion(
@@ -302,8 +303,15 @@ class AliTestSeriesActivity : ComponentActivity() {
                         PdfRenderer(descriptor).use { renderer ->
                             require(pageIndex in 0 until renderer.pageCount) { "PDF page is out of range." }
                             renderer.openPage(pageIndex).use { page ->
-                                val width = 1400
-                                val height = (width.toFloat() * page.height / page.width).toInt().coerceAtLeast(1)
+                                // Bound both dimensions and total pixels so unusual PDF page
+                                // sizes cannot allocate a huge bitmap on low-memory phones.
+                                val pageWidth = page.width.toFloat()
+                                val pageHeight = page.height.toFloat()
+                                val dimensionScale = 1400f / pageWidth
+                                val pixelScale = sqrt(1_500_000f / (pageWidth * pageHeight))
+                                val scale = min(dimensionScale, pixelScale)
+                                val width = (pageWidth * scale).toInt().coerceAtLeast(1)
+                                val height = (pageHeight * scale).toInt().coerceAtLeast(1)
                                 val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                                 try {
                                     page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
