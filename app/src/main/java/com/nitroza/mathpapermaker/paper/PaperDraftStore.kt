@@ -28,6 +28,9 @@ data class PaperDraftSnapshot(
 object PaperDraftStore {
     private const val PREFS = "ali_test_series_draft"
     private const val KEY_DRAFT = "current"
+    private const val MAX_QUESTIONS = 52
+    private const val MAX_DRAFT_CHARS = 2_000_000
+    private const val MAX_QUESTION_TEXT_CHARS = 100_000
 
     fun save(context: Context, draft: PaperDraftSnapshot) {
         val questions = JSONArray().apply {
@@ -49,8 +52,15 @@ object PaperDraftStore {
             .put("examTitle", draft.examTitle)
             .put("schoolName", draft.schoolName)
             .put("questions", questions)
+        val serialized = json.toString()
+        // A draft is local recovery data, not an unbounded document store.
+        if (draft.grade !in 9..10 || draft.questions.size > MAX_QUESTIONS ||
+            draft.examTitle.length > 500 || draft.schoolName.length > 500 ||
+            draft.questions.any { it.text.length > MAX_QUESTION_TEXT_CHARS } ||
+            serialized.length > MAX_DRAFT_CHARS
+        ) return
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .edit().putString(KEY_DRAFT, json.toString()).apply()
+            .edit().putString(KEY_DRAFT, serialized).apply()
     }
 
     fun load(context: Context): PaperDraftSnapshot? {
@@ -66,11 +76,15 @@ object PaperDraftStore {
 
     internal fun parseSnapshot(raw: String, filesDir: File): PaperDraftSnapshot? {
         return runCatching {
+            require(raw.length <= MAX_DRAFT_CHARS) { "Saved draft is too large." }
             val json = JSONObject(raw)
             val grade = json.optInt("grade", 9)
             require(grade == 9 || grade == 10) { "Invalid saved grade." }
 
+            require(json.optString("examTitle").length <= 500 &&
+                json.optString("schoolName").length <= 500) { "Saved paper details are too long." }
             val array = json.getJSONArray("questions")
+            require(array.length() <= MAX_QUESTIONS) { "Saved draft has too many questions." }
             val questions = (0 until array.length()).map { index ->
                 val item = array.getJSONObject(index)
                 val number = item.getString("number").trim()
@@ -95,13 +109,18 @@ object PaperDraftStore {
                 }
 
                 require(item.getLong("id") > 0L) { "Invalid saved question ID." }
-                require(number.isNotBlank()) { "Saved question number is blank." }
+                require(number.isNotBlank() && number.length <= 16) { "Saved question number is invalid." }
+                require(item.optString("text").length <= MAX_QUESTION_TEXT_CHARS) {
+                    "Saved question text is too long."
+                }
                 require(kind in setOf("MCQ", "SHORT", "LONG")) { "Invalid saved question type." }
-                require(marks > 0 && sourcePage > 0) { "Invalid saved question marks or page." }
+                require(marks == when (kind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 } && sourcePage > 0) {
+                    "Invalid saved question marks or page."
+                }
                 require(PunjabBoardPattern.isValidChapter(grade, chapterId)) {
                     "Invalid saved chapter."
                 }
-                require(sectionId.isNotBlank()) { "Saved question section is blank." }
+                require(sectionId in (1..9).map { "Q$it" }) { "Invalid saved question section." }
 
                 StoredPaperQuestion(
                     item.getLong("id"),
