@@ -85,6 +85,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var questionMarks by remember { mutableStateOf("2") }
         var questionNumber by remember { mutableStateOf("") }
         var questionChapter by remember { mutableStateOf("CH1") }
+        var chapterMenuExpanded by remember { mutableStateOf(false) }
         var pendingImageFile by remember { mutableStateOf<String?>(null) }
         var cropRect by remember { mutableStateOf<Rect?>(null) }
         var showQuestions by remember { mutableStateOf(false) }
@@ -423,8 +424,19 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                         OutlinedTextField(questionNumber, { questionNumber = it.take(16) },
                             label = { Text("Paper numbering (editable)") }, singleLine = true)
-                        OutlinedTextField(questionChapter, { questionChapter = it.trim().uppercase().take(4) },
-                            label = { Text("Chapter ID (e.g. CH1)") }, singleLine = true)
+                        Box {
+                            OutlinedButton(onClick = { chapterMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                                Text("CHAPTER: $questionChapter")
+                            }
+                            DropdownMenu(expanded = chapterMenuExpanded, onDismissRequest = { chapterMenuExpanded = false }) {
+                                (1..if (grade == 9) 13 else 12).forEach { chapter ->
+                                    DropdownMenuItem(text = { Text("CH$chapter") }, onClick = {
+                                        questionChapter = "CH$chapter"
+                                        chapterMenuExpanded = false
+                                    })
+                                }
+                            }
+                        }
                         Text("Question type", style = MaterialTheme.typography.labelMedium)
                         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             listOf("MCQ", "SHORT", "LONG").forEach { kind ->
