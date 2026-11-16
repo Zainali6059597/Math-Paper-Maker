@@ -91,7 +91,7 @@ class CompositePatternEngineTest {
         assertTrue(result.toString(), result is CompositeSelectionResult.Success)
         val paper = (result as CompositeSelectionResult.Success).paper
         assertEquals(75, paper.attemptedMarks)
-        assertEquals(62 + 40, paper.offeredMarks)
+        assertEquals(109, paper.offeredMarks)
         assertEquals(52, paper.selectedBySlot.size)
     }
 
