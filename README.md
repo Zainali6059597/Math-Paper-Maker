@@ -28,9 +28,9 @@ Implemented in source:
 - Bundled textbook loading and page-to-chapter auto-fill are enabled when the actual PDFs and a valid, permission-confirmed SHA-256 manifest are supplied.
 - Drag-to-select crop for scanned/image pages.
 - Question list with remove, reorder and editable question labels.
-- Class-specific Punjab Board 2026–27 MCQ chapter distribution, short-section chapter distribution, and long-question chapter pairing validation, alongside the 15 × 1-mark MCQ, 27 × 2-mark short and 10 × 4-mark long-part counts (109 offered marks; 75 attempted marks). Chapter ID is currently selected manually for each question.
+- Class-specific Punjab Board 2026–27 MCQ chapter distribution, short-section chapter distribution, and long-question chapter pairing validation, alongside the 15 × 1-mark MCQ, 27 × 2-mark short and 10 × 4-mark long-part counts (109 offered marks; 75 attempted marks). Teachers choose chapter IDs from a class-specific picker; verified bundled books can prefill them from page ranges.
 - OOXML DOCX writer with editable text and embedded PNG question crops.
-- Pattern rule unit tests added.
+- Pattern rule unit tests added, including grade-specific chapter limits and manual numbering independent of section membership.
 
 Not yet verified:
 - Android Gradle/KSP/Compose build after the new app entry point.
