@@ -458,10 +458,10 @@ class MainActivity : ComponentActivity() {
                                 val complianceQuestions = draft.mapIndexed { index, item ->
                                     val row = questionMap[item.questionId] ?: error("Question ${item.questionId} is missing from the local question bank.")
                                     val slotId = draftSlots.getOrNull(index)?.slotId
+                                    val matchedSlot = slotId?.let { id -> slots.firstOrNull { it.slotId == id } }
                                     val sectionId = if (slotId == null) {
                                         if (!customDraft) error("Question ${item.number} has no matching pattern slot.") else "__CUSTOM_UNASSIGNED__"
                                     } else if (groups.isNotEmpty() || bundleGroups.isNotEmpty()) {
-                                        val matchedSlot = slots.firstOrNull { it.slotId == slotId }
                                         matchedSlot?.bundleChoiceGroupId
                                             ?: matchedSlot?.groupId
                                             ?: matchedSlot?.bundleId?.let { "BUNDLE_$it" }
@@ -474,7 +474,10 @@ class MainActivity : ComponentActivity() {
                                         sectionId = sectionId, chapterId = row.chapterId, sloId = row.sloId,
                                         marks = item.marks,
                                         status = runCatching { ContentStatus.valueOf(row.verificationStatus) }.getOrDefault(ContentStatus.NEEDS_REVIEW),
-                                        summative = row.summative
+                                        summative = row.summative,
+                                        cognitiveLevel = row.cognitiveLevel,
+                                        difficulty = row.difficulty,
+                                        allowedChapterIds = matchedSlot?.let { decodeChapterAlternatives(it.allowedChapterIdsJson) } ?: emptySet()
                                     )
                                 }
                                 val report = BoardPatternCompliance.audit(
@@ -482,7 +485,14 @@ class MainActivity : ComponentActivity() {
                                         identity = draftIdentity, declaredAttemptedMarks = pattern.totalMarks, sections = sections,
                                         sourceStatus = runCatching { ContentStatus.valueOf(source.verificationStatus) }.getOrDefault(ContentStatus.NEEDS_REVIEW),
                                         patternStatus = runCatching { ContentStatus.valueOf(pattern.verificationStatus) }.getOrDefault(ContentStatus.NEEDS_REVIEW),
-                                        hasUnresolvedSourceConflict = source.verificationStatus == "CONFLICTED" || pattern.verificationStatus == "CONFLICTED"
+                                        hasUnresolvedSourceConflict = source.verificationStatus == "CONFLICTED" || pattern.verificationStatus == "CONFLICTED",
+                                        metadataQuotas = storedQuotas.mapNotNull { quota ->
+                                            if (quota.dimension == "CHAPTER_IN_GROUP") {
+                                                val pieces = quota.value.split("|", limit = 2)
+                                                if (pieces.size == 2) MetadataQuota(QuotaDimension.CHAPTER, pieces[1], quota.minimum, quota.maximum, pieces[0]) else null
+                                            } else runCatching { QuotaDimension.valueOf(quota.dimension) }.getOrNull()
+                                                ?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) }
+                                        }
                                     ), complianceQuestions, exclusions,
                                     officialMode = mode == GenerationMode.OFFICIAL && !customDraft
                                 )
