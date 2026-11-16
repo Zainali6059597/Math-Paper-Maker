@@ -21,7 +21,7 @@
     "version": 1,
     "totalMarks": 75,
     "durationMinutes": 150,
-    "sourcePage": "Annex-A: Mathematics Grade-9 reduced syllabus and 75-mark paper instructions (2027 annual examination).",
+    "sourcePage": "PECTAA Notification No. 1238, Grade 9 Mathematics pairing scheme: Q1–Q9.",
     "slots": [
       {
         "slotId": "MCQ01",
@@ -387,49 +387,112 @@
         "groupId": "Q4"
       },
       {
-        "slotId": "LONG1",
+        "slotId": "Q5_A",
         "chapterId": "CH1",
         "sloId": "",
         "questionType": "LONG",
-        "marks": 8,
+        "marks": 4,
         "displayOrder": 42,
-        "groupId": "Q5-Q7"
+        "bundleId": "Q5",
+        "bundleChoiceGroupId": "Q5-Q7"
       },
       {
-        "slotId": "LONG2",
+        "slotId": "Q5_B",
+        "chapterId": "CH2",
+        "sloId": "",
+        "questionType": "LONG",
+        "marks": 4,
+        "displayOrder": 43,
+        "bundleId": "Q5",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q6_A",
         "chapterId": "CH3",
         "sloId": "",
         "questionType": "LONG",
-        "marks": 8,
-        "displayOrder": 43,
-        "groupId": "Q5-Q7"
+        "marks": 4,
+        "displayOrder": 44,
+        "bundleId": "Q6",
+        "bundleChoiceGroupId": "Q5-Q7"
       },
       {
-        "slotId": "LONG3",
+        "slotId": "Q6_B",
+        "chapterId": "CH4",
+        "sloId": "",
+        "questionType": "LONG",
+        "marks": 4,
+        "displayOrder": 45,
+        "bundleId": "Q6",
+        "bundleChoiceGroupId": "Q5-Q7"
+      },
+      {
+        "slotId": "Q7_A",
         "chapterId": "CH5",
         "sloId": "",
         "questionType": "LONG",
-        "marks": 8,
-        "displayOrder": 44,
-        "groupId": "Q5-Q7"
+        "marks": 4,
+        "displayOrder": 46,
+        "bundleId": "Q7",
+        "bundleChoiceGroupId": "Q5-Q7"
       },
       {
-        "slotId": "LONG4",
-        "chapterId": "CH7",
+        "slotId": "Q7_B",
+        "chapterId": "CH6",
         "sloId": "",
         "questionType": "LONG",
-        "marks": 8,
-        "displayOrder": 45,
-        "groupId": "Q8-Q9"
+        "marks": 4,
+        "displayOrder": 47,
+        "bundleId": "Q7",
+        "bundleChoiceGroupId": "Q5-Q7"
       },
       {
-        "slotId": "LONG5",
+        "slotId": "Q8_A",
+        "chapterId": "",
+        "sloId": "",
+        "questionType": "LONG",
+        "marks": 4,
+        "displayOrder": 48,
+        "bundleId": "Q8",
+        "bundleChoiceGroupId": "Q8-Q9",
+        "allowedChapterIds": [
+          "CH7",
+          "CH10"
+        ]
+      },
+      {
+        "slotId": "Q8_B",
+        "chapterId": "CH9",
+        "sloId": "",
+        "questionType": "LONG",
+        "marks": 4,
+        "displayOrder": 49,
+        "bundleId": "Q8",
+        "bundleChoiceGroupId": "Q8-Q9"
+      },
+      {
+        "slotId": "Q9_A",
         "chapterId": "CH12",
         "sloId": "",
         "questionType": "LONG",
-        "marks": 8,
-        "displayOrder": 46,
-        "groupId": "Q8-Q9"
+        "marks": 4,
+        "displayOrder": 50,
+        "bundleId": "Q9",
+        "bundleChoiceGroupId": "Q8-Q9"
+      },
+      {
+        "slotId": "Q9_B",
+        "chapterId": "",
+        "sloId": "",
+        "questionType": "LONG",
+        "marks": 4,
+        "displayOrder": 51,
+        "bundleId": "Q9",
+        "bundleChoiceGroupId": "Q8-Q9",
+        "allowedChapterIds": [
+          "CH11",
+          "CH13"
+        ]
       }
     ],
     "choiceGroups": [
@@ -453,20 +516,6 @@
         "attemptCount": 6,
         "marksPerQuestion": 2,
         "displayOrder": 2
-      },
-      {
-        "groupId": "Q5-Q7",
-        "offeredCount": 3,
-        "attemptCount": 2,
-        "marksPerQuestion": 8,
-        "displayOrder": 3
-      },
-      {
-        "groupId": "Q8-Q9",
-        "offeredCount": 2,
-        "attemptCount": 1,
-        "marksPerQuestion": 8,
-        "displayOrder": 4
       }
     ],
     "exclusions": [
@@ -475,6 +524,31 @@
         "value": "CH8",
         "reason": "Complete chapter excluded in PECTAA Mathematics Grade 9 reduced syllabus.",
         "sourcePage": "Official notification p. 2"
+      }
+    ],
+    "bundleChoiceGroups": [
+      {
+        "groupId": "Q5-Q7",
+        "offeredBundleCount": 3,
+        "attemptBundleCount": 2,
+        "marksPerBundle": 8,
+        "bundleIds": [
+          "Q5",
+          "Q6",
+          "Q7"
+        ],
+        "displayOrder": 3
+      },
+      {
+        "groupId": "Q8-Q9",
+        "offeredBundleCount": 2,
+        "attemptBundleCount": 1,
+        "marksPerBundle": 8,
+        "bundleIds": [
+          "Q8",
+          "Q9"
+        ],
+        "displayOrder": 4
       }
     ]
   },
