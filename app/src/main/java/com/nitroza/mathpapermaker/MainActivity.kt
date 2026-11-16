@@ -40,6 +40,16 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID
 
+private fun List<com.nitroza.mathpapermaker.data.PatternQuotaEntity>.toMetadataQuotas(): List<MetadataQuota> =
+    mapNotNull { quota ->
+        if (quota.dimension == "CHAPTER_IN_GROUP") {
+            val pieces = quota.value.split("|", limit = 2)
+            if (pieces.size == 2) MetadataQuota(QuotaDimension.CHAPTER, pieces[1], quota.minimum, quota.maximum, pieces[0]) else null
+        } else runCatching { QuotaDimension.valueOf(quota.dimension) }.getOrNull()
+            ?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) }
+    }
+
+
 class MainActivity : ComponentActivity() {
     private val database by lazy { AppDatabase.get(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -721,14 +731,7 @@ class MainActivity : ComponentActivity() {
                                     BundleChoiceGroupRule(group.groupId, group.offeredBundleCount,
                                         group.attemptBundleCount, group.marksPerBundle, ids)
                                 }
-                                val quotaRules = storedQuotas.mapNotNull { quota -> runCatching {
-                                    if (quota.dimension == "CHAPTER_IN_GROUP") QuotaDimension.CHAPTER else QuotaDimension.valueOf(quota.dimension)
-                                }.getOrNull()?.let { dim ->
-                                        if (quota.dimension == "CHAPTER_IN_GROUP") {
-                                            val pieces = quota.value.split("|", limit = 2)
-                                            if (pieces.size == 2) MetadataQuota(QuotaDimension.CHAPTER, pieces[1], quota.minimum, quota.maximum, pieces[0]) else null
-                                        } else MetadataQuota(dim, quota.value, quota.minimum, quota.maximum)
-                                    } }
+                                val quotaRules = storedQuotas.toMetadataQuotas()
                                 val compositePattern = CompositePaperPattern(identity, pattern.totalMarks,
                                     compositeSlots, compositeGroups, compositeBundleGroups, quotaRules)
                                 generatedSlotOrder = compositeSlots
@@ -770,15 +773,15 @@ class MainActivity : ComponentActivity() {
                                             attemptCount = group.attemptCount,
                                             marksPerQuestion = group.marksPerQuestion,
                                             slots = slotByGroup[group.groupId].orEmpty().map { slot ->
-                                                OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId, slot.questionType, allowedChapterIds = decodeChapterAlternatives(slot.allowedChapterIdsJson))
+                                                OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId, slot.questionType, groupId = slot.groupId, allowedChapterIds = decodeChapterAlternatives(slot.allowedChapterIdsJson))
                                             }
                                         )
                                     }
                                 )
                                 generatedSlotOrder = choicePattern.groups.flatMap { it.slots }
-                                val quotaRules = storedQuotas.mapNotNull { quota -> runCatching { QuotaDimension.valueOf(quota.dimension) }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
+                                val quotaRules = storedQuotas.toMetadataQuotas()
                                 if (storedQuotas.isNotEmpty()) {
-                                    val quotaSlots = choicePattern.groups.flatMap { it.slots }.map { slot -> QuestionSlot(slot.slotId, slot.chapterId, slot.sloId, slot.questionType, slot.marks) }
+                                    val quotaSlots = choicePattern.groups.flatMap { it.slots }.map { slot -> QuestionSlot(slot.slotId, slot.chapterId, slot.sloId, slot.questionType, slot.marks, groupId = slot.groupId) }
                                     when (val result = QuotaAwareSelectionEngine.select(QuotaSelectionRequest(identity, quotaSlots, quotaRules, mode, seed), candidates)) {
                                         is QuotaSelectionResult.Blocked -> { notice = "Quota generation blocked (${result.code}): ${result.message}"; null }
                                         is QuotaSelectionResult.Success -> {
@@ -816,7 +819,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     generatedSlotOrder = bundles.sortedBy { it.displayOrder }.flatMap { it.parts }
                                     if (storedQuotas.isNotEmpty()) {
-                                        val quotaRules = storedQuotas.mapNotNull { quota -> runCatching { QuotaDimension.valueOf(quota.dimension) }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
+                                        val quotaRules = storedQuotas.toMetadataQuotas()
                                         val quotaSlots = bundles.flatMap { it.parts }.map { part -> QuestionSlot(part.slotId, part.chapterId, part.sloId, part.questionType, part.marks) }
                                         when (val result = QuotaAwareSelectionEngine.select(QuotaSelectionRequest(identity, quotaSlots, quotaRules, mode, seed), candidates)) {
                                             is QuotaSelectionResult.Blocked -> { notice = "Paired-bundle quota generation blocked (${result.code}): ${result.message}"; null }
@@ -856,7 +859,7 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 } else if (storedQuotas.isNotEmpty()) {
-                                    val quotaRules = storedQuotas.mapNotNull { quota -> runCatching { QuotaDimension.valueOf(quota.dimension) }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
+                                    val quotaRules = storedQuotas.toMetadataQuotas()
                                     when (val result = QuotaAwareSelectionEngine.select(QuotaSelectionRequest(identity, slots, quotaRules, mode, seed), candidates)) {
                                         is QuotaSelectionResult.Blocked -> { notice = "Quota generation blocked (${result.code}): ${result.message}"; null }
                                         is QuotaSelectionResult.Success -> result.selected.mapIndexed { index, pair -> PaperPdfExporter.Item(index + 1, questionRows.first { it.questionId == pair.second.id }.questionText, pair.second.marks, pair.second.id) }
