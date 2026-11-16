@@ -93,6 +93,30 @@ class BundledBookManifestReaderTest {
         assertTrue(wrongHash.isEmpty())
     }
 
+    @Test fun rejectsOverlappingChapterPageRanges() {
+        val overlapping = manifest.replace(
+            "\"startPage\":10,\"endPage\":18",
+            "\"startPage\":8,\"endPage\":18"
+        )
+        val chapters = BundledBookManifestReader.parseManifest(
+            overlapping, setOf("maths9.pdf"),
+            "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27", hashes
+        )
+        assertTrue(chapters.isEmpty())
+    }
+
+    @Test fun rejectsDuplicateChapterIds() {
+        val duplicateIds = manifest.replace(
+            "\"chapterId\":\"2\"",
+            "\"chapterId\":\"1\""
+        )
+        val chapters = BundledBookManifestReader.parseManifest(
+            duplicateIds, setOf("maths9.pdf"),
+            "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27", hashes
+        )
+        assertTrue(chapters.isEmpty())
+    }
+
     @Test fun rejectsUnsupportedManifestVersion() {
         val error = runCatching {
             BundledBookManifestReader.parseManifest(
