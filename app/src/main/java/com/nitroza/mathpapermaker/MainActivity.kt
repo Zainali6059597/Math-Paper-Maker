@@ -499,9 +499,10 @@ class MainActivity : ComponentActivity() {
                                             val books = BundledBookPdfReader.readAll(this@MainActivity)
                                             val parsed = books.map { TextbookExerciseParser.parse(it) }
                                             scannedBooks = books
-                                            bookCandidates = parsed.flatMap { it.candidates }
+                                            val detectedCandidates = parsed.flatMap { it.candidates }
+                                            bookCandidates = detectedCandidates
                                             val now = System.currentTimeMillis()
-                                            val records = bookCandidates.map { candidate ->
+                                            val records = detectedCandidates.map { candidate ->
                                                 TextbookCandidateEntity(
                                                     candidateId = textbookCandidateId(candidate),
                                                     bookFile = candidate.bookFile,
@@ -528,35 +529,36 @@ class MainActivity : ComponentActivity() {
                                 Text("No textbook PDFs bundled yet.", style = MaterialTheme.typography.bodyMedium)
                             } else {
                                 Text("${scannedBooks.size} book(s) • ${scannedBooks.sumOf { it.pageCount }} pages • ${scannedBooks.sumOf { it.pagesNeedingOcr.size }} pages need OCR", style = MaterialTheme.typography.labelMedium)
-                                Text("${bookCandidates.size} new scan candidate(s) • ${textbookReviewRows.count { it.reviewStatus == "NEEDS_REVIEW" }} awaiting review in saved queue", style = MaterialTheme.typography.labelMedium)
+                                Text("${bookCandidates.size} new scan candidate(s)", style = MaterialTheme.typography.labelMedium)
                                 bookScanWarnings.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error) }
-                                textbookReviewRows.take(40).forEach { candidate ->
-                                    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
-                                        Column(Modifier.fillMaxWidth().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                                            Text("${candidate.bookFile} · Ch ${candidate.chapterId} · Ex ${candidate.exerciseId} · Q${candidate.questionNumber} · p.${candidate.sourcePage}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
-                                            Text(candidate.questionText, style = MaterialTheme.typography.bodySmall)
-                                            Text(candidate.reviewStatus.replace('_', ' '), style = MaterialTheme.typography.labelMedium, color = if (candidate.reviewStatus == "NEEDS_REVIEW") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
-                                            if (candidate.reviewStatus == "NEEDS_REVIEW") {
-                                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                                    TextButton(onClick = {
-                                                        lifecycleScope.launch {
-                                                            database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "ACCEPTED_FOR_CLASSIFICATION", "Human accepted candidate for metadata classification; not yet a live question.")
-                                                            textbookReviewRows = database.contentDao().allTextbookCandidates()
-                                                        }
-                                                    }) { Text("ACCEPT FOR CLASSIFICATION") }
-                                                    TextButton(onClick = {
-                                                        lifecycleScope.launch {
-                                                            database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "REJECTED", "Rejected during textbook candidate review.")
-                                                            textbookReviewRows = database.contentDao().allTextbookCandidates()
-                                                        }
-                                                    }) { Text("REJECT") }
-                                                }
+                            }
+                            Text("${textbookReviewRows.count { it.reviewStatus == "NEEDS_REVIEW" }} candidates awaiting review • ${textbookReviewRows.count { it.reviewStatus == "ACCEPTED_FOR_CLASSIFICATION" }} accepted for classification", style = MaterialTheme.typography.labelMedium)
+                            textbookReviewRows.take(40).forEach { candidate ->
+                                Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)) {
+                                    Column(Modifier.fillMaxWidth().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                                        Text("${candidate.bookFile} · Ch ${candidate.chapterId} · Ex ${candidate.exerciseId} · Q${candidate.questionNumber} · p.${candidate.sourcePage}", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                                        Text(candidate.questionText, style = MaterialTheme.typography.bodySmall)
+                                        Text(candidate.reviewStatus.replace('_', ' '), style = MaterialTheme.typography.labelMedium, color = if (candidate.reviewStatus == "NEEDS_REVIEW") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+                                        if (candidate.reviewStatus == "NEEDS_REVIEW") {
+                                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                TextButton(onClick = {
+                                                    lifecycleScope.launch {
+                                                        database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "ACCEPTED_FOR_CLASSIFICATION", "Human accepted candidate for metadata classification; not yet a live question.")
+                                                        textbookReviewRows = database.contentDao().allTextbookCandidates()
+                                                    }
+                                                }) { Text("ACCEPT FOR CLASSIFICATION") }
+                                                TextButton(onClick = {
+                                                    lifecycleScope.launch {
+                                                        database.contentDao().updateTextbookCandidateReview(candidate.candidateId, "REJECTED", "Rejected during textbook candidate review.")
+                                                        textbookReviewRows = database.contentDao().allTextbookCandidates()
+                                                    }
+                                                }) { Text("REJECT") }
                                             }
                                         }
                                     }
                                 }
-                                if (textbookReviewRows.size > 40) Text("Showing first 40 saved candidates.", style = MaterialTheme.typography.bodySmall)
                             }
+                            if (textbookReviewRows.size > 40) Text("Showing first 40 saved candidates.", style = MaterialTheme.typography.bodySmall)
                         }
                     }
                     Text("PAPER CONFIGURATION", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
