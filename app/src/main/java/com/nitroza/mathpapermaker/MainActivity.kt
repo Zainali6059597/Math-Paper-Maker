@@ -708,25 +708,15 @@ class MainActivity : ComponentActivity() {
                                     BundleChoiceGroupRule(group.groupId, group.offeredBundleCount,
                                         group.attemptBundleCount, group.marksPerBundle, ids)
                                 }
+                                val quotaRules = storedQuotas.mapNotNull { quota -> runCatching {
+                                    QuotaDimension.valueOf(quota.dimension)
+                                }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
                                 val compositePattern = CompositePaperPattern(identity, pattern.totalMarks,
-                                    compositeSlots, compositeGroups, compositeBundleGroups)
+                                    compositeSlots, compositeGroups, compositeBundleGroups, quotaRules)
                                 generatedSlotOrder = compositeSlots
-                                val selectedBySlot: Map<String, QuestionCandidate>? = if (storedQuotas.isNotEmpty() && storedBundleGroups.isEmpty()) {
-                                    val quotaRules = storedQuotas.mapNotNull { quota -> runCatching {
-                                        QuotaDimension.valueOf(quota.dimension)
-                                    }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
-                                    val quotaSlots = compositeSlots.map { slot ->
-                                        QuestionSlot(slot.slotId, slot.chapterId, slot.sloId, slot.questionType, slot.marks, slot.allowedChapterIds)
-                                    }
-                                    when (val result = QuotaAwareSelectionEngine.select(
-                                        QuotaSelectionRequest(identity, quotaSlots, quotaRules, mode, seed), candidates)) {
-                                        is QuotaSelectionResult.Blocked -> {
-                                            notice = "Mixed-pattern quota generation blocked (${result.code}): ${result.message}"; null
-                                        }
-                                        is QuotaSelectionResult.Success -> result.selected.associate { it.first.slotId to it.second }
-                                            .also { notice = "Mixed-pattern draft generated with all declared quotas satisfied." }
-                                    }
-                                } else when (val result = CompositePatternEngine.generate(compositePattern, candidates, mode, seed)) {
+                                val selectedBySlot: Map<String, QuestionCandidate>? = when (
+                                    val result = CompositePatternEngine.generate(compositePattern, candidates, mode, seed)
+                                ) {
                                     is CompositeSelectionResult.Blocked -> {
                                         notice = "Mixed-pattern generation blocked (${result.code}): ${result.message}"; null
                                     }
