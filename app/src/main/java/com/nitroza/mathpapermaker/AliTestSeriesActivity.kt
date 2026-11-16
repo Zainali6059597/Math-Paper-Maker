@@ -102,6 +102,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var showQuestions by remember { mutableStateOf(false) }
         var showClearConfirm by remember { mutableStateOf(false) }
         var examTitle by remember { mutableStateOf("Mathematics Examination") }
+        var paperMode by remember { mutableStateOf("BOARD") }
         var schoolName by remember { mutableStateOf("") }
         var draftLoaded by remember { mutableStateOf(false) }
         var bundledBookReady by remember { mutableStateOf(false) }
@@ -295,7 +296,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 PunjabBoardPattern.DURATION_MINUTES,
                                 selected.map { item ->
                                     PaperQuestion(item.number, item.text, item.kind, item.marks, item.sourcePage, item.imageFile, item.chapterId, item.sectionId)
-                                }
+                                },
+                                paperMode
                             )
                         }
                     }.onSuccess { notice = "Word paper exported. Open the DOCX in Word or another office app to review and print." }
@@ -661,10 +663,19 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("School name (optional)") }, singleLine = true)
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
-                        Text(PunjabBoardPattern.status(paperQuestions), style = MaterialTheme.typography.labelMedium)
-                        val patternErrors = PunjabBoardPattern.validationErrors(grade, paperQuestions)
-                        patternErrors.forEach { error ->
-                            Text("• $error", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        Text("PAPER FORMAT", style = MaterialTheme.typography.labelLarge)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            FilterChip(selected = paperMode == "BOARD", onClick = { paperMode = "BOARD" }, label = { Text("BOARD PATTERN") })
+                            FilterChip(selected = paperMode == "CUSTOM", onClick = { paperMode = "CUSTOM" }, label = { Text("CUSTOM") })
+                        }
+                        if (paperMode == "BOARD") {
+                            Text("Punjab Board · " + PunjabBoardPattern.status(paperQuestions), style = MaterialTheme.typography.labelMedium)
+                            PunjabBoardPattern.validationErrors(grade, paperQuestions).forEach { error ->
+                                Text("• " + error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                            }
+                        } else {
+                            Text("Custom paper · no fixed question-count or board-distribution restriction. Edit question numbers, sections, types and marks below.", style = MaterialTheme.typography.bodySmall)
+                            Text("Total marks: " + paperQuestions.sumOf { it.marks }, style = MaterialTheme.typography.labelMedium)
                         }
                         if (missingImageCount > 0) {
                             Text(
@@ -803,8 +814,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        if (!PunjabBoardPattern.isComplete(grade, paperQuestions)) {
-                            Text("Word export unlocks when the selected questions match the Punjab Board counts and marks.",
+                        val boardReady = paperMode != "BOARD" || PunjabBoardPattern.isComplete(grade, paperQuestions)
+                        if (!boardReady) {
+                            Text("Board-pattern export requires the official counts, numbering, marks and chapter distribution. Switch to Custom to export a manually arranged paper.",
                                 color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
                     }
@@ -813,7 +825,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         TextButton(onClick = { showClearConfirm = true }) { Text("NEW PAPER") }
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
-                        Button(enabled = PunjabBoardPattern.isComplete(grade, paperQuestions) && missingImageCount == 0,
+                        Button(enabled = boardReady && missingImageCount == 0 && selected.isNotEmpty(),
                             onClick = { exportWord.launch("Ali-Test-Series-Class-$grade.docx") }) { Text("EXPORT WORD") }
                     }
                 }
