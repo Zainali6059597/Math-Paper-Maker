@@ -34,6 +34,16 @@ class QuestionTextSegmenterTest {
         assertEquals(listOf("1", "3"), result.map { it.sourceNumber })
     }
 
+    @Test fun acceptsQuestionWordAndQPrefixNumbering() {
+        val result = QuestionTextSegmenter.segment(
+            """
+            Question 1. Find the roots of the quadratic equation.
+            Q. 2) Solve the simultaneous equations by elimination.
+            """.trimIndent()
+        )
+        assertEquals(listOf("1", "2"), result.map { it.sourceNumber })
+    }
+
     @Test fun emptyOrUnnumberedPageProducesNoCandidates() {
         assertTrue(QuestionTextSegmenter.segment("A page with ordinary text only.").isEmpty())
         assertTrue(QuestionTextSegmenter.segment("").isEmpty())
