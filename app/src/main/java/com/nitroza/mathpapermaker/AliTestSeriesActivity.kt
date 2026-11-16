@@ -101,6 +101,13 @@ class AliTestSeriesActivity : ComponentActivity() {
         var cropRect by remember { mutableStateOf<Rect?>(null) }
         var showQuestions by remember { mutableStateOf(false) }
         var showClearConfirm by remember { mutableStateOf(false) }
+        var showManualAddPrompt by remember { mutableStateOf(false) }
+        var showManualQuestionEditor by remember { mutableStateOf(false) }
+        var manualQuestionText by remember { mutableStateOf(TextFieldValue("")) }
+        var manualQuestionNumber by remember { mutableStateOf("") }
+        var manualQuestionMarks by remember { mutableStateOf("2") }
+        var manualQuestionKind by remember { mutableStateOf("SHORT") }
+        var manualQuestionChapter by remember { mutableStateOf("") }
         var examTitle by remember { mutableStateOf("Mathematics Examination") }
         var paperMode by remember { mutableStateOf("BOARD") }
         var schoolName by remember { mutableStateOf("") }
@@ -346,6 +353,14 @@ class AliTestSeriesActivity : ComponentActivity() {
             renderedPage.exceptionOrNull()?.let { error ->
                 notice = "Could not render PDF page: ${error.message ?: "unknown error"}"
             }
+        }
+
+        fun insertMathToken(token: String) {
+            val start = manualQuestionText.selection.min.coerceIn(0, manualQuestionText.text.length)
+            val end = manualQuestionText.selection.max.coerceIn(start, manualQuestionText.text.length)
+            val updated = manualQuestionText.text.replaceRange(start, end, token)
+            val cursor = start + token.length
+            manualQuestionText = TextFieldValue(updated, androidx.compose.ui.text.TextRange(cursor))
         }
 
         val paperQuestions = selected.map {
@@ -824,9 +839,89 @@ class AliTestSeriesActivity : ComponentActivity() {
                         TextButton(onClick = { showClearConfirm = true }) { Text("NEW PAPER") }
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
                         Button(enabled = boardReady && missingImageCount == 0 && selected.isNotEmpty(),
-                            onClick = { exportWord.launch("Ali-Test-Series-Class-$grade.docx") }) { Text("EXPORT WORD") }
+                            onClick = { showManualAddPrompt = true }) { Text("EXPORT WORD") }
                     }
                 }
+            )
+        }
+
+        if (showManualAddPrompt) {
+            AlertDialog(
+                onDismissRequest = { showManualAddPrompt = false },
+                title = { Text("ADD A QUESTION MANUALLY?") },
+                text = { Text("If a question was missed during selection, you can add it now using the Maths Question Editor before creating the Word file.") },
+                confirmButton = {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        TextButton(onClick = {
+                            showManualAddPrompt = false
+                            exportWord.launch("Ali-Test-Series-Class-$grade.docx")
+                        }) { Text("NO, EXPORT") }
+                        Button(onClick = {
+                            manualQuestionText = TextFieldValue("")
+                            manualQuestionKind = "SHORT"
+                            manualQuestionMarks = "2"
+                            manualQuestionNumber = suggestedNumber("SHORT", selected)
+                            manualQuestionChapter = ""
+                            showManualAddPrompt = false
+                            showManualQuestionEditor = true
+                        }) { Text("YES, ADD QUESTION") }
+                    }
+                }
+            )
+        }
+
+        if (showManualQuestionEditor) {
+            AlertDialog(
+                onDismissRequest = { showManualQuestionEditor = false },
+                title = { Text("MATHS QUESTION EDITOR") },
+                text = {
+                    Column(Modifier.heightIn(max = 560.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Write the missed question. Use the maths symbol pad for common mathematical notation; the question remains editable in Word.", style = MaterialTheme.typography.bodySmall)
+                        OutlinedTextField(manualQuestionText, { manualQuestionText = it }, modifier = Modifier.fillMaxWidth(), minLines = 5, label = { Text("Question") })
+                        Text("MATHS SYMBOL PAD", style = MaterialTheme.typography.labelLarge)
+                        val symbols = listOf("√", "π", "θ", "∞", "≤", "≥", "≠", "±", "×", "÷", "∑", "∫", "∠", "°", "²", "³", "½", "¼", "(", ")", "^", "_", "=", "→")
+                        symbols.chunked(4).forEach { line ->
+                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                                line.forEach { symbol ->
+                                    OutlinedButton(onClick = { insertMathToken(symbol) }, modifier = Modifier.weight(1f), contentPadding = PaddingValues(2.dp)) { Text(symbol) }
+                                }
+                                repeat(4 - line.size) { Spacer(Modifier.weight(1f)) }
+                            }
+                        }
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            listOf("MCQ", "SHORT", "LONG").forEach { kind ->
+                                FilterChip(selected = manualQuestionKind == kind, onClick = {
+                                    manualQuestionKind = kind
+                                    manualQuestionMarks = when (kind) { "MCQ" -> "1"; "SHORT" -> "2"; else -> "4" }
+                                    manualQuestionNumber = suggestedNumber(kind, selected)
+                                }, label = { Text(kind) })
+                            }
+                        }
+                        OutlinedTextField(manualQuestionNumber, { manualQuestionNumber = it.take(16) }, label = { Text("Question number") }, singleLine = true)
+                        OutlinedTextField(manualQuestionMarks, { manualQuestionMarks = it.filter(Char::isDigit).take(2) }, label = { Text("Marks") }, singleLine = true)
+                        OutlinedTextField(manualQuestionChapter, { manualQuestionChapter = it.take(12) }, label = { Text("Chapter (optional, e.g. CH3)") }, singleLine = true)
+                    }
+                },
+                confirmButton = {
+                    Button(enabled = manualQuestionText.text.isNotBlank() && manualQuestionNumber.isNotBlank() && (manualQuestionMarks.toIntOrNull() ?: 0) in 1..100,
+                        onClick = {
+                            val number = manualQuestionNumber.trim()
+                            if (selected.any { it.number.trim().equals(number, ignoreCase = true) }) {
+                                notice = "That question number already exists. Choose a unique number."
+                            } else {
+                                selected = selected + SelectedQuestion(
+                                    id = nextId++, number = number, text = manualQuestionText.text.trim(),
+                                    kind = manualQuestionKind, marks = manualQuestionMarks.toInt(),
+                                    sourcePage = 0, imageFile = null, chapterId = manualQuestionChapter.trim(),
+                                    sectionId = number.substringBefore("(").ifBlank { "CUSTOM" }
+                                )
+                                showManualQuestionEditor = false
+                                showQuestions = true
+                                notice = "Manual question added as editable text."
+                            }
+                        }) { Text("ADD TO PAPER") }
+                },
+                dismissButton = { TextButton(onClick = { showManualQuestionEditor = false }) { Text("CANCEL") } }
             )
         }
 
