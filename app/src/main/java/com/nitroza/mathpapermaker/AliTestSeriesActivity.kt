@@ -129,6 +129,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         PdfRenderer(descriptor).use { it.pageCount }
                     }
                     pdfFile = file
+                    pageBitmap = null
                     pdfName = bundledBookFile
                     useManifestChapters = true
                     pageCount = count
@@ -196,6 +197,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             PdfRenderer(descriptor).use { it.pageCount }
                         }
                         pdfFile = file
+                        pageBitmap = null
                         pdfName = uri.lastPathSegment?.substringAfterLast('/') ?: "Mathematics.pdf"
                         useManifestChapters = false
                         pageCount = count
@@ -231,6 +233,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         LaunchedEffect(pdfFile, pageIndex) {
             val file = pdfFile ?: return@LaunchedEffect
             cropRect = null
+            pageBitmap = null
             pageBitmap = withContext(Dispatchers.IO) {
                 runCatching {
                     val descriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
