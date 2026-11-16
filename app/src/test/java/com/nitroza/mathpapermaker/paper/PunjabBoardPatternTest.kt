@@ -93,9 +93,15 @@ class PunjabBoardPatternTest {
         assertTrue(PunjabBoardPattern.isComplete(9, questions))
     }
 
-    @Test fun invalidSourcePageCannotExport() {
+    @Test fun manuallyTypedEditableQuestionMayOmitPdfPage() {
         val questions = fullPaper(9).toMutableList()
-        questions[0] = questions[0].copy(sourcePage = 0)
+        questions[0] = questions[0].copy(sourcePage = 0, text = "A manually typed mathematics question.")
+        assertTrue(PunjabBoardPattern.isComplete(9, questions))
+    }
+
+    @Test fun negativeSourcePageCannotExport() {
+        val questions = fullPaper(9).toMutableList()
+        questions[0] = questions[0].copy(sourcePage = -1)
         assertFalse(PunjabBoardPattern.isComplete(9, questions))
     }
 
