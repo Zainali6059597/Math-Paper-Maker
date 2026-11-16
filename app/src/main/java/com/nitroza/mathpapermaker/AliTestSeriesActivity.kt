@@ -89,6 +89,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var pendingImageFile by remember { mutableStateOf<String?>(null) }
         var cropRect by remember { mutableStateOf<Rect?>(null) }
         var showQuestions by remember { mutableStateOf(false) }
+        var showClearConfirm by remember { mutableStateOf(false) }
         var examTitle by remember { mutableStateOf("Mathematics Examination") }
         var schoolName by remember { mutableStateOf("") }
         var draftLoaded by remember { mutableStateOf(false) }
@@ -531,11 +532,31 @@ class AliTestSeriesActivity : ComponentActivity() {
                 },
                 confirmButton = {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        TextButton(onClick = { showClearConfirm = true }) { Text("NEW PAPER") }
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
                         Button(enabled = PunjabBoardPattern.isComplete(grade, paperQuestions),
                             onClick = { exportWord.launch("Ali-Test-Series-Class-$grade.docx") }) { Text("EXPORT WORD") }
                     }
                 }
+            )
+        }
+
+        if (showClearConfirm) {
+            AlertDialog(
+                onDismissRequest = { showClearConfirm = false },
+                title = { Text("Start a new paper?") },
+                text = { Text("This clears the current selected questions and paper details from this device.") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        selected = emptyList()
+                        nextId = 1L
+                        schoolName = ""
+                        examTitle = "Mathematics Examination"
+                        showQuestions = false
+                        showClearConfirm = false
+                    }) { Text("CLEAR AND START NEW") }
+                },
+                dismissButton = { TextButton(onClick = { showClearConfirm = false }) { Text("CANCEL") } }
             )
         }
     }
