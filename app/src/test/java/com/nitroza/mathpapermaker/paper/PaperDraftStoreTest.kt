@@ -31,7 +31,7 @@ class PaperDraftStoreTest {
             .put("grade", grade)
             .put("examTitle", "Unit Test")
             .put("schoolName", "School")
-            .put("questions", JSONArray().apply { questions.forEach(::put) })
+            .put("questions", JSONArray().apply { questions.forEach { put(it) } })
             .toString()
 
     @Test fun validDraftRestoresAllQuestionFields() {
