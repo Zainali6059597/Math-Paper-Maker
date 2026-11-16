@@ -14,7 +14,7 @@ Status: development build; **not a production release**
 - Equal-mark short-question choice groups; required multi-part questions; optional choice among whole paired multi-part questions.
 - Strict allowed-chapter alternatives per slot (e.g. Chapter 8 OR Chapter 11); alternatives are persisted, imported, used by selection and retained in saved drafts.
 - Count-based metadata quotas, including quotas scoped to a specific question group (e.g. at least two short questions from each chapter in Q2 only).
-- Chapter/SLO exclusions and board-pattern compliance audit.
+- Chapter/SLO exclusions and board-pattern compliance audit. The pre-export audit also rechecks allowed chapter alternatives and all persisted metadata quotas, including section-scoped chapter minimums, so draft edits or replacements cannot silently break the official pattern.
 - Question replacement constrained by identity, marks, chapter/allowed chapters, SLO, type and duplicate exclusion.
 - Draft editor with reorder/remove/edit/revert, save/reopen/delete, and pinned pattern identity/version/source.
 - A4 PDF export with pagination, section instructions and marks.
