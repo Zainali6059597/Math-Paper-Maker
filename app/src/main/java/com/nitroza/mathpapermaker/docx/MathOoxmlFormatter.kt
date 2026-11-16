@@ -27,6 +27,11 @@ object MathOoxmlFormatter {
                 flushPlain()
                 output.append("<m:oMath>").append(parsed.xml).append("</m:oMath>")
                 index = parsed.endExclusive
+            } else if (source[index] == '\n' || source[index] == '\r') {
+                flushPlain()
+                if (source[index] == '\r' && source.getOrNull(index + 1) == '\n') index++
+                output.append("<w:r><w:br/></w:r>")
+                index++
             } else {
                 plain.append(source[index])
                 index++
@@ -98,6 +103,7 @@ object MathOoxmlFormatter {
     }
 
     private fun mathContent(value: String): String {
+        val normalized = value.replace('\r', ' ').replace('\n', ' ')
         val output = StringBuilder()
         val plain = StringBuilder()
         fun flush() {
@@ -107,14 +113,14 @@ object MathOoxmlFormatter {
             }
         }
         var index = 0
-        while (index < value.length) {
-            val parsed = parseConstruct(value, index)
+        while (index < normalized.length) {
+            val parsed = parseConstruct(normalized, index)
             if (parsed != null) {
                 flush()
                 output.append(parsed.xml)
                 index = parsed.endExclusive
             } else {
-                plain.append(value[index])
+                plain.append(normalized[index])
                 index++
             }
         }
@@ -125,10 +131,19 @@ object MathOoxmlFormatter {
     private fun wordRun(value: String): String =
         "<w:r><w:t xml:space=\"preserve\">${xmlEscape(value)}</w:t></w:r>"
 
-    private fun xmlEscape(value: String): String = value
-        .replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace("\"", "&quot;")
-        .replace("'", "&apos;")
-}
+    private fun xmlEscape(value: String): String {
+        val safe = buildString(value.length) {
+            var index = 0
+            while (index < value.length) {
+                val codePoint = value.codePointAt(index)
+                val allowed = codePoint == 0x09 || codePoint == 0x0A || codePoint == 0x0D ||
+                    codePoint in 0x20..0xD7FF ||
+                    codePoint in 0xE000..0xFFFD ||
+                    codePoint in 0x10000..0x10FFFF
+                if (allowed) append(String(Character.toChars(codePoint)))
+                index += Character.charCount(codePoint)
+            }
+        }
+        return safe.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            .replace("\"", "&quot;").replace("'", "&apos;")
+    }
