@@ -362,6 +362,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         PDFBoxResourceLoader.init(applicationContext)
                                         PDDocument.load(file).use { document ->
                                             PDFTextStripper().apply {
+                                                sortByPosition = true
                                                 startPage = pageIndex + 1
                                                 endPage = pageIndex + 1
                                             }.getText(document)
