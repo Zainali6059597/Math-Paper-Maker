@@ -125,10 +125,17 @@ object PaperDraftStore {
                 require(item.optString("text").isNotBlank() || !imageFile.isNullOrBlank()) {
                     "A saved question must contain editable text or a scanned image."
                 }
-                require(PunjabBoardPattern.isValidChapter(grade, chapterId)) {
+                // Custom full-syllabus papers may intentionally leave a chapter unset.
+                // Board-pattern validation still requires a valid chapter before export.
+                require(chapterId.isBlank() || PunjabBoardPattern.isValidChapter(grade, chapterId)) {
                     "Invalid saved chapter."
                 }
-                require(sectionId in (1..9).map { "Q$it" }) { "Invalid saved question section." }
+                // Custom section labels may be teacher-defined; Board mode separately
+                // validates the exact Q1–Q9 section structure.
+                require(sectionId.isNotBlank() && sectionId.length <= 40 &&
+                    sectionId.none { it.isISOControl() }) {
+                    "Invalid saved question section."
+                }
 
                 StoredPaperQuestion(
                     item.getLong("id"),
