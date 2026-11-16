@@ -681,8 +681,45 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             Text("${item.sectionId} · ${item.kind} · ${item.marks} marks · page ${item.sourcePage}",
                                                 style = MaterialTheme.typography.labelMedium)
                                         }
-                                        Text("${item.chapterId} · " + if (item.imageFile != null) "Scanned question image" else item.text,
-                                            maxLines = 4, style = MaterialTheme.typography.bodySmall)
+                                        val itemChapterMenu = remember(item.id) { mutableStateOf(false) }
+                                        Box {
+                                            OutlinedButton(onClick = { itemChapterMenu.value = true }) {
+                                                Text("CHAPTER: ${item.chapterId}")
+                                            }
+                                            DropdownMenu(
+                                                expanded = itemChapterMenu.value,
+                                                onDismissRequest = { itemChapterMenu.value = false }
+                                            ) {
+                                                (1..(if (grade == 9) 13 else 12)).forEach { chapter ->
+                                                    DropdownMenuItem(
+                                                        text = { Text("CH$chapter") },
+                                                        onClick = {
+                                                            selected = selected.map { question ->
+                                                                if (question.id == item.id) question.copy(chapterId = "CH$chapter") else question
+                                                            }
+                                                            itemChapterMenu.value = false
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        if (item.imageFile != null) {
+                                            Text("Scanned question image · source page ${item.sourcePage}",
+                                                style = MaterialTheme.typography.bodySmall)
+                                        } else {
+                                            OutlinedTextField(
+                                                value = item.text,
+                                                onValueChange = { value ->
+                                                    selected = selected.map { question ->
+                                                        if (question.id == item.id) question.copy(text = value.take(100_000)) else question
+                                                    }
+                                                },
+                                                modifier = Modifier.fillMaxWidth(),
+                                                label = { Text("Question text (editable)") },
+                                                minLines = 2,
+                                                maxLines = 5
+                                            )
+                                        }
                                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                             TextButton(enabled = index > 0, onClick = {
                                                 val copy = selected.toMutableList()
