@@ -133,7 +133,7 @@ object PackageImporter {
                 parts.size >= 2 && parts.sumOf { it.marks } == group.marksPerBundle
             }) { "Each paired question must contain at least two parts and match marksPerBundle." }
         }
-        val questionsJson = root.getJSONArray("questions")
+        val questionsJson = root.optJSONArray("questions") ?: org.json.JSONArray()
         val questions = (0 until questionsJson.length()).map { i ->
             val q = questionsJson.getJSONObject(i)
             QuestionEntity(
