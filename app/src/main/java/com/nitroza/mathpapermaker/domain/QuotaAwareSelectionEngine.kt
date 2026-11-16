@@ -106,7 +106,7 @@ object QuotaAwareSelectionEngine {
     }
 
     private fun QuestionCandidate.matches(slot: QuestionSlot): Boolean = marks == slot.marks &&
-        (slot.chapterId == null || chapterId == slot.chapterId) &&
+        (if (slot.allowedChapterIds.isNotEmpty()) chapterId in slot.allowedChapterIds else slot.chapterId == null || chapterId == slot.chapterId) &&
         (slot.sloId == null || sloId == slot.sloId) &&
         (slot.questionType == null || questionType == slot.questionType)
 
