@@ -60,6 +60,26 @@ class PaperDraftStoreTest {
         assertNull(PaperDraftStore.parseSnapshot(draft(question(chapter = "CH13"), grade = 10), filesDir))
     }
 
+    @Test fun unsupportedQuestionTypeIsRejected() {
+        val invalid = question().put("kind", "ESSAY")
+        assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
+    }
+
+    @Test fun wrongMarksForQuestionTypeAreRejected() {
+        val invalid = question().put("marks", 2)
+        assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
+    }
+
+    @Test fun invalidImageExtensionIsRejected() {
+        val invalidPath = File(filesDir, "question_images/ali_question_1.jpg").absolutePath
+        assertNull(PaperDraftStore.parseSnapshot(draft(question(imageFile = invalidPath)), filesDir))
+    }
+
+    @Test fun malformedQuestionRecordIsRejected() {
+        val invalid = question().put("sourcePage", 0)
+        assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
+    }
+
     @Test fun imagePathOutsideAppOwnedFolderIsRejected() {
         val outside = File(filesDir, "not-question-images/ali_question_1.png").absolutePath
         assertNull(PaperDraftStore.parseSnapshot(draft(question(imageFile = outside)), filesDir))
