@@ -11,6 +11,7 @@ object PackageImporter {
         val choiceGroups: List<ChoiceGroupEntity>,
         val quotas: List<PatternQuotaEntity>,
         val exclusions: List<SyllabusExclusionEntity>,
+        val bundleChoiceGroups: List<BundleChoiceGroupEntity>,
         val warnings: List<String>
     )
 
@@ -65,7 +66,8 @@ object PackageImporter {
                 marks = s.getInt("marks"),
                 displayOrder = s.optInt("displayOrder", i),
                 groupId = s.optString("groupId").takeIf { it.isNotBlank() },
-                bundleId = if (schemaVersion >= 5) s.optString("bundleId").takeIf { it.isNotBlank() } else null
+                bundleId = if (schemaVersion >= 5) s.optString("bundleId").takeIf { it.isNotBlank() } else null,
+                bundleChoiceGroupId = s.optString("bundleChoiceGroupId").takeIf { it.isNotBlank() }
             )
         }
         val choiceGroupsJson = patternJson.optJSONArray("choiceGroups")
@@ -89,6 +91,45 @@ object PackageImporter {
         }
         require(exclusions.all { it.exclusionType in setOf("CHAPTER", "SLO") && it.value.isNotBlank() }) { "Syllabus exclusions must use CHAPTER or SLO and a nonblank value." }
         require(exclusions.map { it.exclusionType to it.value }.distinct().size == exclusions.size) { "Duplicate syllabus exclusions." }
+        val bundleGroupsJson = patternJson.optJSONArray("bundleChoiceGroups")
+        val bundleChoiceGroups = if (bundleGroupsJson == null) emptyList() else (0 until bundleGroupsJson.length()).map { i ->
+            val g = bundleGroupsJson.getJSONObject(i)
+            val ids = g.getJSONArray("bundleIds")
+            val bundleIds = (0 until ids.length()).map { ids.getString(it) }
+            BundleChoiceGroupEntity(
+                patternId = patternId,
+                groupId = g.getString("groupId"),
+                offeredBundleCount = g.getInt("offeredBundleCount"),
+                attemptBundleCount = g.getInt("attemptBundleCount"),
+                marksPerBundle = g.getInt("marksPerBundle"),
+                bundleIdsJson = org.json.JSONArray(bundleIds).toString(),
+                displayOrder = g.optInt("displayOrder", i)
+            )
+        }
+        require(bundleChoiceGroups.map { it.groupId }.distinct().size == bundleChoiceGroups.size)
+        require(bundleChoiceGroups.all { it.groupId.isNotBlank() && it.offeredBundleCount > 0 &&
+            it.attemptBundleCount in 1..it.offeredBundleCount && it.marksPerBundle > 0 &&
+            org.json.JSONArray(it.bundleIdsJson).length() == it.offeredBundleCount &&
+            it.displayOrder >= 0
+        }) { "Invalid paired-question choice group." }
+        require(slots.filter { it.bundleChoiceGroupId != null }.all { slot ->
+            slot.bundleId != null && bundleChoiceGroups.any { it.groupId == slot.bundleChoiceGroupId }
+        }) { "A paired-question slot references an unknown group or has no bundle ID." }
+        require(slots.none { it.groupId != null && it.bundleChoiceGroupId != null }) {
+            "A slot cannot belong to both a single-question and paired-question choice group."
+        }
+        bundleChoiceGroups.forEach { group ->
+            val ids = (0 until org.json.JSONArray(group.bundleIdsJson).length()).map {
+                org.json.JSONArray(group.bundleIdsJson).getString(it)
+            }.toSet()
+            val groupSlots = slots.filter { it.bundleChoiceGroupId == group.groupId }
+            require(groupSlots.mapNotNull { it.bundleId }.toSet() == ids) {
+                "Every offered paired question must have its declared bundle parts."
+            }
+            require(groupSlots.groupBy { it.bundleId }.values.all { parts ->
+                parts.size >= 2 && parts.sumOf { it.marks } == group.marksPerBundle
+            }) { "Each paired question must contain at least two parts and match marksPerBundle." }
+        }
         val questionsJson = root.getJSONArray("questions")
         val questions = (0 until questionsJson.length()).map { i ->
             val q = questionsJson.getJSONObject(i)
@@ -168,6 +209,6 @@ object PackageImporter {
         if (duplicateFingerprints.isNotEmpty()) warnings += "${duplicateFingerprints.size} semantic duplicate fingerprint(s) detected; review before official use."
         if (questions.any { it.sloId.isBlank() }) warnings += "Some questions have no SLO mapping."
         if (questions.any { !it.summative }) warnings += "Some questions are not marked summative."
-        return Parsed(source, pattern, slots, questions, choiceGroups, quotas, exclusions, warnings)
+        return Parsed(source, pattern, slots, questions, choiceGroups, quotas, exclusions, bundleChoiceGroups, warnings)
     }
 }
