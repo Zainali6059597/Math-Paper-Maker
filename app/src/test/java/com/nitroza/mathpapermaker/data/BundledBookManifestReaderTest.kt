@@ -117,6 +117,35 @@ class BundledBookManifestReaderTest {
         assertTrue(chapters.isEmpty())
     }
 
+    @Test fun rejectsMultipleBooksForTheSameIdentity() {
+        val duplicateBook = """
+            {
+              "file": "maths9-copy.pdf",
+              "board": "Punjab",
+              "grade": 9,
+              "stream": "MATHEMATICS",
+              "subject": "Mathematics",
+              "session": "2026-27",
+              "edition": "2025-26", "language": "en", "publisher": "PECTAA",
+              "sourceUrl": "https://pectaa.edu.pk/math9-copy.pdf", "licenseOrPermission": "REDISTRIBUTION_CONFIRMED",
+              "pageCount": 20, "sha256": "$hash",
+              "chapters": [
+                {"chapterId":"1","title":"Different edition","startPage":1,"endPage":5}
+              ]
+            }
+        """.trimIndent()
+        val duplicatedManifest = manifest.replace(
+            "\"books\": [",
+            "\"books\": [\n$duplicateBook,"
+        )
+        val chapters = BundledBookManifestReader.parseManifest(
+            duplicatedManifest, setOf("maths9.pdf", "maths9-copy.pdf", "fbise9.pdf"),
+            "Punjab", 9, "MATHEMATICS", "Mathematics", "2026-27",
+            hashes + ("maths9-copy.pdf" to hash)
+        )
+        assertTrue(chapters.isEmpty())
+    }
+
     @Test fun rejectsUnsupportedManifestVersion() {
         val error = runCatching {
             BundledBookManifestReader.parseManifest(
