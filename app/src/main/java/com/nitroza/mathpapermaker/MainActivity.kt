@@ -696,7 +696,7 @@ class MainActivity : ComponentActivity() {
                                 // Mixed pattern: one assignment covers fixed slots, paired parts and choice slots.
                                 val compositeSlots = storedSlots.sortedBy { it.displayOrder }.map { slot ->
                                     OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId,
-                                        slot.questionType, slot.bundleId, slot.groupId, slot.bundleChoiceGroupId)
+                                        slot.questionType, slot.bundleId, slot.groupId, slot.bundleChoiceGroupId, decodeChapterAlternatives(slot.allowedChapterIdsJson))
                                 }
                                 val compositeGroups = storedGroups.map { group ->
                                     ChoiceGroupRule(group.groupId, group.offeredCount, group.attemptCount,
@@ -716,7 +716,7 @@ class MainActivity : ComponentActivity() {
                                         QuotaDimension.valueOf(quota.dimension)
                                     }.getOrNull()?.let { MetadataQuota(it, quota.value, quota.minimum, quota.maximum) } }
                                     val quotaSlots = compositeSlots.map { slot ->
-                                        QuestionSlot(slot.slotId, slot.chapterId, slot.sloId, slot.questionType, slot.marks)
+                                        QuestionSlot(slot.slotId, slot.chapterId, slot.sloId, slot.questionType, slot.marks, slot.allowedChapterIds)
                                     }
                                     when (val result = QuotaAwareSelectionEngine.select(
                                         QuotaSelectionRequest(identity, quotaSlots, quotaRules, mode, seed), candidates)) {
@@ -762,7 +762,7 @@ class MainActivity : ComponentActivity() {
                                             attemptCount = group.attemptCount,
                                             marksPerQuestion = group.marksPerQuestion,
                                             slots = slotByGroup[group.groupId].orEmpty().map { slot ->
-                                                OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId, slot.questionType)
+                                                OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId, slot.questionType, allowedChapterIds = decodeChapterAlternatives(slot.allowedChapterIdsJson))
                                             }
                                         )
                                     }
@@ -793,7 +793,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             } else {
-                                val slots = storedSlots.map { s -> QuestionSlot(s.slotId, s.chapterId, s.sloId, s.questionType, s.marks) }
+                                val slots = storedSlots.map { s -> QuestionSlot(s.slotId, s.chapterId, s.sloId, s.questionType, s.marks, decodeChapterAlternatives(s.allowedChapterIdsJson)) }
                                 generatedSlotOrder = storedSlots.map { s -> OfferedQuestionSlot(s.slotId, s.marks, s.chapterId, s.sloId, s.questionType, s.bundleId) }
                                 if (storedSlots.any { it.bundleId != null }) {
                                     val bundles = storedSlots.groupBy { it.bundleId ?: "SINGLE_${it.slotId}" }
@@ -802,7 +802,7 @@ class MainActivity : ComponentActivity() {
                                                 bundleId = bundleId,
                                                 displayOrder = parts.minOf { it.displayOrder },
                                                 parts = parts.sortedBy { it.displayOrder }.map { slot ->
-                                                    OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId, slot.questionType, slot.bundleId)
+                                                    OfferedQuestionSlot(slot.slotId, slot.marks, slot.chapterId, slot.sloId, slot.questionType, slot.bundleId, allowedChapterIds = decodeChapterAlternatives(slot.allowedChapterIdsJson))
                                                 }
                                             )
                                         }
@@ -1173,16 +1173,18 @@ private fun decodeItems(raw: String): List<PaperPdfExporter.Item> {
 
 private fun encodeSlots(slots: List<OfferedQuestionSlot>): String = JSONArray().apply {
     slots.forEach { slot -> put(JSONObject().put("slotId", slot.slotId).put("marks", slot.marks)
-        .put("chapterId", slot.chapterId).put("sloId", slot.sloId).put("questionType", slot.questionType).put("bundleId", slot.bundleId)) }
+        .put("chapterId", slot.chapterId).put("sloId", slot.sloId).put("questionType", slot.questionType).put("bundleId", slot.bundleId).put("allowedChapterIds", JSONArray(slot.allowedChapterIds.toList()))) }
 }.toString()
 
 private fun decodeSlots(raw: String): List<OfferedQuestionSlot> {
     val array = JSONArray(raw)
     return (0 until array.length()).map { i -> array.getJSONObject(i).let { obj ->
         OfferedQuestionSlot(obj.getString("slotId"), obj.getInt("marks"), obj.optString("chapterId").takeIf(String::isNotBlank),
-            obj.optString("sloId").takeIf(String::isNotBlank), obj.optString("questionType").takeIf(String::isNotBlank), obj.optString("bundleId").takeIf(String::isNotBlank))
+            obj.optString("sloId").takeIf(String::isNotBlank), obj.optString("questionType").takeIf(String::isNotBlank), obj.optString("bundleId").takeIf(String::isNotBlank), allowedChapterIds = obj.optJSONArray("allowedChapterIds")?.let { a -> (0 until a.length()).map { a.getString(it) }.toSet() } ?: emptySet())
     } }
 }
+
+private fun decodeChapterAlternatives(raw: String): Set<String> = runCatching { val a = JSONArray(raw); (0 until a.length()).map { a.getString(it) }.toSet() }.getOrDefault(emptySet())
 
 private fun encodeStrings(values: List<String>): String = JSONArray(values).toString()
 private fun decodeStrings(raw: String): List<String> {
