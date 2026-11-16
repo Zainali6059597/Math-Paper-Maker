@@ -81,6 +81,24 @@ class PunjabBoardPatternTest {
         assertFalse(PunjabBoardPattern.isComplete(10, questions))
     }
 
+    @Test fun questionWithoutTextOrScannedImageCannotExport() {
+        val questions = fullPaper(9).toMutableList()
+        questions[0] = questions[0].copy(text = "", imageFile = null)
+        assertFalse(PunjabBoardPattern.isComplete(9, questions))
+    }
+
+    @Test fun scannedQuestionMayHaveNoEditableTextWhenImageIsPresent() {
+        val questions = fullPaper(9).toMutableList()
+        questions[0] = questions[0].copy(text = "", imageFile = "/private/question.png")
+        assertTrue(PunjabBoardPattern.isComplete(9, questions))
+    }
+
+    @Test fun invalidSourcePageCannotExport() {
+        val questions = fullPaper(9).toMutableList()
+        questions[0] = questions[0].copy(sourcePage = 0)
+        assertFalse(PunjabBoardPattern.isComplete(9, questions))
+    }
+
     @Test fun duplicateManualNumberingCannotExport() {
         val questions = fullPaper(9).toMutableList()
         questions[1] = questions[1].copy(number = questions[0].number)
