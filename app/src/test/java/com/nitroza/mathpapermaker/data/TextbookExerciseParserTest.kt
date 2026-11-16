@@ -35,4 +35,30 @@ class TextbookExerciseParserTest {
         assertEquals(listOf(4), result.pagesNeedingOcr)
         assertTrue(result.warnings.any { it.contains("OCR") })
     }
+    @Test fun acceptsStandaloneQuestionNumberAndWrappedContinuation() {
+        val book = BundledBookPdfReader.BookIndex(
+            "maths.pdf", 2,
+            listOf(
+                BundledBookPdfReader.PageText(
+                    "maths.pdf", 7,
+                    "Chapter 3: Sets\\nExercise 3.1\\n1.\\nDefine a set and give two examples.\\nExplain your answer.",
+                    false
+                ),
+                BundledBookPdfReader.PageText(
+                    "maths.pdf", 8,
+                    "2.\\nWrite the following set in roster form.",
+                    false
+                )
+            ),
+            emptyList()
+        )
+        val result = TextbookExerciseParser.parse(book)
+        assertEquals(2, result.candidates.size)
+        assertEquals("Define a set and give two examples. Explain your answer.", result.candidates[0].text)
+        assertEquals(7, result.candidates[0].sourcePage)
+        assertEquals("Write the following set in roster form.", result.candidates[1].text)
+        assertEquals(8, result.candidates[1].sourcePage)
+        assertTrue(result.candidates.all { it.verificationStatus == "NEEDS_REVIEW" })
+    }
+
 }
