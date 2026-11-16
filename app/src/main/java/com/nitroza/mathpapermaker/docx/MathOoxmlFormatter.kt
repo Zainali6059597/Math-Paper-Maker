@@ -50,15 +50,18 @@ object MathOoxmlFormatter {
             val contents = source.substring(openIndex + 1, end)
             val rows = splitTopLevel(contents, ';')
             if (rows.isNotEmpty() && rows.all { it.isNotBlank() }) {
-                val rowXml = rows.joinToString("") { row ->
-                    val cells = splitTopLevel(row, ',')
-                    if (cells.isEmpty() || cells.any { it.isBlank() }) return null
-                    "<m:mr>" + cells.joinToString("") { cell -> "<m:e>${mathContent(cell.trim())}</m:e>" } + "</m:mr>"
+                val cellsByRow = rows.map { splitTopLevel(it, ',') }
+                val rectangular = cellsByRow.map { it.size }.distinct().size == 1
+                val allCellsFilled = cellsByRow.all { cells -> cells.isNotEmpty() && cells.all { it.isNotBlank() } }
+                if (rectangular && allCellsFilled) {
+                    val rowXml = cellsByRow.joinToString("") { cells ->
+                        "<m:mr>" + cells.joinToString("") { cell -> "<m:e>${mathContent(cell.trim())}</m:e>" } + "</m:mr>"
+                    }
+                    return Parsed(
+                        end + 1,
+                        "<m:m><m:mPr><m:baseJc m:val=\"center\"/></m:mPr>$rowXml</m:m>"
+                    )
                 }
-                return Parsed(
-                    end + 1,
-                    "<m:m><m:mPr><m:baseJc m:val=\"center\"/></m:mPr>$rowXml</m:m>"
-                )
             }
         }
 
