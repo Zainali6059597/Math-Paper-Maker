@@ -226,7 +226,7 @@
       },
       {
         "slotId": "SHORT10",
-        "chapterId": "CH5",
+        "chapterId": "CH6",
         "sloId": "",
         "questionType": "SHORT",
         "marks": 2,
@@ -253,7 +253,7 @@
       },
       {
         "slotId": "SHORT13",
-        "chapterId": "CH6",
+        "chapterId": "CH7",
         "sloId": "",
         "questionType": "SHORT",
         "marks": 2,
@@ -280,7 +280,7 @@
       },
       {
         "slotId": "SHORT16",
-        "chapterId": "CH7",
+        "chapterId": "CH9",
         "sloId": "",
         "questionType": "SHORT",
         "marks": 2,
@@ -307,7 +307,7 @@
       },
       {
         "slotId": "SHORT19",
-        "chapterId": "CH9",
+        "chapterId": "CH10",
         "sloId": "",
         "questionType": "SHORT",
         "marks": 2,
@@ -325,7 +325,7 @@
       },
       {
         "slotId": "SHORT21",
-        "chapterId": "CH10",
+        "chapterId": "CH11",
         "sloId": "",
         "questionType": "SHORT",
         "marks": 2,
@@ -343,7 +343,7 @@
       },
       {
         "slotId": "SHORT23",
-        "chapterId": "CH11",
+        "chapterId": "CH12",
         "sloId": "",
         "questionType": "SHORT",
         "marks": 2,
@@ -370,7 +370,7 @@
       },
       {
         "slotId": "SHORT26",
-        "chapterId": "CH12",
+        "chapterId": "CH13",
         "sloId": "",
         "questionType": "SHORT",
         "marks": 2,
@@ -387,21 +387,12 @@
         "groupId": "Q4"
       },
       {
-        "slotId": "SHORT28",
-        "chapterId": "CH13",
-        "sloId": "",
-        "questionType": "SHORT",
-        "marks": 2,
-        "displayOrder": 42,
-        "groupId": "Q4"
-      },
-      {
         "slotId": "LONG1",
         "chapterId": "CH1",
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 43,
+        "displayOrder": 42,
         "groupId": "Q5-Q7"
       },
       {
@@ -410,7 +401,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 44,
+        "displayOrder": 43,
         "groupId": "Q5-Q7"
       },
       {
@@ -419,7 +410,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 45,
+        "displayOrder": 44,
         "groupId": "Q5-Q7"
       },
       {
@@ -428,7 +419,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 46,
+        "displayOrder": 45,
         "groupId": "Q8-Q9"
       },
       {
@@ -437,7 +428,7 @@
         "sloId": "",
         "questionType": "LONG",
         "marks": 8,
-        "displayOrder": 47,
+        "displayOrder": 46,
         "groupId": "Q8-Q9"
       }
     ],
@@ -850,21 +841,6 @@
     },
     {
       "questionId": "Q-SHORT10",
-      "chapterId": "CH5",
-      "topic": "Original practice question",
-      "sloId": "",
-      "cognitiveLevel": "UNDERSTANDING",
-      "difficulty": "AVERAGE",
-      "questionType": "SHORT",
-      "marks": 2,
-      "questionText": "Solve 2x−3≤7.",
-      "answerText": "2x≤10, so x≤5.",
-      "summative": true,
-      "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short10-solve-2x-3-7-"
-    },
-    {
-      "questionId": "Q-SHORT11",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -876,10 +852,10 @@
       "answerText": "150°×π/180°=5π/6 radians.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short11-convert-150-into-radians-"
+      "semanticFingerprint": "short10-convert-150-into-radians-"
     },
     {
-      "questionId": "Q-SHORT12",
+      "questionId": "Q-SHORT11",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -891,10 +867,10 @@
       "answerText": "s=rθ=6×π/3=2π cm.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short12-find-the-arc-length-when-r-6-cm-and-3-radians-"
+      "semanticFingerprint": "short11-find-the-arc-length-when-r-6-cm-and-3-radians-"
     },
     {
-      "questionId": "Q-SHORT13",
+      "questionId": "Q-SHORT12",
       "chapterId": "CH6",
       "topic": "Original practice question",
       "sloId": "",
@@ -906,10 +882,10 @@
       "answerText": "2×(√3/2)×(1/2)=√3/2.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short13-evaluate-2cos-6-sin-6-"
+      "semanticFingerprint": "short12-evaluate-2cos-6-sin-6-"
     },
     {
-      "questionId": "Q-SHORT14",
+      "questionId": "Q-SHORT13",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -921,10 +897,10 @@
       "answerText": "d=√[(-2−0)²+(-4−3)²]=√53.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short14-find-the-distance-between-0-3-and-2-4-"
+      "semanticFingerprint": "short13-find-the-distance-between-0-3-and-2-4-"
     },
     {
-      "questionId": "Q-SHORT15",
+      "questionId": "Q-SHORT14",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -936,10 +912,10 @@
       "answerText": "m=(7+2)/(2−3)=9/(−1)=−9.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short15-find-the-slope-joining-3-2-and-2-7-"
+      "semanticFingerprint": "short14-find-the-slope-joining-3-2-and-2-7-"
     },
     {
-      "questionId": "Q-SHORT16",
+      "questionId": "Q-SHORT15",
       "chapterId": "CH7",
       "topic": "Original practice question",
       "sloId": "",
@@ -951,10 +927,10 @@
       "answerText": "y=−9.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short16-write-the-equation-of-the-horizontal-line-through-7-9-"
+      "semanticFingerprint": "short15-write-the-equation-of-the-horizontal-line-through-7-9-"
     },
     {
-      "questionId": "Q-SHORT17",
+      "questionId": "Q-SHORT16",
       "chapterId": "CH9",
       "topic": "Original practice question",
       "sloId": "",
@@ -966,10 +942,10 @@
       "answerText": "Area ratio is the square of side ratio: 2²:3²=4:9.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short17-two-similar-triangles-have-corresponding-sides-in-ratio-2-3-find-the-ratio-of-their-areas-"
+      "semanticFingerprint": "short16-two-similar-triangles-have-corresponding-sides-in-ratio-2-3-find-the-ratio-of-their-areas-"
     },
     {
-      "questionId": "Q-SHORT18",
+      "questionId": "Q-SHORT17",
       "chapterId": "CH9",
       "topic": "Original practice question",
       "sloId": "",
@@ -981,10 +957,10 @@
       "answerText": "The triangles are equiangular and therefore similar.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short18-if-two-corresponding-angles-of-two-triangles-are-equal-and-their-third-angles-are-also-equal-what-can-be-concluded-"
+      "semanticFingerprint": "short17-if-two-corresponding-angles-of-two-triangles-are-equal-and-their-third-angles-are-also-equal-what-can-be-concluded-"
     },
     {
-      "questionId": "Q-SHORT19",
+      "questionId": "Q-SHORT18",
       "chapterId": "CH9",
       "topic": "Original practice question",
       "sloId": "",
@@ -996,10 +972,10 @@
       "answerText": "9/ x=3/5, so x=15 cm.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short19-the-sides-of-two-similar-triangles-are-in-ratio-3-5-if-a-side-of-the-smaller-is-9-cm-find-the-corresponding-larger-side-"
+      "semanticFingerprint": "short18-the-sides-of-two-similar-triangles-are-in-ratio-3-5-if-a-side-of-the-smaller-is-9-cm-find-the-corresponding-larger-side-"
     },
     {
-      "questionId": "Q-SHORT20",
+      "questionId": "Q-SHORT19",
       "chapterId": "CH10",
       "topic": "Original practice question",
       "sloId": "",
@@ -1011,10 +987,10 @@
       "answerText": "y=2(3)−1=5.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short20-find-y-when-x-3-in-y-2x-1-"
+      "semanticFingerprint": "short19-find-y-when-x-3-in-y-2x-1-"
     },
     {
-      "questionId": "Q-SHORT21",
+      "questionId": "Q-SHORT20",
       "chapterId": "CH10",
       "topic": "Original practice question",
       "sloId": "",
@@ -1026,10 +1002,10 @@
       "answerText": "For x=0, y=2; for x=1, y=3. Points: (0,2),(1,3).",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short21-give-two-points-that-lie-on-y-x-2-"
+      "semanticFingerprint": "short20-give-two-points-that-lie-on-y-x-2-"
     },
     {
-      "questionId": "Q-SHORT22",
+      "questionId": "Q-SHORT21",
       "chapterId": "CH11",
       "topic": "Original practice question",
       "sloId": "",
@@ -1041,10 +1017,10 @@
       "answerText": "A line through the segment's midpoint and perpendicular to it.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short22-define-the-perpendicular-bisector-of-a-line-segment-"
+      "semanticFingerprint": "short21-define-the-perpendicular-bisector-of-a-line-segment-"
     },
     {
-      "questionId": "Q-SHORT23",
+      "questionId": "Q-SHORT22",
       "chapterId": "CH11",
       "topic": "Original practice question",
       "sloId": "",
@@ -1056,10 +1032,10 @@
       "answerText": "A circle centred at the fixed point with the given radius.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short23-what-is-the-locus-of-points-at-a-fixed-distance-from-a-fixed-point-"
+      "semanticFingerprint": "short22-what-is-the-locus-of-points-at-a-fixed-distance-from-a-fixed-point-"
     },
     {
-      "questionId": "Q-SHORT24",
+      "questionId": "Q-SHORT23",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
@@ -1071,10 +1047,10 @@
       "answerText": "Mean=(4+6+8+10)/4=28/4=7.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short24-find-the-arithmetic-mean-of-4-6-8-and-10-"
+      "semanticFingerprint": "short23-find-the-arithmetic-mean-of-4-6-8-and-10-"
     },
     {
-      "questionId": "Q-SHORT25",
+      "questionId": "Q-SHORT24",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
@@ -1086,10 +1062,10 @@
       "answerText": "The mode is 5, as it occurs most often.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short25-find-the-mode-of-3-5-5-6-7-5-8-"
+      "semanticFingerprint": "short24-find-the-mode-of-3-5-5-6-7-5-8-"
     },
     {
-      "questionId": "Q-SHORT26",
+      "questionId": "Q-SHORT25",
       "chapterId": "CH12",
       "topic": "Original practice question",
       "sloId": "",
@@ -1101,10 +1077,10 @@
       "answerText": "The middle value is 7.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short26-find-the-median-of-2-4-7-9-12-"
+      "semanticFingerprint": "short25-find-the-median-of-2-4-7-9-12-"
     },
     {
-      "questionId": "Q-SHORT27",
+      "questionId": "Q-SHORT26",
       "chapterId": "CH13",
       "topic": "Original practice question",
       "sloId": "",
@@ -1116,10 +1092,10 @@
       "answerText": "Favourable outcomes={2,4,6}; probability=3/6=1/2.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short27-a-fair-die-is-rolled-find-the-probability-of-getting-an-even-number-"
+      "semanticFingerprint": "short26-a-fair-die-is-rolled-find-the-probability-of-getting-an-even-number-"
     },
     {
-      "questionId": "Q-SHORT28",
+      "questionId": "Q-SHORT27",
       "chapterId": "CH13",
       "topic": "Original practice question",
       "sloId": "",
@@ -1131,7 +1107,7 @@
       "answerText": "S={H,T}, the set of all possible outcomes.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "short28-define-sample-space-for-a-single-coin-toss-"
+      "semanticFingerprint": "short27-define-sample-space-for-a-single-coin-toss-"
     },
     {
       "questionId": "Q-LONG1",
