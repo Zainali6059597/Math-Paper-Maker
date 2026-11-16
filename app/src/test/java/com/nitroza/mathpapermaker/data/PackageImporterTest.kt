@@ -12,7 +12,8 @@ class PackageImporterTest {
           "source": {"sourceId":"TEST-SOURCE","issuer":"PECTAA","title":"Test pattern","sourceType":"OFFICIAL_PAIRING_SCHEME","session":"2026-27"},
           "pattern": {
             "patternId":"TEST-PATTERN","version":1,"totalMarks":75,"durationMinutes":150,
-            "slots":[{"slotId":"ALT","marks":75,"questionType":"LONG","allowedChapterIds":$allowed}],
+            "slots":[{"slotId":"ALT","marks":75,"questionType":"LONG","groupId":"Q2","allowedChapterIds":$allowed}],
+            "choiceGroups":[{"groupId":"Q2","offeredCount":1,"attemptCount":1,"marksPerQuestion":75}],
             "quotas":[{"dimension":"CHAPTER_IN_GROUP","value":"Q2|CH1","minimum":2,"maximum":3}]
           },
           "questions":[]
@@ -22,6 +23,7 @@ class PackageImporterTest {
     @Test fun importsPatternOnlyPackageAndRetainsChapterAlternativesAndScopedQuota() {
         val parsed = PackageImporter.parse(packageJson())
         assertTrue(parsed.questions.isEmpty())
+        assertEquals("Q2", parsed.choiceGroups.single().groupId)
         assertEquals(setOf("CH8", "CH11"),
             (0 until org.json.JSONArray(parsed.slots.single().allowedChapterIdsJson).length())
                 .map { org.json.JSONArray(parsed.slots.single().allowedChapterIdsJson).getString(it) }.toSet())
