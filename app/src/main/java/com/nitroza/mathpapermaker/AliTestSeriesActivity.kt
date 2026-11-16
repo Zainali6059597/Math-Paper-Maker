@@ -303,8 +303,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                             renderer.openPage(pageIndex).use { page ->
                                 val width = 1400
                                 val height = (width.toFloat() * page.height / page.width).toInt().coerceAtLeast(1)
-                                Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { bitmap ->
+                                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                                try {
                                     page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                                    bitmap
+                                } catch (error: Throwable) {
+                                    bitmap.recycle()
+                                    throw error
                                 }
                             }
                         }
