@@ -98,6 +98,27 @@ object CompositePatternEngine {
         if (calculated != pattern.expectedAttemptedMarks)
             return blocked("ATTEMPTED_TOTAL_MISMATCH", "Fixed and paired slots plus attempted choice marks total $calculated, but the pattern declares ${pattern.expectedAttemptedMarks}.")
 
+        // Fail fast when a section-scoped quota cannot be met inside its own group.
+        for (quota in pattern.quotas.filter { it.groupId != null }) {
+            val groupSlots = pattern.slots.filter { it.groupId == quota.groupId }
+            val possible = groupSlots.count { slot ->
+                bank.any { candidate ->
+                    candidate.identity == pattern.identity &&
+                        candidate.status != ContentStatus.CONFLICTED &&
+                        (mode == GenerationMode.PRACTICE || (candidate.status == ContentStatus.VERIFIED_OFFICIAL && candidate.summative)) &&
+                        candidate.matches(QuestionSlot(slot.slotId, slot.chapterId, slot.sloId, slot.questionType, slot.marks, slot.allowedChapterIds, slot.groupId)) &&
+                        when (quota.dimension) {
+                            QuotaDimension.CHAPTER -> candidate.chapterId == quota.value
+                            QuotaDimension.SLO -> candidate.sloId == quota.value
+                            QuotaDimension.COGNITIVE_LEVEL -> candidate.cognitiveLevel == quota.value
+                            QuotaDimension.DIFFICULTY -> candidate.difficulty == quota.value
+                        }
+                }
+            }
+            if (possible < quota.minimum) {
+                return blocked("QUOTA_UNSATISFIABLE", "Section ${quota.groupId} cannot meet its ${quota.dimension}=${quota.value} minimum of ${quota.minimum}.")
+            }
+        }
         val slots = pattern.slots.map { QuestionSlot(it.slotId, it.chapterId, it.sloId, it.questionType, it.marks, it.allowedChapterIds, it.groupId) }
         val picked: Map<String, QuestionCandidate> = if (pattern.quotas.isNotEmpty()) {
             when (val quotaResult = QuotaAwareSelectionEngine.select(
