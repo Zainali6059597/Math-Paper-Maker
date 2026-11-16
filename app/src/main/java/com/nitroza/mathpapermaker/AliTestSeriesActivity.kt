@@ -398,8 +398,20 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     val crop = Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
                                     val imageDirectory = File(filesDir, "question_images").apply { mkdirs() }
                                     val image = File(imageDirectory, "ali_question_${nextId}.png")
-                                    FileOutputStream(image).use { output -> crop.compress(Bitmap.CompressFormat.PNG, 100, output) }
-                                    pendingImageFile = image.absolutePath
+                                    try {
+                                        FileOutputStream(image).use { output ->
+                                            check(crop.compress(Bitmap.CompressFormat.PNG, 100, output)) {
+                                                "The selected question image could not be encoded."
+                                            }
+                                            output.flush()
+                                        }
+                                        pendingImageFile = image.absolutePath
+                                    } catch (error: Throwable) {
+                                        image.delete()
+                                        throw error
+                                    } finally {
+                                        crop.recycle()
+                                    }
                                     questionText = TextFieldValue("")
                                     questionNumber = suggestedNumber(questionKind, selected)
                                     questionSection = questionNumber.substringBefore("(")
