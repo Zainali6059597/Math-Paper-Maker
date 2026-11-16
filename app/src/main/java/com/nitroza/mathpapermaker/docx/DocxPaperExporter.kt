@@ -188,9 +188,25 @@ object DocxPaperExporter {
         val signature = file.inputStream().use { input -> ByteArray(8).also { input.read(it) } }
         require(signature.contentEquals(pngSignature)) { "Selected question image is not a valid PNG." }
 
-        val options = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        android.graphics.BitmapFactory.decodeFile(file.absolutePath, options)
-        require(options.outWidth > 0 && options.outHeight > 0) { "Selected question image is invalid." }
-        return options.outWidth to options.outHeight
+        val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        android.graphics.BitmapFactory.decodeFile(file.absolutePath, bounds)
+        require(bounds.outWidth > 0 && bounds.outHeight > 0) { "Selected question image is invalid." }
+        require(bounds.outWidth.toLong() * bounds.outHeight.toLong() <= 4_000_000L) {
+            "Selected question image is too large. Re-select a smaller crop."
+        }
+
+        // Decode at a bounded sample size to verify the PNG pixel stream without
+        // allocating a full-resolution bitmap on low-memory Android devices.
+        val options = android.graphics.BitmapFactory.Options().apply {
+            var sample = 1
+            while ((bounds.outWidth.toLong() / sample) * (bounds.outHeight.toLong() / sample) > 1_000_000L) {
+                sample *= 2
+            }
+            inSampleSize = sample
+        }
+        val decoded = android.graphics.BitmapFactory.decodeFile(file.absolutePath, options)
+            ?: error("Selected question image data is damaged.")
+        decoded.recycle()
+        return bounds.outWidth to bounds.outHeight
     }
 }
