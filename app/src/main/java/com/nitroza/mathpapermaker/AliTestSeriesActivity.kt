@@ -1534,7 +1534,7 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
 
             override fun writeString(text: String, textPositions: MutableList<TextPosition>) {
                 val selectedChars = textPositions.filter { position ->
-                    // PESRP prints "Watermark Not for Sale" diagonally across
+                    // PECTAA prints "Web Version Of PECTAA Textbook" diagonally across
                     // the page. Exclude diagonal glyphs individually so the
                     // horizontal question text beneath them remains intact.
                     val direction = ((position.dir % 360f) + 360f) % 360f
@@ -1590,6 +1590,7 @@ private fun removePctbWatermarkLines(text: String): String {
         .filter { line ->
             val normalized = line.lowercase().filter(Char::isLetterOrDigit)
             normalized.isNotBlank() &&
+                !normalized.contains("webversionofpectaa") &&
                 !normalized.contains("webversionofpctb") &&
                 !normalized.contains("pctbwebversion")
         }
