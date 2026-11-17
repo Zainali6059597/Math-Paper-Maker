@@ -75,7 +75,7 @@ object OfflinePdfOcr {
                 try {
                     val task = recognizer.process(InputImage.fromBitmap(bitmap, 0))
                     task.addOnSuccessListener { result ->
-                        if (continuation.isActive) continuation.resume(result.text)
+                        if (continuation.isActive) continuation.resume(removePctbWatermarkLines(result.text))
                         releaseResources()
                     }
                     task.addOnFailureListener { error ->
@@ -96,3 +96,14 @@ object OfflinePdfOcr {
             }
         }
 }
+
+ 
+private fun removePctbWatermarkLines(text: String): String =
+    text.lineSequence()
+        .filterNot { line ->
+            val normalized = line.lowercase().filter(Char::isLetterOrDigit)
+            normalized.contains("webversionofpctb") ||
+                normalized.contains("pctbwebversion")
+        }
+        .joinToString("\n")
+        .trim()
