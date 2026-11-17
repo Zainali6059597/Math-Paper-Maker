@@ -663,6 +663,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         contentAlignment = Alignment.TopCenter
                     ) {
                         pageBitmap?.let { bitmap ->
+                            val latestCropRect = rememberUpdatedState(cropRect)
                             Box(
                                 Modifier.fillMaxWidth()
                                     .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
@@ -674,8 +675,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             detectDragGestures(
                                                 onDragStart = { point ->
                                                     dragStart = point
-                                                    originalRect = cropRect
-                                                    val current = cropRect
+                                                    originalRect = latestCropRect.value
+                                                    val current = latestCropRect.value
                                                     val handleRadius = 30.dp.toPx()
                                                     if (current == null) {
                                                         dragMode = "new"
@@ -707,8 +708,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                 onDragEnd = { originalRect = null },
                                                 onDragCancel = { originalRect = null }
                                             ) { change, dragAmount ->
-                                                val dx = dragAmount.x / size.width
-                                                val dy = dragAmount.y / size.height
+                                                val dx = (change.position.x - dragStart.x) / size.width
+                                                val dy = (change.position.y - dragStart.y) / size.height
                                                 val base = originalRect
                                                 val updated = when {
                                                     dragMode == "new" -> {
@@ -1556,12 +1557,25 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
     }
 }
 
-private fun removePctbWatermarkLines(text: String): String =
-    text.lineSequence()
-        .filterNot { line ->
+private fun removePctbWatermarkLines(text: String): String {
+    // PDF watermark glyphs can be interleaved with question text on the same
+    // extracted line. Remove only the watermark phrase, not the whole line.
+    val watermarkPatterns = listOf(
+        Regex("(?i)web\\s*version\\s*of\\s*pctb"),
+        Regex("(?i)pctb\\s*web\\s*version")
+    )
+    return text.lineSequence()
+        .map { line ->
+            watermarkPatterns.fold(line) { cleaned, pattern -> pattern.replace(cleaned, "") }
+                .replace(Regex("[ \\t]{2,}"), " ")
+                .trim()
+        }
+        .filter { line ->
             val normalized = line.lowercase().filter(Char::isLetterOrDigit)
-            normalized.contains("webversionofpctb") ||
-                normalized.contains("pctbwebversion")
+            normalized.isNotBlank() &&
+                !normalized.contains("webversionofpctb") &&
+                !normalized.contains("pctbwebversion")
         }
         .joinToString("\n")
         .trim()
+}
