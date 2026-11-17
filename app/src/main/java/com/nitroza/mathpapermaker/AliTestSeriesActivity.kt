@@ -46,6 +46,7 @@ import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.tom_roush.pdfbox.io.MemoryUsageSetting
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
+import com.tom_roush.pdfbox.text.TextPosition
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -736,39 +737,36 @@ class AliTestSeriesActivity : ComponentActivity() {
                         Button(
                             enabled = cropRect != null && pageBitmap != null,
                             onClick = {
-                                val bitmap = pageBitmap ?: return@Button
                                 val rect = cropRect ?: return@Button
-                                runCatching {
-                                    val left = (rect.left * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
-                                    val top = (rect.top * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
-                                    val right = (rect.right * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
-                                    val bottom = (rect.bottom * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
-                                    val crop = Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
-                                    val imageDirectory = File(filesDir, "question_images").apply { mkdirs() }
-                                    val image = File(imageDirectory, "ali_question_${nextId}.png")
-                                    try {
-                                        FileOutputStream(image).use { output ->
-                                            check(crop.compress(Bitmap.CompressFormat.PNG, 100, output)) {
-                                                "The selected question image could not be encoded."
-                                            }
-                                            output.flush()
+                                val file = pdfFile ?: return@Button
+                                val pageNumber = pageIndex + 1
+                                lifecycleScope.launch {
+                                    val extraction = withContext(Dispatchers.IO) {
+                                        runCatchingCancellable {
+                                            extractPdfTextInRegion(file, pageNumber, rect)
                                         }
-                                        pendingImageFile = image.absolutePath
-                                    } catch (error: Throwable) {
-                                        image.delete()
-                                        throw error
-                                    } finally {
-                                        crop.recycle()
                                     }
-                                    questionText = TextFieldValue("")
-                                    questionNumber = suggestedNumber(questionKind, selected)
-                                    questionSection = questionNumber.substringBefore("(")
-                                    questionChapter = chapterForPage(pageIndex + 1).orEmpty()
-                                    showQuestionEditor = true
-                                }.onFailure { notice = "Could not crop selection: ${it.message}" }
+                                    extraction.onSuccess { text ->
+                                        val cleaned = removePctbWatermarkLines(text)
+                                        if (cleaned.isBlank()) {
+                                            notice = "Is selected area mein selectable text nahi mila. Ye scanned/image-only content ho sakta hai. OCR SCANNED PAGE ya manual editor use karein."
+                                        } else {
+                                            questionText = TextFieldValue(cleaned)
+                                            pendingImageFile = null
+                                            questionNumber = suggestedNumber(questionKind, selected)
+                                            questionSection = questionNumber.substringBefore("(")
+                                            questionChapter = chapterForPage(pageNumber).orEmpty()
+                                            cropSelectionMode = false
+                                            showQuestionEditor = true
+                                            notice = "Selected area ka editable text extract ho gaya."
+                                        }
+                                    }.onFailure { error ->
+                                        notice = "Could not extract text from selected area: ${error.message ?: "unknown error"}"
+                                    }
+                                }
                             },
                             modifier = Modifier.weight(1f)
-                        ) { Text("ADD BOX CROP") }
+                        ) { Text("ADD SELECTED TEXT") }
                     }
                     OutlinedButton(onClick = { findQuestionsOnCurrentPage() }, modifier = Modifier.fillMaxWidth()) {
                         Text("FIND NUMBERED QUESTIONS ON PAGE")
@@ -1442,6 +1440,49 @@ private suspend fun <T> runCatchingCancellable(block: suspend () -> T): Result<T
 }
 
  
+
+private fun extractPdfTextInRegion(file: File, pageNumber: Int, region: Rect): String {
+    PDFBoxResourceLoader.init(file.parentFile?.parentFile ?: throw IllegalStateException("PDF location unavailable"))
+    PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+        require(pageNumber in 1..document.numberOfPages) { "Invalid PDF page." }
+        val page = document.getPage(pageNumber - 1)
+        val cropBox = page.cropBox
+        val rotation = ((page.rotation % 360) + 360) % 360
+        val displayedWidth = if (rotation == 90 || rotation == 270) cropBox.height else cropBox.width
+        val displayedHeight = if (rotation == 90 || rotation == 270) cropBox.width else cropBox.height
+        val left = region.left * displayedWidth
+        val top = region.top * displayedHeight
+        val right = region.right * displayedWidth
+        val bottom = region.bottom * displayedHeight
+
+        val stripper = object : PDFTextStripper() {
+            val selectedLines = StringBuilder()
+
+            override fun writeString(text: String, textPositions: MutableList<TextPosition>) {
+                val selectedChars = textPositions.filter { position ->
+                    val x = position.xDirAdj
+                    val y = position.yDirAdj
+                    val w = position.widthDirAdj
+                    val h = position.heightDir
+                    val centerX = x + w / 2f
+                    val centerY = y - h / 2f
+                    centerX >= left && centerX <= right && centerY >= top && centerY <= bottom
+                }
+                if (selectedChars.isNotEmpty()) {
+                    selectedChars.forEach { selectedLines.append(it.unicode ?: "") }
+                    selectedLines.append('\\n')
+                }
+            }
+        }.apply {
+            sortByPosition = true
+            startPage = pageNumber
+            endPage = pageNumber
+        }
+        stripper.getText(document)
+        return stripper.selectedLines.toString().trim().take(100_000)
+    }
+}
+
 private fun removePctbWatermarkLines(text: String): String =
     text.lineSequence()
         .filterNot { line ->
