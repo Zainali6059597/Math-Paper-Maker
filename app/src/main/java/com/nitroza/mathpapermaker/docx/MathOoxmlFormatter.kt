@@ -177,7 +177,7 @@ object MathOoxmlFormatter {
         val plain = StringBuilder()
         fun flush() {
             if (plain.isNotEmpty()) {
-                output.append("<m:r><m:t xml:space=\\"preserve\\">").append(xmlEscape(plain.toString())).append("</m:t></m:r>")
+                output.append("<m:r><m:t xml:space=\"preserve\">").append(xmlEscape(plain.toString())).append("</m:t></m:r>")
                 plain.clear()
             }
         }
