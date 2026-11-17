@@ -45,8 +45,7 @@ object PaperDraftStore {
         val chapterCount = if (draft.grade == 9) 13 else 12
         val chapters = draft.selectedChapters.ifEmpty { (1..chapterCount).map { "CH$it" }.toSet() }
         if (draft.paperMode !in setOf("BOARD", "CUSTOM") ||
-            chapters.isEmpty() || chapters.any { !PunjabBoardPattern.isValidChapter(draft.grade, it) } ||
-            (draft.paperMode == "BOARD" && chapters.size != chapterCount)
+            chapters.isEmpty() || chapters.any { !PunjabBoardPattern.isValidChapter(draft.grade, it) }
         ) return
 
         val questions = JSONArray().apply {
@@ -105,7 +104,6 @@ object PaperDraftStore {
             }
             require(selectedChapters.isNotEmpty() &&
                 selectedChapters.all { PunjabBoardPattern.isValidChapter(grade, it) } &&
-                (paperMode != "BOARD" || selectedChapters.size == chapterCount) &&
                 (chapterArray == null || selectedChapters.size == chapterArray.length())
             ) { "Invalid saved chapter scope." }
 
