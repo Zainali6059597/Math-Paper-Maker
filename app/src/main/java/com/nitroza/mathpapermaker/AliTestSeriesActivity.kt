@@ -12,7 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -638,14 +638,14 @@ class AliTestSeriesActivity : ComponentActivity() {
                         ) { Text("GO") }
                         Text("of $pageCount", style = MaterialTheme.typography.labelSmall)
                     }
-                    Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Box(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), contentAlignment = Alignment.TopCenter) {
                         pageBitmap?.let { bitmap ->
                             Box(
                                 Modifier.fillMaxWidth()
                                     .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
                                     .pointerInput(bitmap) {
                                         var start: Offset? = null
-                                        detectDragGestures(
+                                        detectDragGesturesAfterLongPress(
                                             onDragStart = { start = it },
                                             onDragEnd = { start = null },
                                             onDragCancel = { start = null }
