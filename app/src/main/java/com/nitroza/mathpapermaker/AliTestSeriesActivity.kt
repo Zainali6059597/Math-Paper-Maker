@@ -1534,6 +1534,19 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
 
             override fun writeString(text: String, textPositions: MutableList<TextPosition>) {
                 val selectedChars = textPositions.filter { position ->
+                    // PESRP prints "Watermark Not for Sale" diagonally across
+                    // the page. Exclude diagonal glyphs individually so the
+                    // horizontal question text beneath them remains intact.
+                    val direction = ((position.dir % 360f) + 360f) % 360f
+                    val nearestRightAngle = minOf(
+                        direction,
+                        kotlin.math.abs(direction - 90f),
+                        kotlin.math.abs(direction - 180f),
+                        kotlin.math.abs(direction - 270f),
+                        360f - direction
+                    )
+                    if (nearestRightAngle > 7f) return@filter false
+
                     val x = position.xDirAdj
                     val y = position.yDirAdj
                     val w = position.widthDirAdj
@@ -1562,7 +1575,9 @@ private fun removePctbWatermarkLines(text: String): String {
     // extracted line. Remove only the watermark phrase, not the whole line.
     val watermarkPatterns = listOf(
         Regex("(?i)web\\s*version\\s*of\\s*pctb"),
-        Regex("(?i)pctb\\s*web\\s*version")
+        Regex("(?i)pctb\\s*web\\s*version"),
+        Regex("(?i)watermark\\s*not\\s*for\\s*sale\\s*[-–—]?\\s*pesrp"),
+        Regex("(?i)not\\s*for\\s*sale\\s*[-–—]?\\s*pesrp")
     )
     return text.lineSequence()
         .map { line ->
