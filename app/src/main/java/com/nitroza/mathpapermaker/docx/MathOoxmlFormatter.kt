@@ -216,3 +216,4 @@ object MathOoxmlFormatter {
         return safe.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             .replace("\"", "&quot;").replace("'", "&apos;")
     }
+}
