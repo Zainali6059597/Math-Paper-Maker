@@ -12,7 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -106,6 +106,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var chapterMenuExpanded by remember { mutableStateOf(false) }
         var pendingImageFile by remember { mutableStateOf<String?>(null) }
         var cropRect by remember { mutableStateOf<Rect?>(null) }
+        var cropSelectionMode by remember { mutableStateOf(false) }
         var showQuestions by remember { mutableStateOf(false) }
         var showClearConfirm by remember { mutableStateOf(false) }
         var showManualAddPrompt by remember { mutableStateOf(false) }
@@ -466,7 +467,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                     }
                 }
-                extraction.onSuccess { pageText ->
+                extraction.onSuccess { rawPageText ->
+                    val pageText = removePctbWatermarkLines(rawPageText)
                     val found = QuestionTextSegmenter.segment(pageText)
                     detectedQuestions = found
                     checkedDetectedQuestions = emptySet()
@@ -499,7 +501,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                 } finally {
                     isOcrRunning = false
                 }
-                extraction.onSuccess { recognizedText ->
+                extraction.onSuccess { rawRecognizedText ->
+                    val recognizedText = removePctbWatermarkLines(rawRecognizedText)
                     val found = QuestionTextSegmenter.segment(recognizedText)
                     detectedQuestions = found
                     checkedDetectedQuestions = emptySet()
@@ -616,6 +619,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             pageIndex = 0
                             pageJumpText = "1"
                             cropRect = null
+                            cropSelectionMode = false
                             useManifestChapters = false
                         }) { Text("CHANGE PDF") }
                     }
@@ -638,25 +642,44 @@ class AliTestSeriesActivity : ComponentActivity() {
                         ) { Text("GO") }
                         Text("of $pageCount", style = MaterialTheme.typography.labelSmall)
                     }
-                    Box(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), contentAlignment = Alignment.TopCenter) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        if (cropSelectionMode) {
+                            TextButton(onClick = { cropSelectionMode = false }) { Text("DONE SELECTING") }
+                        } else {
+                            TextButton(
+                                enabled = pageBitmap != null,
+                                onClick = { cropRect = null; cropSelectionMode = true }
+                            ) { Text("START CROP SELECTION") }
+                        }
+                    }
+                    Box(
+                        Modifier.weight(1f).fillMaxWidth()
+                            .verticalScroll(rememberScrollState(), enabled = !cropSelectionMode),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
                         pageBitmap?.let { bitmap ->
                             Box(
                                 Modifier.fillMaxWidth()
                                     .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
-                                    .pointerInput(bitmap) {
-                                        var start: Offset? = null
-                                        detectDragGesturesAfterLongPress(
-                                            onDragStart = { start = it },
-                                            onDragEnd = { start = null },
-                                            onDragCancel = { start = null }
-                                        ) { change, _ ->
-                                            val origin = start ?: change.position
-                                            val left = (min(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
-                                            val top = (min(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
-                                            val right = (max(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
-                                            val bottom = (max(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
-                                            cropRect = Rect(left, top, right, bottom)
-                                            change.consume()
+                                    .pointerInput(bitmap, cropSelectionMode) {
+                                        if (cropSelectionMode) {
+                                            var start: Offset? = null
+                                            detectDragGestures(
+                                                onDragStart = { start = it },
+                                                onDragEnd = { start = null },
+                                                onDragCancel = { start = null }
+                                            ) { change, _ ->
+                                                val origin = start ?: change.position
+                                                val left = (min(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
+                                                val top = (min(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
+                                                val right = (max(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
+                                                val bottom = (max(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
+                                                cropRect = Rect(left, top, right, bottom)
+                                                change.consume()
+                                            }
                                         }
                                     }
                                     .drawWithContent {
@@ -693,7 +716,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             require(extracted.length <= 100_000) {
                                                 "This page contains too much extractable text. Select a smaller page region or use the scanned-question crop."
                                             }
-                                            extracted
+                                            removePctbWatermarkLines(extracted)
                                         }
                                     }
                                 }
@@ -1417,3 +1440,14 @@ private suspend fun <T> runCatchingCancellable(block: suspend () -> T): Result<T
 } catch (error: Throwable) {
     Result.failure(error)
 }
+
+ 
+private fun removePctbWatermarkLines(text: String): String =
+    text.lineSequence()
+        .filterNot { line ->
+            val normalized = line.lowercase().filter(Char::isLetterOrDigit)
+            normalized.contains("webversionofpctb") ||
+                normalized.contains("pctbwebversion")
+        }
+        .joinToString("\n")
+        .trim()
