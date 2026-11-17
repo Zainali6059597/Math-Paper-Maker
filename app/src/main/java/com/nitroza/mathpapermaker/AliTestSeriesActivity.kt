@@ -1574,10 +1574,12 @@ private fun removePctbWatermarkLines(text: String): String {
     // PDF watermark glyphs can be interleaved with question text on the same
     // extracted line. Remove only the watermark phrase, not the whole line.
     val watermarkPatterns = listOf(
-        Regex("(?i)web\\s*version\\s*of\\s*pctb"),
-        Regex("(?i)pctb\\s*web\\s*version"),
-        Regex("(?i)watermark\\s*not\\s*for\\s*sale\\s*[-–—]?\\s*pesrp"),
-        Regex("(?i)not\\s*for\\s*sale\\s*[-–—]?\\s*pesrp")
+        // Actual textbook overlay: "Web Version Of PECTAA Textbook"
+        Regex("(?i)web\\s*version\\s*of\\s*pectaa\\s*textbook"),
+        // Some PDF extractors may split or omit the word "Textbook".
+        Regex("(?i)web\\s*version\\s*of\\s*pectaa"),
+        // Footer printed separately at the bottom of the page.
+        Regex("(?i)not\\s*for\\s*sale")
     )
     return text.lineSequence()
         .map { line ->
