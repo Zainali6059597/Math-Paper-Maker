@@ -145,11 +145,6 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         LaunchedEffect(grade) {
-            // The first launch starts with Class 9's full scope already selected.
-            // After draft restoration, a teacher changing grade gets that grade's full scope.
-            if (draftLoaded) {
-                selectedChapters = (1..(if (grade == 9) 13 else 12)).map { "CH$it" }.toSet()
-            }
             val expectedFile = "Punjab_Grade${grade}_Mathematics.pdf"
             val result = withContext(Dispatchers.IO) {
                 runCatchingCancellable {
@@ -547,8 +542,14 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Text("Prepare a paper. Choose every question yourself.", style = MaterialTheme.typography.headlineSmall)
                     Text("SELECT CLASS", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        FilterChip(selected = grade == 9, enabled = selected.isEmpty() || grade == 9, onClick = { grade = 9 }, label = { Text("CLASS 9") })
-                        FilterChip(selected = grade == 10, enabled = selected.isEmpty() || grade == 10, onClick = { grade = 10 }, label = { Text("CLASS 10") })
+                        FilterChip(selected = grade == 9, enabled = selected.isEmpty() || grade == 9, onClick = {
+                            grade = 9
+                            selectedChapters = (1..13).map { "CH$it" }.toSet()
+                        }, label = { Text("CLASS 9") })
+                        FilterChip(selected = grade == 10, enabled = selected.isEmpty() || grade == 10, onClick = {
+                            grade = 10
+                            selectedChapters = (1..12).map { "CH$it" }.toSet()
+                        }, label = { Text("CLASS 10") })
                     }
                     Card {
                         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
