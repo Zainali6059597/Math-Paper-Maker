@@ -1543,7 +1543,7 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
                 }
                 if (selectedChars.isNotEmpty()) {
                     selectedChars.forEach { selectedLines.append(it.unicode ?: "") }
-                    selectedLines.append('\\n')
+                    selectedLines.append('\n')
                 }
             }
         }.apply {
