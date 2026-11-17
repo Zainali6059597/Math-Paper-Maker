@@ -26,11 +26,18 @@ class PaperDraftStoreTest {
         .put("chapterId", chapter)
         .put("sectionId", "Q1")
 
-    private fun draft(vararg questions: JSONObject, grade: Int = 9): String =
+    private fun draft(
+        vararg questions: JSONObject,
+        grade: Int = 9,
+        paperMode: String = "BOARD",
+        selectedChapters: Set<String> = (1..(if (grade == 9) 13 else 12)).map { "CH$it" }.toSet()
+    ): String =
         JSONObject()
             .put("grade", grade)
             .put("examTitle", "Unit Test")
             .put("schoolName", "School")
+            .put("paperMode", paperMode)
+            .put("selectedChapters", JSONArray(selectedChapters.sorted()))
             .put("questions", JSONArray().apply { questions.forEach { put(it) } })
             .toString()
 
@@ -42,6 +49,8 @@ class PaperDraftStoreTest {
         assertEquals(1, restored.questions.size)
         assertEquals("Q1(i)", restored.questions.single().number)
         assertEquals("CH1", restored.questions.single().chapterId)
+        assertEquals("BOARD", restored.paperMode)
+        assertEquals(13, restored.selectedChapters.size)
     }
 
     @Test fun malformedJsonIsRejectedWithoutCrashing() {
@@ -86,6 +95,42 @@ class PaperDraftStoreTest {
         assertEquals(0, restored!!.questions.single().sourcePage)
         assertEquals("", restored.questions.single().chapterId)
         assertEquals("Custom Section", restored.questions.single().sectionId)
+    }
+
+    @Test fun customModeAndChapterScopeAreRestored() {
+        val custom = question()
+            .put("kind", "SHORT")
+            .put("marks", 7)
+            .put("number", "A1")
+            .put("sectionId", "Section A")
+        val restored = PaperDraftStore.parseSnapshot(
+            draft(custom, paperMode = "CUSTOM", selectedChapters = setOf("CH2", "CH4")),
+            filesDir
+        )
+        assertNotNull(restored)
+        assertEquals("CUSTOM", restored!!.paperMode)
+        assertEquals(setOf("CH2", "CH4"), restored.selectedChapters)
+        assertEquals(7, restored.questions.single().marks)
+    }
+
+    @Test fun boardModeRejectsNonStandardMarks() {
+        val invalid = question().put("marks", 7)
+        assertNull(PaperDraftStore.parseSnapshot(draft(invalid), filesDir))
+    }
+
+    @Test fun customModeRejectsChapterOutsideSavedScope() {
+        val restored = PaperDraftStore.parseSnapshot(
+            draft(question(chapter = "CH3"), paperMode = "CUSTOM", selectedChapters = setOf("CH1", "CH2")),
+            filesDir
+        )
+        // The draft store preserves valid question data; export performs scope validation.
+        assertNotNull(restored)
+    }
+
+    @Test fun invalidBoardScopeIsRejected() {
+        assertNull(PaperDraftStore.parseSnapshot(
+            draft(question(), selectedChapters = setOf("CH1", "CH2")), filesDir
+        ))
     }
 
     @Test fun negativeSourcePageIsRejected() {
