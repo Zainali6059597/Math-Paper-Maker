@@ -1,6 +1,8 @@
 name: Test and Build Ali Test Series
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -12,7 +14,6 @@ concurrency:
 
 jobs:
   build:
-    if: false # Temporarily disabled: source-only work; do not compile until explicitly requested.
     name: Test and Build APK
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -83,7 +84,7 @@ jobs:
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: maths-paper-maker-debug-apk
+          name: ali-test-series-debug-apk
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
