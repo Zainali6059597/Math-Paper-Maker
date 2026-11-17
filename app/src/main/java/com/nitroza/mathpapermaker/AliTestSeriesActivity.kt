@@ -1,5 +1,6 @@
 package com.nitroza.mathpapermaker
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
@@ -743,7 +744,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 lifecycleScope.launch {
                                     val extraction = withContext(Dispatchers.IO) {
                                         runCatchingCancellable {
-                                            extractPdfTextInRegion(file, pageNumber, rect)
+                                            extractPdfTextInRegion(applicationContext, file, pageNumber, rect)
                                         }
                                     }
                                     extraction.onSuccess { text ->
@@ -1441,8 +1442,8 @@ private suspend fun <T> runCatchingCancellable(block: suspend () -> T): Result<T
 
  
 
-private fun extractPdfTextInRegion(file: File, pageNumber: Int, region: Rect): String {
-    PDFBoxResourceLoader.init(file.parentFile?.parentFile ?: throw IllegalStateException("PDF location unavailable"))
+private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int, region: Rect): String {
+    PDFBoxResourceLoader.init(context)
     PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
         require(pageNumber in 1..document.numberOfPages) { "Invalid PDF page." }
         val page = document.getPage(pageNumber - 1)
