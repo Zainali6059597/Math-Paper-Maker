@@ -21,7 +21,9 @@ data class PaperDraftSnapshot(
     val grade: Int,
     val examTitle: String,
     val schoolName: String,
-    val questions: List<StoredPaperQuestion>
+    val questions: List<StoredPaperQuestion>,
+    val paperMode: String = "BOARD",
+    val selectedChapters: Set<String> = emptySet()
 )
 
 /** One local working draft; no account, network or cloud sync. */
@@ -38,6 +40,13 @@ object PaperDraftStore {
             draft.examTitle.length > 500 || draft.schoolName.length > 500 ||
             draft.questions.any { it.text.length > MAX_QUESTION_TEXT_CHARS } ||
             draft.questions.sumOf { it.text.length.toLong() } > MAX_DRAFT_CHARS.toLong()
+        ) return
+
+        val chapterCount = if (draft.grade == 9) 13 else 12
+        val chapters = draft.selectedChapters.ifEmpty { (1..chapterCount).map { "CH$it" }.toSet() }
+        if (draft.paperMode !in setOf("BOARD", "CUSTOM") ||
+            chapters.isEmpty() || chapters.any { !PunjabBoardPattern.isValidChapter(draft.grade, it) } ||
+            (draft.paperMode == "BOARD" && chapters.size != chapterCount)
         ) return
 
         val questions = JSONArray().apply {
@@ -58,6 +67,8 @@ object PaperDraftStore {
             .put("grade", draft.grade)
             .put("examTitle", draft.examTitle)
             .put("schoolName", draft.schoolName)
+            .put("paperMode", draft.paperMode)
+            .put("selectedChapters", JSONArray(chapters.sorted()))
             .put("questions", questions)
         val serialized = json.toString()
         // A draft is local recovery data, not an unbounded document store.
@@ -83,6 +94,20 @@ object PaperDraftStore {
             val json = JSONObject(raw)
             val grade = json.optInt("grade", 9)
             require(grade == 9 || grade == 10) { "Invalid saved grade." }
+            val paperMode = json.optString("paperMode", "BOARD")
+            require(paperMode in setOf("BOARD", "CUSTOM")) { "Invalid saved paper mode." }
+            val chapterCount = if (grade == 9) 13 else 12
+            val chapterArray = json.optJSONArray("selectedChapters")
+            val selectedChapters = if (chapterArray == null) {
+                (1..chapterCount).map { "CH$it" }.toSet()
+            } else {
+                (0 until chapterArray.length()).map { chapterArray.getString(it) }.toSet()
+            }
+            require(selectedChapters.isNotEmpty() &&
+                selectedChapters.all { PunjabBoardPattern.isValidChapter(grade, it) } &&
+                (paperMode != "BOARD" || selectedChapters.size == chapterCount) &&
+                (chapterArray == null || selectedChapters.size == chapterArray.length())
+            ) { "Invalid saved chapter scope." }
 
             require(json.optString("examTitle").length <= 500 &&
                 json.optString("schoolName").length <= 500) { "Saved paper details are too long." }
@@ -117,8 +142,11 @@ object PaperDraftStore {
                     "Saved question text is too long."
                 }
                 require(kind in setOf("MCQ", "SHORT", "LONG")) { "Invalid saved question type." }
-                require(marks == when (kind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 } &&
-                    sourcePage >= 0 && (sourcePage > 0 || item.optString("text").isNotBlank())
+                val validMarks = if (paperMode == "BOARD") {
+                    marks == when (kind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }
+                } else marks in 1..100
+                require(validMarks && sourcePage >= 0 &&
+                    (sourcePage > 0 || item.optString("text").isNotBlank())
                 ) {
                     "Invalid saved question marks or page. Manually typed questions must retain editable text."
                 }
