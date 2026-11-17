@@ -183,7 +183,9 @@ object PaperDraftStore {
                 grade,
                 json.optString("examTitle", "Mathematics Examination"),
                 json.optString("schoolName"),
-                questions
+                questions,
+                paperMode,
+                selectedChapters
             )
         }.getOrNull()
     }
