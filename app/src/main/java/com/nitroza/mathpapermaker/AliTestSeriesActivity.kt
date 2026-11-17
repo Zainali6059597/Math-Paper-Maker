@@ -388,7 +388,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 paperMode
                             )
                         }
-                    }.onSuccess { notice = "Word paper exported. Open the DOCX in Word or another office app to review and print." }
+                    }.onSuccess { notice = "Editable Word DOCX exported. Text questions can be edited in Word; scanned question crops remain images." }
                         .onFailure { notice = "Word export failed: ${it.message}" }
                 }
             }
@@ -1204,7 +1204,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         TextButton(onClick = { showClearConfirm = true }) { Text("NEW PAPER") }
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
                         Button(enabled = boardReady && questionsInChapterScope && missingImageCount == 0 && selected.isNotEmpty(),
-                            onClick = { showManualAddPrompt = true }) { Text("EXPORT WORD") }
+                            onClick = { showManualAddPrompt = true }) { Text("EXPORT EDITABLE DOCX") }
                     }
                 }
             )
