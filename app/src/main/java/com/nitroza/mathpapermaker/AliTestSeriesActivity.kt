@@ -145,7 +145,11 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         LaunchedEffect(grade) {
-            selectedChapters = (1..(if (grade == 9) 13 else 12)).map { "CH$it" }.toSet()
+            // The first launch starts with Class 9's full scope already selected.
+            // After draft restoration, a teacher changing grade gets that grade's full scope.
+            if (draftLoaded) {
+                selectedChapters = (1..(if (grade == 9) 13 else 12)).map { "CH$it" }.toSet()
+            }
             val expectedFile = "Punjab_Grade${grade}_Mathematics.pdf"
             val result = withContext(Dispatchers.IO) {
                 runCatchingCancellable {
@@ -273,6 +277,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                 grade = saved.grade
                 examTitle = saved.examTitle
                 schoolName = saved.schoolName
+                paperMode = saved.paperMode
+                selectedChapters = saved.selectedChapters
                 selected = saved.questions.map { q ->
                     SelectedQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId, q.sectionId)
                 }
@@ -297,11 +303,13 @@ class AliTestSeriesActivity : ComponentActivity() {
             draftLoaded = true
         }
 
-        LaunchedEffect(grade, selected, examTitle, schoolName, draftLoaded) {
+        LaunchedEffect(grade, selected, examTitle, schoolName, paperMode, selectedChapters, draftLoaded) {
             if (draftLoaded) {
                 PaperDraftStore.save(this@AliTestSeriesActivity, PaperDraftSnapshot(
                     grade, examTitle, schoolName,
-                    selected.map { q -> StoredPaperQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId, q.sectionId) }
+                    selected.map { q -> StoredPaperQuestion(q.id, q.number, q.text, q.kind, q.marks, q.sourcePage, q.imageFile, q.chapterId, q.sectionId) },
+                    paperMode,
+                    selectedChapters
                 ))
             }
         }
