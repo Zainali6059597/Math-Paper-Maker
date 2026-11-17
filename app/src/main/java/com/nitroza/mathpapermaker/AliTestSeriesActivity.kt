@@ -666,20 +666,88 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Box(
                                 Modifier.fillMaxWidth()
                                     .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
-                                    .pointerInput(bitmap, cropSelectionMode) {
+                                    .pointerInput(bitmap, cropSelectionMode, cropRect) {
                                         if (cropSelectionMode) {
-                                            var start: Offset? = null
+                                            var dragStart = Offset.Zero
+                                            var originalRect: Rect? = null
+                                            var dragMode = "new"
                                             detectDragGestures(
-                                                onDragStart = { start = it },
-                                                onDragEnd = { start = null },
-                                                onDragCancel = { start = null }
-                                            ) { change, _ ->
-                                                val origin = start ?: change.position
-                                                val left = (min(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
-                                                val top = (min(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
-                                                val right = (max(origin.x, change.position.x) / size.width).coerceIn(0f, 1f)
-                                                val bottom = (max(origin.y, change.position.y) / size.height).coerceIn(0f, 1f)
-                                                cropRect = Rect(left, top, right, bottom)
+                                                onDragStart = { point ->
+                                                    dragStart = point
+                                                    originalRect = cropRect
+                                                    val current = cropRect
+                                                    val handleRadius = 30.dp.toPx()
+                                                    if (current == null) {
+                                                        dragMode = "new"
+                                                    } else {
+                                                        val l = current.left * size.width
+                                                        val t = current.top * size.height
+                                                        val r = current.right * size.width
+                                                        val b = current.bottom * size.height
+                                                        val handles = listOf(
+                                                            "tl" to Offset(l, t), "tm" to Offset((l+r)/2f, t), "tr" to Offset(r, t),
+                                                            "mr" to Offset(r, (t+b)/2f), "br" to Offset(r, b), "bm" to Offset((l+r)/2f, b),
+                                                            "bl" to Offset(l, b), "ml" to Offset(l, (t+b)/2f)
+                                                        )
+                                                        val nearest = handles.minByOrNull { (_, p) ->
+                                                            val dx = p.x - point.x
+                                                            val dy = p.y - point.y
+                                                            dx * dx + dy * dy
+                                                        }
+                                                        val dx = (nearest?.second?.x ?: 0f) - point.x
+                                                        val dy = (nearest?.second?.y ?: 0f) - point.y
+                                                        dragMode = when {
+                                                            nearest != null && dx * dx + dy * dy <= handleRadius * handleRadius -> nearest.first
+                                                            point.x in l..r && point.y in t..b -> "move"
+                                                            else -> "new"
+                                                        }
+                                                        if (dragMode == "new") originalRect = null
+                                                    }
+                                                },
+                                                onDragEnd = { originalRect = null },
+                                                onDragCancel = { originalRect = null }
+                                            ) { change, dragAmount ->
+                                                val dx = dragAmount.x / size.width
+                                                val dy = dragAmount.y / size.height
+                                                val base = originalRect
+                                                val updated = when {
+                                                    dragMode == "new" -> {
+                                                        val left = (min(dragStart.x, change.position.x) / size.width).coerceIn(0f, 1f)
+                                                        val top = (min(dragStart.y, change.position.y) / size.height).coerceIn(0f, 1f)
+                                                        val right = (max(dragStart.x, change.position.x) / size.width).coerceIn(0f, 1f)
+                                                        val bottom = (max(dragStart.y, change.position.y) / size.height).coerceIn(0f, 1f)
+                                                        Rect(left, top, right, bottom)
+                                                    }
+                                                    base == null -> null
+                                                    dragMode == "move" -> {
+                                                        val left = (base.left + dx).coerceIn(0f, 1f - base.width)
+                                                        val top = (base.top + dy).coerceIn(0f, 1f - base.height)
+                                                        Rect(left, top, left + base.width, top + base.height)
+                                                    }
+                                                    else -> {
+                                                        var left = base.left
+                                                        var top = base.top
+                                                        var right = base.right
+                                                        var bottom = base.bottom
+                                                        if (dragMode.contains("l")) left = (left + dx).coerceIn(0f, right - 0.015f)
+                                                        if (dragMode.contains("r")) right = (right + dx).coerceIn(left + 0.015f, 1f)
+                                                        if (dragMode.contains("t")) top = (top + dy).coerceIn(0f, bottom - 0.015f)
+                                                        if (dragMode.contains("b")) bottom = (bottom + dy).coerceIn(top + 0.015f, 1f)
+                                                        if (dragMode == "tm" || dragMode == "bm") {
+                                                            // Horizontal edge handles adjust width symmetrically.
+                                                            if (dragMode == "tm" || dragMode == "bm") {
+                                                                left = (left + dx).coerceIn(0f, right - 0.015f)
+                                                                right = (right + dx).coerceIn(left + 0.015f, 1f)
+                                                            }
+                                                        }
+                                                        if (dragMode == "ml" || dragMode == "mr") {
+                                                            top = (top + dy).coerceIn(0f, bottom - 0.015f)
+                                                            bottom = (bottom + dy).coerceIn(top + 0.015f, 1f)
+                                                        }
+                                                        Rect(left, top, right, bottom)
+                                                    }
+                                                }
+                                                if (updated != null) cropRect = updated
                                                 change.consume()
                                             }
                                         }
@@ -693,6 +761,21 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                 size = androidx.compose.ui.geometry.Size(r.width * size.width, r.height * size.height),
                                                 style = Stroke(width = 3.dp.toPx())
                                             )
+                                            val handleRadius = 7.dp.toPx()
+                                            val handleStroke = 2.dp.toPx()
+                                            val l = r.left * size.width
+                                            val t = r.top * size.height
+                                            val rr = r.right * size.width
+                                            val b = r.bottom * size.height
+                                            val handles = listOf(
+                                                Offset(l, t), Offset((l + rr) / 2f, t), Offset(rr, t),
+                                                Offset(rr, (t + b) / 2f), Offset(rr, b), Offset((l + rr) / 2f, b),
+                                                Offset(l, b), Offset(l, (t + b) / 2f)
+                                            )
+                                            handles.forEach { point ->
+                                                drawCircle(Color.White, radius = handleRadius, center = point)
+                                                drawCircle(Color.Red, radius = handleRadius, center = point, style = Stroke(width = handleStroke))
+                                            }
                                         }
                                     }
                             ) {
