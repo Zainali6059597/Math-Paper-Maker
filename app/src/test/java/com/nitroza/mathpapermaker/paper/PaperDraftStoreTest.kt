@@ -127,10 +127,23 @@ class PaperDraftStoreTest {
         assertNotNull(restored)
     }
 
-    @Test fun invalidBoardScopeIsRejected() {
+    @Test fun invalidChapterScopeIsRejected() {
         assertNull(PaperDraftStore.parseSnapshot(
-            draft(question(), selectedChapters = setOf("CH1", "CH2")), filesDir
+            draft(question(), paperMode = "CUSTOM", selectedChapters = setOf("CH1", "CH14")), filesDir
         ))
+    }
+
+    @Test fun legacyDraftWithoutModeOrScopeRestoresAsFullBoardDraft() {
+        val legacy = JSONObject()
+            .put("grade", 10)
+            .put("examTitle", "Legacy")
+            .put("schoolName", "School")
+            .put("questions", JSONArray().put(question(chapter = "CH1")))
+            .toString()
+        val restored = PaperDraftStore.parseSnapshot(legacy, filesDir)
+        assertNotNull(restored)
+        assertEquals("BOARD", restored!!.paperMode)
+        assertEquals(12, restored.selectedChapters.size)
     }
 
     @Test fun negativeSourcePageIsRejected() {
