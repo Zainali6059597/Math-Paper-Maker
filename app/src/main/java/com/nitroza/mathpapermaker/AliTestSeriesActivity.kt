@@ -83,6 +83,8 @@ class AliTestSeriesActivity : ComponentActivity() {
     @Composable
     private fun AliTestSeriesApp() {
         var grade by remember { mutableIntStateOf(9) }
+        var pendingGrade by remember { mutableIntStateOf(9) }
+        var showGradeSwitchConfirm by remember { mutableStateOf(false) }
         var selectedChapters by remember { mutableStateOf((1..13).map { "CH$it" }.toSet()) }
         var showChapterPicker by remember { mutableStateOf(false) }
         var pdfFile by remember { mutableStateOf<File?>(null) }
@@ -542,13 +544,23 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Text("Prepare a paper. Choose every question yourself.", style = MaterialTheme.typography.headlineSmall)
                     Text("SELECT CLASS", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        FilterChip(selected = grade == 9, enabled = selected.isEmpty() || grade == 9, onClick = {
-                            grade = 9
-                            selectedChapters = (1..13).map { "CH$it" }.toSet()
+                        FilterChip(selected = grade == 9, enabled = true, onClick = {
+                            if (grade != 9 && selected.isNotEmpty()) {
+                                pendingGrade = 9
+                                showGradeSwitchConfirm = true
+                            } else {
+                                grade = 9
+                                selectedChapters = (1..13).map { "CH$it" }.toSet()
+                            }
                         }, label = { Text("CLASS 9") })
-                        FilterChip(selected = grade == 10, enabled = selected.isEmpty() || grade == 10, onClick = {
-                            grade = 10
-                            selectedChapters = (1..12).map { "CH$it" }.toSet()
+                        FilterChip(selected = grade == 10, enabled = true, onClick = {
+                            if (grade != 10 && selected.isNotEmpty()) {
+                                pendingGrade = 10
+                                showGradeSwitchConfirm = true
+                            } else {
+                                grade = 10
+                                selectedChapters = (1..12).map { "CH$it" }.toSet()
+                            }
                         }, label = { Text("CLASS 10") })
                     }
                     Card {
@@ -1324,6 +1336,27 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }) { Text("ADD TO PAPER") }
                 },
                 dismissButton = { TextButton(onClick = { showManualQuestionEditor = false }) { Text("CANCEL") } }
+            )
+        }
+
+        if (showGradeSwitchConfirm) {
+            AlertDialog(
+                onDismissRequest = { showGradeSwitchConfirm = false },
+                title = { Text("START A NEW CLASS PAPER?") },
+                text = { Text("Switching classes will clear the current paper questions so Class 9 and Class 10 questions are not mixed. Your imported textbook files remain saved.") },
+                confirmButton = {
+                    Button(onClick = {
+                        selected.forEach { it.imageFile?.let { path -> File(path).delete() } }
+                        selected = emptyList()
+                        nextId = 1L
+                        grade = pendingGrade
+                        selectedChapters = (1..if (pendingGrade == 9) 13 else 12).map { "CH$it" }.toSet()
+                        showGradeSwitchConfirm = false
+                    }) { Text("SWITCH CLASS") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showGradeSwitchConfirm = false }) { Text("CANCEL") }
+                }
             )
         }
 
