@@ -666,7 +666,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Box(
                                 Modifier.fillMaxWidth()
                                     .aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
-                                    .pointerInput(bitmap, cropSelectionMode, cropRect) {
+                                    .pointerInput(bitmap, cropSelectionMode) {
                                         if (cropSelectionMode) {
                                             var dragStart = Offset.Zero
                                             var originalRect: Rect? = null
@@ -729,21 +729,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                         var top = base.top
                                                         var right = base.right
                                                         var bottom = base.bottom
-                                                        if (dragMode.contains("l")) left = (left + dx).coerceIn(0f, right - 0.015f)
-                                                        if (dragMode.contains("r")) right = (right + dx).coerceIn(left + 0.015f, 1f)
-                                                        if (dragMode.contains("t")) top = (top + dy).coerceIn(0f, bottom - 0.015f)
-                                                        if (dragMode.contains("b")) bottom = (bottom + dy).coerceIn(top + 0.015f, 1f)
-                                                        if (dragMode == "tm" || dragMode == "bm") {
-                                                            // Horizontal edge handles adjust width symmetrically.
-                                                            if (dragMode == "tm" || dragMode == "bm") {
-                                                                left = (left + dx).coerceIn(0f, right - 0.015f)
-                                                                right = (right + dx).coerceIn(left + 0.015f, 1f)
-                                                            }
-                                                        }
-                                                        if (dragMode == "ml" || dragMode == "mr") {
-                                                            top = (top + dy).coerceIn(0f, bottom - 0.015f)
-                                                            bottom = (bottom + dy).coerceIn(top + 0.015f, 1f)
-                                                        }
+                                                        if (dragMode in listOf("tl", "ml", "bl")) left = (left + dx).coerceIn(0f, right - 0.015f)
+                                                        if (dragMode in listOf("tr", "mr", "br")) right = (right + dx).coerceIn(left + 0.015f, 1f)
+                                                        if (dragMode in listOf("tl", "tm", "tr")) top = (top + dy).coerceIn(0f, bottom - 0.015f)
+                                                        if (dragMode in listOf("bl", "bm", "br")) bottom = (bottom + dy).coerceIn(top + 0.015f, 1f)
                                                         Rect(left, top, right, bottom)
                                                     }
                                                 }
