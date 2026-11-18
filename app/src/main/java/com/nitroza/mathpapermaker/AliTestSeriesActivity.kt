@@ -503,7 +503,13 @@ class AliTestSeriesActivity : ComponentActivity() {
             lifecycleScope.launch {
                 val extraction = try {
                     runCatchingCancellable {
-                        OfflinePdfOcr.readPage(file, pageIndex)
+                        OfflinePdfOcr.readPage(
+                            file,
+                            pageIndex,
+                            cropRect?.let { box ->
+                                android.graphics.RectF(box.left, box.top, box.right, box.bottom)
+                            }
+                        )
                     }
                 } finally {
                     isOcrRunning = false
@@ -1546,7 +1552,18 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
                     centerX >= left && centerX <= right && centerY >= top && centerY <= bottom
                 }
                 if (selectedChars.isNotEmpty()) {
-                    selectedChars.forEach { selectedLines.append(it.unicode ?: "") }
+                    var previousRight: Float? = null
+                    selectedChars.forEach { position ->
+                        val currentLeft = position.xDirAdj
+                        val previous = previousRight
+                        // PDFBox reports glyph positions individually; restore word gaps
+                        // instead of gluing every selected character into one long token.
+                        if (previous != null && currentLeft - previous > max(1.5f, position.widthDirAdj * 0.28f)) {
+                            selectedLines.append(' ')
+                        }
+                        selectedLines.append(position.unicode ?: "")
+                        previousRight = currentLeft + position.widthDirAdj
+                    }
                     selectedLines.append('\n')
                 }
             }
