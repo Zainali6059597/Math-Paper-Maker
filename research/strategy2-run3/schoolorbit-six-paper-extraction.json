@@ -1,0 +1,1793 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-18",
+  "description": "Research index of six SchoolOrbit-hosted Punjab BISE mathematics past-paper pages. Text excerpts are research candidates only; OCR/math formatting requires manual verification and chapter mapping.",
+  "status": "NEEDS_REVIEW",
+  "papers": [
+    {
+      "grade": "G9",
+      "board": "Multan",
+      "year": "2025",
+      "session": "First Annual",
+      "group": "Group 1",
+      "sourceUrl": "https://schoolorbit.pk/past-papers/class-9/mathematics/bise-multan-class-9-mathematics-2025-first-annual-group-1-spg-404dfebc704dac638b746d840fc4205d",
+      "sourceTitle": "Class 9 Mathematics Past Paper 2025 | BISE Multan · First Annual · Group 1 | SchoolOrbit",
+      "sourceLength": 11014,
+      "extractionStatus": "FAILED",
+      "candidateBlocks": [
+        {
+          "localId": "G9-Multan-2025-1",
+          "text": "01. 1\n\n    Product of \\[xy\\]\\[21\\]\\[x​y​\\]\\[21​\\]\n\n    \\[xy\\]\\[21\\]\\[x​y​\\]\\[21​\\] کا حاصل ضرب ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-2",
+          "text": "02. 2\n\n    (2516)−12=\\_\\_\\_(1625​)−21​=\\\\_\\\\_\\\\_\n\n    \\_\\_\\_=(2516)−12\\\\_\\\\_\\\\_=(1625​)−21​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-3",
+          "text": "03. 3\n\n    The logarithm of unity to any base is \\_\\_\\_.\n\n    کسی اساس پر 11 کا لوگارتھم ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-4",
+          "text": "04. 4\n\n    1a−b−1a+b=\\_\\_\\_a−b1​−a+b1​=\\\\_\\\\_\\\\_\n\n    \\_\\_\\_=1a−b−1a+b\\\\_\\\\_\\\\_=a−b1​−a+b1​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-5",
+          "text": "05. 5\n\n    For what value of “mm”, x2+4x+mx2+4x+m is a complete square.\n\n    “mm” کی کس قیمت کے لئے x2+4x+mx2+4x+m کامل مربع بن جائے گا۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-6",
+          "text": "06. 6\n\n    HCF of a3+b3a3+b3 and a2−ab+b2a2−ab+b2 is \\_\\_\\_.\n\n    a3+b3a3+b3 اور a2−ab+b2a2−ab+b2 کا ذواعظم ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-7",
+          "text": "07. 7\n\n    Which is the solution of 3−4x≤113−4x≤11?\n\n    3−4x≤113−4x≤11 کا کون سا حل ٹھیک ہے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-8",
+          "text": "08. 8\n\n    Point (−4,3)(−4,3) lies in the quadrant \\_\\_\\_.\n\n    نقطہ (−4,3)(−4,3) \\_\\_\\_ ربع میں واقع ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-9",
+          "text": "09. 9\n\n    The mid-point of the points (2,2)(2,2), (0,0)(0,0) is \\_\\_\\_.\n\n    (2,2)(2,2) اور (0,0)(0,0) نقاط کا درمیانی نقطہ \\_\\_\\_ ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-10",
+          "text": "10. 10\n\n    “⊥⊥” is the symbol of \\_\\_\\_.\n\n    “⊥⊥” \\_\\_\\_ کی علامت ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-11",
+          "text": "11. 11\n\n    The right bisectors of the sides of \\_\\_\\_ triangle intersect each other inside the triangle.\n\n    \\_\\_\\_ مثلث میں اضلاع کے عمودی ناصف مثلث کے اندر قطع کرتے ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-12",
+          "text": "12. 12\n\n    \\_\\_\\_ points determine a line.\n\n    نقاط ایک خط کا تعین کرتے ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-13",
+          "text": "13. 13\n\n    Diagonals of a parallelogram cut each other in the \\_\\_\\_ ratio.\n\n    متوازی الاضلاع کے وتر ایک دوسرے کو \\_\\_\\_ نسبت سے قطع کرتے ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-14",
+          "text": "14. 14\n\n    Unit of area is \\_\\_\\_.\n\n    رقبہ کا یونٹ \\_\\_\\_ ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-15",
+          "text": "15. 15\n\n    Median of a triangle divides it into \\_\\_\\_ triangles of equal parts.\n\n    مثلث کا وسطانیہ مثلث کو \\_\\_\\_ برابر مثلثوں میں تقسیم کرتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-16",
+          "text": "1. (i)\n\nFind the transpose of A=\\[20−17\\]A=\\[2−1​07​\\].\n\nٹرانسپوز معلوم کیجئے۔ A=\\[20−17\\]A=\\[2−1​07​\\]",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-17",
+          "text": "2. (ii)\n\nDefine identity matrix and give example.\n\nاکائی قالب کی تعریف کیجئے اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-18",
+          "text": "3. (iii)\n\nSimplify (x3)2÷x32(x3)2÷x32.\n\nمختصر کیجئے۔ (x3)2÷x32(x3)2÷x32",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-19",
+          "text": "4. (iv)\n\nSimplify and express the answer in the form of a+bia+bi. 2(5+4i)−3(7+4i)2(5+4i)−3(7+4i)\n\nمختصر کیجئے اور جواب a+bia+bi کی شکل میں لکھئے۔ 2(5+4i)−3(7+4i)2(5+4i)−3(7+4i)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-20",
+          "text": "5. (v)\n\nEvaluate log⁡21128log2​1281​.\n\nقیمت معلوم کیجئے۔ log⁡21128log2​1281​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-21",
+          "text": "6. (vi)\n\nCalculate log⁡53×log⁡325log5​3×log3​25.\n\nحل کیجئے۔ log⁡53×log⁡325log5​3×log3​25",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-22",
+          "text": "7. (vii)\n\nExpress in lowest form 8a(x+1)2(x2−1)2(x2−1)8a(x+1)​.\n\nمختصر ترین شکل میں لکھئے۔ 8a(x+1)2(x2−1)2(x2−1)8a(x+1)​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-23",
+          "text": "8. (viii)\n\nDefine a polynomial with example.\n\nکثیر رقمی کی تعریف کیجئے اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-24",
+          "text": "9. (ix)\n\nSimplify 21×7×321​×7​×3​.\n\nمختصر کیجئے۔ 21×7×321​×7​×3​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-25",
+          "text": "01. (i)\n\n    Define L.C.M.\n\n    ذواضعاف اقل کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-26",
+          "text": "02. (ii)\n\n    Solve the equation 3x+4=23x+4​=2.\n\n    مساوات کو حل کیجئے۔ 3x+4=23x+4​=2",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-27",
+          "text": "03. (iii)\n\n    Solve for “xx” ∣2x+5∣=11∣2x+5∣=11.\n\n    “xx” کی قیمت کے لئے حل کیجئے۔ ∣2x+5∣=11∣2x+5∣=11",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-28",
+          "text": "04. (iv)\n\n    Find the values of “mm” and “cc” by expressing the line in the form y=mx+cy=mx+c if 3x+2y=13x+2y=1.\n\n    دی گئی مساوات کو y=mx+cy=mx+c میں ظاہر کرکے “mm” اور “cc” کی قیمتیں معلوم کیجئے۔ 3x+2y=13x+2y=1",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-29",
+          "text": "05. (v)\n\n    Define Cartesian plane and draw its figure.\n\n    کارتیسی مستوی کی تعریف کیجئے اور شکل بھی بنائیے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-30",
+          "text": "06. (vi)\n\n    Find the distance between two points A(3,−11),B(3,−4)A(3,−11),B(3,−4).\n\n    دو نقاط کے جوڑوں کے درمیان فاصلہ معلوم کیجئے۔ A(3,−11),B(3,−4)A(3,−11),B(3,−4)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-31",
+          "text": "07. (vii)\n\n    Find the mid-point of the line segment joining A(2,5)A(2,5) and B(−1,1)B(−1,1).\n\n    دو نقاط A(2,5)A(2,5) اور B(−1,1)B(−1,1) کا درمیانی نقطہ معلوم کیجئے جو قطعہ خط AB‾AB پر واقع ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-32",
+          "text": "08. (viii)\n\n    In right triangle if one angle is of 30∘30∘ and its opposite side mAB‾=5cmmAB=5cm then find the length of hypotenuse AC‾AC.\n\n    اگر قائمہ زاویہ مثلث میں 30∘30∘ زاویہ کے سامنے عمود AB‾AB کی لمبائی 5cm5cm ہو تو وتر AC‾AC کی لمبائی معلوم کیجئے۔\n\n    ABC5cmmAC=?30°",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-33",
+          "text": "09. (ix)\n\n    Define parallelogram and draw its figure.\n\n    متوازی الاضلاع کی تعریف کیجئے اور شکل بنائیے۔\n\n10. P.T.O.",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-34",
+          "text": "1. (i)\n\nDefine bisector of a line segment.\n\nقطعہ خط کے ناصف کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-35",
+          "text": "2. (ii)\n\n3cm3cm, 4cm4cm and 7cm7cm are not the lengths of a triangle. Give the reason.\n\n3cm3cm، 4cm4cm اور 7cm7cm کسی مثلث کے اضلاع کی لمبائیاں نہیں ہیں۔ دلیل سے وضاحت کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-36",
+          "text": "3. (iii)\n\nDefine similar triangles.\n\nتشابہ مثلثان کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-37",
+          "text": "4. (iv)\n\nThe three sides of a triangle are of measure 88, xx and 1717 respectively. For what value of xx will it become base of a right angled triangle?\n\nایک مثلث کے اضلاع کی لمبائیاں بالترتیب 88، xx اور 1717 ہیں۔ xx کی کس قیمت کے لئے یہ ضلع قائمہ زاویہ مثلث کا قاعدہ بن جائے گا؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-38",
+          "text": "5. (v)\n\nVerify that the triangle has the measures of the sides are right-angled. a=9cm,b=12cm,c=15cma=9cm,b=12cm,c=15cm\n\nتصدیق کیجئے کہ اضلاع کی لمبائیاں قائمہ زاویہ مثلث کی ہیں۔ a=9cm,b=12cm,c=15cma=9cm,b=12cm,c=15cm",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-39",
+          "text": "6. (vi)\n\nWhat is meant by Rectangular region?\n\nمستطیلی علاقہ سے کیا مراد ہے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-40",
+          "text": "7. (vii)\n\nFind the area of the figure.\n\nشکل کا رقبہ معلوم کیجئے۔\n\n8 cm10cm8 cm10cm",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-41",
+          "text": "8. (viii)\n\nWhat is meant by circumcentre?\n\nمحاصرہ مرکز یا سرکم سنٹر سے کیا مراد ہے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-42",
+          "text": "9. (ix)\n\nConstructed △ABC△ABC in which mAB‾=4.8cm,mBC‾=3.7cm,m∠B=60∘mAB=4.8cm,mBC=3.7cm,m∠B=60∘\n\n△ABC△ABC بنائیں جس میں mAB‾=4.8cm,mBC‾=3.7cm,m∠B=60∘mAB=4.8cm,mBC=3.7cm,m∠B=60∘\n\nSECTION-II\n\nحصہ دوم\n\nNOTE: Attempt any three questions but question No.9 is compulsory.\n\nنوٹ: کوئی سے تین سوالات کے جوابات تحریر کیجئے لیکن سوال نمبر 9 لازمی ہے۔\n\n24 = 8 × 3",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-43",
+          "text": "1. (A)\n\nSolve by Crammer’s rule. 4x−y=0,2x+2y=1504x−y=0,2x+2y=150\n\nکریمر کے رول کی مدد سے حل کیجئے۔ 4x−y=0,2x+2y=1504x−y=0,2x+2y=150\n\n2. (B)\n\nSolve for real numbers xx and yy. (3−4i)(x+yi)=1+0i(3−4i)(x+yi)=1+0i\n\nxx اور yy حقیقی اعداد کے لئے حل کیجئے۔ (3−4i)(x+yi)=1+0i(3−4i)(x+yi)=1+0i",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-44",
+          "text": "1. (A)\n\nUse log table to find the value of 0.678×9.010.02340.02340.678×9.01​.\n\nلوگارتھم جدول کی مدد سے قیمت معلوم کیجئے۔ 0.678×9.010.02340.02340.678×9.01​\n\n2. (B)\n\nIf a2+b2+c2=45a2+b2+c2=45 and a+b+c=−1a+b+c=−1 then find the value of ab+bc+caab+bc+ca.\n\nاگر a2+b2+c2=45a2+b2+c2=45 اور a+b+c=−1a+b+c=−1 ہو تو ab+bc+caab+bc+ca کی قیمت معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-45",
+          "text": "1. (A)\n\nFactorize (x+1)(x+2)(x+3)(x+4)−120(x+1)(x+2)(x+3)(x+4)−120.\n\nتجزی کیجئے۔ (x+1)(x+2)(x+3)(x+4)−120(x+1)(x+2)(x+3)(x+4)−120\n\n2. (B)\n\nUse the division method to find the square root of x4−10x3+37x2−60x+36x4−10x3+37x2−60x+36.\n\nبذریعہ تقسیم جذر بالمربع معلوم کیجئے۔ x4−10x3+37x2−60x+36x4−10x3+37x2−60x+36",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-46",
+          "text": "1. (A)\n\nSolve the inequality −2<1−2x3<1−2<31−2x​<1.\n\nمرکب غیر مساوات −2<1−2x3<1−2<31−2x​<1 کو حل کریں۔\n\n2. (B)\n\nConstruct △ABC△ABC, draw the bisectors of its angles. mAB‾=5.2cm,mBC‾=7cm,mCA‾=6.2cmmAB=5.2cm,mBC=7cm,mCA=6.2cm\n\nمثلث ABCABC بنائیے اور اس کے زاویوں کے ناصف کھینچئے۔ mAB‾=5.2cm,mBC‾=7cm,mCA‾=6.2cmmAB=5.2cm,mBC=7cm,mCA=6.2cm",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-47",
+          "text": "1. Any point equidistant from the end points of a line segment is on the right bisector of it.\n\nاگر ایک نقطہ کسی قطعہ خط کے سروں سے مساوی الفاصلہ ہو تو وہ اس قطعہ خط کے عمودی ناصف پر واقع ہو گا۔\n\n2. OR\n\nیا\n\n3. Triangles on equal bases and of equal altitudes are equal in area.\n\nایسی مثلثیں جن کے قاعدے اور ارتفاع برابر ہوں وہ رقبہ میں برابر ہوں گی۔\n\n4. 29-2025(1st-A)-88000 (MULTAN)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        }
+      ]
+    },
+    {
+      "grade": "G9",
+      "board": "Multan",
+      "year": "2025",
+      "session": "Second Annual",
+      "group": "Group 1",
+      "sourceUrl": "https://schoolorbit.pk/past-papers/class-9/mathematics/bise-multan-class-9-mathematics-2025-second-annual-group-1-spg-514bd10fd2b579bf881b83f422fe1fb6",
+      "sourceTitle": "Class 9 Mathematics Past Paper 2025 | BISE Multan · Second Annual · Group 1 | SchoolOrbit",
+      "sourceLength": 11459,
+      "extractionStatus": "FAILED",
+      "candidateBlocks": [
+        {
+          "localId": "G9-Multan-2025-1",
+          "text": "01. 1\n\n    Product of \\[xy\\]\\[2−1\\]\\[x​y​\\]\\[2−1​\\] is \\_\\_\\_.\n\n    \\[xy\\]\\[2−1\\]\\[x​y​\\]\\[2−1​\\] کا حاصل ضرب ہے \\_\\_\\_.",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-2",
+          "text": "02. 2\n\n    The conjugate of 5+4i5+4i is \\_\\_\\_.\n\n    5+4i5+4i کا کانجوگیٹ \\_\\_\\_ ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-3",
+          "text": "03. 3\n\n    The logarithm of any number to itself as base is \\_\\_\\_.\n\n    اگر کسی عدد کے لوگارتھم کی اساس وہی عدد ہو تو جواب \\_\\_\\_ ہوتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-4",
+          "text": "04. 4\n\n    (a+b)(a−b)=\\_\\_\\_(a​+b​)(a​−b​)=\\\\_\\\\_\\\\_.\n\n    (a+b)(a−b)(a​+b​)(a​−b​) برابر ہے \\_\\_\\_.",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-5",
+          "text": "05. 5\n\n    What will be added to complete the square of 9a2−12ab9a2−12ab?\n\n    9a2−12ab9a2−12ab کو کامل مربع بنانے کے لئے اس میں کیا جمع کریں گے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-6",
+          "text": "06. 6\n\n    H.C.F of x−2x−2 and x2+x−6x2+x−6 is \\_\\_\\_.\n\n    x−2x−2 اور x2+x−6x2+x−6 کا عاد اعظم \\_\\_\\_ ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-7",
+          "text": "07. 7\n\n    x=…x=… is a solution of the inequality −2<x<32−2<x<23​.\n\n    x=…x=… غیر مساوات −2<x<32−2<x<23​ کے حل سیٹ کا ایک رکن ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-8",
+          "text": "08. 8\n\n    If (x,0)=(0,y)(x,0)=(0,y) then (x,y)(x,y) is \\_\\_\\_.\n\n    اگر (x,0)=(0,y)(x,0)=(0,y) ہو تو (x,y)(x,y)، برابر ہے \\_\\_\\_.",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-9",
+          "text": "09. 9\n\n    Distance between the points (0,0)(0,0) and (1,1)(1,1) is \\_\\_\\_.\n\n    (0,0)(0,0) اور (1,1)(1,1) کے درمیان فاصلہ \\_\\_\\_ ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-10",
+          "text": "10. 10\n\n    The symbol used for “Correspondence” is \\_\\_\\_.\n\n    مطابقت کے لئے \\_\\_\\_ علامت استعمال ہوتی ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-11",
+          "text": "11. 11\n\n    In a parallelogram opposite angles are \\_\\_\\_.\n\n    متوازی الاضلاع کے مخالف زاویے \\_\\_\\_ ہوتے ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-12",
+          "text": "12. 12\n\n    The right bisectors of the sides of a right triangle intersect each other on the \\_\\_\\_.\n\n    قائمہ زاویہ مثلث کے اضلاع کے عمودی ناصف ایک دوسرے کو \\_\\_\\_ پر قطع کرتے ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-13",
+          "text": "13. 13\n\n    One and only one line can be drawn through \\_\\_\\_ points.\n\n    \\_\\_\\_ نقاط میں سے ایک اور صرف ایک خط کھینچا جا سکتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-14",
+          "text": "14. 14\n\n    Area of the figure is \\_\\_\\_.\n\n    شکل کا رقبہ \\_\\_\\_ ہے۔\n\n    3cm",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-15",
+          "text": "15. 15\n\n    Medians of triangles are \\_\\_\\_.\n\n    مثلث کے وسطانیے \\_\\_\\_ ہوتے ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-16",
+          "text": "1. (i)\n\nDefine Singular Matrix and give example.\n\nنادر قالب کی تعریف کیجئے اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-17",
+          "text": "2. (ii)\n\nIf A=\\[−4213\\],B=\\[−2123\\]A=\\[−41​23​\\],B=\\[−22​13​\\] Find A−BA−B\n\nاگر A=\\[−4213\\]A=\\[−41​23​\\]، B=\\[−2123\\]B=\\[−22​13​\\] تو A−BA−B کی قیمت معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-18",
+          "text": "3. (iii)\n\nSimplify. x52÷(x5)2x52÷(x5)2\n\nمختصر کیجئے۔ x52÷(x5)2x52÷(x5)2",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-19",
+          "text": "4. (iv)\n\nSimplify and write your answer in the form a+bia+bi from −21+i1+i−2​\n\na+bia+bi کی شکل میں مختصر کیجئے۔ −21+i1+i−2​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-20",
+          "text": "5. (v)\n\nCalculate. log⁡32×log⁡281log3​2×log2​81\n\nقیمت معلوم کیجئے۔ log⁡32×log⁡281log3​2×log2​81",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-21",
+          "text": "6. (vi)\n\nFind the value of xx. log⁡x64=2logx​64=2\n\nxx کی قیمت معلوم کیجئے۔ log⁡x64=2logx​64=2",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-22",
+          "text": "7. (vii)\n\nSimplify. (5+3)(5−3)(5​+3​)(5​−3​)\n\nمختصر کیجئے۔ (5+3)(5−3)(5​+3​)(5​−3​)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-23",
+          "text": "8. (viii)\n\nRationalize the denominator. 68278​27​6​\n\nمخرج کو ناطق بنائے۔ 68278​27​6​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-24",
+          "text": "9. (ix)\n\nFactorize. 1−64x31−64x3\n\nتجزی کیجئے۔ 1−64x31−64x3",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-25",
+          "text": "1. (i)\n\nFind H.C.F. 102xy2z,85x2yz,187xyz2102xy2z,85x2yz,187xyz2\n\nعاد اعظم معلوم کیجئے۔ 102xy2z,85x2yz,187xyz2102xy2z,85x2yz,187xyz2",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-26",
+          "text": "2. (ii)\n\nSolve the equation. 23x−12x=x+1632​x−21​x=x+61​\n\nمساوات کو حل کیجئے۔ 23x−12x=x+1632​x−21​x=x+61​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-27",
+          "text": "3. (iii)\n\nSolve. ∣2x+3∣=11∣2x+3∣=11\n\nحل کیجئے۔ ∣2x+3∣=11∣2x+3∣=11",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-28",
+          "text": "4. (iv)\n\nVerify whether the point (2,3)(2,3) lies on the line 2x−y+1=02x−y+1=0 or not.\n\nتصدیق کیجئے کہ نقطہ (2,3)(2,3) لائن 2x−y+1=02x−y+1=0 پر واقع ہے یا نہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-29",
+          "text": "5. (v)\n\nDraw point (−4,−3)(−4,−3) in XYXY-plane.\n\nXY-planeXY-plane پر نقطہ (−4,−3)(−4,−3) کو ظاہر کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-30",
+          "text": "6. (vi)\n\nFind distance between (7,5)(7,5) and (1,1)(1,1) points.\n\nنقاط (1,1)(1,1) اور (7,5)(7,5) کے درمیان فاصلہ معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-31",
+          "text": "7. (vii)\n\nDefine collinear points with example.\n\nہم خطی نقاط کی تعریف اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-32",
+          "text": "8. (viii)\n\nDefine A.S.A postulate of triangles.\n\nمثلثوں کے ز-ض-ز موضوع کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-33",
+          "text": "9. (ix)\n\nFind unknown in the given figure.\n\nشکل میں نامعلوم کی مقدار معلوم کیجئے۔\n\nm°n°75°x°y°",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-34",
+          "text": "01. (i)\n\n    In the given equilateral triangle ABCABC, AD‾AD is bisector of ∠A∠A. Then find the unknowns x∘,y∘,z∘x∘,y∘,z∘\n\n    دی گئی متساوی الاضلاع مثلث ABCABC میں AD‾AD زاویہ AA کا ناصف ہے؟ نامعلوم x∘,y∘x∘,y∘ اور z∘z∘ کی قیمتیں معلوم کیجئے۔\n\n    ABCDx°y°z°",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-35",
+          "text": "02. (ii)\n\n    If 13cm13cm, 12cm12cm and 5cm5cm are the lengths of a triangle then verify that the difference of measures of any two sides of a triangle is less than the measure of third side.\n\n    اگر ایک مثلث کے اضلاع کی لمبائیاں 13cm13cm، 12cm12cm اور 5cm5cm ہوں تو تصدیق کریں کہ مثلث کے کوئی دو اضلاع کی لمبائیوں کا فرق تیسرے ضلع کی لمبائی سے کم ہوتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-36",
+          "text": "03. (iii)\n\n    Define proportion and write its symbol.\n\n    تناسب کی تعریف کیجئے اور اس کا علامت لکھئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-37",
+          "text": "04. (iv)\n\n    In the given figure find the value of unknown xx.\n\n    سامنے دی گئی شکل میں نامعلوم xx کی قیمت معلوم کیجئے۔\n\n    4 cm3 cmx",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-38",
+          "text": "05. (v)\n\n    Verify that the triangle having sides a=1.5cm,b=2cm,c=2.5cma=1.5cm,b=2cm,c=2.5cm is right-angled triangle.\n\n    تصدیق کریں کہ مثلث جس کے اضلاع a=1.5cma=1.5cm، b=2cmb=2cm، c=2.5cmc=2.5cm ہیں۔ یہ مثلث قائمہ زاویہ مثلث ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-39",
+          "text": "06. (vi)\n\n    What is meant by “Interior of Rectangle”?\n\n    “مستطیل کے اندرون” سے کیا مراد ہے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-40",
+          "text": "07. (vii)\n\n    Define “Altitude of Parallelogram”.\n\n    “متوازی الاضلاع کے ارتفاع” کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-41",
+          "text": "08. (viii)\n\n    Define “In centre” of a triangle.\n\n    مثلث کے “اندرونی مرکز” کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-42",
+          "text": "09. (ix)\n\n    What is meant by “Median of Triangle”?\n\n    “مثلث کے وسطانیہ” سے کیا مراد ہے۔\n\n10. P.T.O.\n\nSECTION-II\n\nحصہ دوم\n\nNOTE: Attempt any three questions but question No.9 is compulsory.\n\nنوٹ: کوئی سے تین سوالات کے جوابات تحریر کیجئے لیکن سوال نمبر 9 لازمی ہے۔\n\n24 = 8 × 3",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-43",
+          "text": "1. (A)\n\nSolve the system of linear equations by using the matrix inverse method.\n\nx−y=−1x−y=−1\n\nx−2y=−1x−2y=−1\n\nقالبوں کے معکوس کے طریقے کی مدد سے لینیئر مساواتوں کے جوڑوں میں xx اور yy متغیرات کی قیمت معلوم کیجئے۔\n\nx−y=−1x−y=−1\n\nx−2y=−1x−2y=−1\n\n2. (B)\n\nShow that (xaxb)a+b×(xbxc)b+c×(xcxa)c+a=1(xbxa​)a+b×(xcxb​)b+c×(xaxc​)c+a=1\n\nثابت کیجئے۔ (xaxb)a+b×(xbxc)b+c×(xcxa)c+a=1(xbxa​)a+b×(xcxb​)b+c×(xaxc​)c+a=1",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-44",
+          "text": "1. (A)\n\nUse logarithm to find the value of 0.7214×20.3760.83360.80.7214×20.37​​\n\nلوگارتھم کی مدد سے حل کیجئے۔ 0.7214×20.3760.83360.80.7214×20.37​​\n\n2. (B)\n\nIf a+b+c=7a+b+c=7 and ab+bc+ca=10ab+bc+ca=10 then find the value of a2+b2+c2a2+b2+c2\n\nاگر a+b+c=7a+b+c=7 اور ab+bc+ca=10ab+bc+ca=10 ہو تو a2+b2+c2a2+b2+c2 کی قیمت معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-45",
+          "text": "1. (A)\n\nFor what value of mm is the polynomial P(x)=4x3−7x2+6x−3mP(x)=4x3−7x2+6x−3m exactly divisible by x+2x+2?\n\nمعلوم کیجئے کہ mm کی کس قیمت کے لئے x+2x+2 کثیر رقمی P(x)=4x3−7x2+6x−3mP(x)=4x3−7x2+6x−3m کو پورا پورا تقسیم کرے گا۔\n\n2. (B)\n\nUse division method to find the square root of 4x2+12xy+9y2+16x+24y+164x2+12xy+9y2+16x+24y+16\n\nتقسیم طریقے سے جذر مربع معلوم کیجئے۔ 4x2+12xy+9y2+16x+24y+164x2+12xy+9y2+16x+24y+16",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-46",
+          "text": "1. (A)\n\nSolve the equation x3x−6=2−2xx−2,x≠23x−6x​=2−x−22x​,x=2\n\nمساوات کا حل معلوم کیجئے۔ x3x−6=2−2xx−2,x≠23x−6x​=2−x−22x​,x=2\n\n2. (B)\n\nConstruct the △ABC△ABC draw the bisectors of their angles and verify their concurrency.\n\nmAB‾=4.2cmmAB=4.2cm\n\nmBC‾=6cmmBC=6cm\n\nmCA‾=5.2cmmCA=5.2cm\n\nمثلث ABCABC بنائے اس کے زاویوں کا ناصف کھینچئے اور ان کے ہم نقطہ ہونے کی تصدیق کیجئے۔\n\nmAB‾=4.2cmmAB=4.2cm\n\nmBC‾=6cmmBC=6cm\n\nmCA‾=5.2cmmCA=5.2cm",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G9-Multan-2025-47",
+          "text": "1. Prove that the bisectors of the angles of a triangle are concurrent.\n\nثابت کیجئے کہ کسی مثلث کے اندرونی زاویوں کے ناصف ہم نقطہ ہوتے ہیں۔\n\n2. OR\n\nیا\n\n3. Prove that parallelograms on equal bases and having the same (or equal) altitudes are equal in area.\n\nثابت کیجئے کہ برابر قاعدوں پر واقع اور برابر ارتفاع والی متوازی الاضلاع رقبہ میں برابر ہوتی ہیں۔\n\n4. 29-2025(2nd-A)- (MULTAN)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        }
+      ]
+    },
+    {
+      "grade": "G9",
+      "board": "Sahiwal",
+      "year": "2025",
+      "session": "First Annual",
+      "group": "Group 2",
+      "sourceUrl": "https://schoolorbit.pk/past-papers/class-9/mathematics/bise-sahiwal-class-9-mathematics-2025-first-annual-group-2-spg-a11d6b06d8fd635bc2d852b3a604fe9b",
+      "sourceTitle": "Sorry ! Page not found",
+      "sourceLength": 182,
+      "extractionStatus": "FAILED",
+      "candidateBlocks": []
+    },
+    {
+      "grade": "G10",
+      "board": "Multan",
+      "year": "2026",
+      "session": "First Annual",
+      "group": "Group 1",
+      "sourceUrl": "https://schoolorbit.pk/past-papers/class-10/mathematics/bise-multan-class-10-mathematics-2026-first-annual-group-1-spg-78b19bdfca86cf1b55bfde0dc244fd33",
+      "sourceTitle": "Class 10 Mathematics Past Paper 2026 | BISE Multan · First Annual · Group 1 | SchoolOrbit",
+      "sourceLength": 11382,
+      "extractionStatus": "FAILED",
+      "candidateBlocks": [
+        {
+          "localId": "G10-Multan-2026-1",
+          "text": "01. 1\n\n    An equation, which remains unchanged when xx is replaced by 1xx1​ is called a/an \\_\\_\\_ equation.\n\n    وہ مساوات جس میں xx کی جگہ 1xx1​ درج کرنے سے تبدیلی نہ ہو، \\_\\_\\_ مساوات کہلاتی ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-2",
+          "text": "02. 2\n\n    The number of methods to solve a quadratic equation are:\n\n    دو درجی مساوات کو حل کرنے کے طریقے ہیں:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-3",
+          "text": "03. 3\n\n    Discriminant of quadratic equation is:\n\n    دو درجی مساوات کا ممیز ہوتا ہے:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-4",
+          "text": "04. 4\n\n    The value of (1−ω−ω2)5(1−ω−ω2)5 is:\n\n    (1−ω−ω2)5(1−ω−ω2)5 کی قیمت ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-5",
+          "text": "05. 5\n\n    The \\_\\_\\_ of the elements in a ratio is important.\n\n    نسبت کے ارکان کی \\_\\_\\_ اہم ہوتی ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-6",
+          "text": "06. 6\n\n    If uv=vw=kvu​=wv​=k, then:\n\n    اگر uv=vw=kvu​=wv​=k ہو تو:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-7",
+          "text": "07. 7\n\n    (x+3)2=x2+6x+9(x+3)2=x2+6x+9 is a/an \\_\\_\\_.\n\n    (x+3)2=x2+6x+9(x+3)2=x2+6x+9 ایک \\_\\_\\_ ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-8",
+          "text": "08. 8\n\n    If A=NA=N and B=WB=W, then A−BA−B is:\n\n    اگر A=NA=N اور B=WB=W ہو تو A−BA−B برابر ہے:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-9",
+          "text": "09. 9\n\n    The different number of ways to describe a set is:\n\n    سیٹ کو بیان کرنے کے مختلف طریقوں کی تعداد ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-10",
+          "text": "10. 10\n\n    The most frequent occurring observation in a data set is called:\n\n    کسی مواد میں سب سے زیادہ مرتبہ آنے والے مشاہدہ کو کہا جاتا ہے:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-11",
+          "text": "11. 11\n\n    π33π​ radian in degree is equal to:\n\n    π33π​ ریڈین، ڈگری میں برابر ہے:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-12",
+          "text": "12. 12\n\n    The distance of any point of the circle to its centre is called:\n\n    دائرے کے کسی نقطہ کا اس کے مرکز سے فاصلہ کہلاتا ہے:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-13",
+          "text": "13. 13\n\n    The straight line joining any two points of the circumference is called:\n\n    خط جو دائرے پر سے دو نقاط کو ملانے والا قطعہ خط دائرے کی \\_\\_\\_ کہلاتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-14",
+          "text": "14. 14\n\n    The semi circumference and the diameter of a circle both subtend a central angle of \\_\\_\\_.\n\n    دائرے کے نصف محیط کا مرکزی زاویہ \\_\\_\\_ ہوتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-15",
+          "text": "15. 15\n\n    The portion of circle between two radii and an arc is called:\n\n    ایک دائرے کا حصہ جو ایک قوس اور دو رداسوں کے درمیان ہو، \\_\\_\\_ کہلاتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-16",
+          "text": "1. (i)\n\nWrite the following quadratic equation in standard form. x2+43−x7=13x2+4​−7x​=1\n\nمندرجہ ذیل دو درجی مساوات کو معیاری فارم میں لکھئے۔ x2+43−x7=13x2+4​−7x​=1\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-17",
+          "text": "2. (ii)\n\nDefine reciprocal equation.\n\nمعکوس مساوات کی تعریف کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-18",
+          "text": "3. (iii)\n\nSolve x2+2x−2=0x2+2x−2=0\n\nحل کیجئے۔ x2+2x−2=0x2+2x−2=0\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-19",
+          "text": "4. (iv)\n\nWithout solving, find the sum and product of the roots of the given equation. 3x2−5x+7=03x2−5x+7=0\n\nحل کئے بغیر دو درجی مساوات کے روٹس کا مجموعہ اور حاصل ضرب معلوم کیجئے۔ 3x2−5x+7=03x2−5x+7=0\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-20",
+          "text": "5. (v)\n\nWrite the quadratic equation having roots −1,−7−1,−7\n\nدو درجی مساوات لکھیں جس کے روٹس −1,−7−1,−7 ہوں۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-21",
+          "text": "6. (vi)\n\nFind the value of pp, if the ratios 2p+5:3p+42p+5:3p+4 and 3:43:4 are equal.\n\npp کی قیمت معلوم کیجئے اگر نسبتیں 2p+5:3p+42p+5:3p+4 اور 3:43:4 برابر ہوں۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-22",
+          "text": "7. (vii)\n\nEvaluate ω13+ω−17ω13+ω−17\n\nقیمت معلوم کیجئے۔ ω−13+ω−17ω−13+ω−17\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-23",
+          "text": "8. (viii)\n\nIf K∝T2K∝T2 and K=8K=8 when T=3T=3, find KK When T=6T=6.\n\nاگر K∝T2K∝T2 اور K=8K=8 جب T=3T=3 ہو تو KK معلوم کیجئے جبکہ T=6T=6 ہو۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-24",
+          "text": "9. (ix)\n\nFind the fourth proportional to 8,7,6.\n\n8،7،6 کا چوتھا تناسب معلوم کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-25",
+          "text": "1. (i)\n\nResolve into partial fractions 3x+3(x−1)(x+2)(x−1)(x+2)3x+3​.\n\nجزوی کسور میں تحلیل کیجئے۔ 3x+3(x−1)(x+2)(x−1)(x+2)3x+3​\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-26",
+          "text": "2. (ii)\n\nWhat are partial fractions?\n\nجزوی کسور کیا ہوتی ہے؟\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-27",
+          "text": "3. (iii)\n\nIf U={1,2,3,…,10}U={1,2,3,…,10} and A={2,4,6,8}A={2,4,6,8} then find AcAc.\n\nاگر U={1,2,3,…,10}U={1,2,3,…,10} اور A={2,4,6,8}A={2,4,6,8} ہو تو AcAc معلوم کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-28",
+          "text": "4. (iv)\n\nFind the sets XX and YY if X×Y={(a,a),(b,a),(c,a),(d,a)}X×Y={(a,a),(b,a),(c,a),(d,a)}.\n\nXX اور YY سیٹ معلوم کیجئے اگر X×Y={(a,a),(b,a),(c,a),(d,a)}X×Y={(a,a),(b,a),(c,a),(d,a)}\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-29",
+          "text": "5. (v)\n\nIf M={a,b,c}M={a,b,c} then make two binary relations for M×MM×M.\n\nاگر M={a,b,c}M={a,b,c} ہو تو M×MM×M کے دو ثنائی روابط بنائیے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-30",
+          "text": "6. (vi)\n\nIf U={1,2,3,4,…,10}U={1,2,3,4,…,10} and B={1,4,7,10}B={1,4,7,10} then find BcBc.\n\nاگر U={1,2,3,4,…,10}U={1,2,3,4,…,10} اور B={1,4,7,10}B={1,4,7,10} ہو تو BcBc معلوم کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-31",
+          "text": "7. (vii)\n\nDefine class limits.\n\nجماعتی حدود کی تعریف لکھئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-32",
+          "text": "8. (viii)\n\nFind arithmetic mean for given data\n\n12,14,17,20,24,29,35,45\n\nدیئے گئے مواد کے لیے حسابی اوسط معلوم کیجئے۔\n\n12,14,17,20,24,29,35,45\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-33",
+          "text": "9. (ix)\n\nDefine range also write its formula.\n\nسعت کی تعریف لکھیں اور فارمولا بھی تحریر کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-34",
+          "text": "1. (i)\n\nConvert 315∘315∘ into radians.\n\n315∘315∘ کو ریڈین میں تبدیل کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-35",
+          "text": "2. (ii)\n\nFind θθ, when ℓ=2cmℓ=2cm, and r=3.5cmr=3.5cm\n\nاگر ℓ=2cmℓ=2cm اور r=3.5cmr=3.5cm ہو تو θθ معلوم کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-36",
+          "text": "3. (iii)\n\nDefine an angle.\n\nزاویہ کی تعریف کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-37",
+          "text": "4. (iv)\n\nVerify that (1−sin⁡θ)(1+sin⁡θ)=cos⁡2θ(1−sinθ)(1+sinθ)=cos2θ\n\nثابت کریں کہ (1−sin⁡θ)(1+sin⁡θ)=cos⁡2θ(1−sinθ)(1+sinθ)=cos2θ\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-38",
+          "text": "5. (v)\n\nDifferentiate between collinear and non-collinear points.\n\nہم خط اور غیر ہم خط نقاط میں فرق بیان کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-39",
+          "text": "6. (vi)\n\nWhat do you know about tangent of a circle?\n\nدائرے کے مماس کے بارے میں آپ کیا جانتے ہیں؟\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-40",
+          "text": "7. (vii)\n\nDefine in-centre.\n\nمحصور مرکز کی تعریف کیجئے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-41",
+          "text": "8. (viii)\n\nDraw a circle of radius 3cm3cm.\n\n3cm3cm رداس کا ایک دائرہ بنائیے۔\n\n(2 marks)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-42",
+          "text": "9. (ix)\n\nThe length of each side of a regular octagon is 2cm2cm, find its perimeter.\n\nایک منتظم مثمن کے ہر ضلع کی لمبائی 2cm2cm ہے۔ اس کا احاطہ معلوم کیجئے۔\n\n(2 marks)\n\nSECTION-II\n\nحصہ دوم\n\nNOTE: Attempt any three questions but question No.9 is compulsory.\n\nنوٹ: کوئی سے تین سوالات کے جوابات تحریر کیجئے لیکن سوال نمبر 9 لازمی ہے۔\n\n24=8×324=8×3",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-43",
+          "text": "1. (A)\n\nSolve: 2x4−9x2+4=02x4−9x2+4=0\n\nحل کیجئے۔ 2x4−9x2+4=02x4−9x2+4=0\n\n2. (B)\n\nIf α,βα,β are the roots of the equation x2−3x+6=0x2−3x+6=0, form equation whose roots are α2,β2α2,β2.\n\nاگر α,βα,β مساوات x2−3x+6=0x2−3x+6=0 کے روٹس ہیں تو وہ مساوات بنائیے جس کے روٹس α2,β2α2,β2 ہوں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-44",
+          "text": "1. (A)\n\nIf a:b=c:d(a,b,c,d≠0)a:b=c:d(a,b,c,d=0) then show that p(a+b)+qb:p(c+d)+qd=a:cp(a+b)+qb:p(c+d)+qd=a:c\n\nاگر a:b=c:d(a,b,c,d≠0)a:b=c:d(a,b,c,d=0) ہو تو ثابت کیجئے کہ p(a+b)+qb:p(c+d)+qd=a:cp(a+b)+qb:p(c+d)+qd=a:c\n\n2. (B)\n\nResolve into partial fractions 3x+7(x2+1)(x+3)(x2+1)(x+3)3x+7​\n\nجزوی کسور میں تحلیل کیجئے۔ 3x+7(x2+1)(x+3)(x2+1)(x+3)3x+7​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-45",
+          "text": "1. (A)\n\nIf U={1,2,3,…,10}U={1,2,3,…,10}, A={1,3,5,7,9}A={1,3,5,7,9} and B={2,3,4,5,8}B={2,3,4,5,8} then prove that B−A=B∩A′B−A=B∩A′\n\nاگر U={1,2,3,…,10}U={1,2,3,…,10}، A={1,3,5,7,9}A={1,3,5,7,9} اور B={2,3,4,5,8}B={2,3,4,5,8} ہو تو ثابت کیجئے۔ B−A=B∩A′B−A=B∩A′\n\n2. (B)\n\nFind standard deviation “S” :\n\n12, 6, 7, 3, 15, 10, 18, 5.\n\nمعیاری انحراف “S” معلوم کیجئے۔\n\n12,6,7,3,15,10,18,512,6,7,3,15,10,18,5",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-46",
+          "text": "1. (A)\n\nVerify the identity 1+cos⁡θ1−cos⁡θ=sin⁡θ1−cos⁡θ1−cosθ1+cosθ​​=1−cosθsinθ​\n\nشناخت ثابت کیجئے۔ 1+cos⁡θ1−cos⁡θ=sin⁡θ1−cos⁡θ1−cosθ1+cosθ​​=1−cosθsinθ​\n\n2. (B)\n\nCircumscribe a circle about a triangle ABC with lengths of sides of triangle are ∣AB‾∣=3cm∣AB∣=3cm, ∣BC‾∣=4cm∣BC∣=4cm and ∣AC‾∣=3cm∣AC∣=3cm\n\nمثلث ABCABC کے گرد دائرہ بنائیے۔ جبکہ مثلث ABCABC کے اضلاع کی لمبائیاں ∣AB‾∣=3cm∣AB∣=3cm، ∣BC‾∣=4cm∣BC∣=4cm اور ∣AC‾∣=3cm∣AC∣=3cm ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Multan-2026-47",
+          "text": "1. Prove that perpendicular from the center of a circle on a chord bisects it.\n\nثابت کریں کہ دائرے کے مرکز سے کسی وتر پر عمود اس کو تنصیف کرتا ہے۔\n\n2. OR\n\nیا\n\n3. Prove that\n\nثابت کریں کہ\n\nAny two angles in the same segment of circle are equal.\n\nدیئے گئے دائرے کے ایک قطعہ دائرہ میں بننے والے باہم زاویے برابر ہوتے ہیں۔\n\n4. 30-2026(1st-A)-68000 (MULTAN)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        }
+      ]
+    },
+    {
+      "grade": "G10",
+      "board": "Gujranwala",
+      "year": "2025",
+      "session": "First Annual",
+      "group": "Group 2",
+      "sourceUrl": "https://schoolorbit.pk/past-papers/class-10/mathematics/bise-gujranwala-class-10-mathematics-2025-first-annual-group-2-spg-1fda0d0ec76d5cf60de1923cc85874d8",
+      "sourceTitle": "Class 10 Mathematics Past Paper 2025 | BISE Gujranwala · First Annual · Group 2 | SchoolOrbit",
+      "sourceLength": 11587,
+      "extractionStatus": "FAILED",
+      "candidateBlocks": [
+        {
+          "localId": "G10-Gujranwala-2025-1",
+          "text": "01. 1\n\n    The number of terms in a standard quadratic equation ax2+bx+c=0ax2+bx+c=0 is\n\n    دو درجی معیاری مساوات ax2+bx+c=0ax2+bx+c=0 میں رقموں کی تعداد ہے",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-2",
+          "text": "02. 2\n\n    The solution set of equation 4x2−16=04x2−16=0 is\n\n    مساوات 4x2−16=04x2−16=0 کا حل سیٹ ہے",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-3",
+          "text": "03. 3\n\n    α2+β2α2+β2 is equal to\n\n    α2+β2α2+β2 برابر ہے",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-4",
+          "text": "04. 4\n\n    Product of cube roots of unity is\n\n    اکائی کے جذر المکعب کا حاصل ضرب ہے",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-5",
+          "text": "05. 5\n\n    If a:b=x:ya:b=x:y, then alternando property is\n\n    اگر a:b=x:ya:b=x:y ہو تو ابدال نسبت ہے",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-6",
+          "text": "06. 6\n\n    The third proportional of x2x2 and y2y2 is\n\n    x2x2 اور y2y2 کا تیسرا تناسب ہے",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-7",
+          "text": "07. 7\n\n    The identity (5x+4)2=25x2+40x+16(5x+4)2=25x2+40x+16 is true for\n\n    مماثلت (5x+4)2=25x2+40x+16(5x+4)2=25x2+40x+16، xx کی \\_\\_\\_ کے لیے درست ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-8",
+          "text": "08. 8\n\n    The range of R={(1,3),(2,2),(3,1),(4,4)}R={(1,3),(2,2),(3,1),(4,4)} is\n\n    اگر R={(1,3),(2,2),(3,1),(4,4)}R={(1,3),(2,2),(3,1),(4,4)} ہو تو RR کی رینج کیا ہو گی؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-9",
+          "text": "09. 9\n\n    The number of elements in power set {1,2,3}{1,2,3} is\n\n    {1,2,3}{1,2,3} کے پاور سیٹ کے ارکان کی تعداد ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-10",
+          "text": "10. 10\n\n    Mean is affected by change in \\_\\_\\_\\_.\n\n    حسابی اوسط \\_\\_\\_\\_ تبدیل کرنے سے اثر انداز ہوتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-11",
+          "text": "11. 11\n\n    cosec⁡2θ−cot⁡2θ=\\_\\_\\_\\_cosec2θ−cot2θ=\\\\_\\\\_\\\\_\\_\n\n    cosec⁡2θ−cot⁡2θ=\\_\\_\\_\\_cosec2θ−cot2θ=\\\\_\\\\_\\\\_\\_",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-12",
+          "text": "12. 12\n\n    The distance of any point of the circle to its centre is called\n\n    دائرے کے کسی نقطے کا اس کے مرکز تک کا فاصلہ کہلاتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-13",
+          "text": "13. 13\n\n    A line which has two points in common with a circle is called\n\n    ایک خط جس کے دائرے کے ساتھ دو نقاط مشترک ہوں، اسے کہتے ہیں",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-14",
+          "text": "14. 14\n\n    A 4cm4cm long chord subtends a central angle of 60∘60∘. The radial segment of this circle is\n\n    ایک 44 سم لمبائی والا وتر مرکز پر 60∘60∘ کا زاویہ بناتا ہے۔ دائرے کا رداس \\_\\_\\_\\_ ہو گا۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-15",
+          "text": "15. 15\n\n    The circumference of a circle is called\n\n    دائرے کا محیط کہلاتا ہے",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-16",
+          "text": "1. (i)\n\nSolve by factorization: 4−17x2=32x4−17x2=32x\n\n4−17x2=32x4−17x2=32x کو تجزی کے طریقے سے حل کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-17",
+          "text": "2. (ii)\n\nWrite (x−3)(x+7)7=−17(x−3)(x+7)​=−1 in standard form.\n\n(x−3)(x+7)7=−17(x−3)(x+7)​=−1 کو معیاری شکل (فارم) میں لکھئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-18",
+          "text": "3. (iii)\n\nDefine quadratic equation and give an example.\n\nدو درجی مساوات کی تعریف کیجئے اور مثال بھی دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-19",
+          "text": "4. (iv)\n\nFind the discriminant of x2−3x+3=0x2−3x+3=0\n\nx2−3x+3=0x2−3x+3=0 مساوات کا فرق کنندہ معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-20",
+          "text": "5. (v)\n\nEvaluate: ω−13+ω−17ω−13+ω−17\n\nقیمت معلوم کیجئے: ω−13+ω−17ω−13+ω−17",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-21",
+          "text": "6. (vi)\n\nWrite quadratic equation having roots: −i+1,i+1−i+1,i+1\n\nدو درجی مساوات لکھئے جس کے روٹس −i+1,i+1−i+1,i+1 ہوں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-22",
+          "text": "7. (vii)\n\nState theorem of componendo – dividendo.\n\nمسئلہ ترکیب و تفصیل نسبت کو بیان کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-23",
+          "text": "8. (viii)\n\nFind mean proportional to 25 and 49\n\n2525 اور 4949 کا وسطی التناسب معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-24",
+          "text": "9. (ix)\n\nFind fourth proportional to 4x4,2x3,18x54x4,2x3,18x5\n\n4x4,2x3,18x54x4,2x3,18x5 کا چوتھا تناسب معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-25",
+          "text": "1. (i)\n\nDefine fraction and give one example.\n\nکسر کی تعریف کیجئے نیز ایک مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-26",
+          "text": "2. (ii)\n\nResolve into partial fractions: x−5x2+2x−3x2+2x−3x−5​\n\nجزوی کسروں میں تحلیل کیجئے: x−5x2+2x−3x2+2x−3x−5​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-27",
+          "text": "3. (iii)\n\nWrite down De Morgan’s Laws.\n\nڈی مارگن کے قوانین لکھیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-28",
+          "text": "4. (iv)\n\nIf U={4,5,6,7,…,25}U={4,5,6,7,…,25}, X={11,13,17,19,23}X={11,13,17,19,23} and Y={4,5,6,7,…,17}Y={4,5,6,7,…,17}, then find (X∩Y)′(X∩Y)′\n\nاگر U={4,5,6,7,…,25}U={4,5,6,7,…,25}، X={11,13,17,19,23}X={11,13,17,19,23} اور Y={4,5,6,7,…,17}Y={4,5,6,7,…,17} ہو تو (X∩Y)′(X∩Y)′ معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-29",
+          "text": "5. (v)\n\nFind a and b if (a−2,2b+1)=(3a+1,b−3)(a−2,2b+1)=(3a+1,b−3)\n\naa اور bb کی قیمتیں معلوم کیجئے اگر: (a−2,2b+1)=(3a+1,b−3)(a−2,2b+1)=(3a+1,b−3)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-30",
+          "text": "6. (vi)\n\nDefine Onto function.\n\nآن ٹو تفاعل کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-31",
+          "text": "7. (vii)\n\nWhat is Histogram?\n\nکافی نقشے کسے کہتے ہیں؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-32",
+          "text": "8. (viii)\n\nWrite down any two properties of arithmetic mean.\n\nحسابی اوسط کی دو خصوصیات لکھئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-33",
+          "text": "9. (ix)\n\nFind the median for the frequency distribution:\n\nتعددی تقسیم کا وسطانیہ معلوم کیجئے:\n\nXFrequency1328354351X12345​Frequency38531​​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-34",
+          "text": "01. (i)\n\n    What is meant by a degree?\n\n    ڈگری سے کیا مراد ہے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-35",
+          "text": "02. (ii)\n\n    Define coterminal angles. Give an example.\n\n    کوٹرمینل زاویے کی تعریف کیجئے اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-36",
+          "text": "03. (iii)\n\n    Find the distance travelled by a cyclist moving in a circle of radius 15m, if he makes 3 revolutions.\n\n    ایک سائیکل سوار ایک دائرے کے گرد جس کا رداس 15 میٹر ہے، 3 چکر لگاتا ہے۔ اس نے کتنا سفر طے کیا؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-37",
+          "text": "04. (iv)\n\n    Verify that: cot⁡θsec⁡θ=cosec⁡θcotθsecθ=cosecθ\n\n    ثابت کیجئے کہ: cot⁡θsec⁡θ=cosec⁡θcotθsecθ=cosecθ",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-38",
+          "text": "05. (v)\n\n    Differentiate between acute angle and obtuse angle.\n\n    حادہ زاویہ اور منفرجہ زاویہ میں کیا فرق ہے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-39",
+          "text": "06. (vi)\n\n    Define central angle.\n\n    مرکزی زاویے کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-40",
+          "text": "07. (vii)\n\n    Define tangent of a circle.\n\n    دائرے کے مماس کی تعریف کیجئے۔\n\n08. (ورق الٹیے)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-41",
+          "text": "09. (viii)\n\n    The length of the side of an equilateral triangle is 9.5cm, What is its perimeter?\n\n    ایک مساوی الاضلاع مثلث کے ضلع کی لمبائی 9.5 سم ہے۔ اس کا احاطہ معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-42",
+          "text": "10. (ix)\n\n    Draw a tangent at any point on the circumference of a circle.\n\n    دائرے کے محیط پر کسی نقطے پر مماس کھینچئے۔\n\nSection-II\n\nحصہ دوم\n\nہر سوال کے 8 اور ہر جزو کے 4 نمبر ہیں",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-43",
+          "text": "1. (a)\n\nSolve the equation: 2x4+x3−6x2+x+2=02x4+x3−6x2+x+2=0\n\nمساوات کو حل کیجئے: 2x4+x3−6x2+x+2=02x4+x3−6x2+x+2=0",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-44",
+          "text": "2. (b)\n\nSolve by using synthetic division, if ‘3’ and ‘-4’ are the roots of the equation x4+2x3−13x2−14x+24=0x4+2x3−13x2−14x+24=0\n\nبذریعہ ترکیبی تقسیم حل کیجئے اگر ‘3’ اور ‘-4’ مساوات x4+2x3−13x2−14x+24=0x4+2x3−13x2−14x+24=0 کے روٹس ہوں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-45",
+          "text": "1. (a)\n\nSolve by using Componendo – Dividendo Theorem: (x+5)3−(x−3)3(x+5)3+(x−3)3=1314(x+5)3+(x−3)3(x+5)3−(x−3)3​=1413​\n\nمسئلہ ترکیب و تفصیل کے استعمال سے حل کیجئے: (x+5)3−(x−3)3(x+5)3+(x−3)3=1314(x+5)3+(x−3)3(x+5)3−(x−3)3​=1413​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-46",
+          "text": "2. (b)\n\nResolve 7x+4(3x+2)(x+1)2(3x+2)(x+1)27x+4​ into partial fractions.\n\nکسر 7x+4(3x+2)(x+1)2(3x+2)(x+1)27x+4​ کو جزوی کسروں میں تحلیل کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-47",
+          "text": "1. (a)\n\nIf U={x∣x∈N∧3≤x≤25}U={x∣x∈N∧3≤x≤25}, X={x∣x is prime∧7<x≤23}X={x∣x is prime∧7<x≤23}, Y={x∣x∈W∧4<x≤17}Y={x∣x∈W∧4<x≤17} then find the value of X′∩Y′X′∩Y′\n\nاگر U={x∣x∈N∧3≤x≤25}U={x∣x∈N∧3≤x≤25}، X={x∣x is prime∧7<x≤23}X={x∣x is prime∧7<x≤23}، Y={x∣x∈W∧4<x≤17}Y={x∣x∈W∧4<x≤17} ہو تو X′∩Y′X′∩Y′ کی قیمت معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-48",
+          "text": "2. (b)\n\nFind the standard deviation of the data: 40, 60, 70, 80, 90\n\nمواد کا معیاری انحراف معلوم کیجئے: 40,60,70,80,9040,60,70,80,90",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-49",
+          "text": "1. (a)\n\nThe base of a rectangle is 25 feet and the height of the rectangle is 13 feet. Find the angle that the diagonal of the rectangle makes with the base.\n\nایک مستطیل کا قاعدہ 25 فٹ اور بلندی 13 فٹ ہے۔ مستطیل کے وتر کا زاویہ معلوم کیجئے جو وہ مستطیل کے قاعدہ کے ساتھ بناتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-50",
+          "text": "2. (b)\n\nCircumscribe a circle about an equilateral triangle ABC with each side of length 4 cm.\n\nمساوی الاضلاع مثلث ABCABC کا محاصر دائرہ بنائیے، جبکہ اس کے ہر ضلع کی لمبائی 4 سم ہو۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Gujranwala-2025-51",
+          "text": "1. Prove that one and only one circle can pass through three non-collinear points.\n\nثابت کیجئے کہ تین غیر خطی نقاط سے ایک اور صرف ایک ہی دائرہ گزر سکتا ہے۔\n\n2. OR\n\nیا\n\n3. Prove that any two angles in the same segment of a circle are equal.\n\nثابت کیجئے کہ دو زاویے جو ایک ہی قطعہ دائرہ میں واقع ہوں باہم برابر ہوتے ہیں۔\n\n4. 112-1st A 225-88500(#)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        }
+      ]
+    },
+    {
+      "grade": "G10",
+      "board": "Sahiwal",
+      "year": "2025",
+      "session": "First Annual",
+      "group": "Group 1",
+      "sourceUrl": "https://schoolorbit.pk/past-papers/class-10/mathematics/bise-sahiwal-class-10-mathematics-2025-first-annual-group-1-spg-d61d6b06d8fd635bc2d852b3a604fe9b",
+      "sourceTitle": "Class 10 Mathematics Past Paper 2025 | BISE Sahiwal · First Annual · Group 1 | SchoolOrbit",
+      "sourceLength": 10970,
+      "extractionStatus": "FAILED",
+      "candidateBlocks": [
+        {
+          "localId": "G10-Sahiwal-2025-1",
+          "text": "01. 1\n\n    The number of terms in a standard quadratic equation, ax2+bx+c=0ax2+bx+c=0 is / are:\n\n    دو درجی مساوات ax2+bx+c=0ax2+bx+c=0 میں رقموں کی تعداد ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-2",
+          "text": "02. 2\n\n    The solution set of 4x2−16=04x2−16=0 is:\n\n    مساوات 4x2−16=04x2−16=0 کا حل سیٹ ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-3",
+          "text": "03. 3\n\n    Two square roots of unity are:\n\n    اکائی کے دو جذر المربع ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-4",
+          "text": "04. 4\n\n    Roots of the equation 4x2−4x+1=04x2−4x+1=0 are:\n\n    مساوات 4x2−4x+1=04x2−4x+1=0 کے روٹس ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-5",
+          "text": "05. 5\n\n    If uv=vw=kvu​=wv​=k then:\n\n    اگر uv=vw=kvu​=wv​=k ہو تو:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-6",
+          "text": "06. 6\n\n    The fourth proportional ww of x:y::v:wx:y::v:w is:\n\n    x:y::v:wx:y::v:w میں چوتھا تناسب ww ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-7",
+          "text": "07. 7\n\n    If A={0,1,2,3}A={0,1,2,3} and B={1,2,3}B={1,2,3} such that f={(0,1),(1,2),(2,3),(3,2)}f={(0,1),(1,2),(2,3),(3,2)} then ff is a/an ‾​function.\n\n    اگر A={0,1,2,3}A={0,1,2,3} اور B={1,2,3}B={1,2,3} جبکہ f={(0,1),(1,2),(2,3),(3,2)}f={(0,1),(1,2),(2,3),(3,2)} ہو تو ff ایک ‾​تفاعل ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-8",
+          "text": "08. 8\n\n    2x+1(x+1)(x−1)(x+1)(x−1)2x+1​ is a/an:\n\n    2x+1(x+1)(x−1)(x+1)(x−1)2x+1​ ایک ‾​ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-9",
+          "text": "09. 9\n\n    If A⊆BA⊆B, then A−BA−B is equal to:\n\n    اگر A⊆BA⊆B ہو تو A−BA−B برابر ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-10",
+          "text": "10. 10\n\n    The measure which determines the middlemost observation in a data is called:\n\n    ایسا پیمانہ جو مواد کی درمیانی مدت کو بتائے، کہلاتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-11",
+          "text": "11. 11\n\n    2sin⁡45∘=‾2sin45∘=​",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-12",
+          "text": "12. 12\n\n    Radii of a circle are:\n\n    ایک ہی دائرے کے رداس ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-13",
+          "text": "13. 13\n\n    Two tangents drawn to a circle from a point outside it are of ‾​in length.\n\n    ایک دائرے کے بیرونی نقطہ سے دو کھینچے گئے مماس لمبائی کے لحاظ سے ‾​ہوتے ہیں۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-14",
+          "text": "14. 14\n\n    The semi-circumference and the diameter of a circle both subtend a central angle of:\n\n    دائرے کے نصف محیط کا مرکزی زاویہ ہوتا ہے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-15",
+          "text": "15. 15\n\n    How many common tangents can be drawn for two disjoint circles?\n\n    دو غیر متقاطع دائروں کے کتنے مشترک مماس کھینچے جا سکتے ہیں؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-16",
+          "text": "1. (i)\n\nWrite the given quadratic equation in the standard form. xx+1+x+1x=6x+1x​+xx+1​=6\n\nدی گئی دو درجی مساوات کو معیاری فارم میں لکھئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-17",
+          "text": "2. (ii)\n\nSolve by factorization. 4−32x=17x24−32x=17x2\n\nبذریعہ تجزی حل کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-18",
+          "text": "3. (iii)\n\nDefine reciprocal equation and give an example.\n\nمعکوس مساوات کی تعریف کیجئے اور ایک مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-19",
+          "text": "4. (iv)\n\nFind the discriminant of the given quadratic equation. 9x2−30x+25=09x2−30x+25=0\n\nدی گئی دو درجی مساوات کا فرق کنندہ معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-20",
+          "text": "5. (v)\n\nEvaluate. (9+4ω+4ω2)3(9+4ω+4ω2)3\n\nقیمت معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-21",
+          "text": "6. (vi)\n\nWithout solving, find the sum and the product of the roots of the given quadratic equation. px2−qx+r=0px2−qx+r=0\n\nدی گئی دو درجی مساوات کو حل کیے بغیر مجموعہ اور حاصل ضرب معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-22",
+          "text": "7. (vii)\n\nIf y∝1xy∝x1​ and y=4y=4 when x=3x=3. Find xx when y=24y=24\n\nاگر y∝1xy∝x1​ اور y=4y=4 جب x=3x=3 ہو تو xx معلوم کیجئے جبکہ y=24y=24 ہو۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-23",
+          "text": "8. (viii)\n\nFind a third proportional to: a2−b2,a−ba2−b2,a−b\n\nتیسرا تناسب معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-24",
+          "text": "9. (ix)\n\nDefine direct variation.\n\nتغیر راست کی تعریف کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-25",
+          "text": "1. (i)\n\nDefine proper fraction and write an example.\n\nواجب کسر کی تعریف کیجئے اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-26",
+          "text": "2. (ii)\n\nConvert improper fraction into proper fraction. 3x2−2x−1x2−x+1x2−x+13x2−2x−1​\n\nغیر واجب کسر کو واجب کسر میں تبدیل کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-27",
+          "text": "3. (iii)\n\nIf A={1,4,7,9}A={1,4,7,9}, B={2,4,5,9}B={2,4,5,9} then find A∩BA∩B.\n\nاگر A={1,4,7,9}A={1,4,7,9}، B={2,4,5,9}B={2,4,5,9} ہو تو A∩BA∩B معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-28",
+          "text": "4. (iv)\n\nFind aa and bb if (a−4,b−2)=(2,1)(a−4,b−2)=(2,1)\n\naa اور bb معلوم کیجئے اگر (a−4,b−2)=(2,1)(a−4,b−2)=(2,1)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-29",
+          "text": "5. (v)\n\nWrite all the subsets of the set {1,2}{1,2}\n\nسیٹ {1,2}{1,2} کے تمام تحتی سیٹ لکھئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-30",
+          "text": "6. (vi)\n\nDefine one-one function and write its example.\n\nون-ون تفاعل کی تعریف کیجئے اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-31",
+          "text": "7. (vii)\n\nFind the geometric mean of the observations 2,4,8.\n\nمدات 2،4،8 کیلئے اقلیدی اوسط معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-32",
+          "text": "8. (viii)\n\nFind the mean of observations: 34, 34, 34, 34, 34\n\nدی گئی مدات کا حسابی اوسط معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-33",
+          "text": "9. (ix)\n\nDefine mode and give its example.\n\nعادہ کی تعریف کیجئے اور مثال دیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-34",
+          "text": "1. (i)\n\nExpress the angle 300∘300∘ into radians.\n\nزاویہ 300∘300∘ کو ریڈین میں لکھئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-35",
+          "text": "2. (ii)\n\nFind ll when θ=180∘θ=180∘ and r=4.9cmr=4.9cm\n\nll معلوم کیجئے جبکہ θ=180∘θ=180∘ اور r=4.9cmr=4.9cm ہو۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-36",
+          "text": "3. (iii)\n\nVerify that: (1−sin⁡θ)(1+sin⁡θ)=cos⁡2θ(1−sinθ)(1+sinθ)=cos2θ\n\nثابت کیجئے کہ:",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-37",
+          "text": "4. (iv)\n\nHow many minutes are there in two right angles?\n\nدو قائمہ زاویوں میں کل کتنے منٹ ہوتے ہیں؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-38",
+          "text": "5. (v)\n\nDefine minor arc in a circle and illustrate by diagram.\n\nدائرے میں قوس صغیرہ کی تعریف کیجئے اور بذریعہ شکل وضاحت کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-39",
+          "text": "6. (vi)\n\nDefine arc of a circle and illustrate it by diagram.\n\nدائرہ کی قوس سے کیا مراد ہے؟ شکل بنا کر واضح کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-40",
+          "text": "7. (vii)\n\nWhen does a quadrilateral is called cyclic?\n\nایک چوکور کب سائیکلک کہلاتی ہے؟",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-41",
+          "text": "8. (viii)\n\nThe length of each side of a regular pentagon is 5cm. Find its perimeter.\n\nایک منتظم مخمس کے ہر ضلع کی لمبائی 5سم ہے۔ اس کا احاطہ معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-42",
+          "text": "9. (ix)\n\nDraw a circle of radius 2.5cm.\n\n2.5سم رداس کا ایک دائرہ بنائیے۔\n\nSECTION-C\n\nحصہ سوم",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-43",
+          "text": "1. (2)",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-44",
+          "text": "2. (a)\n\nSolve the equation: 2x4+x3−6x2+x+2=02x4+x3−6x2+x+2=0\n\nمساوات کو حل کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-45",
+          "text": "3. (b)\n\nThe difference of a number and its reciprocal is 154415​. Find the number.\n\nایک عدد اور اس کے معکوس کا فرق 154415​ ہے۔ عدد معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-46",
+          "text": "1. (a)\n\nIf ww varies inversely as the cube of uu and w=5w=5 when u=3u=3. Find ww when u=6u=6.\n\nاگر ww کا uu کے مکعب سے تغیر معکوس ہو، اور w=5w=5 جبکہ u=3u=3 ہو۔ ww معلوم کیجئے جبکہ u=6u=6 ہو۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-47",
+          "text": "2. (b)\n\nResolve into partial fractions: 7x+4(3x+2)(x+1)2(3x+2)(x+1)27x+4​\n\nجزوی کسور میں تحلیل کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-48",
+          "text": "1. (a)\n\nIf U={1,2,3,4,…,10}U={1,2,3,4,…,10}, A={1,3,5,7,8}A={1,3,5,7,8} and B={1,4,7,10}B={1,4,7,10} then verify (A∪B)′=A′∩B′(A∪B)′=A′∩B′\n\nاگر U={1,2,3,4,…,10}U={1,2,3,4,…,10}، A={1,3,5,7,8}A={1,3,5,7,8} اور B={1,4,7,10}B={1,4,7,10} ثابت کیجئے کہ (A∪B)′=A′∩B′(A∪B)′=A′∩B′",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-49",
+          "text": "2. (b)\n\nFind standard deviation of data: 9, 3, 8, 8, 9, 8, 9, 18\n\nمواد کا معیاری انحراف معلوم کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-50",
+          "text": "1. (a)\n\nVerify the identity: 1+cos⁡θ1−cos⁡θ=sin⁡θ1−cos⁡θ1−cosθ1+cosθ​​=1−cosθsinθ​\n\nمماثلت ثابت کیجئے۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-51",
+          "text": "2. (b)\n\nInscribe a circle in an equilateral triangle ABC with each side of length 5cm.\n\nمساوی الاضلاع مثلث ABC کا محصورہ دائرہ بنائیے جبکہ ہر ضلع کی لمبائی 5سم ہو۔",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        },
+        {
+          "localId": "G10-Sahiwal-2025-52",
+          "text": "1. Prove that two chords of a circle which are equidistant from the centre, are congruent.\n\nثابت کیجئے دائرے کے دو وتر جو مرکز سے مساوی الفاصلہ ہوں، باہم ہم شکل ہوتے ہیں۔\n\n2. OR\n\nیا\n\n3. Prove that the opposite angles of any quadrilateral inscribed in a circle are supplementary.\n\nثابت کیجئے کسی دائرہ کی دائروی چوکور کے متقابل زاویے، سپلیمنٹری ہوتے ہیں۔\n\n4. 111-225-1A-40500",
+          "verificationStatus": "NEEDS_REVIEW",
+          "chapterId": "UNMAPPED",
+          "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+        }
+      ]
+    }
+  ]
+}
