@@ -18,7 +18,7 @@ class BundledContentPackTest {
         assertEquals("PUNJAB_G9_MATH_2027_PECTAA_ALP", parsed.pattern.patternId)
         assertEquals(75, parsed.pattern.totalMarks)
         assertEquals(9, parsed.questions.size)
-        assertTrue(parsed.questions.all { it.verificationStatus == "NEEDS_REVIEW" })
-        assertTrue(parsed.warnings.isEmpty())
+        assertTrue(parsed.questions.all { it.verificationStatus == "NEEDS_REVIEW" && it.summative })
+        assertTrue(parsed.warnings.any { it.contains("no SLO mapping") })
     }
 }
