@@ -147,6 +147,9 @@ class AliTestSeriesActivity : ComponentActivity() {
         var pdfIsPersistent by remember { mutableStateOf(false) }
         var chapterRanges by remember { mutableStateOf<List<BundledBookManifestReader.Chapter>>(emptyList()) }
         var useManifestChapters by remember { mutableStateOf(false) }
+        var workflowMode by remember { mutableStateOf("CHOICE") }
+        var showAutoSetup by remember { mutableStateOf(false) }
+        var includeCurrentQuestions by remember { mutableStateOf(true) }
 
         // Release the previous rendered page only after Compose has switched away
         // from it; this prevents page navigation from retaining large bitmaps.
@@ -712,6 +715,25 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Text(notice, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     Spacer(Modifier.weight(1f))
                     Text("Manual selection + automatic board-pattern selection · Offline · No AI question invention", style = MaterialTheme.typography.labelSmall)
+                }
+            } else if (workflowMode == "CHOICE") {
+                Column(Modifier.fillMaxSize().padding(padding).padding(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Spacer(Modifier.height(12.dp))
+                    Text("HOW WOULD YOU LIKE TO CREATE YOUR PAPER?", style = MaterialTheme.typography.headlineSmall)
+                    Text("Class $grade · $pdfName", style = MaterialTheme.typography.bodySmall)
+                    Card(onClick = { showAutoSetup = true }, modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("⚡ AUTO PAPER", style = MaterialTheme.typography.titleLarge)
+                            Text("Create a Punjab Board-pattern paper. Choose chapters and include important questions.", style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                    Card(onClick = { workflowMode = "MANUAL" }, modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("✍ MANUAL PAPER", style = MaterialTheme.typography.titleLarge)
+                            Text("Select PDF text, crop scanned questions, write your own questions and arrange the paper.", style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                    TextButton(onClick = { if (!pdfIsPersistent) pdfFile?.delete(); pdfFile = null; pdfName = ""; pageCount = 0 }) { Text("CHANGE PDF") }
                 }
             } else {
                 Column(Modifier.fillMaxSize().padding(padding).padding(horizontal = 12.dp, vertical = 8.dp)) {
