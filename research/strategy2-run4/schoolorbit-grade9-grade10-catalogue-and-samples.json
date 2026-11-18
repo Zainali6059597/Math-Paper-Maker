@@ -1,0 +1,129 @@
+{
+  "research_run": "strategy2-run4",
+  "collected_on": "2026-11-18",
+  "purpose": "Expand attributable Punjab Board Grade 9/10 Mathematics practice-source coverage before the separate integration-and-APK run.",
+  "source": "SchoolOrbit past-paper library; page-level catalogue cross-check",
+  "source_pages": [
+    {
+      "grade": 9,
+      "url": "https://schoolorbit.pk/past-papers/class-9/mathematics",
+      "published_paper_count": 3,
+      "papers": [
+        {
+          "board": "BISE Multan",
+          "year": 2025,
+          "session": "First Annual",
+          "group": 1,
+          "questions_reported_by_source": 52,
+          "url": "https://schoolorbit.pk/past-papers/class-9/mathematics/bise-multan-class-9-mathematics-2025-first-annual-group-1-spg-404dfebc704dac638b746d840fc4205d"
+        },
+        {
+          "board": "BISE Multan",
+          "year": 2025,
+          "session": "Second Annual",
+          "group": 1,
+          "questions_reported_by_source": 52,
+          "url": "https://schoolorbit.pk/past-papers/class-9/mathematics/bise-multan-class-9-mathematics-2025-second-annual-group-1-spg-514bd10fd2b579bf881b83f422fe1fb6"
+        },
+        {
+          "board": "BISE Sahiwal",
+          "year": 2025,
+          "session": "First Annual",
+          "group": 2,
+          "questions_reported_by_source": 52,
+          "url": "https://schoolorbit.pk/past-papers/class-9/mathematics/bise-sahiwal-class-9-mathematics-2025-first-annual-group-2-spg-a11a029581856f28036b03b95efe02f7"
+        }
+      ],
+      "sample_question_excerpts": [
+        {
+          "type": "MCQ",
+          "excerpt": "Order of transpose of a 3-by-2 matrix is:",
+          "source_paper": "BISE Sahiwal 2025 First Annual Group 2",
+          "review": "NEEDS_REVIEW"
+        },
+        {
+          "type": "MCQ",
+          "excerpt": "The logarithm of unity to any base is ____.",
+          "source_paper": "BISE Multan 2025 First Annual Group 1",
+          "review": "NEEDS_REVIEW"
+        },
+        {
+          "type": "Short",
+          "excerpt": "Define column matrix and give an example.",
+          "source_paper": "BISE Sahiwal 2025 First Annual Group 2",
+          "review": "NEEDS_REVIEW"
+        },
+        {
+          "type": "Short",
+          "excerpt": "Find the determinant of the given 2-by-2 matrix.",
+          "source_paper": "BISE Sahiwal 2025 First Annual Group 2",
+          "review": "NEEDS_REVIEW"
+        }
+      ]
+    },
+    {
+      "grade": 10,
+      "url": "https://schoolorbit.pk/past-papers/class-10/mathematics",
+      "published_paper_count": 3,
+      "papers": [
+        {
+          "board": "BISE Multan",
+          "year": 2026,
+          "session": "First Annual",
+          "group": 1,
+          "questions_reported_by_source": 52,
+          "url": "https://schoolorbit.pk/past-papers/class-10/mathematics/bise-multan-class-10-mathematics-2026-first-annual-group-1-spg-78b19bdfca86cf1b55bfde0dc244fd33"
+        },
+        {
+          "board": "BISE Gujranwala",
+          "year": 2025,
+          "session": "First Annual",
+          "group": 2,
+          "questions_reported_by_source": 52,
+          "url": "https://schoolorbit.pk/past-papers/class-10/mathematics/bise-gujranwala-class-10-mathematics-2025-first-annual-group-2-spg-1fda0d0ec76d5cf60de1923cc85874d8"
+        },
+        {
+          "board": "BISE Sahiwal",
+          "year": 2025,
+          "session": "First Annual",
+          "group": 1,
+          "questions_reported_by_source": 52,
+          "url": "https://schoolorbit.pk/past-papers/class-10/mathematics/bise-sahiwal-class-10-mathematics-2025-first-annual-group-1-spg-d61d6b06d8fd635bc2d852b3a604fe9b"
+        }
+      ],
+      "sample_question_excerpts": [
+        {
+          "type": "MCQ",
+          "excerpt": "The number of terms in a standard quadratic equation ax² + bx + c = 0 is:",
+          "source_paper": "BISE Gujranwala 2025 First Annual Group 2",
+          "review": "NEEDS_REVIEW"
+        },
+        {
+          "type": "Short",
+          "excerpt": "Solve x² + 2x − 2 = 0.",
+          "source_paper": "BISE Multan 2026 First Annual Group 1",
+          "review": "NEEDS_REVIEW"
+        },
+        {
+          "type": "Short",
+          "excerpt": "Find the discriminant of x² − 3x + 3 = 0.",
+          "source_paper": "BISE Gujranwala 2025 First Annual Group 2",
+          "review": "NEEDS_REVIEW"
+        },
+        {
+          "type": "Short",
+          "excerpt": "Define reciprocal equation and give an example.",
+          "source_paper": "BISE Sahiwal 2025 First Annual Group 1",
+          "review": "NEEDS_REVIEW"
+        }
+      ]
+    }
+  ],
+  "quality_notes": [
+    "The catalogue reports 52 question records per paper; this is source-reported metadata, not 52 manually cleaned unique prompts.",
+    "The source pages expose question text and mixed Urdu/English/math notation. OCR/transcription fidelity and chapter mapping still require review.",
+    "All excerpts in this file are NEEDS_REVIEW and are not approved for automatic paper generation.",
+    "The source explicitly advises checking current board guidance and syllabus; past-paper year alone does not establish current syllabus eligibility.",
+    "Use excerpts and source metadata only; do not redistribute complete source papers."
+  ]
+}
