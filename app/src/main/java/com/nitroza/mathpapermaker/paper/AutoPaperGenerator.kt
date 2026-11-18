@@ -49,9 +49,10 @@ object AutoPaperGenerator {
         val used = mutableSetOf<QuestionSourceIdentity>()
         val result = mutableListOf<PaperQuestion>()
 
-        fun take(kind: String, chapter: String, section: String, number: String): PaperQuestion? {
+        fun take(kind: String, chapter: String?, section: String, number: String): PaperQuestion? {
             val identity = available.firstOrNull {
-                it.kind.equals(kind, true) && it.chapterId == chapter &&
+                it.kind.equals(kind, true) &&
+                    (chapter == null || it.chapterId == chapter) &&
                     QuestionSourceIdentity.from(it) !in used
             } ?: return null
             val key = QuestionSourceIdentity.from(identity)
@@ -79,19 +80,36 @@ object AutoPaperGenerator {
         fun fail(message: String): Result.NeedsMoreQuestions =
             Result.NeedsMoreQuestions(message)
 
-        // Q1: exact chapter-wise MCQ allocation.
+        val fullSyllabus = selectedChapters.size == if (grade == 9) 13 else 12
+        // A full-syllabus paper follows the official chapter allocation. A selected-unit
+        // paper keeps the same Board paper structure and marks, but draws only from chosen units.
         var mcqIndex = 1
-        for ((chapter, count) in PunjabBoardPattern.mcqDistribution(grade)) {
-            repeat(count) {
-                val item = take("MCQ", chapter, "Q1", "Q1(${roman(mcqIndex++)})")
-                    ?: return fail("Not enough MCQs from $chapter. Add more indexed questions or select a wider chapter range.")
+        if (fullSyllabus) {
+            for ((chapter, count) in PunjabBoardPattern.mcqDistribution(grade)) {
+                repeat(count) {
+                    val item = take("MCQ", chapter, "Q1", "Q1(${roman(mcqIndex++)})")
+                        ?: return fail("Not enough MCQs from $chapter. Add more indexed questions.")
+                    result += item
+                }
+            }
+        } else {
+            repeat(PunjabBoardPattern.MCQ_COUNT) {
+                val item = take("MCQ", null, "Q1", "Q1(${roman(mcqIndex++)})")
+                    ?: return fail("Selected chapters need 15 MCQs in total. Found ${result.count { it.kind == "MCQ" }}; add more MCQs from the selected units.")
                 result += item
             }
         }
 
-        // Q2-Q4: exact Class 9 allocation; Class 10 requires at least two from each chapter.
+        // Q2-Q4: full syllabus uses the official chapter allocation. Selected-unit
+        // papers retain 9 short questions in each section, sourced only from chosen units.
         for (section in 2..4) {
-            if (grade == 9) {
+            if (!fullSyllabus) {
+                repeat(9) { index ->
+                    val item = take("SHORT", null, "Q$section", "Q$section(${roman(index + 1)})")
+                        ?: return fail("Selected chapters need 27 short questions in total (9 in each of Q2, Q3 and Q4). Add more short questions from the selected units.")
+                    result += item
+                }
+            } else if (grade == 9) {
                 var shortIndex = 1
                 for ((chapter, count) in PunjabBoardPattern.shortDistribution(grade, section)) {
                     repeat(count) {
@@ -124,26 +142,38 @@ object AutoPaperGenerator {
             }
         }
 
-        // Q5-Q9: each pair must follow the board's prescribed chapter pairing.
-        PunjabBoardPattern.longPairRules(grade).forEachIndexed { index, rule ->
-            val section = "Q${index + 5}"
-            val firstChapter = rule.first.firstOrNull { chapter ->
-                available.any { it.kind.equals("LONG", true) && it.chapterId == chapter &&
-                    QuestionSourceIdentity.from(it) !in used }
-            } ?: return fail("No unused long question is available for $section (first prescribed chapter group).")
-            val first = take("LONG", firstChapter, section, "$section(a)")
-                ?: return fail("Could not select the first part of $section.")
-            val secondChapter = rule.second.firstOrNull { chapter ->
-                available.any { it.kind.equals("LONG", true) && it.chapterId == chapter &&
-                    QuestionSourceIdentity.from(it) !in used }
-            } ?: return fail("No unused long question is available for $section (second prescribed chapter group).")
-            val second = take("LONG", secondChapter, section, "$section(b)")
-                ?: return fail("Could not select the second part of $section.")
-            result += first
-            result += second
+        // Q5-Q9: full syllabus uses the official pairings. Selected-unit papers keep
+        // five two-part long questions, all sourced from the selected chapters.
+        if (fullSyllabus) {
+            PunjabBoardPattern.longPairRules(grade).forEachIndexed { index, rule ->
+                val section = "Q${index + 5}"
+                val firstChapter = rule.first.firstOrNull { chapter ->
+                    available.any { it.kind.equals("LONG", true) && it.chapterId == chapter &&
+                        QuestionSourceIdentity.from(it) !in used }
+                } ?: return fail("No unused long question is available for $section (first prescribed chapter group).")
+                val first = take("LONG", firstChapter, section, "$section(a)")
+                    ?: return fail("Could not select the first part of $section.")
+                val secondChapter = rule.second.firstOrNull { chapter ->
+                    available.any { it.kind.equals("LONG", true) && it.chapterId == chapter &&
+                        QuestionSourceIdentity.from(it) !in used }
+                } ?: return fail("No unused long question is available for $section (second prescribed chapter group).")
+                val second = take("LONG", secondChapter, section, "$section(b)")
+                    ?: return fail("Could not select the second part of $section.")
+                result += first
+                result += second
+            }
+        } else {
+            (5..9).forEach { questionNumber ->
+                repeat(2) { part ->
+                    val label = if (part == 0) "a" else "b"
+                    val item = take("LONG", null, "Q$questionNumber", "Q$questionNumber($label)")
+                        ?: return fail("Selected chapters need 10 long-question parts in total (two in each of Q5–Q9). Add more long questions from the selected units.")
+                    result += item
+                }
+            }
         }
 
-        val errors = PunjabBoardPattern.validationErrors(grade, result)
+        val errors = PunjabBoardPattern.validationErrors(grade, result, selectedChapters)
         return if (errors.isEmpty()) Result.Success(result)
         else Result.NeedsMoreQuestions("The selected textbook questions cannot form a valid board paper: ${errors.joinToString(" ")}")
     }
