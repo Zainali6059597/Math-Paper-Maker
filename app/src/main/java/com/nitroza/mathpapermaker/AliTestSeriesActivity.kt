@@ -758,6 +758,15 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                         }
                     }
+                    OutlinedButton(
+                        onClick = { startActivity(Intent(this@AliTestSeriesActivity, MainActivity::class.java)) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text("OPEN OFFLINE QUESTION BANK & CONTENT REVIEW") }
+                    Text(
+                        "PECTAA Grade 9 2027 model-paper candidates are bundled offline. They remain under review until you verify them.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
                     if (selected.isNotEmpty()) {
                         OutlinedButton(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
                             Text("REVIEW SAVED PAPER (${selected.size} QUESTIONS)")
