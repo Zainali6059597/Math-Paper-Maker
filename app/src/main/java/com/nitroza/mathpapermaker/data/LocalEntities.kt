@@ -177,6 +177,9 @@ data class TextbookCandidateEntity(
     val questionNumber: String,
     val questionText: String,
     val sourcePage: Int,
+    @androidx.room.ColumnInfo(defaultValue = "'SHORT'") val questionType: String = "SHORT",
+    @androidx.room.ColumnInfo(defaultValue = "2") val marks: Int = 2,
+    val imageFile: String? = null,
     val reviewStatus: String = "NEEDS_REVIEW",
     val reviewNote: String = "",
     val detectedAt: Long
