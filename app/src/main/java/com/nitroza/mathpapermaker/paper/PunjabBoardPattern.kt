@@ -112,8 +112,9 @@ object PunjabBoardPattern {
     ): List<String> {
         if (grade !in 9..10) return listOf("Only Class 9 and Class 10 are supported.")
         val errors = mutableListOf<String>()
+        val expectedChapterCount = if (grade == 9) 13 else 12
         val scopedUnitPaper = selectedChapters != null &&
-            selectedChapters.size < if (grade == 9) 13 else 12
+            selectedChapters.size < expectedChapterCount
         if (selectedChapters != null && questions.any { it.chapterId !in selectedChapters }) {
             errors += "A question is outside the selected chapter scope."
         }
