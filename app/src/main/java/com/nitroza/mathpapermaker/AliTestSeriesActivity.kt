@@ -42,6 +42,7 @@ import com.nitroza.mathpapermaker.data.OfflinePdfOcr
 import com.nitroza.mathpapermaker.data.PdfTextDocumentCache
 import com.nitroza.mathpapermaker.data.TextbookQuestionBank
 import com.nitroza.mathpapermaker.data.TextbookQuestionBankMapper
+import com.nitroza.mathpapermaker.data.CuratedQuestionBankRepository
 import com.nitroza.mathpapermaker.data.TextbookCandidateEntity
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.AutoPaperGenerator
@@ -579,18 +580,23 @@ class AliTestSeriesActivity : ComponentActivity() {
                 notice = "Automatic generation always uses the Punjab Board pattern."
                 return
             }
-            if (pdfName.isBlank()) {
-                workflowMode = "CHOICE"
-                autoProgress = 0f
-                notice = "Open the textbook PDF whose saved questions you want to use."
-                return
-            }
             lifecycleScope.launch {
-                notice = "Loading saved textbook questions and current selections..."
-                val bookKey = "CLASS$grade|$pdfName"
+                notice = "Loading verified research questions, saved textbook questions and current selections..."
+                val bookKey = if (pdfName.isBlank()) "" else "CLASS$grade|$pdfName"
                 autoProgress = 0.25f
                 val savedBank = withContext(Dispatchers.IO) {
-                    runCatching { TextbookQuestionBank.approvedForBook(applicationContext, bookKey) }
+                    if (bookKey.isBlank()) Result.success(emptyList())
+                    else runCatching { TextbookQuestionBank.approvedForBook(applicationContext, bookKey) }
+                }
+                val curatedBank = withContext(Dispatchers.IO) {
+                    runCatching {
+                        CuratedQuestionBankRepository.approvedPunjabMaths(
+                            applicationContext, grade, selectedChapters
+                        )
+                    }
+                }
+                curatedBank.onFailure { error ->
+                    notice = "Could not load the verified research bank: " + (error.message ?: "unknown error")
                 }
                 savedBank.onFailure { error ->
                     notice = "Could not load the offline question bank: " + (error.message ?: "unknown error")
@@ -613,9 +619,22 @@ class AliTestSeriesActivity : ComponentActivity() {
                         sectionId = item.sectionId
                     )
                 }
+                val curatedQuestions = curatedBank.getOrNull().orEmpty().map { item ->
+                    SelectedQuestion(
+                        id = nextId++,
+                        number = item.number,
+                        text = item.text,
+                        kind = item.kind,
+                        marks = item.marks,
+                        sourcePage = item.sourcePage,
+                        imageFile = item.imageFile,
+                        chapterId = item.chapterId,
+                        sectionId = item.sectionId
+                    )
+                }
                 autoProgress = 0.68f
                 autoStage = "Building Punjab Board paper pattern…"
-                val sourceItems = ((if (includeCurrentQuestions) selected else emptyList()) + savedQuestions)
+                val sourceItems = ((if (includeCurrentQuestions) selected else emptyList()) + savedQuestions + curatedQuestions)
                     .filter { it.chapterId in selectedChapters }
                     .distinctBy {
                         listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|")
