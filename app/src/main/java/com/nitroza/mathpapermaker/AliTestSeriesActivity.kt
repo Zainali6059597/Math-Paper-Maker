@@ -833,7 +833,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     extraction.onSuccess { text ->
                                         val cleaned = removePctbWatermarkLines(text)
                                         if (cleaned.isBlank()) {
-                                            notice = "Is selected area mein selectable text nahi mila. Ye scanned/image-only content ho sakta hai. OCR SCANNED PAGE ya manual editor use karein."
+                                            notice = "No selectable text was found in the selected area. It may be scanned or image-only content. Use OCR SCANNED PAGE or the manual editor."
                                         } else {
                                             questionText = TextFieldValue(cleaned, androidx.compose.ui.text.TextRange(0, cleaned.length))
                                             pendingImageFile = null
@@ -842,7 +842,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             questionChapter = chapterForPage(pageNumber).orEmpty()
                                             cropSelectionMode = false
                                             showQuestionEditor = true
-                                            notice = "Selected area ka editable text extract ho gaya."
+                                            notice = "Editable text was extracted from the selected area."
                                         }
                                     }.onFailure { error ->
                                         notice = "Could not extract text from selected area: ${error.message ?: "unknown error"}"
