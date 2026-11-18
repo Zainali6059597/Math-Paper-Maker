@@ -422,6 +422,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 val height = (pageHeight * scale).toInt().coerceAtLeast(1)
                                 val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                                 try {
+                                    // PdfRenderer may leave transparent page areas untouched.
+                                    // Initialize to paper white so they never appear black in dark UI.
+                                    bitmap.eraseColor(android.graphics.Color.WHITE)
                                     page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                                     bitmap
                                 } catch (error: Throwable) {
@@ -1533,20 +1536,10 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
             val selectedLines = StringBuilder()
 
             override fun writeString(text: String, textPositions: MutableList<TextPosition>) {
+                // Do not filter glyphs by rotation: real textbook questions contain
+                // slanted symbols, italic variables and rotated diagram labels.
+                // The watermark is removed as a phrase after extraction instead.
                 val selectedChars = textPositions.filter { position ->
-                    // PECTAA prints "Web Version Of PECTAA Textbook" diagonally across
-                    // the page. Exclude diagonal glyphs individually so the
-                    // horizontal question text beneath them remains intact.
-                    val direction = ((position.dir % 360f) + 360f) % 360f
-                    val nearestRightAngle = minOf(
-                        direction,
-                        kotlin.math.abs(direction - 90f),
-                        kotlin.math.abs(direction - 180f),
-                        kotlin.math.abs(direction - 270f),
-                        360f - direction
-                    )
-                    if (nearestRightAngle > 7f) return@filter false
-
                     val x = position.xDirAdj
                     val y = position.yDirAdj
                     val w = position.widthDirAdj
