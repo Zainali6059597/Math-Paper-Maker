@@ -1135,7 +1135,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                             val saved = withContext(Dispatchers.IO) {
                                 runCatching {
                                     TextbookQuestionBank.saveApprovedCandidates(
-                                        applicationContext, bankBookKey, bankChapter, bankPage, approvedCandidates
+                                        applicationContext, bankBookKey, bankChapter, bankPage, approvedCandidates,
+                                        detectedQuestionKind, marks
                                     )
                                 }
                             }
