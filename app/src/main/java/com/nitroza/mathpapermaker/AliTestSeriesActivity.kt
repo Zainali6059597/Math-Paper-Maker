@@ -1397,7 +1397,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Checkbox(checked = includeCurrentQuestions, onCheckedChange = { includeCurrentQuestions = it })
                             Text("Include questions I have already selected as important")
                         }
-                        Text("The app uses approved questions saved in your offline textbook bank and follows the Punjab Board pattern. If the bank is short, it will tell you what is missing.", style = MaterialTheme.typography.bodySmall)
+                        Text("The app builds the Punjab Board paper structure (15 MCQs, 27 short questions and 5 two-part long questions) using only the chapters you select. Full-syllabus papers also follow the official chapter-wise allocation. Questions must already be in your approved offline bank or current selection; missing question types are reported clearly.", style = MaterialTheme.typography.bodySmall)
                     }
                 },
                 confirmButton = {
@@ -1498,7 +1498,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Text("INCLUDE CHAPTERS: ${selectedChapters.size} / ${if (grade == 9) 13 else 12}")
                         }
                         if (!allChaptersSelected && paperMode == "BOARD") {
-                            Text("A full Punjab Board pattern uses chapter distribution across the complete syllabus. Switch to CUSTOM for a selected-chapter paper.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                            Text("Selected-unit Board paper: the same 15 MCQs, 27 short questions and 10 long-question parts are drawn only from your chosen chapters. Full-syllabus selection uses the official chapter-wise allocation.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
                         Text("PAPER FORMAT", style = MaterialTheme.typography.labelLarge)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
