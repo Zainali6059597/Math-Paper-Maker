@@ -102,6 +102,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var pageBitmap by remember { mutableStateOf<Bitmap?>(null) }
         var selected by remember { mutableStateOf<List<SelectedQuestion>>(emptyList()) }
         var nextId by remember { mutableLongStateOf(1L) }
+        var savedQuestionBankCount by remember { mutableIntStateOf(0) }
         var notice by remember { mutableStateOf("Choose Class 9 or Class 10, then open its Mathematics PDF.") }
         var showQuestionEditor by remember { mutableStateOf(false) }
         var questionText by remember { mutableStateOf(TextFieldValue("")) }
@@ -151,6 +152,17 @@ class AliTestSeriesActivity : ComponentActivity() {
                 if (bitmapToRelease != null && !bitmapToRelease.isRecycled) {
                     bitmapToRelease.recycle()
                 }
+            }
+        }
+
+        LaunchedEffect(grade, pdfName) {
+            savedQuestionBankCount = if (pdfName.isBlank()) 0 else withContext(Dispatchers.IO) {
+                runCatching {
+                    TextbookQuestionBank.approvedCount(
+                        applicationContext,
+                        "CLASS$grade|$pdfName"
+                    )
+                }.getOrDefault(0)
             }
         }
 
@@ -1173,6 +1185,11 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     )
                                 }
                             }
+                            savedQuestionBankCount = withContext(Dispatchers.IO) {
+                                runCatching {
+                                    TextbookQuestionBank.approvedCount(applicationContext, bankBookKey)
+                                }.getOrDefault(savedQuestionBankCount)
+                            }
                             notice = saved.fold(
                                 onSuccess = { count -> "Added $addedCount question(s); $count new teacher-approved question(s) saved in the offline textbook bank." },
                                 onFailure = { error -> "Added $addedCount question(s), but the offline bank save failed: " + (error.message ?: "unknown error") }
@@ -1240,12 +1257,20 @@ class AliTestSeriesActivity : ComponentActivity() {
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
                         Text("AUTOMATIC PAPER GENERATION", style = MaterialTheme.typography.labelLarge)
-                        Text("The generator selects only questions already collected in this draft. Add source questions from your textbook first; it will not invent questions.", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            "The generator uses teacher-approved questions saved on this device plus the current draft. It never invents question text.",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Text(
+                            "OFFLINE BANK: $savedQuestionBankCount approved question(s) for this textbook",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                         Button(
                             onClick = { autoGenerateFromCollectedQuestions() },
-                            enabled = paperMode == "BOARD" && selected.isNotEmpty(),
+                            enabled = paperMode == "BOARD" && (selected.isNotEmpty() || savedQuestionBankCount > 0),
                             modifier = Modifier.fillMaxWidth()
-                        ) { Text("AUTO-GENERATE BOARD PAPER FROM COLLECTED QUESTIONS") }
+                        ) { Text("AUTO-GENERATE FROM TEXTBOOK QUESTION BANK") }
                         Text("CHAPTER SCOPE", style = MaterialTheme.typography.labelLarge)
                         OutlinedButton(onClick = { showChapterPicker = true }, modifier = Modifier.fillMaxWidth()) {
                             Text("INCLUDE CHAPTERS: ${selectedChapters.size} / ${if (grade == 9) 13 else 12}")
