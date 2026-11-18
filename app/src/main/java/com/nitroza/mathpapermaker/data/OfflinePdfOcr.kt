@@ -1,6 +1,7 @@
 package com.nitroza.mathpapermaker.data
 
 import android.graphics.Bitmap
+import android.graphics.RectF
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import com.google.mlkit.vision.common.InputImage
@@ -28,7 +29,10 @@ object OfflinePdfOcr {
     private const val MAX_PIXELS = 2_000_000L
     private const val MAX_WIDTH = 1800f
 
-    suspend fun readPage(pdfFile: File, zeroBasedPage: Int): String =
+    // Reuse the bundled recognizer; constructing it for every page adds avoidable latency.
+    private val recognizer by lazy { TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS) }
+
+    suspend fun readPage(pdfFile: File, zeroBasedPage: Int, selectedRegion: RectF? = null): String =
         withContext(Dispatchers.IO) {
             require(pdfFile.isFile && pdfFile.length() > 0L) { "The PDF file is missing or empty." }
             require(zeroBasedPage >= 0) { "Choose a valid PDF page." }
@@ -47,35 +51,41 @@ object OfflinePdfOcr {
                         ).coerceAtMost(2.5f)
                         val width = (pageWidth * scale).toInt().coerceAtLeast(1)
                         val height = (pageHeight * scale).toInt().coerceAtLeast(1)
-                        Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { image ->
-                            try {
-                                // Keep blank/transparent PDF areas white for reliable OCR input.
-                                image.eraseColor(android.graphics.Color.WHITE)
-                                page.render(image, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                            } catch (error: Throwable) {
-                                image.recycle()
-                                throw error
+                        val fullPage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                        try {
+                            fullPage.eraseColor(android.graphics.Color.WHITE)
+                            page.render(fullPage, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT)
+                            val box = selectedRegion?.let { region ->
+                                val left = (region.left.coerceIn(0f, 1f) * width).toInt().coerceIn(0, width - 1)
+                                val top = (region.top.coerceIn(0f, 1f) * height).toInt().coerceIn(0, height - 1)
+                                val right = (region.right.coerceIn(0f, 1f) * width).toInt().coerceIn(left + 1, width)
+                                val bottom = (region.bottom.coerceIn(0f, 1f) * height).toInt().coerceIn(top + 1, height)
+                                android.graphics.Rect(left, top, right, bottom)
                             }
+                            if (box == null) fullPage else {
+                                Bitmap.createBitmap(fullPage, box.left, box.top, box.width(), box.height()).also {
+                                    fullPage.recycle()
+                                }
+                            }
+                        } catch (error: Throwable) {
+                            if (!fullPage.isRecycled) fullPage.recycle()
+                            throw error
                         }
                     }
                 }
             }
 
-            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+            val textRecognizer = recognizer
             suspendCancellableCoroutine { continuation ->
                 val released = AtomicBoolean(false)
                 fun releaseResources() {
                     if (released.compareAndSet(false, true)) {
-                        try {
-                            recognizer.close()
-                        } finally {
-                            if (!bitmap.isRecycled) bitmap.recycle()
-                        }
+                        if (!bitmap.isRecycled) bitmap.recycle()
                     }
                 }
 
                 try {
-                    val task = recognizer.process(InputImage.fromBitmap(bitmap, 0))
+                    val task = textRecognizer.process(InputImage.fromBitmap(bitmap, 0))
                     task.addOnSuccessListener { result ->
                         if (continuation.isActive) continuation.resume(removePctbWatermarkLines(result.text))
                         releaseResources()
