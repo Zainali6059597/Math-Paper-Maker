@@ -49,6 +49,8 @@ object OfflinePdfOcr {
                         val height = (pageHeight * scale).toInt().coerceAtLeast(1)
                         Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { image ->
                             try {
+                                // Keep blank/transparent PDF areas white for reliable OCR input.
+                                image.eraseColor(android.graphics.Color.WHITE)
                                 page.render(image, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                             } catch (error: Throwable) {
                                 image.recycle()
