@@ -545,40 +545,73 @@ class AliTestSeriesActivity : ComponentActivity() {
                 notice = "Switch to Board Pattern before automatic board-paper selection."
                 return
             }
-            if (selected.isEmpty()) {
-                notice = "First collect textbook questions using text selection, page detection, scanned crops or the manual editor. The generator only selects existing questions; it never invents them."
+            if (pdfName.isBlank()) {
+                notice = "Open the textbook PDF whose saved questions you want to use."
                 return
             }
-            val sourcePool = selected.map {
-                PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
-            }
-            when (val generated = AutoPaperGenerator.generate(grade, selectedChapters, sourcePool)) {
-                is AutoPaperGenerator.Result.Success -> {
-                    val rebuilt = generated.questions.mapNotNull { generatedQuestion ->
-                        val original = selected.firstOrNull { candidate ->
-                            candidate.kind.equals(generatedQuestion.kind, true) &&
-                                candidate.chapterId == generatedQuestion.chapterId &&
-                                candidate.sourcePage == generatedQuestion.sourcePage &&
-                                candidate.text == generatedQuestion.text &&
-                                candidate.imageFile == generatedQuestion.imageFile
-                        } ?: return@mapNotNull null
-                        original.copy(
-                            number = generatedQuestion.number,
-                            kind = generatedQuestion.kind,
-                            marks = generatedQuestion.marks,
-                            sectionId = generatedQuestion.sectionId
-                        )
-                    }
-                    if (rebuilt.size == generated.questions.size) {
-                        selected = rebuilt
-                        showQuestions = true
-                        notice = "Automatic board paper generated from " + sourcePool.size + " collected textbook question(s). Review, edit, replace, reorder or remove questions before export."
-                    } else {
-                        notice = "Could not match every generated question to its source. Your existing selection was kept unchanged."
-                    }
+            lifecycleScope.launch {
+                notice = "Loading saved textbook questions and current selections..."
+                val bookKey = "CLASS$grade|$pdfName"
+                val savedBank = withContext(Dispatchers.IO) {
+                    runCatching { TextbookQuestionBank.approvedForBook(applicationContext, bookKey) }
                 }
-                is AutoPaperGenerator.Result.NeedsMoreQuestions -> {
-                    notice = generated.message + " Collect more source questions or select additional chapters."
+                savedBank.onFailure { error ->
+                    notice = "Could not load the offline question bank: " + (error.message ?: "unknown error")
+                }
+                val savedQuestions = savedBank.getOrNull().orEmpty().map { item ->
+                    SelectedQuestion(
+                        id = nextId++,
+                        number = item.questionNumber,
+                        text = item.questionText,
+                        kind = item.questionType,
+                        marks = item.marks,
+                        sourcePage = item.sourcePage,
+                        imageFile = item.imageFile,
+                        chapterId = item.chapterId,
+                        sectionId = "BANK"
+                    )
+                }
+                val sourceItems = (selected + savedQuestions)
+                    .filter { it.chapterId in selectedChapters }
+                    .distinctBy {
+                        listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|")
+                    }
+                if (sourceItems.isEmpty()) {
+                    notice = "No approved textbook questions are saved for this book yet. Detect questions, assign their type/chapter, and add them to the bank first."
+                    return@launch
+                }
+                val sourcePool = sourceItems.map {
+                    PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
+                }
+                when (val generated = AutoPaperGenerator.generate(grade, selectedChapters, sourcePool)) {
+                    is AutoPaperGenerator.Result.Success -> {
+                        val rebuilt = generated.questions.mapNotNull { generatedQuestion ->
+                            sourceItems.firstOrNull { candidate ->
+                                candidate.kind.equals(generatedQuestion.kind, true) &&
+                                    candidate.chapterId == generatedQuestion.chapterId &&
+                                    candidate.sourcePage == generatedQuestion.sourcePage &&
+                                    candidate.text == generatedQuestion.text &&
+                                    candidate.imageFile == generatedQuestion.imageFile
+                            }?.copy(
+                                id = nextId++,
+                                number = generatedQuestion.number,
+                                kind = generatedQuestion.kind,
+                                marks = generatedQuestion.marks,
+                                sectionId = generatedQuestion.sectionId
+                            )
+                        }
+                        if (rebuilt.size == generated.questions.size) {
+                            selected = rebuilt
+                            showQuestions = true
+                            notice = "Board paper generated using " + sourceItems.size +
+                                " available question(s): saved bank + current draft. Review, edit, replace, reorder or remove before export."
+                        } else {
+                            notice = "Could not match every generated question to its source. Your existing selection was kept unchanged."
+                        }
+                    }
+                    is AutoPaperGenerator.Result.NeedsMoreQuestions -> {
+                        notice = generated.message + " Add more approved textbook questions to the offline bank."
+                    }
                 }
             }
         }
