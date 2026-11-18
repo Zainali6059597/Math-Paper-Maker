@@ -1,0 +1,26 @@
+{
+  "research_run": "strategy2-final-run",
+  "collected_on": "2026-11-18",
+  "authority": "Punjab Education Curriculum, Training and Assessment Authority (PECTAA)",
+  "official_index": "https://pectaa.edu.pk/curriculum-compliance/",
+  "academic_session": "2026-27",
+  "grade10_official_item": {
+    "title": "Smart Syllabus (Accelerated Learning Programme / Deleted Topics and Exercise Questions), Pairing Schemes and Model Papers of Grade-10 for Academic Session 2026-27 and BISE Annual Examination-2027",
+    "source_page_link_number": 28,
+    "notification_pdf": "https://pectaa.edu.pk/wp-content/uploads/2026/11/ALPs-Notification-14.11.2026-1257.pdf",
+    "date_indicated_by_filename": "14.11.2026",
+    "status": "OFFICIAL_SOURCE_LOCATED_CONTENT_NOT_EXTRACTED",
+    "reason": "The official PDF is approximately 24.3 MB and could not be opened by the available page reader due to its content-size limit. Do not infer Grade 10 syllabus details or pairing scheme from its title alone."
+  },
+  "grade9_official_item": {
+    "title": "Smart Syllabus (Accelerated Learning Programme) Grade-9 AY 2026-27",
+    "source_page_link_number": 24,
+    "status": "OFFICIAL_SOURCE_LOCATED",
+    "related_existing_research": "research/strategy2-run1/grade9-pectaa-2027-import-package.json"
+  },
+  "research_rules": [
+    "PECTAA is the primary authority for current Punjab board syllabus, pairing schemes and board model papers.",
+    "PEF-QAT papers are practice material for PEF assessment and are not substitutes for PECTAA/BISE model papers.",
+    "Do not mark a question current-syllabus verified until matched to the official applicable ALP and chapter/exercise."
+  ]
+}
