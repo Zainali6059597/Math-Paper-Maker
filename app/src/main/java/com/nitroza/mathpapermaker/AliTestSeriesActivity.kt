@@ -1128,6 +1128,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                         showQuestions = true
                         notice = "Added $addedCount checked question(s). Saving teacher-approved questions to the offline textbook bank..."
                         lifecycleScope.launch {
+                            if (!PunjabBoardPattern.isValidChapter(grade, bankChapter)) {
+                                notice = "Added $addedCount question(s). Assign a valid chapter before saving them to the reusable textbook bank."
+                                return@launch
+                            }
                             val saved = withContext(Dispatchers.IO) {
                                 runCatching {
                                     TextbookQuestionBank.saveApprovedCandidates(
