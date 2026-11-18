@@ -1044,14 +1044,46 @@ class AliTestSeriesActivity : ComponentActivity() {
                         normalizedNumber.isNotBlank() && !duplicateNumber &&
                         PunjabBoardPattern.isValidChapter(grade, questionChapter) && questionChapter in selectedChapters &&
                         questionMarks.toIntOrNull() == requiredMarks && !atKindLimit, onClick = {
+                        val confirmedText = selectedQuestionText(questionText)
+                        val confirmedImage = pendingImageFile
+                        val confirmedNumber = questionNumber.trim()
+                        val confirmedType = questionKind
+                        val confirmedMarks = questionMarks.toInt()
+                        val confirmedChapter = questionChapter
+                        val confirmedPage = pageIndex + 1
+                        val bankBookKey = "CLASS$grade|$pdfName"
                         selected = selected + SelectedQuestion(
-                            nextId++, questionNumber.trim(), selectedQuestionText(questionText), questionKind,
-                            questionMarks.toInt(), pageIndex + 1, pendingImageFile, questionChapter, questionSection
+                            nextId++, confirmedNumber, confirmedText, confirmedType,
+                            confirmedMarks, confirmedPage, confirmedImage, confirmedChapter, questionSection
                         )
                         showQuestionEditor = false
                         pendingImageFile = null
                         cropRect = null
-                        notice = "Question added to your manual selection."
+                        notice = "Question added. Saving your teacher-confirmed question to the offline textbook bank..."
+                        lifecycleScope.launch {
+                            val saved = withContext(Dispatchers.IO) {
+                                runCatching {
+                                    TextbookQuestionBank.saveApprovedQuestion(
+                                        applicationContext, bankBookKey, confirmedChapter, confirmedPage,
+                                        confirmedNumber, confirmedText, confirmedType, confirmedMarks, confirmedImage
+                                    )
+                                }
+                            }
+                            savedQuestionBankCount = withContext(Dispatchers.IO) {
+                                runCatching {
+                                    TextbookQuestionBank.approvedCount(applicationContext, bankBookKey)
+                                }.getOrDefault(savedQuestionBankCount)
+                            }
+                            notice = saved.fold(
+                                onSuccess = { inserted ->
+                                    if (inserted) "Question added and saved to the offline textbook bank."
+                                    else "Question added. It was already present in the offline textbook bank."
+                                },
+                                onFailure = { error ->
+                                    "Question added to this paper, but bank saving failed: " + (error.message ?: "unknown error")
+                                }
+                            )
+                        }
                     }) { Text("ADD QUESTION") }
                 },
                 dismissButton = { TextButton(onClick = {
