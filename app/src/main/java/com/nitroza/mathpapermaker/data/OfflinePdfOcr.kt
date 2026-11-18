@@ -87,7 +87,10 @@ object OfflinePdfOcr {
                 try {
                     val task = textRecognizer.process(InputImage.fromBitmap(bitmap, 0))
                     task.addOnSuccessListener { result ->
-                        if (continuation.isActive) continuation.resume(removePctbWatermarkLines(result.text))
+                        if (continuation.isActive) {
+                            val cleaned = removePctbWatermarkLines(result.text)
+                            continuation.resume(rejectLikelyWatermarkNoise(cleaned))
+                        }
                         releaseResources()
                     }
                     task.addOnFailureListener { error ->
@@ -119,3 +122,14 @@ private fun removePctbWatermarkLines(text: String): String =
         }
         .joinToString("\n")
         .trim()
+
+/** Reject OCR output dominated by isolated glyphs instead of readable question text. */
+private fun rejectLikelyWatermarkNoise(text: String): String {
+    if (text.isBlank()) return text
+    val tokens = text.split(Regex("\\s+")).filter { it.isNotBlank() }
+    if (tokens.size < 8) return text
+    val shortTokens = tokens.count { it.count(Char::isLetterOrDigit) <= 2 }
+    val hasQuestionNumber = Regex("(?m)^\\s*(?:Q(?:uestion)?\\s*)?\\d{1,2}\\s*[.)]", RegexOption.IGNORE_CASE)
+        .containsMatchIn(text)
+    return if (!hasQuestionNumber && shortTokens.toFloat() / tokens.size >= 0.60f) "" else text
+}
