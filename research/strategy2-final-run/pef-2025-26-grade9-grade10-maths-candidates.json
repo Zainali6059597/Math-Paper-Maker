@@ -1,0 +1,268 @@
+{
+  "research_run": "strategy2-final-run",
+  "collected_on": "2026-11-18",
+  "source": "Punjab Education Foundation (PEF), Quality Assurance and Improvement Directorate",
+  "academic_year": "2025-26",
+  "source_classification": "PEF-QAT practice/model papers; NOT BISE board model papers",
+  "source_index": "https://www.pef.edu.pk/ADU/Model_Papers202526",
+  "papers": [
+    {
+      "grade": 9,
+      "url": "https://www.pef.edu.pk/pdf/downloads/Model-Papers/A.Y%202025-26/class%209.pdf",
+      "pages": 20,
+      "maths_pages": [
+        2,
+        3
+      ],
+      "marks": 20,
+      "pattern": {
+        "mcq": 8,
+        "short_questions": 5,
+        "short_attempt": "any four",
+        "short_marks_each": 3
+      },
+      "candidates": [
+        {
+          "type": "MCQ",
+          "prompt": "√75 + √27 = ?",
+          "options": [
+            "√102",
+            "9√3",
+            "5√3",
+            "8√3"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "The product of (3 + √5)(3 − √5) is:",
+          "options": [
+            "prime number",
+            "odd number",
+            "rational number",
+            "irrational number"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "2^x × 8^x = 64, then x = ?",
+          "options": [
+            "3/2",
+            "3/4",
+            "5/6",
+            "2/3"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "For all x ∈ R, x = x is called:",
+          "options": [
+            "reflexive property",
+            "transitive property",
+            "symmetric property",
+            "trichotomy property"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "The standard form of 5.2 × 10^6 is:",
+          "options": [
+            "52,000",
+            "520,000",
+            "5,200,000",
+            "52,000,000"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "Scientific notation of 0.00034 is:",
+          "options": [
+            "3.4 × 10^3",
+            "3.4 × 10^-4",
+            "3.4 × 10^4",
+            "3.4 × 10^-3"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "The base of common logarithm is:",
+          "options": [
+            "2",
+            "10",
+            "5",
+            "e"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "log 100 = ?",
+          "options": [
+            "2",
+            "3",
+            "10",
+            "1"
+          ]
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Represent 4 1/3 on the number line.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find two rational numbers between 1/3 and 1/4.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Simplify ³√(27x^6y^9z^3).",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "If x = 3 + √8, find x² + 1/x².",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find x if log₄ x = 3/2.",
+          "marks": 3
+        }
+      ],
+      "status": "NEEDS_REVIEW",
+      "note": "These Grade 9 prompts substantially overlap the PEF 2026-27 paper; retain provenance by academic year, but deduplicate identical question text in any combined bank."
+    },
+    {
+      "grade": 10,
+      "url": "https://www.pef.edu.pk/pdf/downloads/Model-Papers/A.Y%202025-26/class%2010.pdf",
+      "pages": 25,
+      "maths_pages": [
+        2,
+        3,
+        4
+      ],
+      "marks": 20,
+      "science_pattern": {
+        "mcq": 8,
+        "short_questions": 5,
+        "short_attempt": "any four",
+        "short_marks_each": 3
+      },
+      "science_candidates": [
+        {
+          "type": "MCQ",
+          "prompt": "What is the standard form of the quadratic equation (x − 4)(x + 3) = −7?",
+          "options": [
+            "x² − x − 12 = 0",
+            "x² − x + 12 = 0",
+            "x² − x − 5 = 0",
+            "x² − x + 5 = 0"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "What is the discriminant of 2x² − x + 1 = 0?",
+          "options": [
+            "7",
+            "−7",
+            "9",
+            "−9"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "If 12, p and 3 are in continued proportion, what is p?",
+          "options": [
+            "4",
+            "3",
+            "36",
+            "±6"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "What is (x − 11)/((x − 4)(x + 3))?",
+          "options": [
+            "A proper fraction",
+            "An improper fraction",
+            "An identity",
+            "An equation"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "Identify the correct option for the Venn diagram with the overlap of A and B shaded.",
+          "options": [
+            "A − B",
+            "A ∩ B",
+            "A ∪ B",
+            "B − A"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "What is the mode of 4, 5, 6, 8, 4, 3, 7, 8, 5, 5?",
+          "options": [
+            "8",
+            "5",
+            "5.5",
+            "4"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "The union of two non-collinear rays with a common endpoint is called:",
+          "options": [
+            "An angle",
+            "A degree",
+            "A minute",
+            "A radian"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "(1/2) cosec 45° = ?",
+          "options": [
+            "1/(2√2)",
+            "1/√2",
+            "√2",
+            "√3/2"
+          ]
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Solve by factorization: 4 − 32x = 17x².",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Using synthetic division, find h if the zero of P(x) = 3x² + 4x − 7h is 1.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find x if the ratios (3x − 6):(2x + 9) and 6:1 are equal.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "If U={1,2,...,10}, A={1,3,5,7,9}, B={1,4,7,10}, find (A ∩ B)ᶜ.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Verify sin³θ = sinθ − sinθ cos²θ.",
+          "marks": 3
+        }
+      ],
+      "status": "NEEDS_REVIEW",
+      "note": "The paper contains separate Science and Arts maths tracks. Candidates above are Science track only. Diagram-dependent Venn question needs image review."
+    }
+  ],
+  "validation": {
+    "official_source": true,
+    "current_bise_board_pattern": false,
+    "syllabus_approval": false,
+    "visual_formula_review_required": true,
+    "duplicate_handling": "Question wording repeats across PEF academic years in Grade 9; preserve source-year references and deduplicate question-bank entries by normalized text."
+  }
+}
