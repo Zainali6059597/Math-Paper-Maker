@@ -80,7 +80,8 @@ object AutoPaperGenerator {
         fun fail(message: String): Result.NeedsMoreQuestions =
             Result.NeedsMoreQuestions(message)
 
-        val fullSyllabus = selectedChapters.size == if (grade == 9) 13 else 12
+        val expectedChapterCount = if (grade == 9) 13 else 12
+        val fullSyllabus = selectedChapters.size == expectedChapterCount
         // A full-syllabus paper follows the official chapter allocation. A selected-unit
         // paper keeps the same Board paper structure and marks, but draws only from chosen units.
         var mcqIndex = 1
