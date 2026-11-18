@@ -40,6 +40,7 @@ import com.nitroza.mathpapermaker.data.OfflinePdfOcr
 import com.nitroza.mathpapermaker.data.PdfTextDocumentCache
 import com.nitroza.mathpapermaker.data.TextbookQuestionBank
 import com.nitroza.mathpapermaker.data.TextbookQuestionBankMapper
+import com.nitroza.mathpapermaker.data.TextbookCandidateEntity
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.AutoPaperGenerator
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
@@ -104,6 +105,8 @@ class AliTestSeriesActivity : ComponentActivity() {
         var selected by remember { mutableStateOf<List<SelectedQuestion>>(emptyList()) }
         var nextId by remember { mutableLongStateOf(1L) }
         var savedQuestionBankCount by remember { mutableIntStateOf(0) }
+        var showBankManager by remember { mutableStateOf(false) }
+        var savedBankQuestions by remember { mutableStateOf<List<TextbookCandidateEntity>>(emptyList()) }
         var notice by remember { mutableStateOf("Choose Class 9 or Class 10, then open its Mathematics PDF.") }
         var showQuestionEditor by remember { mutableStateOf(false) }
         var questionText by remember { mutableStateOf(TextFieldValue("")) }
@@ -306,7 +309,10 @@ class AliTestSeriesActivity : ComponentActivity() {
             // Keep only images referenced by the restored draft; remove abandoned app-owned crops.
             withContext(Dispatchers.IO) {
                 val imageDirectory = File(filesDir, "question_images")
-                val referencedImages = selected.mapNotNull { it.imageFile }
+                val bankReferencedImages = runCatching {
+                    TextbookQuestionBank.referencedImagePaths(applicationContext)
+                }.getOrDefault(emptySet())
+                val referencedImages = (selected.mapNotNull { it.imageFile } + bankReferencedImages)
                     .mapNotNull { path -> runCatching { File(path).canonicalPath }.getOrNull() }
                     .toSet()
                 imageDirectory.listFiles()
@@ -1357,6 +1363,23 @@ class AliTestSeriesActivity : ComponentActivity() {
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
+                        OutlinedButton(
+                            onClick = {
+                                val bookKey = "CLASS$grade|$pdfName"
+                                lifecycleScope.launch {
+                                    val loaded = withContext(Dispatchers.IO) {
+                                        runCatching { TextbookQuestionBank.approvedForBook(applicationContext, bookKey) }
+                                    }
+                                    loaded.onSuccess {
+                                        savedBankQuestions = it
+                                        showBankManager = true
+                                    }.onFailure { error ->
+                                        notice = "Could not open the offline bank: ${error.message ?: "unknown error"}"
+                                    }
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text("MANAGE SAVED TEXTBOOK QUESTIONS") }
                         Button(
                             onClick = { autoGenerateFromCollectedQuestions() },
                             enabled = paperMode == "BOARD" && (selected.isNotEmpty() || savedQuestionBankCount > 0),
@@ -1513,7 +1536,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                 selected = copy
                                             }) { Text("DOWN") }
                                             TextButton(onClick = {
-                                                item.imageFile?.let { File(it).delete() }
                                                 selected = selected.filterNot { it.id == item.id }
                                             }) { Text("REMOVE") }
                                         }
@@ -1700,6 +1722,67 @@ class AliTestSeriesActivity : ComponentActivity() {
             )
         }
 
+        if (showBankManager) {
+            AlertDialog(
+                onDismissRequest = { showBankManager = false },
+                title = { Text("OFFLINE TEXTBOOK BANK · ${savedBankQuestions.size}") },
+                text = {
+                    if (savedBankQuestions.isEmpty()) {
+                        Text("No approved questions are saved for this textbook yet.")
+                    } else {
+                        LazyColumn(
+                            Modifier.heightIn(max = 520.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            itemsIndexed(savedBankQuestions, key = { _, item -> item.candidateId }) { _, item ->
+                                Card {
+                                    Column(
+                                        Modifier.fillMaxWidth().padding(10.dp),
+                                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                                    ) {
+                                        Text("${item.questionNumber} · ${item.chapterId} · ${item.questionType} · ${item.marks} marks",
+                                            style = MaterialTheme.typography.labelLarge)
+                                        Text(
+                                            item.questionText.ifBlank { "Scanned image question · page ${item.sourcePage}" },
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            maxLines = 4
+                                        )
+                                        Text("Source page: ${item.sourcePage} · ${item.exerciseId}",
+                                            style = MaterialTheme.typography.labelSmall)
+                                        TextButton(onClick = {
+                                            lifecycleScope.launch {
+                                                val removed = withContext(Dispatchers.IO) {
+                                                    runCatching {
+                                                        TextbookQuestionBank.removeQuestion(
+                                                            applicationContext, item.candidateId
+                                                        )
+                                                    }
+                                                }
+                                                removed.onSuccess { didRemove ->
+                                                    if (didRemove) {
+                                                        savedBankQuestions = savedBankQuestions.filterNot {
+                                                            it.candidateId == item.candidateId
+                                                        }
+                                                        savedQuestionBankCount = (savedQuestionBankCount - 1).coerceAtLeast(0)
+                                                        notice = "Question removed from the reusable offline bank."
+                                                    }
+                                                }.onFailure { error ->
+                                                    notice = "Could not remove bank question: ${error.message ?: "unknown error"}"
+                                                }
+                                            }
+                                        }) { Text("REMOVE FROM BANK") }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showBankManager = false }) { Text("DONE") }
+                }
+            )
+        }
+
         if (showGradeSwitchConfirm) {
             AlertDialog(
                 onDismissRequest = { showGradeSwitchConfirm = false },
@@ -1707,7 +1790,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                 text = { Text("Switching classes will clear the current paper questions so Class 9 and Class 10 questions are not mixed. Your imported textbook files remain saved.") },
                 confirmButton = {
                     Button(onClick = {
-                        selected.forEach { it.imageFile?.let { path -> File(path).delete() } }
                         selected = emptyList()
                         nextId = 1L
                         grade = pendingGrade
@@ -1728,7 +1810,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                 text = { Text("This clears the current selected questions and paper details from this device.") },
                 confirmButton = {
                     TextButton(onClick = {
-                        selected.forEach { it.imageFile?.let { path -> File(path).delete() } }
                         selected = emptyList()
                         nextId = 1L
                         schoolName = ""
