@@ -48,7 +48,7 @@ object PunjabBoardPattern {
         setOf("CH9", "CH10", "CH11", "CH12")
     )
 
-    private data class LongPairRule(val first: Set<String>, val second: Set<String>)
+    data class LongPairRule(val first: Set<String>, val second: Set<String>)
     private val grade9LongPairs = listOf(
         LongPairRule(setOf("CH1"), setOf("CH2")),
         LongPairRule(setOf("CH3"), setOf("CH4")),
@@ -63,6 +63,28 @@ object PunjabBoardPattern {
         LongPairRule(setOf("CH6"), setOf("CH8", "CH11")),
         LongPairRule(setOf("CH10"), setOf("CH9", "CH12"))
     )
+
+    /** Required MCQ counts by chapter, exposed for deterministic auto-selection. */
+    fun mcqDistribution(grade: Int): Map<String, Int> = when (grade) {
+        9 -> grade9Mcqs
+        10 -> grade10Mcqs
+        else -> emptyMap()
+    }
+
+    /** Required Class 9 short-question counts, or allowed Class 10 chapter groups. */
+    fun shortDistribution(grade: Int, sectionNumber: Int): Map<String, Int> =
+        if (grade == 9 && sectionNumber in 2..4) grade9ShortGroups[sectionNumber - 2]
+        else emptyMap()
+
+    fun shortAllowedChapters(grade: Int, sectionNumber: Int): Set<String> =
+        if (grade == 10 && sectionNumber in 2..4) grade10ShortGroups[sectionNumber - 2]
+        else emptySet()
+
+    fun longPairRules(grade: Int): List<LongPairRule> = when (grade) {
+        9 -> grade9LongPairs
+        10 -> grade10LongPairs
+        else -> emptyList()
+    }
 
     fun isValidChapter(grade: Int, chapterId: String): Boolean {
         if (grade !in 9..10 || !chapterId.matches(Regex("CH(?:[1-9]|1[0-3])"))) return false
