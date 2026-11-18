@@ -2,7 +2,6 @@ package com.nitroza.mathpapermaker.data
 
 import android.content.Context
 import java.io.File
-import java.security.MessageDigest
 
 /**
  * Offline repository for textbook questions explicitly confirmed by the teacher.
@@ -31,12 +30,11 @@ object TextbookQuestionBank {
             require(candidate.sourceNumber.isNotBlank() && candidate.text.isNotBlank()) {
                 "A saved textbook question must have a source number and text."
             }
-            val identity = listOf(
-                stableBookKey, chapterId, sourcePage.toString(),
-                candidate.sourceNumber.trim(), questionType, candidate.text.trim()
-            ).joinToString("|")
             TextbookCandidateEntity(
-                candidateId = sha256(identity),
+                candidateId = TextbookQuestionBankIdentity.create(
+                    stableBookKey, chapterId, sourcePage, candidate.sourceNumber,
+                    questionType, candidate.text
+                ),
                 bookFile = stableBookKey,
                 chapterId = chapterId,
                 exerciseId = "PAGE",
@@ -92,12 +90,11 @@ object TextbookQuestionBank {
             "A saved question needs editable text or a scanned crop image."
         }
         val stableBookKey = bookFile.trim()
-        val identity = listOf(
-            stableBookKey, chapterId, sourcePage.toString(), questionNumber.trim(),
-            questionType, cleanText, cleanImage.orEmpty()
-        ).joinToString("|")
         val row = TextbookCandidateEntity(
-            candidateId = sha256(identity),
+            candidateId = TextbookQuestionBankIdentity.create(
+                stableBookKey, chapterId, sourcePage, questionNumber,
+                questionType, cleanText, cleanImage
+            ),
             bookFile = stableBookKey,
             chapterId = chapterId,
             exerciseId = "MANUAL",
@@ -149,8 +146,4 @@ object TextbookQuestionBank {
             .approvedTextbookCandidateCount(bookFile.trim())
     }
 
-    private fun sha256(value: String): String =
-        MessageDigest.getInstance("SHA-256")
-            .digest(value.toByteArray(Charsets.UTF_8))
-            .joinToString("") { byte -> "%02x".format(byte) }
 }
