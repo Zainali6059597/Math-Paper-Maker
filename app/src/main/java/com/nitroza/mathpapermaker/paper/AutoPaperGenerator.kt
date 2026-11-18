@@ -77,9 +77,10 @@ object AutoPaperGenerator {
         // Q2-Q4: exact Class 9 allocation; Class 10 requires at least two from each chapter.
         for (section in 2..4) {
             if (grade == 9) {
+                var shortIndex = 1
                 for ((chapter, count) in PunjabBoardPattern.shortDistribution(grade, section)) {
-                    repeat(count) { index ->
-                        val item = take("SHORT", chapter, "Q$section", "Q$section(${roman(index + 1)})")
+                    repeat(count) {
+                        val item = take("SHORT", chapter, "Q$section", "Q$section(${roman(shortIndex++)})")
                             ?: return fail("Not enough short questions from $chapter for Q$section.")
                         result += item
                     }
