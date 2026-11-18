@@ -1651,15 +1651,48 @@ class AliTestSeriesActivity : ComponentActivity() {
                             if (selected.any { it.number.trim().equals(number, ignoreCase = true) }) {
                                 notice = "That question number already exists. Choose a unique number."
                             } else {
+                                val manualText = manualQuestionText.text.trim()
+                                val manualType = manualQuestionKind
+                                val manualMarksValue = manualQuestionMarks.toInt()
+                                val manualChapter = manualQuestionChapter.trim()
+                                val manualBookKey = "CLASS$grade|$pdfName"
                                 selected = selected + SelectedQuestion(
-                                    id = nextId++, number = number, text = manualQuestionText.text.trim(),
-                                    kind = manualQuestionKind, marks = manualQuestionMarks.toInt(),
-                                    sourcePage = 0, imageFile = null, chapterId = manualQuestionChapter.trim(),
+                                    id = nextId++, number = number, text = manualText,
+                                    kind = manualType, marks = manualMarksValue,
+                                    sourcePage = 0, imageFile = null, chapterId = manualChapter,
                                     sectionId = number.substringBefore("(").ifBlank { "CUSTOM" }
                                 )
                                 showManualQuestionEditor = false
                                 showQuestions = true
-                                notice = "Manual question added as editable text."
+                                if (manualBookKey.isNotBlank() && PunjabBoardPattern.isValidChapter(grade, manualChapter)) {
+                                    notice = "Manual question added. Saving it to the offline textbook bank..."
+                                    lifecycleScope.launch {
+                                        val saved = withContext(Dispatchers.IO) {
+                                            runCatching {
+                                                TextbookQuestionBank.saveApprovedQuestion(
+                                                    applicationContext, manualBookKey, manualChapter, 0,
+                                                    number, manualText, manualType, manualMarksValue
+                                                )
+                                            }
+                                        }
+                                        savedQuestionBankCount = withContext(Dispatchers.IO) {
+                                            runCatching {
+                                                TextbookQuestionBank.approvedCount(applicationContext, manualBookKey)
+                                            }.getOrDefault(savedQuestionBankCount)
+                                        }
+                                        notice = saved.fold(
+                                            onSuccess = { inserted ->
+                                                if (inserted) "Manual question added and saved to the offline textbook bank."
+                                                else "Manual question added. It was already in the offline textbook bank."
+                                            },
+                                            onFailure = { error ->
+                                                "Manual question added to this paper, but bank saving failed: ${error.message ?: "unknown error"}"
+                                            }
+                                        )
+                                    }
+                                } else {
+                                    notice = "Manual question added as editable text. Assign a valid chapter while reviewing if you want it reusable in the textbook bank."
+                                }
                             }
                         }) { Text("ADD TO PAPER") }
                 },
