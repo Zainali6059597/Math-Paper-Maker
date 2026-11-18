@@ -134,6 +134,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var detectedChapterMenuExpanded by remember { mutableStateOf(false) }
         var showDetectedQuestions by remember { mutableStateOf(false) }
         var isOcrRunning by remember { mutableStateOf(false) }
+        var isRegionTextExtracting by remember { mutableStateOf(false) }
         var manualQuestionText by remember { mutableStateOf(TextFieldValue("")) }
         var manualQuestionNumber by remember { mutableStateOf("") }
         var manualQuestionMarks by remember { mutableStateOf("2") }
@@ -1014,21 +1015,28 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                         }, modifier = Modifier.weight(1f)) { Text("SELECT TEXT") }
                         Button(
-                            enabled = cropRect != null && pageBitmap != null,
+                            enabled = cropRect != null && pageBitmap != null && !isRegionTextExtracting,
                             onClick = {
+                                if (isRegionTextExtracting) return@Button
                                 val rect = cropRect ?: return@Button
                                 val file = pdfFile ?: return@Button
                                 val pageNumber = pageIndex + 1
+                                isRegionTextExtracting = true
+                                notice = "Reading the selected PDF area… Please wait; the app is extracting editable text, not using OCR."
                                 lifecycleScope.launch {
-                                    val extraction = withContext(Dispatchers.IO) {
-                                        runCatchingCancellable {
-                                            extractPdfTextInRegion(applicationContext, file, pageNumber, rect)
+                                    val extraction = try {
+                                        withContext(Dispatchers.IO) {
+                                            runCatchingCancellable {
+                                                extractPdfTextInRegion(applicationContext, file, pageNumber, rect)
+                                            }
                                         }
+                                    } finally {
+                                        isRegionTextExtracting = false
                                     }
                                     extraction.onSuccess { text ->
                                         val cleaned = removePctbWatermarkLines(text)
                                         if (cleaned.isBlank()) {
-                                            notice = "No selectable text was found in the selected area. It may be scanned or image-only content. Use OCR SCANNED PAGE or the manual editor."
+                                            notice = "No selectable text was found in this area. It may be a scanned/image-only page; use OCR SCANNED PAGE or ADD SCANNED IMAGE CROP."
                                         } else {
                                             questionText = TextFieldValue(cleaned, androidx.compose.ui.text.TextRange(0, cleaned.length))
                                             pendingImageFile = null
@@ -1037,7 +1045,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             questionChapter = chapterForPage(pageNumber).orEmpty()
                                             cropSelectionMode = false
                                             showQuestionEditor = true
-                                            notice = "Editable text was extracted from the selected area."
+                                            notice = "Text extracted in reading order. Review it before adding the question."
                                         }
                                     }.onFailure { error ->
                                         notice = "Could not extract text from selected area: ${error.message ?: "unknown error"}"
@@ -1045,7 +1053,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                             },
                             modifier = Modifier.weight(1f)
-                        ) { Text("ADD SELECTED TEXT") }
+                        ) {
+                            if (isRegionTextExtracting) {
+                                CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                                Spacer(Modifier.width(6.dp))
+                                Text("EXTRACTING…")
+                            } else Text("ADD SELECTED TEXT")
+                        }
                     }
                     OutlinedButton(
                         enabled = cropRect != null && pageBitmap != null,
@@ -2007,15 +2021,19 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
 
             override fun writeString(text: String, textPositions: MutableList<TextPosition>) {
                 // Preserve italic/rotated maths glyphs; only filter by the selected page area.
-                val selectedChars = textPositions.filter { position ->
-                    val x = position.xDirAdj
-                    val y = position.yDirAdj
-                    val w = position.widthDirAdj
-                    val h = position.heightDir
-                    val centerX = x + w / 2f
-                    val centerY = y - h / 2f
-                    centerX >= left && centerX <= right && centerY >= top && centerY <= bottom
-                }
+                val selectedChars = textPositions
+                    .filter { position ->
+                        val x = position.xDirAdj
+                        val y = position.yDirAdj
+                        val w = position.widthDirAdj
+                        val h = position.heightDir
+                        val centerX = x + w / 2f
+                        val centerY = y - h / 2f
+                        centerX >= left && centerX <= right && centerY >= top && centerY <= bottom
+                    }
+                    // Keep each extracted line left-to-right even when the PDF's
+                    // internal glyph order is unusual.
+                    .sortedBy { it.xDirAdj }
                 if (selectedChars.isNotEmpty()) {
                     var previousRight: Float? = null
                     selectedChars.forEach { position ->
@@ -2033,6 +2051,9 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
                 }
             }
         }.apply {
+            // PDF content streams often store glyphs in drawing order, not reading order.
+            // Sorting by position is essential here; otherwise selected math text can
+            // arrive as scrambled character sequences.
             sortByPosition = true
             startPage = pageNumber
             endPage = pageNumber
