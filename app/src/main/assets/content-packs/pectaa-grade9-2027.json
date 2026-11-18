@@ -456,7 +456,8 @@
       "semanticFingerprint": "the base of common logarithm is a 2 b 10 c 5 d e",
       "selectionWeight": 1.5,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q1(ii)"
+      "sourcePage": "Annex-A Maths model paper, Q1(ii)",
+      "summative": true
     },
     {
       "questionId": "G9M27-MCQ-010",
@@ -470,7 +471,8 @@
       "semanticFingerprint": "distance between two points p 1 2 and q 4 6 is a 5 b 6 c 13 d 4",
       "selectionWeight": 1.5,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q1(x)"
+      "sourcePage": "Annex-A Maths model paper, Q1(x)",
+      "summative": true
     },
     {
       "questionId": "G9M27-MCQ-014",
@@ -484,7 +486,8 @@
       "semanticFingerprint": "which data takes only some specific values a continuous data b discrete data c grouped data d ungrouped data",
       "selectionWeight": 1.5,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q1(xiv)"
+      "sourcePage": "Annex-A Maths model paper, Q1(xiv)",
+      "summative": true
     },
     {
       "questionId": "G9M27-MCQ-015",
@@ -498,7 +501,8 @@
       "semanticFingerprint": "while rolling a pair of dice what will be the probability of double 2 a 1 6 b 1 3 c 5 6 d 1 36",
       "selectionWeight": 1.8,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q1(xv)"
+      "sourcePage": "Annex-A Maths model paper, Q1(xv)",
+      "summative": true
     },
     {
       "questionId": "G9M27-SHORT-001",
@@ -512,7 +516,8 @@
       "semanticFingerprint": "find two rational numbers between 2 and 3",
       "selectionWeight": 1.5,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q2(i)"
+      "sourcePage": "Annex-A Maths model paper, Q2(i)",
+      "summative": true
     },
     {
       "questionId": "G9M27-SHORT-010",
@@ -526,7 +531,8 @@
       "semanticFingerprint": "convert 315 to radians",
       "selectionWeight": 1.5,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q3(i)"
+      "sourcePage": "Annex-A Maths model paper, Q3(i)",
+      "summative": true
     },
     {
       "questionId": "G9M27-SHORT-023",
@@ -540,7 +546,8 @@
       "semanticFingerprint": "define arithmetic mean am",
       "selectionWeight": 1.4,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q4(v)"
+      "sourcePage": "Annex-A Maths model paper, Q4(v)",
+      "summative": true
     },
     {
       "questionId": "G9M27-SHORT-027",
@@ -554,7 +561,8 @@
       "semanticFingerprint": "define sample space",
       "selectionWeight": 1.4,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q4(ix)"
+      "sourcePage": "Annex-A Maths model paper, Q4(ix)",
+      "summative": true
     },
     {
       "questionId": "G9M27-LONG-007A",
@@ -568,7 +576,8 @@
       "semanticFingerprint": "indicate the solution region of the following linear inequalities by shading 2x 3y 6 2x 3y 12",
       "selectionWeight": 1.8,
       "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
-      "sourcePage": "Annex-A Maths model paper, Q7(a)"
+      "sourcePage": "Annex-A Maths model paper, Q7(a)",
+      "summative": true
     }
   ]
 }
