@@ -39,6 +39,7 @@ import com.nitroza.mathpapermaker.data.QuestionTextSegmenter
 import com.nitroza.mathpapermaker.data.OfflinePdfOcr
 import com.nitroza.mathpapermaker.data.PdfTextDocumentCache
 import com.nitroza.mathpapermaker.paper.PaperQuestion
+import com.nitroza.mathpapermaker.paper.AutoPaperGenerator
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
 import com.nitroza.mathpapermaker.paper.PaperDraftStore
 import com.nitroza.mathpapermaker.paper.PaperDraftSnapshot
@@ -538,6 +539,49 @@ class AliTestSeriesActivity : ComponentActivity() {
             }
         }
 
+        fun autoGenerateFromCollectedQuestions() {
+            if (paperMode != "BOARD") {
+                notice = "Switch to Board Pattern before automatic board-paper selection."
+                return
+            }
+            if (selected.isEmpty()) {
+                notice = "First collect textbook questions using text selection, page detection, scanned crops or the manual editor. The generator only selects existing questions; it never invents them."
+                return
+            }
+            val sourcePool = selected.map {
+                PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
+            }
+            when (val generated = AutoPaperGenerator.generate(grade, selectedChapters, sourcePool)) {
+                is AutoPaperGenerator.Result.Success -> {
+                    val rebuilt = generated.questions.mapNotNull { generatedQuestion ->
+                        val original = selected.firstOrNull { candidate ->
+                            candidate.kind.equals(generatedQuestion.kind, true) &&
+                                candidate.chapterId == generatedQuestion.chapterId &&
+                                candidate.sourcePage == generatedQuestion.sourcePage &&
+                                candidate.text == generatedQuestion.text &&
+                                candidate.imageFile == generatedQuestion.imageFile
+                        } ?: return@mapNotNull null
+                        original.copy(
+                            number = generatedQuestion.number,
+                            kind = generatedQuestion.kind,
+                            marks = generatedQuestion.marks,
+                            sectionId = generatedQuestion.sectionId
+                        )
+                    }
+                    if (rebuilt.size == generated.questions.size) {
+                        selected = rebuilt
+                        showQuestions = true
+                        notice = "Automatic board paper generated from " + sourcePool.size + " collected textbook question(s). Review, edit, replace, reorder or remove questions before export."
+                    } else {
+                        notice = "Could not match every generated question to its source. Your existing selection was kept unchanged."
+                    }
+                }
+                is AutoPaperGenerator.Result.NeedsMoreQuestions -> {
+                    notice = generated.message + " Collect more source questions or select additional chapters."
+                }
+            }
+        }
+
         val paperQuestions = selected.map {
             PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
         }
@@ -558,7 +602,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Modifier.fillMaxSize().padding(padding).padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(18.dp)
                 ) {
-                    Text("Prepare a paper. Choose every question yourself.", style = MaterialTheme.typography.headlineSmall)
+                    Text("Prepare a paper. Build your question pool, then generate or select questions.", style = MaterialTheme.typography.headlineSmall)
                     Text("SELECT CLASS", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         FilterChip(selected = grade == 9, enabled = true, onClick = {
@@ -611,7 +655,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                     Text(notice, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     Spacer(Modifier.weight(1f))
-                    Text("Manual selection only · No AI · No automatic paper generation", style = MaterialTheme.typography.labelSmall)
+                    Text("Manual selection + automatic board-pattern selection · Offline · No AI question invention", style = MaterialTheme.typography.labelSmall)
                 }
             } else {
                 Column(Modifier.fillMaxSize().padding(padding).padding(horizontal = 12.dp, vertical = 8.dp)) {
@@ -1139,6 +1183,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("School name (optional)") }, singleLine = true)
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
+                        Text("AUTOMATIC PAPER GENERATION", style = MaterialTheme.typography.labelLarge)
+                        Text("The generator selects only questions already collected in this draft. Add source questions from your textbook first; it will not invent questions.", style = MaterialTheme.typography.bodySmall)
+                        Button(
+                            onClick = { autoGenerateFromCollectedQuestions() },
+                            enabled = paperMode == "BOARD" && selected.isNotEmpty(),
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text("AUTO-GENERATE BOARD PAPER FROM COLLECTED QUESTIONS") }
                         Text("CHAPTER SCOPE", style = MaterialTheme.typography.labelLarge)
                         OutlinedButton(onClick = { showChapterPicker = true }, modifier = Modifier.fillMaxWidth()) {
                             Text("INCLUDE CHAPTERS: ${selectedChapters.size} / ${if (grade == 9) 13 else 12}")
