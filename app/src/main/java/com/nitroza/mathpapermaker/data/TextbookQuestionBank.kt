@@ -1,6 +1,7 @@
 package com.nitroza.mathpapermaker.data
 
 import android.content.Context
+import java.io.File
 import java.security.MessageDigest
 
 /**
@@ -54,6 +55,66 @@ object TextbookQuestionBank {
             .contentDao()
             .insertTextbookCandidates(rows)
         return inserted.count { it >= 0L }
+    }
+
+    /**
+     * Saves one teacher-confirmed manual or scanned question for reuse.
+     * Image paths must point to an existing crop owned by this app.
+     */
+    suspend fun saveApprovedQuestion(
+        context: Context,
+        bookFile: String,
+        chapterId: String,
+        sourcePage: Int,
+        questionNumber: String,
+        questionText: String,
+        questionType: String,
+        marks: Int,
+        imageFile: String? = null,
+        detectedAt: Long = System.currentTimeMillis()
+    ): Boolean {
+        require(bookFile.isNotBlank()) { "A textbook identity is required." }
+        require(chapterId.isNotBlank()) { "A chapter must be assigned before saving questions." }
+        require(sourcePage > 0) { "Source page must be positive." }
+        require(questionNumber.isNotBlank()) { "Question numbering is required." }
+        require(questionType in setOf("MCQ", "SHORT", "LONG")) { "Invalid textbook question type." }
+        require(marks > 0) { "Question marks must be positive." }
+        val cleanText = questionText.trim()
+        val cleanImage = imageFile?.takeIf { it.isNotBlank() }?.let { path ->
+            val root = File(context.filesDir, "question_images").canonicalFile
+            val image = File(path).canonicalFile
+            require(image.path.startsWith(root.path + File.separator) && image.isFile && image.length() > 0L) {
+                "A saved scanned question must use an existing app-owned crop image."
+            }
+            image.absolutePath
+        }
+        require(cleanText.isNotBlank() || cleanImage != null) {
+            "A saved question needs editable text or a scanned crop image."
+        }
+        val stableBookKey = bookFile.trim()
+        val identity = listOf(
+            stableBookKey, chapterId, sourcePage.toString(), questionNumber.trim(),
+            questionType, cleanText, cleanImage.orEmpty()
+        ).joinToString("|")
+        val row = TextbookCandidateEntity(
+            candidateId = sha256(identity),
+            bookFile = stableBookKey,
+            chapterId = chapterId,
+            exerciseId = "MANUAL",
+            questionNumber = questionNumber.trim(),
+            questionText = cleanText,
+            sourcePage = sourcePage,
+            questionType = questionType,
+            marks = marks,
+            imageFile = cleanImage,
+            reviewStatus = "APPROVED",
+            reviewNote = "Teacher confirmed this manually selected question for reuse.",
+            detectedAt = detectedAt
+        )
+        val inserted = AppDatabase.get(context.applicationContext)
+            .contentDao()
+            .insertTextbookCandidates(listOf(row))
+        return inserted.firstOrNull()?.let { it >= 0L } == true
     }
 
     suspend fun approvedForBook(
