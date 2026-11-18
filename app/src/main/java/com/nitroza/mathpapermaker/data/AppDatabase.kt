@@ -21,6 +21,8 @@ interface LocalContentDao {
     suspend fun approvedTextbookCandidates(bookFile: String): List<TextbookCandidateEntity>
     @Query("SELECT COUNT(*) FROM textbook_candidates WHERE bookFile=:bookFile AND reviewStatus='APPROVED'")
     suspend fun approvedTextbookCandidateCount(bookFile: String): Int
+    @Query("DELETE FROM textbook_candidates WHERE candidateId=:candidateId")
+    suspend fun deleteTextbookCandidate(candidateId: String): Int
     @Query("UPDATE textbook_candidates SET reviewStatus=:status, reviewNote=:note WHERE candidateId=:candidateId")
     suspend fun updateTextbookCandidateReview(candidateId: String, status: String, note: String)
     @Query("SELECT COUNT(*) FROM textbook_candidates WHERE reviewStatus='NEEDS_REVIEW'")
