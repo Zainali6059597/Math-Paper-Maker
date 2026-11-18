@@ -154,6 +154,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var includeCurrentQuestions by remember { mutableStateOf(true) }
         var autoProgress by remember { mutableFloatStateOf(0f) }
         var autoStage by remember { mutableStateOf("Preparing your paper…") }
+        var autoFailureMessage by remember { mutableStateOf("") }
         val animatedAutoProgress by animateFloatAsState(targetValue = autoProgress, animationSpec = tween(durationMillis = 650), label = "auto-paper-progress")
 
         // Release the previous rendered page only after Compose has switched away
@@ -570,6 +571,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         fun autoGenerateFromCollectedQuestions() {
             workflowMode = "AUTO"
             autoProgress = 0.08f
+            autoFailureMessage = ""
             autoStage = "Loading approved textbook questions…"
             if (paperMode != "BOARD") {
                 workflowMode = "CHOICE"
@@ -619,9 +621,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                         listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|")
                     }
                 if (sourceItems.isEmpty()) {
-                    workflowMode = "CHOICE"
-                    autoProgress = 0f
-                    notice = "No approved questions are available for these chapters yet. Switch to Manual, add questions and mark important ones, then return to Auto."
+                    autoProgress = 1f
+                    autoStage = "Question bank is empty for these chapters"
+                    autoFailureMessage = "No approved questions were found in the selected chapters. Add questions from the PDF in Manual mode, mark important questions, then return here. Auto cannot create questions that are not in your textbook bank."
+                    notice = autoFailureMessage
                     return@launch
                 }
                 val sourcePool = sourceItems.map {
@@ -653,13 +656,17 @@ class AliTestSeriesActivity : ComponentActivity() {
                             notice = "Board paper generated using " + sourceItems.size +
                                 " available question(s): saved bank + current draft. Review, edit, replace, reorder or remove before export."
                         } else {
-                            notice = "Could not match every generated question to its source. Your existing selection was kept unchanged."
+                            autoProgress = 1f
+                            autoStage = "Paper could not be assembled"
+                            autoFailureMessage = "Some generated questions could not be matched to their original textbook entries. Your current selection has been kept unchanged. Please try again or use Manual mode."
+                            notice = autoFailureMessage
                         }
                     }
                     is AutoPaperGenerator.Result.NeedsMoreQuestions -> {
-                        workflowMode = "CHOICE"
-                        autoProgress = 0f
-                        notice = generated.message + " Add more approved textbook questions to the offline bank."
+                        autoProgress = 1f
+                        autoStage = "More textbook questions are needed"
+                        autoFailureMessage = generated.message + " Add more approved textbook questions from the selected chapters in Manual mode, then try Auto again."
+                        notice = autoFailureMessage
                     }
                 }
             }
@@ -747,6 +754,20 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Text("PLEASE BE PATIENT…", style = MaterialTheme.typography.titleLarge)
                     Text(autoStage, style = MaterialTheme.typography.bodyMedium)
                     Text((animatedAutoProgress * 100).toInt().toString() + "%", style = MaterialTheme.typography.headlineMedium)
+                    if (autoFailureMessage.isNotBlank()) {
+                        Spacer(Modifier.height(12.dp))
+                        Text(autoFailureMessage, style = MaterialTheme.typography.bodyMedium)
+                        Spacer(Modifier.height(8.dp))
+                        Button(onClick = { showAutoSetup = true }, modifier = Modifier.fillMaxWidth()) {
+                            Text("CHANGE CHAPTERS / TRY AGAIN")
+                        }
+                        OutlinedButton(onClick = {
+                            workflowMode = "MANUAL"
+                            autoFailureMessage = ""
+                        }, modifier = Modifier.fillMaxWidth()) {
+                            Text("GO TO MANUAL MODE")
+                        }
+                    }
                 }
             } else if (workflowMode == "CHOICE") {
                 Column(Modifier.fillMaxSize().padding(padding).padding(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
