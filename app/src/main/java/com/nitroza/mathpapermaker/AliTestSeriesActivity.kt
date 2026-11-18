@@ -150,6 +150,8 @@ class AliTestSeriesActivity : ComponentActivity() {
         var workflowMode by remember { mutableStateOf("CHOICE") }
         var showAutoSetup by remember { mutableStateOf(false) }
         var includeCurrentQuestions by remember { mutableStateOf(true) }
+        var autoProgress by remember { mutableFloatStateOf(0f) }
+        var autoStage by remember { mutableStateOf("Preparing your paper…") }
 
         // Release the previous rendered page only after Compose has switched away
         // from it; this prevents page navigation from retaining large bitmaps.
@@ -563,6 +565,9 @@ class AliTestSeriesActivity : ComponentActivity() {
         }
 
         fun autoGenerateFromCollectedQuestions() {
+            workflowMode = "AUTO"
+            autoProgress = 0.08f
+            autoStage = "Loading approved textbook questions…"
             if (paperMode != "BOARD") {
                 notice = "Switch to Board Pattern before automatic board-paper selection."
                 return
@@ -574,12 +579,15 @@ class AliTestSeriesActivity : ComponentActivity() {
             lifecycleScope.launch {
                 notice = "Loading saved textbook questions and current selections..."
                 val bookKey = "CLASS$grade|$pdfName"
+                autoProgress = 0.25f
                 val savedBank = withContext(Dispatchers.IO) {
                     runCatching { TextbookQuestionBank.approvedForBook(applicationContext, bookKey) }
                 }
                 savedBank.onFailure { error ->
                     notice = "Could not load the offline question bank: " + (error.message ?: "unknown error")
                 }
+                autoProgress = 0.48f
+                autoStage = "Preparing selected chapters…"
                 val savedQuestions = TextbookQuestionBankMapper.toPaperQuestions(
                     savedBank.getOrNull().orEmpty(),
                     selectedChapters
@@ -596,7 +604,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                         sectionId = item.sectionId
                     )
                 }
-                val sourceItems = (selected + savedQuestions)
+                autoProgress = 0.68f
+                autoStage = "Building Punjab Board paper pattern…"
+                val sourceItems = ((if (includeCurrentQuestions) selected else emptyList()) + savedQuestions)
                     .filter { it.chapterId in selectedChapters }
                     .distinctBy {
                         listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|")
@@ -608,6 +618,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 val sourcePool = sourceItems.map {
                     PaperQuestion(it.number, it.text, it.kind, it.marks, it.sourcePage, it.imageFile, it.chapterId, it.sectionId)
                 }
+                autoProgress = 0.86f
                 when (val generated = AutoPaperGenerator.generate(grade, selectedChapters, sourcePool)) {
                     is AutoPaperGenerator.Result.Success -> {
                         val rebuilt = generated.questions.mapNotNull { generatedQuestion ->
@@ -627,6 +638,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                         if (rebuilt.size == generated.questions.size) {
                             selected = rebuilt
+                            autoProgress = 1f
+                            autoStage = "Paper ready. Opening review…"
                             showQuestions = true
                             notice = "Board paper generated using " + sourceItems.size +
                                 " available question(s): saved bank + current draft. Review, edit, replace, reorder or remove before export."
@@ -635,6 +648,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                     }
                     is AutoPaperGenerator.Result.NeedsMoreQuestions -> {
+                        workflowMode = "CHOICE"
+                        autoProgress = 0f
                         notice = generated.message + " Add more approved textbook questions to the offline bank."
                     }
                 }
@@ -715,6 +730,14 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Text(notice, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     Spacer(Modifier.weight(1f))
                     Text("Manual selection + automatic board-pattern selection · Offline · No AI question invention", style = MaterialTheme.typography.labelSmall)
+                }
+            } else if (workflowMode == "AUTO") {
+                Column(Modifier.fillMaxSize().padding(padding).padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    CircularProgressIndicator(progress = { autoProgress.coerceIn(0f, 1f) }, modifier = Modifier.size(112.dp), strokeWidth = 9.dp)
+                    Spacer(Modifier.height(24.dp))
+                    Text("PLEASE BE PATIENT…", style = MaterialTheme.typography.titleLarge)
+                    Text(autoStage, style = MaterialTheme.typography.bodyMedium)
+                    Text((autoProgress * 100).toInt().toString() + "%", style = MaterialTheme.typography.headlineMedium)
                 }
             } else if (workflowMode == "CHOICE") {
                 Column(Modifier.fillMaxSize().padding(padding).padding(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
