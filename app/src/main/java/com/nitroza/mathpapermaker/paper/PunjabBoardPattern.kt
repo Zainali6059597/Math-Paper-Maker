@@ -105,9 +105,18 @@ object PunjabBoardPattern {
             }
         }
 
-    fun validationErrors(grade: Int, questions: List<PaperQuestion>): List<String> {
+    fun validationErrors(
+        grade: Int,
+        questions: List<PaperQuestion>,
+        selectedChapters: Set<String>? = null
+    ): List<String> {
         if (grade !in 9..10) return listOf("Only Class 9 and Class 10 are supported.")
         val errors = mutableListOf<String>()
+        val scopedUnitPaper = selectedChapters != null &&
+            selectedChapters.size < if (grade == 9) 13 else 12
+        if (selectedChapters != null && questions.any { it.chapterId !in selectedChapters }) {
+            errors += "A question is outside the selected chapter scope."
+        }
         val mcqs = questions.filter { it.kind.equals("MCQ", true) }
         val shorts = questions.filter { it.kind.equals("SHORT", true) }
         val longs = questions.filter { it.kind.equals("LONG", true) }
@@ -132,25 +141,29 @@ object PunjabBoardPattern {
 
         if (mcqs.any { it.sectionId != "Q1" }) errors += "All MCQs must belong to section Q1."
 
-        val expectedMcqs = if (grade == 9) grade9Mcqs else grade10Mcqs
-        val actualMcqs = mcqs.groupingBy { it.chapterId }.eachCount()
-        if (actualMcqs != expectedMcqs) {
-            errors += "MCQ chapter distribution does not match the official Class $grade pattern."
+        if (!scopedUnitPaper) {
+            val expectedMcqs = if (grade == 9) grade9Mcqs else grade10Mcqs
+            val actualMcqs = mcqs.groupingBy { it.chapterId }.eachCount()
+            if (actualMcqs != expectedMcqs) {
+                errors += "MCQ chapter distribution does not match the official Class $grade pattern."
+            }
         }
 
         (2..4).forEach { questionNumber ->
             val group = shorts.filter { it.sectionId == "Q$questionNumber" }
             if (group.size != 9) errors += "Section Q$questionNumber must contain exactly 9 short questions."
             if (group.size == 9) {
-                if (grade == 9) {
-                    val expected = grade9ShortGroups[questionNumber - 2]
-                    val actual = group.groupingBy { it.chapterId }.eachCount()
-                    if (actual != expected) errors += "Short-question group Q$questionNumber has the wrong chapter distribution."
-                } else {
-                    val allowed = grade10ShortGroups[questionNumber - 2]
-                    val actual = group.groupingBy { it.chapterId }.eachCount()
-                    if (allowed.any { (actual[it] ?: 0) < 2 } || actual.keys.any { it !in allowed }) {
-                        errors += "Short-question group Q$questionNumber needs at least two questions from each prescribed chapter."
+                if (!scopedUnitPaper) {
+                    if (grade == 9) {
+                        val expected = grade9ShortGroups[questionNumber - 2]
+                        val actual = group.groupingBy { it.chapterId }.eachCount()
+                        if (actual != expected) errors += "Short-question group Q$questionNumber has the wrong chapter distribution."
+                    } else {
+                        val allowed = grade10ShortGroups[questionNumber - 2]
+                        val actual = group.groupingBy { it.chapterId }.eachCount()
+                        if (allowed.any { (actual[it] ?: 0) < 2 } || actual.keys.any { it !in allowed }) {
+                            errors += "Short-question group Q$questionNumber needs at least two questions from each prescribed chapter."
+                        }
                     }
                 }
             }
@@ -160,7 +173,7 @@ object PunjabBoardPattern {
         (5..9).forEach { questionNumber ->
             val pair = longs.filter { it.sectionId == "Q$questionNumber" }
             if (pair.size != 2) errors += "Long question Q$questionNumber must contain exactly two 4-mark parts."
-            if (pair.size == 2) {
+            if (pair.size == 2 && !scopedUnitPaper) {
                 val rule = rules[questionNumber - 5]
                 val chapters = pair.map { it.chapterId }
                 val valid = (chapters[0] in rule.first && chapters[1] in rule.second) ||
