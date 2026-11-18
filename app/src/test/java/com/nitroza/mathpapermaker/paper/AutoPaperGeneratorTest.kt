@@ -131,4 +131,21 @@ class AutoPaperGeneratorTest {
         }
     }
 
+
+    @Test fun sourceIdentityDoesNotCollideWhenQuestionTextContainsDelimiter() {
+        val base = completeBank(9).filterNot { it.kind == "SHORT" && it.chapterId == "CH3" }
+        val collidingIfJoined = listOf(
+            PaperQuestion("A", "x|y", "SHORT", 2, 7, chapterId = "CH3"),
+            PaperQuestion("B", "x", "SHORT", 2, 7, imageFile = "y|null", chapterId = "CH3")
+        )
+        val result = AutoPaperGenerator.generate(
+            9, (1..13).map { "CH$it" }.toSet(), base + collidingIfJoined
+        )
+        assertTrue(result.toString(), result is AutoPaperGenerator.Result.Success)
+        val selected = (result as AutoPaperGenerator.Result.Success).questions
+            .filter { it.kind == "SHORT" && it.chapterId == "CH3" }
+        assertEquals(2, selected.size)
+        assertEquals(setOf("x|y", "x"), selected.map { it.text }.toSet())
+    }
+
 }
