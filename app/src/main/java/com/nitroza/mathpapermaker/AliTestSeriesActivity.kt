@@ -12,6 +12,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
@@ -152,6 +154,7 @@ class AliTestSeriesActivity : ComponentActivity() {
         var includeCurrentQuestions by remember { mutableStateOf(true) }
         var autoProgress by remember { mutableFloatStateOf(0f) }
         var autoStage by remember { mutableStateOf("Preparing your paper…") }
+        val animatedAutoProgress by animateFloatAsState(targetValue = autoProgress, animationSpec = tween(durationMillis = 650), label = "auto-paper-progress")
 
         // Release the previous rendered page only after Compose has switched away
         // from it; this prevents page navigation from retaining large bitmaps.
@@ -739,11 +742,11 @@ class AliTestSeriesActivity : ComponentActivity() {
                 }
             } else if (workflowMode == "AUTO") {
                 Column(Modifier.fillMaxSize().padding(padding).padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    CircularProgressIndicator(progress = { autoProgress.coerceIn(0f, 1f) }, modifier = Modifier.size(112.dp), strokeWidth = 9.dp)
+                    CircularProgressIndicator(progress = { animatedAutoProgress.coerceIn(0f, 1f) }, modifier = Modifier.size(112.dp), strokeWidth = 9.dp)
                     Spacer(Modifier.height(24.dp))
                     Text("PLEASE BE PATIENT…", style = MaterialTheme.typography.titleLarge)
                     Text(autoStage, style = MaterialTheme.typography.bodyMedium)
-                    Text((autoProgress * 100).toInt().toString() + "%", style = MaterialTheme.typography.headlineMedium)
+                    Text((animatedAutoProgress * 100).toInt().toString() + "%", style = MaterialTheme.typography.headlineMedium)
                 }
             } else if (workflowMode == "CHOICE") {
                 Column(Modifier.fillMaxSize().padding(padding).padding(22.dp), verticalArrangement = Arrangement.spacedBy(18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
