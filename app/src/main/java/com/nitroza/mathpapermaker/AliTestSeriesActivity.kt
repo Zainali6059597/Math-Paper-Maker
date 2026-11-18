@@ -428,7 +428,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     // PdfRenderer may leave transparent page areas untouched.
                                     // Initialize to paper white so they never appear black in dark UI.
                                     bitmap.eraseColor(android.graphics.Color.WHITE)
-                                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                                    bitmap.setHasAlpha(false)
+                                    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT)
                                     bitmap
                                 } catch (error: Throwable) {
                                     bitmap.recycle()
