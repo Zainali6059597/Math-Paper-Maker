@@ -765,6 +765,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Text("CLASS $grade MATHEMATICS", style = MaterialTheme.typography.titleSmall)
                             Text(pdfName, style = MaterialTheme.typography.labelSmall, maxLines = 1)
                         }
+                        TextButton(onClick = { workflowMode = "CHOICE" }) { Text("BACK TO MODES") }
                         TextButton(onClick = {
                             // Release the previous imported/bundled PDF immediately.
                             // Textbooks can be hundreds of megabytes; waiting for the
