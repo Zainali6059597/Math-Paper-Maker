@@ -181,7 +181,7 @@ object DocxPaperExporter {
                     }
                 }
             }
-            context.contentResolver.openOutputStream(destination, "w")?.use { output ->
+            context.contentResolver.openOutputStream(destination, "wt")?.use { output ->
                 stagedDocx.inputStream().use { it.copyTo(output) }
                 output.flush()
             } ?: error("Cannot open the selected Word document destination.")

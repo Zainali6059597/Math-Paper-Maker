@@ -37,15 +37,13 @@ import com.nitroza.mathpapermaker.docx.DocxPaperExporter
 import com.nitroza.mathpapermaker.data.BundledBookManifestReader
 import com.nitroza.mathpapermaker.data.QuestionTextSegmenter
 import com.nitroza.mathpapermaker.data.OfflinePdfOcr
+import com.nitroza.mathpapermaker.data.PdfTextDocumentCache
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
 import com.nitroza.mathpapermaker.paper.PaperDraftStore
 import com.nitroza.mathpapermaker.paper.PaperDraftSnapshot
 import com.nitroza.mathpapermaker.paper.StoredPaperQuestion
 import com.nitroza.mathpapermaker.ui.MathPaperMakerTheme
-import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
-import com.tom_roush.pdfbox.io.MemoryUsageSetting
-import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
 import com.tom_roush.pdfbox.text.TextPosition
 import kotlinx.coroutines.CancellationException
@@ -79,6 +77,11 @@ class AliTestSeriesActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { MathPaperMakerTheme { AliTestSeriesApp() } }
+    }
+
+    override fun onDestroy() {
+        PdfTextDocumentCache.close()
+        super.onDestroy()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -462,8 +465,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 val file = pdfFile ?: return@launch
                 val extraction = withContext(Dispatchers.IO) {
                     runCatchingCancellable {
-                        PDFBoxResourceLoader.init(applicationContext)
-                        PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+                        PdfTextDocumentCache.withDocument(applicationContext, file) { document ->
                             PDFTextStripper().apply {
                                 sortByPosition = true
                                 startPage = pageIndex + 1
@@ -783,9 +785,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 val file = pdfFile ?: return@launch
                                 val extraction = withContext(Dispatchers.IO) {
                                     runCatchingCancellable {
-                                        PDFBoxResourceLoader.init(applicationContext)
-                                        // Keep PDFBox stream buffering on disk instead of retaining a large textbook in heap.
-                                        PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+                                        PdfTextDocumentCache.withDocument(applicationContext, file) { document ->
                                             val extracted = PDFTextStripper().apply {
                                                 sortByPosition = true
                                                 startPage = pageIndex + 1
@@ -1519,8 +1519,7 @@ private suspend fun <T> runCatchingCancellable(block: suspend () -> T): Result<T
  
 
 private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int, region: Rect): String {
-    PDFBoxResourceLoader.init(context)
-    PDDocument.load(file, MemoryUsageSetting.setupTempFileOnly()).use { document ->
+    return PdfTextDocumentCache.withDocument(context, file) { document ->
         require(pageNumber in 1..document.numberOfPages) { "Invalid PDF page." }
         val page = document.getPage(pageNumber - 1)
         val cropBox = page.cropBox
@@ -1536,9 +1535,7 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
             val selectedLines = StringBuilder()
 
             override fun writeString(text: String, textPositions: MutableList<TextPosition>) {
-                // Do not filter glyphs by rotation: real textbook questions contain
-                // slanted symbols, italic variables and rotated diagram labels.
-                // The watermark is removed as a phrase after extraction instead.
+                // Preserve italic/rotated maths glyphs; only filter by the selected page area.
                 val selectedChars = textPositions.filter { position ->
                     val x = position.xDirAdj
                     val y = position.yDirAdj
@@ -1559,7 +1556,7 @@ private fun extractPdfTextInRegion(context: Context, file: File, pageNumber: Int
             endPage = pageNumber
         }
         stripper.getText(document)
-        return stripper.selectedLines.toString().trim().take(100_000)
+        stripper.selectedLines.toString().trim().take(100_000)
     }
 }
 
