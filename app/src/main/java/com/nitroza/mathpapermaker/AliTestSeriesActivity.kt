@@ -38,6 +38,7 @@ import com.nitroza.mathpapermaker.data.BundledBookManifestReader
 import com.nitroza.mathpapermaker.data.QuestionTextSegmenter
 import com.nitroza.mathpapermaker.data.OfflinePdfOcr
 import com.nitroza.mathpapermaker.data.PdfTextDocumentCache
+import com.nitroza.mathpapermaker.data.TextbookQuestionBank
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.AutoPaperGenerator
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
@@ -1118,10 +1119,27 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                         }
                         val addedCount = newQuestions.size - selected.size
+                        val approvedCandidates = checkedDetectedQuestions.sorted().map { detectedQuestions[it] }
+                        val bankBookKey = "CLASS$grade|$pdfName"
+                        val bankChapter = detectedQuestionChapter
+                        val bankPage = detectedQuestionPage
                         selected = newQuestions
                         showDetectedQuestions = false
                         showQuestions = true
-                        notice = "Added $addedCount checked question(s). Review their chapters and numbering before export."
+                        notice = "Added $addedCount checked question(s). Saving teacher-approved questions to the offline textbook bank..."
+                        lifecycleScope.launch {
+                            val saved = withContext(Dispatchers.IO) {
+                                runCatching {
+                                    TextbookQuestionBank.saveApprovedCandidates(
+                                        applicationContext, bankBookKey, bankChapter, bankPage, approvedCandidates
+                                    )
+                                }
+                            }
+                            notice = saved.fold(
+                                onSuccess = { count -> "Added $addedCount question(s); $count new teacher-approved question(s) saved in the offline textbook bank." },
+                                onFailure = { error -> "Added $addedCount question(s), but the offline bank save failed: " + (error.message ?: "unknown error") }
+                            )
+                        }
                     }) { Text("ADD CHECKED QUESTIONS") }
                 },
                 dismissButton = { TextButton(onClick = { showDetectedQuestions = false }) { Text("CANCEL") } }
