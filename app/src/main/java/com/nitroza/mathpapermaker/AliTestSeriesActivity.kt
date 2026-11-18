@@ -569,10 +569,14 @@ class AliTestSeriesActivity : ComponentActivity() {
             autoProgress = 0.08f
             autoStage = "Loading approved textbook questions…"
             if (paperMode != "BOARD") {
-                notice = "Switch to Board Pattern before automatic board-paper selection."
+                workflowMode = "CHOICE"
+                autoProgress = 0f
+                notice = "Automatic generation always uses the Punjab Board pattern."
                 return
             }
             if (pdfName.isBlank()) {
+                workflowMode = "CHOICE"
+                autoProgress = 0f
                 notice = "Open the textbook PDF whose saved questions you want to use."
                 return
             }
@@ -612,7 +616,9 @@ class AliTestSeriesActivity : ComponentActivity() {
                         listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|")
                     }
                 if (sourceItems.isEmpty()) {
-                    notice = "No approved textbook questions are saved for this book yet. Detect questions, assign their type/chapter, and add them to the bank first."
+                    workflowMode = "CHOICE"
+                    autoProgress = 0f
+                    notice = "No approved questions are available for these chapters yet. Switch to Manual, add questions and mark important ones, then return to Auto."
                     return@launch
                 }
                 val sourcePool = sourceItems.map {
