@@ -1,0 +1,281 @@
+{
+  "research_run": "strategy2-final-run",
+  "collected_on": "2026-11-18",
+  "category": "PEF-QAT practice papers (separate from BISE board papers)",
+  "authority": "Punjab Education Foundation — Quality Assurance and Improvement Directorate",
+  "academic_year": "2026-27",
+  "source_page": "https://www.pef.edu.pk/ADU/Model_Papers202627",
+  "source_note": "PEF states these model papers are for practice and QAT pattern/type familiarisation, based on content books for PEF partner schools. They are not BISE board model papers and must remain a separately labelled source category.",
+  "papers": [
+    {
+      "grade": 9,
+      "url": "https://www.pef.edu.pk/pdf/downloads/Model-Papers/A.Y%202026-27/class%209.pdf",
+      "pages": 20,
+      "maths_pages": [
+        2,
+        3
+      ],
+      "marks": 20,
+      "objective": {
+        "marks": 8,
+        "questions": 8,
+        "type": "MCQ"
+      },
+      "subjective": {
+        "marks": 12,
+        "attempt": "Any four",
+        "marks_each": 3
+      },
+      "candidates": [
+        {
+          "type": "MCQ",
+          "prompt": "√75 + √27 = ?",
+          "options": [
+            "√102",
+            "9√3",
+            "5√3",
+            "8√3"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "The product of (3 + √5)(3 − √5) is:",
+          "options": [
+            "prime number",
+            "odd number",
+            "rational number",
+            "irrational number"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "2^x × 8^x = 64, then x = ?",
+          "options": [
+            "3/2",
+            "3/4",
+            "5/6",
+            "2/3"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "For all x ∈ R, x = x is called:",
+          "options": [
+            "reflexive property",
+            "transitive property",
+            "symmetric property",
+            "trichotomy property"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "The standard form of 5.2 × 10^6 is:",
+          "options": [
+            "52,000",
+            "520,000",
+            "5,200,000",
+            "52,000,000"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "Scientific notation of 0.00034 is:",
+          "options": [
+            "3.4 × 10^3",
+            "3.4 × 10^-4",
+            "3.4 × 10^4",
+            "3.4 × 10^-3"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "The base of common logarithm is:",
+          "options": [
+            "2",
+            "10",
+            "5",
+            "e"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "log 100 = ?",
+          "options": [
+            "2",
+            "3",
+            "10",
+            "1"
+          ]
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Represent the number 4 1/3 on the number line.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find two rational numbers between 1/3 and 1/4.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Simplify the given radical expression: cube root of 27x^6y^9z^3.",
+          "marks": 3,
+          "note": "Formula layout in PDF extraction should be visually checked."
+        },
+        {
+          "type": "SHORT",
+          "prompt": "If x = 3 + √8, find x^2 + 1/x^2.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find x if log base 4 of x = 3/2.",
+          "marks": 3
+        }
+      ],
+      "status": "NEEDS_REVIEW",
+      "syllabus_status": "PEF_QAT_CONTENT_BOOK_CHECK_REQUIRED",
+      "verification_note": "Transcribed from searchable PDF text. Mathematical typesetting, especially radicals/fractions, requires visual PDF check before import."
+    },
+    {
+      "grade": 10,
+      "url": "https://www.pef.edu.pk/pdf/downloads/Model-Papers/A.Y%202026-27/class%2010.pdf",
+      "pages": 22,
+      "maths_pages": [
+        2,
+        3,
+        4
+      ],
+      "marks": 20,
+      "objective": {
+        "marks": 8,
+        "questions": 8,
+        "type": "MCQ"
+      },
+      "subjective": {
+        "marks": 12,
+        "attempt": "Any four",
+        "marks_each": 3
+      },
+      "candidates": [
+        {
+          "type": "MCQ",
+          "prompt": "i^2 + i^4 = ?",
+          "options": [
+            "-1",
+            "0",
+            "1",
+            "2"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "What is the additive inverse of 5 − 2i?",
+          "options": [
+            "5 + 2i",
+            "−5 − 2i",
+            "5 − 2i",
+            "−5 + 2i"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "What is the discriminant of x^2 + 5x − 5 = 0?",
+          "options": [
+            "−20",
+            "20",
+            "25",
+            "45"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "Product of the roots of 3x^2 + 5x − 12 = 0 is:",
+          "options": [
+            "−4",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "If [ (a + 2) / 3 ] = [ 7 / 3 ], then a = ?",
+          "options": [
+            "3",
+            "5",
+            "6",
+            "7"
+          ],
+          "note": "Bracket notation in source may represent equality of fractions; check page image."
+        },
+        {
+          "type": "MCQ",
+          "prompt": "| 3 1 ; 0 4 | = ?",
+          "options": [
+            "11",
+            "12",
+            "13",
+            "−11"
+          ],
+          "note": "2×2 determinant."
+        },
+        {
+          "type": "MCQ",
+          "prompt": "Lowest form of 15xyz/10 is:",
+          "options": [
+            "3xyz/2",
+            "3/2",
+            "xyz",
+            "xyz/2"
+          ]
+        },
+        {
+          "type": "MCQ",
+          "prompt": "What is the value of |3i + 4j|?",
+          "options": [
+            "3",
+            "4",
+            "5",
+            "7"
+          ]
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find the real and imaginary parts of (4 − 5i)^−1.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find the equation whose roots are double the roots of x^2 − px + q = 0.",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Find the multiplicative inverse of the matrix [−4 8; 7 2].",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Given f(x) = 3x + 2 and g(x) = 2x + 3, find g(f(4)).",
+          "marks": 3
+        },
+        {
+          "type": "SHORT",
+          "prompt": "Solve the equation 5x^4 − 19x^2 + 12 = 0.",
+          "marks": 3
+        }
+      ],
+      "status": "NEEDS_REVIEW",
+      "syllabus_status": "PEF_QAT_CONTENT_BOOK_CHECK_REQUIRED",
+      "verification_note": "Transcribed from searchable PDF text. Check matrix/fraction notation and compare topics with current PEF content book before any use."
+    }
+  ],
+  "source_policy": [
+    "Keep PEF-QAT records separate from BISE Grade 9/10 board question-bank sources.",
+    "Do not treat PEF's 20-mark subject sample as the official BISE board pattern.",
+    "Do not mark candidates VERIFIED until visual transcription review and content-book/syllabus matching are complete.",
+    "Store short attributable excerpts and source metadata; do not redistribute full copyrighted paper PDFs."
+  ]
+}
