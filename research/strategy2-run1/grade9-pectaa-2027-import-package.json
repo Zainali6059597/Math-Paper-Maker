@@ -1,0 +1,572 @@
+{
+  "schemaVersion": 5,
+  "identity": {
+    "board": "Punjab",
+    "grade": 9,
+    "stream": "MATHEMATICS",
+    "subject": "Mathematics",
+    "session": "2026-27"
+  },
+  "source": {
+    "sourceId": "PECTAA_G9_MATH_MODEL_2027",
+    "issuer": "Punjab Education, Curriculum, Training and Assessment Authority (PECTAA)",
+    "title": "Smart / Reduced Syllabus, Pairing Scheme and Model Paper — Mathematics Grade 9, Annual Examination 2027",
+    "sourceUrl": "https://www.studypoint.pk/wp-content/uploads/2026/11/ALP-9-Notification-06.11.2026-F-1.pdf",
+    "sourceType": "OFFICIAL_MODEL_PAPER_MIRROR",
+    "session": "2026-27",
+    "pageReference": "PECTAA Notification No. PECTAA/C&C Unit/2026/1238, dated 06.11.2026; Maths Annex-A pages 22-28"
+  },
+  "pattern": {
+    "patternId": "PUNJAB_G9_MATH_2027_PECTAA_ALP",
+    "version": 1,
+    "totalMarks": 75,
+    "durationMinutes": 150,
+    "sourcePage": "Maths Annex-A pages 22-28",
+    "slots": [
+      {
+        "slotId": "MCQ_01",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 0
+      },
+      {
+        "slotId": "MCQ_02",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 1
+      },
+      {
+        "slotId": "MCQ_03",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 2
+      },
+      {
+        "slotId": "MCQ_04",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 3
+      },
+      {
+        "slotId": "MCQ_05",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 4
+      },
+      {
+        "slotId": "MCQ_06",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 5
+      },
+      {
+        "slotId": "MCQ_07",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 6
+      },
+      {
+        "slotId": "MCQ_08",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 7
+      },
+      {
+        "slotId": "MCQ_09",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 8
+      },
+      {
+        "slotId": "MCQ_10",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 9
+      },
+      {
+        "slotId": "MCQ_11",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 10
+      },
+      {
+        "slotId": "MCQ_12",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 11
+      },
+      {
+        "slotId": "MCQ_13",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 12
+      },
+      {
+        "slotId": "MCQ_14",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 13
+      },
+      {
+        "slotId": "MCQ_15",
+        "questionType": "MCQ",
+        "marks": 1,
+        "displayOrder": 14
+      },
+      {
+        "slotId": "Q2_SHORT_01",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 15
+      },
+      {
+        "slotId": "Q2_SHORT_02",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 16
+      },
+      {
+        "slotId": "Q2_SHORT_03",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 17
+      },
+      {
+        "slotId": "Q2_SHORT_04",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 18
+      },
+      {
+        "slotId": "Q2_SHORT_05",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 19
+      },
+      {
+        "slotId": "Q2_SHORT_06",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 20
+      },
+      {
+        "slotId": "Q2_SHORT_07",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 21
+      },
+      {
+        "slotId": "Q2_SHORT_08",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 22
+      },
+      {
+        "slotId": "Q2_SHORT_09",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q2",
+        "displayOrder": 23
+      },
+      {
+        "slotId": "Q3_SHORT_01",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 24
+      },
+      {
+        "slotId": "Q3_SHORT_02",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 25
+      },
+      {
+        "slotId": "Q3_SHORT_03",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 26
+      },
+      {
+        "slotId": "Q3_SHORT_04",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 27
+      },
+      {
+        "slotId": "Q3_SHORT_05",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 28
+      },
+      {
+        "slotId": "Q3_SHORT_06",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 29
+      },
+      {
+        "slotId": "Q3_SHORT_07",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 30
+      },
+      {
+        "slotId": "Q3_SHORT_08",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 31
+      },
+      {
+        "slotId": "Q3_SHORT_09",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q3",
+        "displayOrder": 32
+      },
+      {
+        "slotId": "Q4_SHORT_01",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 33
+      },
+      {
+        "slotId": "Q4_SHORT_02",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 34
+      },
+      {
+        "slotId": "Q4_SHORT_03",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 35
+      },
+      {
+        "slotId": "Q4_SHORT_04",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 36
+      },
+      {
+        "slotId": "Q4_SHORT_05",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 37
+      },
+      {
+        "slotId": "Q4_SHORT_06",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 38
+      },
+      {
+        "slotId": "Q4_SHORT_07",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 39
+      },
+      {
+        "slotId": "Q4_SHORT_08",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 40
+      },
+      {
+        "slotId": "Q4_SHORT_09",
+        "questionType": "SHORT",
+        "marks": 2,
+        "groupId": "Q4",
+        "displayOrder": 41
+      },
+      {
+        "slotId": "Q5_A",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q5",
+        "bundleChoiceGroupId": "LONG_16",
+        "displayOrder": 42
+      },
+      {
+        "slotId": "Q5_B",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q5",
+        "bundleChoiceGroupId": "LONG_16",
+        "displayOrder": 43
+      },
+      {
+        "slotId": "Q6_A",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q6",
+        "bundleChoiceGroupId": "LONG_16",
+        "displayOrder": 44
+      },
+      {
+        "slotId": "Q6_B",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q6",
+        "bundleChoiceGroupId": "LONG_16",
+        "displayOrder": 45
+      },
+      {
+        "slotId": "Q7_A",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q7",
+        "bundleChoiceGroupId": "LONG_16",
+        "displayOrder": 46
+      },
+      {
+        "slotId": "Q7_B",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q7",
+        "bundleChoiceGroupId": "LONG_16",
+        "displayOrder": 47
+      },
+      {
+        "slotId": "Q8_A",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q8",
+        "bundleChoiceGroupId": "LONG_8",
+        "displayOrder": 48
+      },
+      {
+        "slotId": "Q8_B",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q8",
+        "bundleChoiceGroupId": "LONG_8",
+        "displayOrder": 49
+      },
+      {
+        "slotId": "Q9_A",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q9",
+        "bundleChoiceGroupId": "LONG_8",
+        "displayOrder": 50
+      },
+      {
+        "slotId": "Q9_B",
+        "questionType": "LONG",
+        "marks": 4,
+        "bundleId": "Q9",
+        "bundleChoiceGroupId": "LONG_8",
+        "displayOrder": 51
+      }
+    ],
+    "choiceGroups": [
+      {
+        "groupId": "Q2",
+        "offeredCount": 9,
+        "attemptCount": 6,
+        "marksPerQuestion": 2,
+        "displayOrder": 0
+      },
+      {
+        "groupId": "Q3",
+        "offeredCount": 9,
+        "attemptCount": 6,
+        "marksPerQuestion": 2,
+        "displayOrder": 1
+      },
+      {
+        "groupId": "Q4",
+        "offeredCount": 9,
+        "attemptCount": 6,
+        "marksPerQuestion": 2,
+        "displayOrder": 2
+      }
+    ],
+    "bundleChoiceGroups": [
+      {
+        "groupId": "LONG_16",
+        "offeredBundleCount": 3,
+        "attemptBundleCount": 2,
+        "marksPerBundle": 8,
+        "bundleIds": [
+          "Q5",
+          "Q6",
+          "Q7"
+        ],
+        "displayOrder": 0
+      },
+      {
+        "groupId": "LONG_8",
+        "offeredBundleCount": 2,
+        "attemptBundleCount": 1,
+        "marksPerBundle": 8,
+        "bundleIds": [
+          "Q8",
+          "Q9"
+        ],
+        "displayOrder": 1
+      }
+    ],
+    "quotas": [],
+    "exclusions": [
+      {
+        "type": "CHAPTER",
+        "value": "CH8",
+        "reason": "Chapter 8 Logic is excluded in Grade-9 ALP 2026-27",
+        "sourcePage": "Maths ALP table"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "questionId": "G9M27-MCQ-002",
+      "chapterId": "CH2",
+      "topic": "Common logarithms",
+      "questionType": "MCQ",
+      "marks": 1,
+      "questionText": "The base of common logarithm is: (a) 2 (b) 10 (c) 5 (d) e",
+      "cognitiveLevel": "RECALL",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "the base of common logarithm is a 2 b 10 c 5 d e",
+      "selectionWeight": 1.5,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q1(ii)"
+    },
+    {
+      "questionId": "G9M27-MCQ-010",
+      "chapterId": "CH7",
+      "topic": "Distance between two points",
+      "questionType": "MCQ",
+      "marks": 1,
+      "questionText": "Distance between two points P(1, 2) and Q(4, 6) is: (a) 5 (b) 6 (c) √13 (d) 4",
+      "cognitiveLevel": "APPLICATION",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "distance between two points p 1 2 and q 4 6 is a 5 b 6 c 13 d 4",
+      "selectionWeight": 1.5,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q1(x)"
+    },
+    {
+      "questionId": "G9M27-MCQ-014",
+      "chapterId": "CH12",
+      "topic": "Discrete data",
+      "questionType": "MCQ",
+      "marks": 1,
+      "questionText": "Which data takes only some specific values? (a) continuous data (b) discrete data (c) grouped data (d) ungrouped data",
+      "cognitiveLevel": "RECALL",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "which data takes only some specific values a continuous data b discrete data c grouped data d ungrouped data",
+      "selectionWeight": 1.5,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q1(xiv)"
+    },
+    {
+      "questionId": "G9M27-MCQ-015",
+      "chapterId": "CH13",
+      "topic": "Probability of an event",
+      "questionType": "MCQ",
+      "marks": 1,
+      "questionText": "While rolling a pair of dice, what will be the probability of double 2? (a) 1/6 (b) 1/3 (c) 5/6 (d) 1/36",
+      "cognitiveLevel": "APPLICATION",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "while rolling a pair of dice what will be the probability of double 2 a 1 6 b 1 3 c 5 6 d 1 36",
+      "selectionWeight": 1.8,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q1(xv)"
+    },
+    {
+      "questionId": "G9M27-SHORT-001",
+      "chapterId": "CH1",
+      "topic": "Rational numbers",
+      "questionType": "SHORT",
+      "marks": 2,
+      "questionText": "Find two rational numbers between 2 and 3.",
+      "cognitiveLevel": "APPLICATION",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "find two rational numbers between 2 and 3",
+      "selectionWeight": 1.5,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q2(i)"
+    },
+    {
+      "questionId": "G9M27-SHORT-010",
+      "chapterId": "CH6",
+      "topic": "Circular measure",
+      "questionType": "SHORT",
+      "marks": 2,
+      "questionText": "Convert 315° to radians.",
+      "cognitiveLevel": "APPLICATION",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "convert 315 to radians",
+      "selectionWeight": 1.5,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q3(i)"
+    },
+    {
+      "questionId": "G9M27-SHORT-023",
+      "chapterId": "CH12",
+      "topic": "Arithmetic mean",
+      "questionType": "SHORT",
+      "marks": 2,
+      "questionText": "Define Arithmetic Mean (AM).",
+      "cognitiveLevel": "RECALL",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "define arithmetic mean am",
+      "selectionWeight": 1.4,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q4(v)"
+    },
+    {
+      "questionId": "G9M27-SHORT-027",
+      "chapterId": "CH13",
+      "topic": "Sample space",
+      "questionType": "SHORT",
+      "marks": 2,
+      "questionText": "Define sample space.",
+      "cognitiveLevel": "RECALL",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "define sample space",
+      "selectionWeight": 1.4,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q4(ix)"
+    },
+    {
+      "questionId": "G9M27-LONG-007A",
+      "chapterId": "CH5",
+      "topic": "Linear inequalities",
+      "questionType": "LONG",
+      "marks": 4,
+      "questionText": "Indicate the solution region of the following linear inequalities by shading: 2x − 3y ≤ 6; 2x + 3y ≤ 12.",
+      "cognitiveLevel": "APPLICATION",
+      "difficulty": "NOT_SPECIFIED",
+      "semanticFingerprint": "indicate the solution region of the following linear inequalities by shading 2x 3y 6 2x 3y 12",
+      "selectionWeight": 1.8,
+      "copyrightStatus": "ATTRIBUTED_SHORT_EXCERPT",
+      "sourcePage": "Annex-A Maths model paper, Q7(a)"
+    }
+  ]
+}
