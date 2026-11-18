@@ -14,11 +14,15 @@ object TextbookQuestionBank {
         chapterId: String,
         sourcePage: Int,
         candidates: List<QuestionTextSegmenter.Segment>,
+        questionType: String,
+        marks: Int,
         detectedAt: Long = System.currentTimeMillis()
     ): Int {
         require(bookFile.isNotBlank()) { "A textbook identity is required." }
         require(chapterId.isNotBlank()) { "A chapter must be assigned before saving questions." }
         require(sourcePage > 0) { "Source page must be positive." }
+        require(questionType in setOf("MCQ", "SHORT", "LONG")) { "Invalid textbook question type." }
+        require(marks > 0) { "Question marks must be positive." }
         if (candidates.isEmpty()) return 0
 
         val stableBookKey = bookFile.trim()
@@ -28,7 +32,7 @@ object TextbookQuestionBank {
             }
             val identity = listOf(
                 stableBookKey, chapterId, sourcePage.toString(),
-                candidate.sourceNumber.trim(), candidate.text.trim()
+                candidate.sourceNumber.trim(), questionType, candidate.text.trim()
             ).joinToString("|")
             TextbookCandidateEntity(
                 candidateId = sha256(identity),
@@ -38,6 +42,8 @@ object TextbookQuestionBank {
                 questionNumber = candidate.sourceNumber.trim(),
                 questionText = candidate.text.trim(),
                 sourcePage = sourcePage,
+                questionType = questionType,
+                marks = marks,
                 reviewStatus = "APPROVED",
                 reviewNote = "Teacher selected this detected question for a paper.",
                 detectedAt = detectedAt
