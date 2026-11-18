@@ -50,8 +50,8 @@ interface LocalContentDao {
           AND LOWER(q.board) LIKE '%punjab%'
           AND LOWER(q.subject) LIKE '%math%'
           AND LOWER(q.stream) LIKE '%math%'
-          AND q.verificationStatus = 'VERIFIED'
-          AND s.verificationStatus = 'VERIFIED'
+          AND q.verificationStatus IN ('VERIFIED', 'VERIFIED_OFFICIAL')
+          AND s.verificationStatus IN ('VERIFIED', 'VERIFIED_OFFICIAL')
         ORDER BY q.selectionWeight DESC, q.chapterId, q.questionId
     """)
     suspend fun approvedPunjabMathematicsQuestionBank(grade: Int): List<QuestionEntity>
