@@ -21,7 +21,7 @@ object TextbookQuestionBank {
     ): Int {
         require(bookFile.isNotBlank()) { "A textbook identity is required." }
         require(chapterId.isNotBlank()) { "A chapter must be assigned before saving questions." }
-        require(sourcePage >= 0) { "Source page cannot be negative; use 0 for manually authored questions." }
+        require(sourcePage > 0) { "Source page must be positive." }
         require(questionType in setOf("MCQ", "SHORT", "LONG")) { "Invalid textbook question type." }
         require(marks > 0) { "Question marks must be positive." }
         if (candidates.isEmpty()) return 0
@@ -75,7 +75,7 @@ object TextbookQuestionBank {
     ): Boolean {
         require(bookFile.isNotBlank()) { "A textbook identity is required." }
         require(chapterId.isNotBlank()) { "A chapter must be assigned before saving questions." }
-        require(sourcePage > 0) { "Source page must be positive." }
+        require(sourcePage >= 0) { "Source page cannot be negative; use 0 for manually authored questions." }
         require(questionNumber.isNotBlank()) { "Question numbering is required." }
         require(questionType in setOf("MCQ", "SHORT", "LONG")) { "Invalid textbook question type." }
         require(marks > 0) { "Question marks must be positive." }
