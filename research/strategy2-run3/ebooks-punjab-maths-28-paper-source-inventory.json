@@ -6,7 +6,8 @@
     "grade9": 18,
     "grade10": 10,
     "total": 28,
-    "scansIndividuallyMetadataChecked": 18
+    "scansIndividuallyMetadataChecked": 18,
+    "individualPagesMetadataVerified": 28
   },
   "notes": [
     "Archive lists 18 Grade 9 papers: nine boards in 2024 and nine in 2023.",
@@ -14,7 +15,8 @@
     "2024 Grade 9 and 2024/2023 Grade 10 pages were individually opened for metadata; Grade 9 2023 entries are archive-index listings pending individual validation.",
     "These are scans; reader extraction did not expose reliable machine-readable question text. Do not treat as extracted question candidates until OCR/manual review.",
     "All legacy papers require chapter mapping against the correct syllabus version before Auto eligibility.",
-    "ebooks.pk states copies are shared by members and it is not connected to the boards; rights holder may request removal. Do not redistribute complete scans."
+    "ebooks.pk states copies are shared by members and it is not connected to the boards; rights holder may request removal. Do not redistribute complete scans.",
+    "All 28 individual ebooks.pk paper pages have now been opened and metadata checked. Grade 9 2023 pages confirm both groups for eight boards; Sahiwal lists Group I only. These remain scanned-image papers; text extraction/OCR is still pending."
   ],
   "records": [
     {
@@ -133,8 +135,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-bahawalpur-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 9,
@@ -144,8 +151,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-dg-khan-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 9,
@@ -155,8 +167,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-faisalabad-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 9,
@@ -166,8 +183,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-gujranwala-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 9,
@@ -177,8 +199,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-lahore-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 9,
@@ -188,8 +215,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-multan-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 9,
@@ -199,8 +231,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-rawalpindi-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 9,
@@ -210,8 +247,12 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-sahiwal-board-group-1",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 3,
+      "groups": [
+        "Group I"
+      ]
     },
     {
       "grade": 9,
@@ -221,8 +262,13 @@
       "url": "https://ebooks.pk/book/mathematics-9th-class-past-paper-2023-sargodha-board-group-1-2",
       "source": "ebooks.pk",
       "paperFormat": "scanned paper (archive listing)",
-      "extractionStatus": "SOURCE_LISTED_PAPER_FETCH_PENDING",
-      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED"
+      "extractionStatus": "INDIVIDUAL_PAGE_VERIFIED_SCAN_OCR_PENDING",
+      "syllabusStatus": "LEGACY_SYLLABUS_REMAP_REQUIRED",
+      "pages": 6,
+      "groups": [
+        "Group I",
+        "Group II"
+      ]
     },
     {
       "grade": 10,
