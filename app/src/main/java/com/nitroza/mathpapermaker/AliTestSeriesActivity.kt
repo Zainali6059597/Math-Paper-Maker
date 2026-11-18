@@ -828,7 +828,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         if (cleaned.isBlank()) {
                                             notice = "Is selected area mein selectable text nahi mila. Ye scanned/image-only content ho sakta hai. OCR SCANNED PAGE ya manual editor use karein."
                                         } else {
-                                            questionText = TextFieldValue(cleaned)
+                                            questionText = TextFieldValue(cleaned, androidx.compose.ui.text.TextRange(0, cleaned.length))
                                             pendingImageFile = null
                                             questionNumber = suggestedNumber(questionKind, selected)
                                             questionSection = questionNumber.substringBefore("(")
@@ -879,7 +879,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 text = {
                     Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            if (pendingImageFile == null) "Long-press and drag the text selection handles over the exact question. If no text is selected, the full edited text will be used."
+                            if (pendingImageFile == null) "Long-press and drag the selection handles over the exact question. Only highlighted text is added; the whole PDF page is never added by default."
                             else "The selected page area will be embedded as an image in the Word document.",
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -939,7 +939,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         "SHORT" -> 27
                         else -> 10
                     }
-                    TextButton(enabled = (questionText.text.isNotBlank() || pendingImageFile != null) &&
+                    TextButton(enabled = (selectedQuestionText(questionText).isNotBlank() || pendingImageFile != null) &&
                         normalizedNumber.isNotBlank() && !duplicateNumber &&
                         PunjabBoardPattern.isValidChapter(grade, questionChapter) && questionChapter in selectedChapters &&
                         questionMarks.toIntOrNull() == requiredMarks && !atKindLimit, onClick = {
@@ -1506,7 +1506,7 @@ private fun selectedQuestionText(value: TextFieldValue): String {
     val selection = value.selection
     return if (!selection.collapsed && selection.min >= 0 && selection.max <= value.text.length) {
         value.text.substring(selection.min, selection.max).trim()
-    } else value.text.trim()
+    } else ""
 }
 private suspend fun <T> runCatchingCancellable(block: suspend () -> T): Result<T> = try {
     Result.success(block())
