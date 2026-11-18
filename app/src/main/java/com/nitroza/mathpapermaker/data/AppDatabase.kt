@@ -43,6 +43,18 @@ interface LocalContentDao {
     @Query("SELECT COUNT(*) FROM paper_patterns") suspend fun patternCount(): Int
     @Query("SELECT * FROM questions WHERE board=:board AND grade=:grade AND stream=:stream AND subject=:subject AND session=:session")
     suspend fun findQuestions(board: String, grade: Int, stream: String, subject: String, session: String): List<QuestionEntity>
+    @Query("""
+        SELECT q.* FROM questions q
+        INNER JOIN question_sources s ON s.sourceId = q.sourceId
+        WHERE q.grade = :grade
+          AND LOWER(q.board) LIKE '%punjab%'
+          AND LOWER(q.subject) LIKE '%math%'
+          AND LOWER(q.stream) LIKE '%math%'
+          AND q.verificationStatus = 'VERIFIED'
+          AND s.verificationStatus = 'VERIFIED'
+        ORDER BY q.selectionWeight DESC, q.chapterId, q.questionId
+    """)
+    suspend fun approvedPunjabMathematicsQuestionBank(grade: Int): List<QuestionEntity>
     @Query("SELECT * FROM paper_patterns WHERE board=:board AND grade=:grade AND stream=:stream AND subject=:subject AND session=:session ORDER BY version DESC LIMIT 1")
     suspend fun findPattern(board: String, grade: Int, stream: String, subject: String, session: String): PaperPatternEntity?
     @Query("SELECT * FROM paper_patterns WHERE patternId=:patternId LIMIT 1")
