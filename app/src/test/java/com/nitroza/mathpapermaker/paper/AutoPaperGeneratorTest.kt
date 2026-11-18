@@ -60,9 +60,26 @@ class AutoPaperGeneratorTest {
         assertTrue((result as AutoPaperGenerator.Result.NeedsMoreQuestions).message.isNotBlank())
     }
 
-    @Test fun selectedChaptersLimitWhichQuestionsCanBeUsed() {
-        val result = AutoPaperGenerator.generate(9, setOf("CH1"), completeBank(9))
-        assertFalse(result is AutoPaperGenerator.Result.Success)
+    @Test fun selectedUnitPaperKeepsBoardStructureUsingOnlyChosenChapter() {
+        val bank = buildList {
+            repeat(15) { add(PaperQuestion("M$it", "MCQ $it", "MCQ", 1, 1, chapterId = "CH1")) }
+            repeat(27) { add(PaperQuestion("S$it", "Short $it", "SHORT", 2, 2, chapterId = "CH1")) }
+            repeat(10) { add(PaperQuestion("L$it", "Long $it", "LONG", 4, 3, chapterId = "CH1")) }
+        }
+        val result = AutoPaperGenerator.generate(9, setOf("CH1"), bank)
+        assertTrue(result.toString(), result is AutoPaperGenerator.Result.Success)
+        val questions = (result as AutoPaperGenerator.Result.Success).questions
+        assertEquals(15, questions.count { it.kind == "MCQ" })
+        assertEquals(27, questions.count { it.kind == "SHORT" })
+        assertEquals(10, questions.count { it.kind == "LONG" })
+        assertTrue(questions.all { it.chapterId == "CH1" })
+        assertTrue(PunjabBoardPattern.validationErrors(9, questions, setOf("CH1")).isEmpty())
+    }
+
+    @Test fun selectedUnitPaperReportsExactMissingQuestionType() {
+        val result = AutoPaperGenerator.generate(9, setOf("CH1"), emptyList())
+        assertTrue(result is AutoPaperGenerator.Result.NeedsMoreQuestions)
+        assertTrue((result as AutoPaperGenerator.Result.NeedsMoreQuestions).message.contains("15 MCQs"))
     }
 
     @Test fun rejectsInvalidClassAndEmptyChapterSelection() {
