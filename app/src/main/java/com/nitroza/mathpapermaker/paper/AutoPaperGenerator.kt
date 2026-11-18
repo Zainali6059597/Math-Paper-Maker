@@ -1,5 +1,20 @@
 package com.nitroza.mathpapermaker.paper
 
+private data class QuestionSourceIdentity(
+    val kind: String,
+    val chapterId: String,
+    val sourcePage: Int,
+    val text: String,
+    val imageFile: String?
+) {
+    companion object {
+        fun from(question: PaperQuestion) = QuestionSourceIdentity(
+            question.kind.uppercase(), question.chapterId, question.sourcePage,
+            question.text, question.imageFile
+        )
+    }
+}
+
 /**
  * Builds a complete board-pattern paper from already indexed textbook questions.
  * It never writes or invents question text: every output item comes from [questionBank].
@@ -29,17 +44,17 @@ object AutoPaperGenerator {
             .filter { it.chapterId in selectedChapters }
             .filter { it.kind.uppercase() in setOf("MCQ", "SHORT", "LONG") }
             .filter { it.text.isNotBlank() || !it.imageFile.isNullOrBlank() }
-            .distinctBy { listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|") }
+            .distinctBy(QuestionSourceIdentity::from)
 
-        val used = mutableSetOf<String>()
+        val used = mutableSetOf<QuestionSourceIdentity>()
         val result = mutableListOf<PaperQuestion>()
 
         fun take(kind: String, chapter: String, section: String, number: String): PaperQuestion? {
             val identity = available.firstOrNull {
                 it.kind.equals(kind, true) && it.chapterId == chapter &&
-                    listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|") !in used
+                    QuestionSourceIdentity.from(it) !in used
             } ?: return null
-            val key = listOf(identity.kind.uppercase(), identity.chapterId, identity.sourcePage, identity.text, identity.imageFile).joinToString("|")
+            val key = QuestionSourceIdentity.from(identity)
             used += key
             return identity.copy(number = number, kind = kind, marks = when (kind) {
                 "MCQ" -> 1
@@ -98,7 +113,7 @@ object AutoPaperGenerator {
                 val extraChapter = chapters.firstOrNull { chapter ->
                     available.any {
                         it.kind.equals("SHORT", true) && it.chapterId == chapter &&
-                            listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|") !in used
+                            QuestionSourceIdentity.from(it) !in used
                     }
                 } ?: return fail("Q$section needs one additional short question from its prescribed chapters.")
                 take("SHORT", extraChapter, "Q$section", "")?.let(sectionItems::add)
@@ -114,13 +129,13 @@ object AutoPaperGenerator {
             val section = "Q${index + 5}"
             val firstChapter = rule.first.firstOrNull { chapter ->
                 available.any { it.kind.equals("LONG", true) && it.chapterId == chapter &&
-                    listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|") !in used }
+                    QuestionSourceIdentity.from(it) !in used }
             } ?: return fail("No unused long question is available for $section (first prescribed chapter group).")
             val first = take("LONG", firstChapter, section, "$section(a)")
                 ?: return fail("Could not select the first part of $section.")
             val secondChapter = rule.second.firstOrNull { chapter ->
                 available.any { it.kind.equals("LONG", true) && it.chapterId == chapter &&
-                    listOf(it.kind.uppercase(), it.chapterId, it.sourcePage, it.text, it.imageFile).joinToString("|") !in used }
+                    QuestionSourceIdentity.from(it) !in used }
             } ?: return fail("No unused long question is available for $section (second prescribed chapter group).")
             val second = take("LONG", secondChapter, section, "$section(b)")
                 ?: return fail("Could not select the second part of $section.")
