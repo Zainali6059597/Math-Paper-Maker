@@ -39,6 +39,7 @@ import com.nitroza.mathpapermaker.data.QuestionTextSegmenter
 import com.nitroza.mathpapermaker.data.OfflinePdfOcr
 import com.nitroza.mathpapermaker.data.PdfTextDocumentCache
 import com.nitroza.mathpapermaker.data.TextbookQuestionBank
+import com.nitroza.mathpapermaker.data.TextbookQuestionBankMapper
 import com.nitroza.mathpapermaker.paper.PaperQuestion
 import com.nitroza.mathpapermaker.paper.AutoPaperGenerator
 import com.nitroza.mathpapermaker.paper.PunjabBoardPattern
@@ -570,17 +571,20 @@ class AliTestSeriesActivity : ComponentActivity() {
                 savedBank.onFailure { error ->
                     notice = "Could not load the offline question bank: " + (error.message ?: "unknown error")
                 }
-                val savedQuestions = savedBank.getOrNull().orEmpty().map { item ->
+                val savedQuestions = TextbookQuestionBankMapper.toPaperQuestions(
+                    savedBank.getOrNull().orEmpty(),
+                    selectedChapters
+                ).map { item ->
                     SelectedQuestion(
                         id = nextId++,
-                        number = item.questionNumber,
-                        text = item.questionText,
-                        kind = item.questionType,
+                        number = item.number,
+                        text = item.text,
+                        kind = item.kind,
                         marks = item.marks,
                         sourcePage = item.sourcePage,
                         imageFile = item.imageFile,
                         chapterId = item.chapterId,
-                        sectionId = "BANK"
+                        sectionId = item.sectionId
                     )
                 }
                 val sourceItems = (selected + savedQuestions)
