@@ -8,7 +8,7 @@ package com.nitroza.mathpapermaker.data
 object QuestionTextSegmenter {
     data class Segment(val sourceNumber: String, val text: String)
 
-    private val marker = Regex("""^\s*(?:(?:Q(?:uestion)?\.?\s*))?(\d{1,2})\s*[.)](?:\s+(.*))?$""", RegexOption.IGNORE_CASE)
+    private val marker = Regex("""^\s*(?:(?:Q(?:uestion)?\.?\s*))?(\d{1,2})\s*[.)](?:\s*(.*))?$""", RegexOption.IGNORE_CASE)
 
     fun segment(pageText: String): List<Segment> {
         val result = mutableListOf<Segment>()
