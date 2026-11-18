@@ -1,8 +1,11 @@
 name: Test and Build Ali Test Series
 
-# Automatic builds are paused while coding-only runs are in progress.
-# A manual workflow dispatch remains available when Ali is ready to verify builds.
+# Build and test after each change lands on the main branch.
+# Manual dispatch remains available for an on-demand verification run.
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
