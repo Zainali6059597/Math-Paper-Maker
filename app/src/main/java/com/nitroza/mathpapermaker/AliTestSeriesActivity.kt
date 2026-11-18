@@ -1320,6 +1320,38 @@ class AliTestSeriesActivity : ComponentActivity() {
             )
         }
 
+        if (showAutoSetup) {
+            AlertDialog(
+                onDismissRequest = { showAutoSetup = false },
+                title = { Text("SET UP YOUR BOARD PAPER") },
+                text = {
+                    Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState())) {
+                        Text("Select units / chapters for this paper.")
+                        Row {
+                            TextButton(onClick = { selectedChapters = (1..if (grade == 9) 13 else 12).map { "CH$it" }.toSet() }) { Text("SELECT ALL") }
+                            TextButton(onClick = { selectedChapters = emptySet() }) { Text("CLEAR") }
+                        }
+                        (1..if (grade == 9) 13 else 12).forEach { n ->
+                            val chapter = "CH$n"
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(checked = chapter in selectedChapters, onCheckedChange = { checked -> selectedChapters = if (checked) selectedChapters + chapter else selectedChapters - chapter })
+                                Text("Chapter $n")
+                            }
+                        }
+                        Divider()
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Checkbox(checked = includeCurrentQuestions, onCheckedChange = { includeCurrentQuestions = it })
+                            Text("Include questions I have already selected as important")
+                        }
+                        Text("The app uses approved questions saved in your offline textbook bank and follows the Punjab Board pattern. If the bank is short, it will tell you what is missing.", style = MaterialTheme.typography.bodySmall)
+                    }
+                },
+                confirmButton = {
+                    Button(enabled = selectedChapters.isNotEmpty(), onClick = { showAutoSetup = false; autoGenerateFromCollectedQuestions() }) { Text("GENERATE BOARD PAPER") }
+                },
+                dismissButton = { TextButton(onClick = { showAutoSetup = false }) { Text("CANCEL") } }
+            )
+        }
         if (showChapterPicker) {
             val chapterCount = if (grade == 9) 13 else 12
             AlertDialog(
