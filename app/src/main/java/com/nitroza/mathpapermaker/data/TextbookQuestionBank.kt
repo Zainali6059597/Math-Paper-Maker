@@ -127,6 +127,21 @@ object TextbookQuestionBank {
             .approvedTextbookCandidates(bookFile.trim())
     }
 
+    suspend fun removeQuestion(context: Context, candidateId: String): Boolean {
+        require(candidateId.isNotBlank()) { "A question ID is required." }
+        return AppDatabase.get(context.applicationContext)
+            .contentDao()
+            .deleteTextbookCandidate(candidateId) > 0
+    }
+
+    /** Image paths retained by saved bank rows must survive draft cleanup. */
+    suspend fun referencedImagePaths(context: Context): Set<String> =
+        AppDatabase.get(context.applicationContext)
+            .contentDao()
+            .allTextbookCandidates()
+            .mapNotNull { it.imageFile?.takeIf(String::isNotBlank) }
+            .toSet()
+
     suspend fun approvedCount(context: Context, bookFile: String): Int {
         if (bookFile.isBlank()) return 0
         return AppDatabase.get(context.applicationContext)
