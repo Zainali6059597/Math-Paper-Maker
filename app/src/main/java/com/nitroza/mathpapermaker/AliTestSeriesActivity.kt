@@ -352,13 +352,22 @@ class AliTestSeriesActivity : ComponentActivity() {
         fun suggestedNumber(kind: String, current: List<SelectedQuestion>): String {
             val existing = current.map { it.number }.toSet()
             val limit = when (kind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
-            return (1..limit).asSequence().map { index ->
+            val boardNumber = (1..limit).asSequence().map { index ->
                 when (kind) {
                     "MCQ" -> "Q1(${roman(index)})"
                     "SHORT" -> "Q${2 + (index - 1) / 9}(${roman((index - 1) % 9 + 1)})"
                     else -> "Q${5 + (index - 1) / 2}(${if (index % 2 == 1) "a" else "b"})"
                 }
-            }.firstOrNull { it !in existing } ?: ""
+            }.firstOrNull { it !in existing }
+            if (boardNumber != null) return boardNumber
+            if (paperMode != "CUSTOM") return ""
+            var suffix = current.size + 1
+            var customNumber = "Q$suffix"
+            while (customNumber in existing) {
+                suffix++
+                customNumber = "Q$suffix"
+            }
+            return customNumber
         }
 
         val openPdf = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
