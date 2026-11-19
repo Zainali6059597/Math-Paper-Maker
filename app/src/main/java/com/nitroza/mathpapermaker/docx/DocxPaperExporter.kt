@@ -82,7 +82,15 @@ object DocxPaperExporter {
             "Scanned question images are too large for one Word paper. Use smaller crops."
         }
         val imageRelIds = imageEntries.associate { (index, _) -> index to "rIdImage${index + 1}" }
-        val sections = if (paperMode == "BOARD") PunjabBoardPattern.sections(questions) else questions.groupBy { it.sectionId.ifBlank { "QUESTIONS" } }.map { (section, items) -> PaperSection(section, "Answer the following questions.", items) }
+        // A Custom paper is an explicitly ordered list. Grouping by sectionId here
+        // silently moves a question when the teacher reorders it across sections.
+        // Keep the exact editor order in one section; Board papers retain their
+        // official section grouping below.
+        val sections = if (paperMode == "BOARD") {
+            PunjabBoardPattern.sections(questions)
+        } else {
+            listOf(PaperSection("QUESTIONS", "Answer the following questions.", questions))
+        }
         val consumedQuestionIndices = mutableSetOf<Int>()
         val document = buildString {
             append("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
