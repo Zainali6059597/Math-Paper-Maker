@@ -562,7 +562,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         }
                     } else {
                         showDetectedQuestions = true
-                        notice = "Offline OCR found ${found.size} question candidates. Review and tick only the required questions."
+                        notice = "Offline OCR found ${found.size} question candidates. Select the questions you want."
                     }
                 }.onFailure { error ->
                     notice = "Offline OCR failed: ${error.message ?: "unknown error"}"
@@ -574,7 +574,7 @@ class AliTestSeriesActivity : ComponentActivity() {
             workflowMode = "AUTO"
             autoProgress = 0.08f
             autoFailureMessage = ""
-            autoStage = "Loading approved textbook questions…"
+            autoStage = "Loading saved textbook questions…"
             if (paperMode != "BOARD") {
                 workflowMode = "CHOICE"
                 autoProgress = 0f
@@ -582,7 +582,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 return
             }
             lifecycleScope.launch {
-                notice = "Loading verified research questions, saved textbook questions and current selections..."
+                notice = "Loading saved questions and current selections..."
                 val bookKey = if (pdfName.isBlank()) "" else "CLASS$grade|$pdfName"
                 autoProgress = 0.25f
                 val savedBank = withContext(Dispatchers.IO) {
@@ -597,7 +597,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                 }
                 curatedBank.onFailure { error ->
-                    notice = "Could not load the verified research bank: " + (error.message ?: "unknown error")
+                    notice = "Could not load the offline question bank: " + (error.message ?: "unknown error")
                 }
                 savedBank.onFailure { error ->
                     notice = "Could not load the offline question bank: " + (error.message ?: "unknown error")
@@ -643,7 +643,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 if (sourceItems.isEmpty()) {
                     autoProgress = 1f
                     autoStage = "Question bank is empty for these chapters"
-                    autoFailureMessage = "No approved questions were found in the selected chapters. Add questions from the PDF in Manual mode, mark important questions, then return here. Auto cannot create questions that are not in your textbook bank."
+                    autoFailureMessage = "No saved questions were found in the selected chapters. Add questions from the PDF in Manual mode, mark important questions, then return here. Auto cannot create questions that are not in your textbook bank."
                     notice = autoFailureMessage
                     return@launch
                 }
@@ -671,10 +671,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                         if (rebuilt.size == generated.questions.size) {
                             selected = rebuilt
                             autoProgress = 1f
-                            autoStage = "Paper ready. Opening review…"
+                            autoStage = "Paper ready. Opening editor…"
                             showQuestions = true
                             notice = "Board paper generated using " + sourceItems.size +
-                                " available question(s): saved bank + current draft. Review, edit, replace, reorder or remove before export."
+                                " available question(s): saved bank + current draft. Edit, replace, reorder or remove questions before export."
                         } else {
                             autoProgress = 1f
                             autoStage = "Paper could not be assembled"
@@ -685,7 +685,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     is AutoPaperGenerator.Result.NeedsMoreQuestions -> {
                         autoProgress = 1f
                         autoStage = "More textbook questions are needed"
-                        autoFailureMessage = generated.message + " Add more approved textbook questions from the selected chapters in Manual mode, then try Auto again."
+                        autoFailureMessage = generated.message + " Add more questions from the selected chapters in Manual mode, then try Auto again."
                         notice = autoFailureMessage
                     }
                 }
@@ -760,7 +760,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                     if (selected.isNotEmpty()) {
                         OutlinedButton(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
-                            Text("REVIEW SAVED PAPER (${selected.size} QUESTIONS)")
+                            Text("OPEN SAVED PAPER (${selected.size} QUESTIONS)")
                         }
                     }
                     Text(notice, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
@@ -1045,7 +1045,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                             questionChapter = chapterForPage(pageNumber).orEmpty()
                                             cropSelectionMode = false
                                             showQuestionEditor = true
-                                            notice = "Text extracted in reading order. Review it before adding the question."
+                                            notice = "Text extracted in reading order. Check it before adding the question."
                                         }
                                     }.onFailure { error ->
                                         notice = "Could not extract text from selected area: ${error.message ?: "unknown error"}"
@@ -1254,7 +1254,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        Text("They will be added as $detectedQuestionKind questions (${when (detectedQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }} marks each). Edit numbering and marks in Review.", style = MaterialTheme.typography.bodySmall)
+                        Text("They will be added as $detectedQuestionKind questions (${when (detectedQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }} marks each). Edit numbering and marks in the paper editor.", style = MaterialTheme.typography.bodySmall)
                         LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             itemsIndexed(detectedQuestions) { index, candidate ->
                                 Card {
@@ -1325,7 +1325,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         selected = newQuestions
                         showDetectedQuestions = false
                         showQuestions = true
-                        notice = "Added $addedCount checked question(s). Saving teacher-approved questions to the offline textbook bank..."
+                        notice = "Added $addedCount checked question(s). Saving questions for reuse..."
                         lifecycleScope.launch {
                             if (!PunjabBoardPattern.isValidChapter(grade, bankChapter)) {
                                 notice = "Added $addedCount question(s). Assign a valid chapter before saving them to the reusable textbook bank."
@@ -1345,7 +1345,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 }.getOrDefault(savedQuestionBankCount)
                             }
                             notice = saved.fold(
-                                onSuccess = { count -> "Added $addedCount question(s); $count new teacher-approved question(s) saved in the offline textbook bank." },
+                                onSuccess = { count -> "Added $addedCount question(s); $count question(s) saved for reuse." },
                                 onFailure = { error -> "Added $addedCount question(s), but the offline bank save failed: " + (error.message ?: "unknown error") }
                             )
                         }
@@ -1378,7 +1378,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Checkbox(checked = includeCurrentQuestions, onCheckedChange = { includeCurrentQuestions = it })
                             Text("Include questions I have already selected as important")
                         }
-                        Text("The app builds the Punjab Board paper structure (15 MCQs, 27 short questions and 5 two-part long questions) using only the chapters you select. Full-syllabus papers also follow the official chapter-wise allocation. Questions must already be in your approved offline bank or current selection; missing question types are reported clearly.", style = MaterialTheme.typography.bodySmall)
+                        Text("The app builds the Punjab Board paper structure (15 MCQs, 27 short questions and 5 two-part long questions) using only the chapters you select. Full-syllabus papers also follow the official chapter-wise allocation. Questions are arranged from your selected chapters and saved question bank.", style = MaterialTheme.typography.bodySmall)
                     }
                 },
                 confirmButton = {
