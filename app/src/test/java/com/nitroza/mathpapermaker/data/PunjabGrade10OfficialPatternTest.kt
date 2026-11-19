@@ -81,9 +81,14 @@ class PunjabGrade10OfficialPatternTest {
         assertEquals(setOf("CH9", "CH12"), (0 until q9b.getJSONArray("allowedChapterIds").length()).map { q9b.getJSONArray("allowedChapterIds").getString(it) }.toSet())
     }
 
-    @Test fun patternOnlyPackageParsesAndGenerationWaitsForRealQuestions() {
+    @Test fun bundledQuestionBankParsesAlongsideOfficialPattern() {
         val parsed = PackageImporter.parse(pack().toString())
-        assertTrue(parsed.questions.isEmpty())
+        assertEquals(52, parsed.questions.size)
+        assertEquals(52, parsed.questions.map { it.id }.toSet().size)
+        assertEquals(15, parsed.questions.count { it.questionType == "MCQ" })
+        assertEquals(27, parsed.questions.count { it.questionType == "SHORT" })
+        assertEquals(10, parsed.questions.count { it.questionType == "LONG" })
+        assertTrue(parsed.questions.all { !it.answerText.isNullOrBlank() })
         assertEquals(52, parsed.slots.size)
         assertEquals(3, parsed.choiceGroups.size)
         assertEquals(2, parsed.bundleChoiceGroups.size)
