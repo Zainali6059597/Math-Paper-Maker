@@ -758,15 +758,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                         }
                     }
-                    OutlinedButton(
-                        onClick = { startActivity(Intent(this@AliTestSeriesActivity, MainActivity::class.java)) },
-                        modifier = Modifier.fillMaxWidth()
-                    ) { Text("OPEN OFFLINE QUESTION BANK & CONTENT REVIEW") }
-                    Text(
-                        "PECTAA Grade 9 2027 model-paper candidates are bundled offline. They remain under review until you verify them.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary
-                    )
                     if (selected.isNotEmpty()) {
                         OutlinedButton(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
                             Text("REVIEW SAVED PAPER (${selected.size} QUESTIONS)")
@@ -774,7 +765,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                     }
                     Text(notice, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     Spacer(Modifier.weight(1f))
-                    Text("Manual selection + automatic board-pattern selection · Offline · No AI question invention", style = MaterialTheme.typography.labelSmall)
                 }
             } else if (workflowMode == "AUTO") {
                 Column(Modifier.fillMaxSize().padding(padding).padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -791,6 +781,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Text("CHANGE CHAPTERS / TRY AGAIN")
                         }
                         OutlinedButton(onClick = {
+                            paperMode = "CUSTOM"
                             workflowMode = "MANUAL"
                             autoFailureMessage = ""
                         }, modifier = Modifier.fillMaxWidth()) {
@@ -803,13 +794,13 @@ class AliTestSeriesActivity : ComponentActivity() {
                     Spacer(Modifier.height(12.dp))
                     Text("HOW WOULD YOU LIKE TO CREATE YOUR PAPER?", style = MaterialTheme.typography.headlineSmall)
                     Text("Class $grade · $pdfName", style = MaterialTheme.typography.bodySmall)
-                    Card(onClick = { showAutoSetup = true }, modifier = Modifier.fillMaxWidth()) {
+                    Card(onClick = { paperMode = "BOARD"; showAutoSetup = true }, modifier = Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text("⚡ AUTO PAPER", style = MaterialTheme.typography.titleLarge)
                             Text("Create a Punjab Board-pattern paper. Choose chapters and include important questions.", style = MaterialTheme.typography.bodyMedium)
                         }
                     }
-                    Card(onClick = { workflowMode = "MANUAL" }, modifier = Modifier.fillMaxWidth()) {
+                    Card(onClick = { paperMode = "CUSTOM"; workflowMode = "MANUAL" }, modifier = Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text("✍ MANUAL PAPER", style = MaterialTheme.typography.titleLarge)
                             Text("Select PDF text, crop scanned questions, write your own questions and arrange the paper.", style = MaterialTheme.typography.bodyMedium)
@@ -1140,7 +1131,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         } else Text("OCR SCANNED PAGE · OFFLINE")
                     }
                     Button(onClick = { showQuestions = true }, modifier = Modifier.fillMaxWidth()) {
-                        Text("REVIEW SELECTED QUESTIONS (${selected.size})")
+                        Text("BUILD / EDIT PAPER (${selected.size})")
                     }
                     Text(notice, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier.padding(top = 4.dp))
@@ -1496,45 +1487,14 @@ class AliTestSeriesActivity : ComponentActivity() {
             val boardReady = paperMode != "BOARD" || (allChaptersSelected && PunjabBoardPattern.isComplete(grade, paperQuestions))
             AlertDialog(
                 onDismissRequest = { showQuestions = false },
-                title = { Text("SELECTED QUESTIONS (${selected.size})") },
+                title = { Text("BUILD YOUR PAPER (${selected.size})") },
                 text = {
                     Column(Modifier.heightIn(max = 560.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedTextField(schoolName, { schoolName = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("School name (optional)") }, singleLine = true)
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
-                        Text("AUTOMATIC PAPER GENERATION", style = MaterialTheme.typography.labelLarge)
-                        Text(
-                            "The generator uses teacher-approved questions saved on this device plus the current draft. It never invents question text.",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                        Text(
-                            "OFFLINE BANK: $savedQuestionBankCount approved question(s) for this textbook",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        OutlinedButton(
-                            onClick = {
-                                val bookKey = "CLASS$grade|$pdfName"
-                                lifecycleScope.launch {
-                                    val loaded = withContext(Dispatchers.IO) {
-                                        runCatching { TextbookQuestionBank.approvedForBook(applicationContext, bookKey) }
-                                    }
-                                    loaded.onSuccess {
-                                        savedBankQuestions = it
-                                        showBankManager = true
-                                    }.onFailure { error ->
-                                        notice = "Could not open the offline bank: ${error.message ?: "unknown error"}"
-                                    }
-                                }
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        ) { Text("MANAGE SAVED TEXTBOOK QUESTIONS") }
-                        Button(
-                            onClick = { autoGenerateFromCollectedQuestions() },
-                            enabled = paperMode == "BOARD" && (selected.isNotEmpty() || savedQuestionBankCount > 0),
-                            modifier = Modifier.fillMaxWidth()
-                        ) { Text("AUTO-GENERATE FROM TEXTBOOK QUESTION BANK") }
+                        Text("Edit question text, numbering, marks and order. Arrange the questions and export your paper.", style = MaterialTheme.typography.bodySmall)
                         Text("CHAPTER SCOPE", style = MaterialTheme.typography.labelLarge)
                         OutlinedButton(onClick = { showChapterPicker = true }, modifier = Modifier.fillMaxWidth()) {
                             Text("INCLUDE CHAPTERS: ${selectedChapters.size} / ${if (grade == 9) 13 else 12}")
@@ -1738,10 +1698,10 @@ class AliTestSeriesActivity : ComponentActivity() {
         if (showManualQuestionEditor) {
             AlertDialog(
                 onDismissRequest = { showManualQuestionEditor = false },
-                title = { Text("MATHS QUESTION EDITOR") },
+                title = { Text("ADD QUESTION") },
                 text = {
                     Column(Modifier.heightIn(max = 560.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Write the missed question. Use the maths symbol pad for common mathematical notation; the question remains editable in Word.", style = MaterialTheme.typography.bodySmall)
+                        Text("Write a question or edit text extracted from the PDF.", style = MaterialTheme.typography.bodySmall)
                         OutlinedTextField(manualQuestionText, { manualQuestionText = it }, modifier = Modifier.fillMaxWidth(), minLines = 5, label = { Text("Question") })
                         Text("MATHS EQUATION TEMPLATES", style = MaterialTheme.typography.labelLarge)
                         val templates = listOf(
@@ -1863,7 +1823,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         )
                                     }
                                 } else {
-                                    notice = "Manual question added as editable text. Assign a valid chapter while reviewing if you want it reusable in the textbook bank."
+                                    notice = "Question added to your paper."
                                 }
                             }
                         }) { Text("ADD TO PAPER") }
