@@ -1496,6 +1496,17 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("School name (optional)") }, singleLine = true)
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
+                        OutlinedButton(
+                            onClick = {
+                                manualQuestionText = TextFieldValue("")
+                                manualQuestionKind = "SHORT"
+                                manualQuestionMarks = "2"
+                                manualQuestionNumber = suggestedNumber("SHORT", selected)
+                                manualQuestionChapter = ""
+                                showManualQuestionEditor = true
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text("ADD QUESTION MANUALLY") }
                         if (paperMode == "BOARD") {
                             Text("CHAPTERS", style = MaterialTheme.typography.labelLarge)
                             OutlinedButton(onClick = { showChapterPicker = true }, modifier = Modifier.fillMaxWidth()) {
