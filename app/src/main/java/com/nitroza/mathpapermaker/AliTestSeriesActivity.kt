@@ -1512,6 +1512,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 manualQuestionMarks = "2"
                                 manualQuestionNumber = suggestedNumber("SHORT", selected)
                                 manualQuestionChapter = ""
+                                // Compose AlertDialogs are separate windows. Close the paper
+                                // builder before opening the question editor to avoid stacking
+                                // two dialogs and losing the manual-add interaction.
+                                showQuestions = false
                                 showManualQuestionEditor = true
                             },
                             modifier = Modifier.fillMaxWidth()
@@ -1692,7 +1696,10 @@ class AliTestSeriesActivity : ComponentActivity() {
 
         if (showManualQuestionEditor) {
             AlertDialog(
-                onDismissRequest = { showManualQuestionEditor = false },
+                onDismissRequest = {
+                    showManualQuestionEditor = false
+                    showQuestions = true
+                },
                 title = { Text("ADD QUESTION") },
                 text = {
                     Column(Modifier.heightIn(max = 560.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -1822,7 +1829,10 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                         }) { Text("ADD TO PAPER") }
                 },
-                dismissButton = { TextButton(onClick = { showManualQuestionEditor = false }) { Text("CANCEL") } }
+                dismissButton = { TextButton(onClick = {
+                    showManualQuestionEditor = false
+                    showQuestions = true
+                }) { Text("CANCEL") } }
             )
         }
 
