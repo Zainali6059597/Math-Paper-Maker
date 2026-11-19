@@ -1970,7 +1970,7 @@
       "questionCount": 24,
       "questions": [
         {
-          "questionId": "G10-ORIG-1-MCQ01",
+          "questionId": "G10-PRACTICE-001",
           "grade": 10,
           "chapterId": "CH1",
           "topic": "Complex Numbers",
@@ -1983,7 +1983,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-1-SHORT01",
+          "questionId": "G10-PRACTICE-002",
           "grade": 10,
           "chapterId": "CH1",
           "topic": "Complex Numbers",
@@ -1996,7 +1996,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-MCQ01",
+          "questionId": "G10-PRACTICE-003",
           "grade": 10,
           "chapterId": "CH2",
           "topic": "Quadratic Equations and Inequalities",
@@ -2009,7 +2009,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT01",
+          "questionId": "G10-PRACTICE-004",
           "grade": 10,
           "chapterId": "CH2",
           "topic": "Quadratic Equations and Inequalities",
@@ -2022,7 +2022,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-3-MCQ01",
+          "questionId": "G10-PRACTICE-005",
           "grade": 10,
           "chapterId": "CH3",
           "topic": "Matrices and Determinants",
@@ -2035,7 +2035,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-3-SHORT01",
+          "questionId": "G10-PRACTICE-006",
           "grade": 10,
           "chapterId": "CH3",
           "topic": "Matrices and Determinants",
@@ -2048,7 +2048,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-4-MCQ01",
+          "questionId": "G10-PRACTICE-007",
           "grade": 10,
           "chapterId": "CH4",
           "topic": "Functions and Graphs",
@@ -2061,7 +2061,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-4-SHORT01",
+          "questionId": "G10-PRACTICE-008",
           "grade": 10,
           "chapterId": "CH4",
           "topic": "Functions and Graphs",
@@ -2074,7 +2074,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-5-MCQ01",
+          "questionId": "G10-PRACTICE-009",
           "grade": 10,
           "chapterId": "CH5",
           "topic": "Algebraic Fractions",
@@ -2087,7 +2087,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-5-SHORT01",
+          "questionId": "G10-PRACTICE-010",
           "grade": 10,
           "chapterId": "CH5",
           "topic": "Algebraic Fractions",
@@ -2100,7 +2100,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-6-MCQ01",
+          "questionId": "G10-PRACTICE-011",
           "grade": 10,
           "chapterId": "CH6",
           "topic": "Vectors in Plane",
@@ -2113,7 +2113,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-6-SHORT01",
+          "questionId": "G10-PRACTICE-012",
           "grade": 10,
           "chapterId": "CH6",
           "topic": "Vectors in Plane",
@@ -2126,7 +2126,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-7-MCQ01",
+          "questionId": "G10-PRACTICE-013",
           "grade": 10,
           "chapterId": "CH7",
           "topic": "Trigonometry",
@@ -2139,7 +2139,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-7-SHORT01",
+          "questionId": "G10-PRACTICE-014",
           "grade": 10,
           "chapterId": "CH7",
           "topic": "Trigonometry",
@@ -2152,7 +2152,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-8-MCQ01",
+          "questionId": "G10-PRACTICE-015",
           "grade": 10,
           "chapterId": "CH8",
           "topic": "Chords and Arcs of a Circle",
@@ -2165,7 +2165,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-8-SHORT01",
+          "questionId": "G10-PRACTICE-016",
           "grade": 10,
           "chapterId": "CH8",
           "topic": "Chords and Arcs of a Circle",
@@ -2178,7 +2178,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-9-MCQ01",
+          "questionId": "G10-PRACTICE-017",
           "grade": 10,
           "chapterId": "CH9",
           "topic": "Tangent and Angles of a Circle",
@@ -2191,7 +2191,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-9-SHORT01",
+          "questionId": "G10-PRACTICE-018",
           "grade": 10,
           "chapterId": "CH9",
           "topic": "Tangent and Angles of a Circle",
@@ -2204,7 +2204,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-10-MCQ01",
+          "questionId": "G10-PRACTICE-019",
           "grade": 10,
           "chapterId": "CH10",
           "topic": "Practical Geometry of Circles",
@@ -2217,7 +2217,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-10-SHORT01",
+          "questionId": "G10-PRACTICE-020",
           "grade": 10,
           "chapterId": "CH10",
           "topic": "Practical Geometry of Circles",
@@ -2230,7 +2230,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-11-MCQ01",
+          "questionId": "G10-PRACTICE-021",
           "grade": 10,
           "chapterId": "CH11",
           "topic": "Information Handling",
@@ -2243,7 +2243,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-11-SHORT01",
+          "questionId": "G10-PRACTICE-022",
           "grade": 10,
           "chapterId": "CH11",
           "topic": "Information Handling",
@@ -2256,7 +2256,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-12-MCQ01",
+          "questionId": "G10-PRACTICE-023",
           "grade": 10,
           "chapterId": "CH12",
           "topic": "Probability",
@@ -2269,7 +2269,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-12-SHORT01",
+          "questionId": "G10-PRACTICE-024",
           "grade": 10,
           "chapterId": "CH12",
           "topic": "Probability",
@@ -2282,7 +2282,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-MCQ01",
+          "questionId": "G10-PRACTICE-025",
           "grade": 10,
           "chapterId": "CH9",
           "topic": "Tangent and Angles of a Circle",
@@ -2295,7 +2295,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-MCQ02",
+          "questionId": "G10-PRACTICE-026",
           "grade": 10,
           "chapterId": "CH11",
           "topic": "Information Handling",
@@ -2308,7 +2308,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-MCQ03",
+          "questionId": "G10-PRACTICE-027",
           "grade": 10,
           "chapterId": "CH12",
           "topic": "Probability",
@@ -2321,7 +2321,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT04",
+          "questionId": "G10-PRACTICE-028",
           "grade": 10,
           "chapterId": "CH1",
           "topic": "Complex Numbers",
@@ -2334,7 +2334,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT05",
+          "questionId": "G10-PRACTICE-029",
           "grade": 10,
           "chapterId": "CH2",
           "topic": "Quadratic Equations and Inequalities",
@@ -2347,7 +2347,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT06",
+          "questionId": "G10-PRACTICE-030",
           "grade": 10,
           "chapterId": "CH3",
           "topic": "Matrices and Determinants",
@@ -2360,7 +2360,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT07",
+          "questionId": "G10-PRACTICE-031",
           "grade": 10,
           "chapterId": "CH4",
           "topic": "Functions and Graphs",
@@ -2373,7 +2373,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT08",
+          "questionId": "G10-PRACTICE-032",
           "grade": 10,
           "chapterId": "CH5",
           "topic": "Algebraic Fractions",
@@ -2386,7 +2386,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT09",
+          "questionId": "G10-PRACTICE-033",
           "grade": 10,
           "chapterId": "CH6",
           "topic": "Vectors in Plane",
@@ -2399,7 +2399,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT10",
+          "questionId": "G10-PRACTICE-034",
           "grade": 10,
           "chapterId": "CH7",
           "topic": "Trigonometry",
@@ -2412,7 +2412,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT11",
+          "questionId": "G10-PRACTICE-035",
           "grade": 10,
           "chapterId": "CH8",
           "topic": "Chords and Arcs of a Circle",
@@ -2425,7 +2425,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT12",
+          "questionId": "G10-PRACTICE-036",
           "grade": 10,
           "chapterId": "CH9",
           "topic": "Tangent and Angles of a Circle",
@@ -2438,7 +2438,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT13",
+          "questionId": "G10-PRACTICE-037",
           "grade": 10,
           "chapterId": "CH10",
           "topic": "Practical Geometry of Circles",
@@ -2451,7 +2451,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT14",
+          "questionId": "G10-PRACTICE-038",
           "grade": 10,
           "chapterId": "CH11",
           "topic": "Information Handling",
@@ -2464,7 +2464,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT15",
+          "questionId": "G10-PRACTICE-039",
           "grade": 10,
           "chapterId": "CH12",
           "topic": "Probability",
@@ -2477,7 +2477,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT16",
+          "questionId": "G10-PRACTICE-040",
           "grade": 10,
           "chapterId": "CH1",
           "topic": "Complex Numbers",
@@ -2490,7 +2490,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT17",
+          "questionId": "G10-PRACTICE-041",
           "grade": 10,
           "chapterId": "CH2",
           "topic": "Quadratic Equations and Inequalities",
@@ -2503,7 +2503,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-SHORT18",
+          "questionId": "G10-PRACTICE-042",
           "grade": 10,
           "chapterId": "CH3",
           "topic": "Matrices and Determinants",
@@ -2516,7 +2516,7 @@
           "difficulty": "FOUNDATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG19",
+          "questionId": "G10-PRACTICE-043",
           "grade": 10,
           "chapterId": "CH1",
           "topic": "Complex Numbers",
@@ -2529,7 +2529,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG20",
+          "questionId": "G10-PRACTICE-044",
           "grade": 10,
           "chapterId": "CH2",
           "topic": "Quadratic Equations and Inequalities",
@@ -2542,7 +2542,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG21",
+          "questionId": "G10-PRACTICE-045",
           "grade": 10,
           "chapterId": "CH3",
           "topic": "Matrices and Determinants",
@@ -2555,7 +2555,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG22",
+          "questionId": "G10-PRACTICE-046",
           "grade": 10,
           "chapterId": "CH4",
           "topic": "Functions and Graphs",
@@ -2568,7 +2568,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG23",
+          "questionId": "G10-PRACTICE-047",
           "grade": 10,
           "chapterId": "CH5",
           "topic": "Algebraic Fractions",
@@ -2581,7 +2581,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG24",
+          "questionId": "G10-PRACTICE-048",
           "grade": 10,
           "chapterId": "CH7",
           "topic": "Trigonometry",
@@ -2594,7 +2594,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG25",
+          "questionId": "G10-PRACTICE-049",
           "grade": 10,
           "chapterId": "CH6",
           "topic": "Vectors in Plane",
@@ -2607,7 +2607,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG26",
+          "questionId": "G10-PRACTICE-050",
           "grade": 10,
           "chapterId": "CH8",
           "topic": "Chords and Arcs of a Circle",
@@ -2620,7 +2620,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG27",
+          "questionId": "G10-PRACTICE-051",
           "grade": 10,
           "chapterId": "CH10",
           "topic": "Practical Geometry of Circles",
@@ -2633,7 +2633,7 @@
           "difficulty": "APPLICATION"
         },
         {
-          "questionId": "G10-ORIG-2-LONG28",
+          "questionId": "G10-PRACTICE-052",
           "grade": 10,
           "chapterId": "CH9",
           "topic": "Tangent and Angles of a Circle",
