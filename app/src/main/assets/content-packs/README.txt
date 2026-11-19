@@ -17,3 +17,6 @@ IMPORTANT:
 - Never put credentials, private data, or network-dependent assets in these packs.
 
 FBISE Grade 9 Functional Mathematics (2025 curriculum / 2026-27): 34 original practice questions; 75-mark structure of 15 compulsory MCQs, 9 of 14 short questions at 4 marks, and 3 of 5 extended questions at 8 marks. This is Functional Mathematics, not legacy General Mathematics. All imported records remain NEEDS_REVIEW.
+
+
+Grade 10 Punjab Mathematics (2026–27): 52 independently authored practice questions (15 MCQ, 27 short, 10 long) bundled with the updated PECTAA Grade 10 pairing pattern. These are practice questions, not copied textbook exercises. The consolidated research master is stored outside the auto-import content-packs directory.
