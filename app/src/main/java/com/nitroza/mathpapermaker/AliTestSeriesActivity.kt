@@ -1361,7 +1361,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 title = { Text("SET UP YOUR BOARD PAPER") },
                 text = {
                     Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState())) {
-                        Text("Select units / chapters for this paper.")
+                        Text("Choose chapters for your Board paper.")
                         Row {
                             TextButton(onClick = { selectedChapters = (1..if (grade == 9) 13 else 12).map { "CH$it" }.toSet() }) { Text("SELECT ALL") }
                             TextButton(onClick = { selectedChapters = emptySet() }) { Text("CLEAR") }
@@ -1378,7 +1378,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                             Checkbox(checked = includeCurrentQuestions, onCheckedChange = { includeCurrentQuestions = it })
                             Text("Include questions I have already selected as important")
                         }
-                        Text("The app builds the Punjab Board paper structure (15 MCQs, 27 short questions and 5 two-part long questions) using only the chapters you select. Full-syllabus papers also follow the official chapter-wise allocation. Questions are arranged from your selected chapters and saved question bank.", style = MaterialTheme.typography.bodySmall)
                     }
                 },
                 confirmButton = {
@@ -1442,10 +1441,11 @@ class AliTestSeriesActivity : ComponentActivity() {
                             label = { Text("School name (optional)") }, singleLine = true)
                         OutlinedTextField(examTitle, { examTitle = it }, modifier = Modifier.fillMaxWidth(),
                             label = { Text("Paper title") }, singleLine = true)
-                        Text("Edit question text, numbering, marks and order. Arrange the questions and export your paper.", style = MaterialTheme.typography.bodySmall)
-                        Text("CHAPTER SCOPE", style = MaterialTheme.typography.labelLarge)
-                        OutlinedButton(onClick = { showChapterPicker = true }, modifier = Modifier.fillMaxWidth()) {
-                            Text("INCLUDE CHAPTERS: ${selectedChapters.size} / ${if (grade == 9) 13 else 12}")
+                        if (paperMode == "BOARD") {
+                            Text("CHAPTERS", style = MaterialTheme.typography.labelLarge)
+                            OutlinedButton(onClick = { showChapterPicker = true }, modifier = Modifier.fillMaxWidth()) {
+                                Text("INCLUDE CHAPTERS: ${selectedChapters.size} / ${if (grade == 9) 13 else 12}")
+                            }
                         }
                         if (!allChaptersSelected && paperMode == "BOARD") {
                             Text("Selected-unit Board paper: the same 15 MCQs, 27 short questions and 10 long-question parts are drawn only from your chosen chapters. Full-syllabus selection uses the official chapter-wise allocation.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
@@ -1461,8 +1461,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 Text("• " + error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                             }
                         } else {
-                            Text("Custom paper · no fixed question-count or board-distribution restriction. Edit question numbers, sections, types and marks below.", style = MaterialTheme.typography.bodySmall)
-                            Text("Total marks: " + paperQuestions.sumOf { it.marks }, style = MaterialTheme.typography.labelMedium)
+                                Text("Total marks: " + paperQuestions.sumOf { it.marks }, style = MaterialTheme.typography.labelMedium)
                         }
                         if (!questionsInChapterScope) {
                             Text("Some selected questions are outside the included chapters. Change their chapter or update the chapter scope before export.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
@@ -1474,8 +1473,6 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
-                        Text("Offered marks: ${selected.sumOf { it.marks }} / ${PunjabBoardPattern.TOTAL_OFFERED_MARKS} · Board attempted marks: ${PunjabBoardPattern.TOTAL_ATTEMPTED_MARKS}",
-                            style = MaterialTheme.typography.labelSmall)
                         LazyColumn(Modifier.weight(1f, fill = false), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             itemsIndexed(selected, key = { _, item -> item.id }) { index, item ->
                                 Card {
