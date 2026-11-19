@@ -84,7 +84,7 @@ class PunjabGrade10OfficialPatternTest {
     @Test fun bundledQuestionBankParsesAlongsideOfficialPattern() {
         val parsed = PackageImporter.parse(pack().toString())
         assertEquals(52, parsed.questions.size)
-        assertEquals(52, parsed.questions.map { it.id }.toSet().size)
+        assertEquals(52, parsed.questions.map { it.questionId }.toSet().size)
         assertEquals(15, parsed.questions.count { it.questionType == "MCQ" })
         assertEquals(27, parsed.questions.count { it.questionType == "SHORT" })
         assertEquals(10, parsed.questions.count { it.questionType == "LONG" })
