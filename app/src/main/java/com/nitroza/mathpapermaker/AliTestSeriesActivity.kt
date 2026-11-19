@@ -1268,8 +1268,7 @@ class AliTestSeriesActivity : ComponentActivity() {
             val maxForKind = when (detectedQuestionKind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
             val alreadySelected = selected.count { it.kind == detectedQuestionKind }
             val allChaptersSelected = selectedChapters.size == (if (grade == 9) 13 else 12)
-            val chapterReady = if (allChaptersSelected && paperMode == "CUSTOM") true
-                else PunjabBoardPattern.isValidChapter(grade, detectedQuestionChapter) && detectedQuestionChapter in selectedChapters
+            val chapterReady = paperMode == "CUSTOM" || (PunjabBoardPattern.isValidChapter(grade, detectedQuestionChapter) && detectedQuestionChapter in selectedChapters)
             val canAddChecked = checkedDetectedQuestions.isNotEmpty() && chapterReady &&
                 (paperMode == "CUSTOM" || alreadySelected + checkedDetectedQuestions.size <= maxForKind)
             AlertDialog(
@@ -1298,7 +1297,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         detectedChapterMenuExpanded = false
                                     })
                                 }
-                                if (paperMode == "CUSTOM" && selectedChapters.size == (if (grade == 9) 13 else 12)) {
+                                if (paperMode == "CUSTOM") {
                                     DropdownMenuItem(text = { Text("No chapter (Custom only)") }, onClick = {
                                         detectedQuestionChapter = ""
                                         detectedChapterMenuExpanded = false
@@ -1483,7 +1482,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 item.imageFile != null && !File(item.imageFile).isFile
             }
             val allChaptersSelected = selectedChapters.size == (if (grade == 9) 13 else 12)
-            val questionsInChapterScope = allChaptersSelected || selected.all { it.chapterId in selectedChapters }
+            val questionsInChapterScope = paperMode == "CUSTOM" || allChaptersSelected || selected.all { it.chapterId in selectedChapters }
             val boardReady = paperMode != "BOARD" || (allChaptersSelected && PunjabBoardPattern.isComplete(grade, paperQuestions))
             AlertDialog(
                 onDismissRequest = { showQuestions = false },
@@ -1757,7 +1756,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                         manualChapterMenuExpanded = false
                                     })
                                 }
-                                if (paperMode == "CUSTOM" && selectedChapters.size == (if (grade == 9) 13 else 12)) {
+                                if (paperMode == "CUSTOM") {
                                     DropdownMenuItem(text = { Text("No chapter (Custom only)") }, onClick = {
                                         manualQuestionChapter = ""
                                         manualChapterMenuExpanded = false
@@ -1770,8 +1769,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 confirmButton = {
                     val manualMarks = manualQuestionMarks.toIntOrNull()
                     val manualAllChaptersSelected = selectedChapters.size == (if (grade == 9) 13 else 12)
-                    val manualChapterInScope = (paperMode == "CUSTOM" && manualAllChaptersSelected) ||
-                        (manualQuestionChapter in selectedChapters && PunjabBoardPattern.isValidChapter(grade, manualQuestionChapter))
+                    val manualChapterInScope = paperMode == "CUSTOM" || (manualQuestionChapter in selectedChapters && PunjabBoardPattern.isValidChapter(grade, manualQuestionChapter))
                     val boardManualMarksValid = paperMode == "CUSTOM" || (
                         manualMarks == when (manualQuestionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 } &&
                             PunjabBoardPattern.isValidChapter(grade, manualQuestionChapter)
