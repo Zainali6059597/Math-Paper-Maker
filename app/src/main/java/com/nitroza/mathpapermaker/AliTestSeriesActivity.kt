@@ -1612,32 +1612,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         TextButton(onClick = { showClearConfirm = true }) { Text("NEW PAPER") }
                         TextButton(onClick = { showQuestions = false }) { Text("DONE") }
                         Button(enabled = boardReady && questionsInChapterScope && missingImageCount == 0 && selected.isNotEmpty(),
-                            onClick = { showManualAddPrompt = true }) { Text("EXPORT EDITABLE DOCX") }
-                    }
-                }
-            )
-        }
-
-        if (showManualAddPrompt) {
-            AlertDialog(
-                onDismissRequest = { showManualAddPrompt = false },
-                title = { Text("ADD A QUESTION MANUALLY?") },
-                text = { Text("If a question was missed during selection, you can add it now using the Maths Question Editor before creating the Word file.") },
-                confirmButton = {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        TextButton(onClick = {
-                            showManualAddPrompt = false
-                            exportWord.launch("Ali-Test-Series-Class-$grade.docx")
-                        }) { Text("NO, EXPORT") }
-                        Button(onClick = {
-                            manualQuestionText = TextFieldValue("")
-                            manualQuestionKind = "SHORT"
-                            manualQuestionMarks = "2"
-                            manualQuestionNumber = suggestedNumber("SHORT", selected)
-                            manualQuestionChapter = ""
-                            showManualAddPrompt = false
-                            showManualQuestionEditor = true
-                        }) { Text("YES, ADD QUESTION") }
+                            onClick = { exportWord.launch("Ali-Test-Series-Class-$grade.docx") }) { Text("EXPORT EDITABLE DOCX") }
                     }
                 }
             )
