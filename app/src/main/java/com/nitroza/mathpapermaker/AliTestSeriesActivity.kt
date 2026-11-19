@@ -857,12 +857,12 @@ class AliTestSeriesActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.End
                     ) {
                         if (cropSelectionMode) {
-                            TextButton(onClick = { cropSelectionMode = false }) { Text("DONE SELECTING") }
+                            TextButton(onClick = { cropSelectionMode = false }) { Text("DONE") }
                         } else {
                             TextButton(
                                 enabled = pageBitmap != null,
                                 onClick = { cropRect = null; cropSelectionMode = true }
-                            ) { Text("START CROP SELECTION") }
+                            ) { Text("SELECT QUESTION AREA") }
                         }
                     }
                     Box(
@@ -1058,7 +1058,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                 CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
                                 Spacer(Modifier.width(6.dp))
                                 Text("EXTRACTING…")
-                            } else Text("ADD SELECTED TEXT")
+                            } else Text("EXTRACT BOX TEXT")
                         }
                     }
                     OutlinedButton(
@@ -1205,15 +1205,19 @@ class AliTestSeriesActivity : ComponentActivity() {
                     val requiredMarks = when (questionKind) { "MCQ" -> 1; "SHORT" -> 2; else -> 4 }
                     val normalizedNumber = questionNumber.trim()
                     val duplicateNumber = selected.any { it.number.equals(normalizedNumber, ignoreCase = true) }
-                    val atKindLimit = selected.count { it.kind == questionKind } >= when (questionKind) {
+                    val atKindLimit = paperMode == "BOARD" && selected.count { it.kind == questionKind } >= when (questionKind) {
                         "MCQ" -> 15
                         "SHORT" -> 27
                         else -> 10
                     }
+                    val chapterValid = paperMode == "CUSTOM" ||
+                        (PunjabBoardPattern.isValidChapter(grade, questionChapter) && questionChapter in selectedChapters)
+                    val marksValid = questionMarks.toIntOrNull()?.let { marks ->
+                        if (paperMode == "BOARD") marks == requiredMarks else marks in 1..100
+                    } ?: false
                     TextButton(enabled = (selectedQuestionText(questionText).isNotBlank() || pendingImageFile != null) &&
                         normalizedNumber.isNotBlank() && !duplicateNumber &&
-                        PunjabBoardPattern.isValidChapter(grade, questionChapter) && questionChapter in selectedChapters &&
-                        questionMarks.toIntOrNull() == requiredMarks && !atKindLimit, onClick = {
+                        chapterValid && marksValid && !atKindLimit, onClick = {
                         val confirmedText = selectedQuestionText(questionText)
                         val confirmedImage = pendingImageFile
                         val confirmedNumber = questionNumber.trim()
@@ -1229,7 +1233,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                         showQuestionEditor = false
                         pendingImageFile = null
                         cropRect = null
-                        notice = "Question added. Saving your teacher-confirmed question to the offline textbook bank..."
+                        notice = "Question added to your paper."
                         lifecycleScope.launch {
                             val saved = withContext(Dispatchers.IO) {
                                 runCatching {
@@ -1246,8 +1250,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                             }
                             notice = saved.fold(
                                 onSuccess = { inserted ->
-                                    if (inserted) "Question added and saved to the offline textbook bank."
-                                    else "Question added. It was already present in the offline textbook bank."
+                                    if (inserted) "Question added and saved for reuse."
+                                    else "Question added. It was already saved for reuse."
                                 },
                                 onFailure = { error ->
                                     "Question added to this paper, but bank saving failed: " + (error.message ?: "unknown error")
