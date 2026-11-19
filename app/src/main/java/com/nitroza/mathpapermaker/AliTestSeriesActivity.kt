@@ -1061,6 +1061,61 @@ class AliTestSeriesActivity : ComponentActivity() {
                             } else Text("EXTRACT BOX TEXT")
                         }
                     }
+                    OutlinedButton(
+                        enabled = cropRect != null && pageBitmap != null,
+                        onClick = {
+                            val rect = cropRect ?: return@OutlinedButton
+                            val source = pageBitmap ?: return@OutlinedButton
+                            val sourcePage = pageIndex + 1
+                            val left = (rect.left * source.width).toInt().coerceIn(0, source.width - 1)
+                            val top = (rect.top * source.height).toInt().coerceIn(0, source.height - 1)
+                            val right = (rect.right * source.width).toInt().coerceIn(left + 1, source.width)
+                            val bottom = (rect.bottom * source.height).toInt().coerceIn(top + 1, source.height)
+                            if (right - left < 8 || bottom - top < 8) {
+                                notice = "The crop is too small. Draw a larger box around the complete question."
+                            } else {
+                                val cropBitmap = Bitmap.createBitmap(source, left, top, right - left, bottom - top)
+                                lifecycleScope.launch {
+                                    val savedCrop = withContext(Dispatchers.IO) {
+                                        runCatchingCancellable {
+                                            val directory = File(filesDir, "question_images").apply { mkdirs() }
+                                            val target = File(directory, "ali_question_${System.currentTimeMillis()}_${nextId}.png")
+                                            try {
+                                                FileOutputStream(target).use { output ->
+                                                    check(cropBitmap.compress(Bitmap.CompressFormat.PNG, 100, output)) {
+                                                        "The scanned crop could not be encoded."
+                                                    }
+                                                }
+                                                require(target.isFile && target.length() > 0L) {
+                                                    "The scanned crop file is empty."
+                                                }
+                                                target.absolutePath
+                                            } catch (error: Throwable) {
+                                                target.delete()
+                                                throw error
+                                            } finally {
+                                                cropBitmap.recycle()
+                                            }
+                                        }
+                                    }
+                                    savedCrop.onSuccess { imagePath ->
+                                        questionText = TextFieldValue("")
+                                        pendingImageFile = imagePath
+                                        questionNumber = suggestedNumber(questionKind, selected)
+                                        questionSection = questionNumber.substringBefore("(")
+                                        questionChapter = chapterForPage(sourcePage).orEmpty()
+                                        cropSelectionMode = false
+                                        showQuestionEditor = true
+                                        notice = "Scanned crop saved locally. Assign its chapter and question details, then add it."
+                                    }.onFailure { error ->
+                                        if (!cropBitmap.isRecycled) cropBitmap.recycle()
+                                        notice = "Could not save scanned crop: ${error.message ?: "unknown error"}"
+                                    }
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text("ADD SCANNED IMAGE CROP") }
                     OutlinedButton(onClick = { findQuestionsOnCurrentPage() }, modifier = Modifier.fillMaxWidth()) {
                         Text("FIND NUMBERED QUESTIONS ON PAGE")
                     }
