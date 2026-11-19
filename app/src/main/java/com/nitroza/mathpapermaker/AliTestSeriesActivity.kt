@@ -1036,7 +1036,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                     extraction.onSuccess { text ->
                                         val cleaned = removePctbWatermarkLines(text)
                                         if (cleaned.isBlank()) {
-                                            notice = "No selectable text was found in this area. It may be a scanned/image-only page; use OCR SCANNED PAGE or ADD SCANNED IMAGE CROP."
+                                            notice = "No selectable text was found in this area. It may be a scanned/image-only page; use OCR SCANNED PAGE to convert it into editable text."
                                         } else {
                                             questionText = TextFieldValue(cleaned, androidx.compose.ui.text.TextRange(0, cleaned.length))
                                             pendingImageFile = null
@@ -1150,7 +1150,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 text = {
                     Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            if (pendingImageFile == null) "Long-press and drag the selection handles over the exact question. Only highlighted text is added; the whole PDF page is never added by default."
+                            if (pendingImageFile == null) "Select the exact question text. If text selection is difficult, edit this box so it contains only the question; without an active selection, the full text in this box is added."
                             else "The selected page area will be embedded as an image in the Word document.",
                             style = MaterialTheme.typography.bodySmall
                         )
@@ -1218,7 +1218,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     TextButton(enabled = (selectedQuestionText(questionText).isNotBlank() || pendingImageFile != null) &&
                         normalizedNumber.isNotBlank() && !duplicateNumber &&
                         chapterValid && marksValid && !atKindLimit, onClick = {
-                        val confirmedText = selectedQuestionText(questionText)
+                        val confirmedText = selectedQuestionText(questionText).ifBlank { questionText.text.trim() }
                         val confirmedImage = pendingImageFile
                         val confirmedNumber = questionNumber.trim()
                         val confirmedType = questionKind
