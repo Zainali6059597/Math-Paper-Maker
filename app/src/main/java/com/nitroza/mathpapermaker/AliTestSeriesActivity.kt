@@ -1760,7 +1760,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                 title = { Text("OFFLINE TEXTBOOK BANK · ${savedBankQuestions.size}") },
                 text = {
                     if (savedBankQuestions.isEmpty()) {
-                        Text("No approved questions are saved for this textbook yet.")
+                        Text("No questions have been saved for this textbook yet.")
                     } else {
                         LazyColumn(
                             Modifier.heightIn(max = 520.dp),
