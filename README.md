@@ -14,6 +14,7 @@ Ali Test Series lets a teacher manually select questions from a local Mathematic
 - Review, reorder and remove selected questions.
 - Automatically save the working paper locally and restore it on the next launch.
 - Validate Punjab Board 2026–27 counts, marks, chapter distribution, section membership and long-question pairings.
+- Use the bundled offline question bank: 47 Grade 9 questions and 52 original Grade 10 practice questions (15 MCQs, 27 short, 10 long), with answers.
 - Export DOCX with editable extracted text and embedded PNGs for scanned questions.
 - No account, cloud backend or INTERNET permission.
 
@@ -33,9 +34,9 @@ Manual question selection only. No AI question generation, automatic question se
 
 ## Current verification
 
-The test-only GitHub Actions run for source commit `e3ff9412d4c65aa38d7abcb252cf64e353159113` passed. The current verified suite contains 102 unit tests, and the offline manifest check passed. Documentation updates are also being checked by CI.
+GitHub Actions run [#328](https://github.com/Zainali6059597/Math-Paper-Maker/actions/runs/44465311346) for commit `72dad0c9073746342b9fd6f4c01c0d03e84e65f9` passed: **145 unit tests, offline-only manifest verification, and debug APK assembly**. The APK artifact was uploaded successfully (APK size: 63,994,540 bytes).
 
-This does not claim physical-device acceptance or visual verification of DOCX files in Microsoft Word. Those checks require an Android phone and an office app.
+This verifies compilation and automated tests, not physical-device acceptance. PDF rendering/cropping, large-file memory use, draft restoration, airplane-mode behaviour and DOCX visual layout still need hands-on testing on an Android phone and an office app.
 
 ## Build the debug APK
 
