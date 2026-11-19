@@ -10,6 +10,9 @@ This catalogue records the upstream documents used by the offline paper generato
   https://pectaa.edu.pk/wp-content/uploads/2026/11/ALP-9-Notification-06.11.2026-F_Redacted.pdf
 - Grade 10 ALP / deleted topics / pairing schemes / model papers, session 2026–27, BISE Annual Examination 2027:
   https://pectaa.edu.pk/wp-content/uploads/2026/11/ALPs-Notification-14.11.2026-1257.pdf
+- Additional revised Grade 9 Mathematics ALP/model-paper PDF published 14 November 2026 (Notification 1253):
+  https://pectaa.edu.pk/wp-content/uploads/2026/11/ALPs-Notification-14.11.2026-1253-F1.pdf
+  The PDF includes a revised Grade 9 Mathematics deleted-content table, paper instructions and model-paper questions. Its opening notification describes the implementation scope as Matric-Tech Grade 9, so do not silently replace the general Grade 9 pattern pack with it until the intended stream/scope is confirmed.
 - Official Model Papers page: https://pectaa.edu.pk/model-papers/
 - PECTAA Item Bank System overview (describes MCQ, short and constructed-response item development and review): https://pectaa.edu.pk/item-bank-system/
 
@@ -74,4 +77,4 @@ The current Grade 10 Mathematics pairing-scheme PDF is the separate 14 November 
 - [ ] Bundle licensed PDFs and generate the matching book manifest.
 - [ ] Run extraction/OCR quality checks on every bundled book and retain page provenance.
 
-Last checked: 2026-11-16.
+Last checked: 2026-11-19.
