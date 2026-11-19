@@ -1160,7 +1160,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                     val marksValid = questionMarks.toIntOrNull()?.let { marks ->
                         if (paperMode == "BOARD") marks == requiredMarks else marks in 1..100
                     } ?: false
-                    TextButton(enabled = (selectedQuestionText(questionText).isNotBlank() || pendingImageFile != null) &&
+                    TextButton(enabled = (questionText.text.isNotBlank() || pendingImageFile != null) &&
                         normalizedNumber.isNotBlank() && !duplicateNumber &&
                         chapterValid && marksValid && !atKindLimit, onClick = {
                         val confirmedText = selectedQuestionText(questionText).ifBlank { questionText.text.trim() }
