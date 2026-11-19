@@ -1140,8 +1140,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         val kindLimit = when (questionKind) { "MCQ" -> 15; "SHORT" -> 27; else -> 10 }
                         val kindCount = selected.count { it.kind == questionKind }
                         Text(
-                            "$questionKind questions selected: $kindCount / $kindLimit",
-                            color = if (kindCount >= kindLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
+                            if (paperMode == "BOARD") "$questionKind questions selected: $kindCount / $kindLimit" else "Custom paper · no fixed question limit",
+                            color = if (paperMode == "BOARD" && kindCount >= kindLimit) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
