@@ -1277,7 +1277,7 @@ class AliTestSeriesActivity : ComponentActivity() {
                                                 modifier = Modifier.fillMaxWidth(),
                                                 minLines = 2,
                                                 maxLines = 5,
-                                                label = { Text("Review / correct question text") }
+                                                label = { Text("Question text") }
                                             )
                                         }
                                     }
