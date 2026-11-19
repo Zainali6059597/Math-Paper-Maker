@@ -540,7 +540,7 @@
   },
   "questions": [
     {
-      "questionId": "G10-ORIG-1-MCQ01",
+      "questionId": "G10-PRACTICE-001",
       "chapterId": "CH1",
       "topic": "Complex Numbers",
       "sloId": "",
@@ -556,7 +556,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-1-SHORT01",
+      "questionId": "G10-PRACTICE-002",
       "chapterId": "CH1",
       "topic": "Complex Numbers",
       "sloId": "",
@@ -572,7 +572,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-MCQ01",
+      "questionId": "G10-PRACTICE-003",
       "chapterId": "CH2",
       "topic": "Quadratic Equations and Inequalities",
       "sloId": "",
@@ -588,7 +588,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT01",
+      "questionId": "G10-PRACTICE-004",
       "chapterId": "CH2",
       "topic": "Quadratic Equations and Inequalities",
       "sloId": "",
@@ -604,7 +604,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-3-MCQ01",
+      "questionId": "G10-PRACTICE-005",
       "chapterId": "CH3",
       "topic": "Matrices and Determinants",
       "sloId": "",
@@ -620,7 +620,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-3-SHORT01",
+      "questionId": "G10-PRACTICE-006",
       "chapterId": "CH3",
       "topic": "Matrices and Determinants",
       "sloId": "",
@@ -636,7 +636,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-4-MCQ01",
+      "questionId": "G10-PRACTICE-007",
       "chapterId": "CH4",
       "topic": "Functions and Graphs",
       "sloId": "",
@@ -652,7 +652,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-4-SHORT01",
+      "questionId": "G10-PRACTICE-008",
       "chapterId": "CH4",
       "topic": "Functions and Graphs",
       "sloId": "",
@@ -668,7 +668,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-5-MCQ01",
+      "questionId": "G10-PRACTICE-009",
       "chapterId": "CH5",
       "topic": "Algebraic Fractions",
       "sloId": "",
@@ -684,7 +684,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-5-SHORT01",
+      "questionId": "G10-PRACTICE-010",
       "chapterId": "CH5",
       "topic": "Algebraic Fractions",
       "sloId": "",
@@ -700,7 +700,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-6-MCQ01",
+      "questionId": "G10-PRACTICE-011",
       "chapterId": "CH6",
       "topic": "Vectors in Plane",
       "sloId": "",
@@ -716,7 +716,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-6-SHORT01",
+      "questionId": "G10-PRACTICE-012",
       "chapterId": "CH6",
       "topic": "Vectors in Plane",
       "sloId": "",
@@ -732,7 +732,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-7-MCQ01",
+      "questionId": "G10-PRACTICE-013",
       "chapterId": "CH7",
       "topic": "Trigonometry",
       "sloId": "",
@@ -748,7 +748,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-7-SHORT01",
+      "questionId": "G10-PRACTICE-014",
       "chapterId": "CH7",
       "topic": "Trigonometry",
       "sloId": "",
@@ -764,7 +764,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-8-MCQ01",
+      "questionId": "G10-PRACTICE-015",
       "chapterId": "CH8",
       "topic": "Chords and Arcs of a Circle",
       "sloId": "",
@@ -780,7 +780,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-8-SHORT01",
+      "questionId": "G10-PRACTICE-016",
       "chapterId": "CH8",
       "topic": "Chords and Arcs of a Circle",
       "sloId": "",
@@ -796,7 +796,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-9-MCQ01",
+      "questionId": "G10-PRACTICE-017",
       "chapterId": "CH9",
       "topic": "Tangent and Angles of a Circle",
       "sloId": "",
@@ -812,7 +812,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-9-SHORT01",
+      "questionId": "G10-PRACTICE-018",
       "chapterId": "CH9",
       "topic": "Tangent and Angles of a Circle",
       "sloId": "",
@@ -828,7 +828,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-10-MCQ01",
+      "questionId": "G10-PRACTICE-019",
       "chapterId": "CH10",
       "topic": "Practical Geometry of Circles",
       "sloId": "",
@@ -844,7 +844,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-10-SHORT01",
+      "questionId": "G10-PRACTICE-020",
       "chapterId": "CH10",
       "topic": "Practical Geometry of Circles",
       "sloId": "",
@@ -860,7 +860,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-11-MCQ01",
+      "questionId": "G10-PRACTICE-021",
       "chapterId": "CH11",
       "topic": "Information Handling",
       "sloId": "",
@@ -876,7 +876,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-11-SHORT01",
+      "questionId": "G10-PRACTICE-022",
       "chapterId": "CH11",
       "topic": "Information Handling",
       "sloId": "",
@@ -892,7 +892,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-12-MCQ01",
+      "questionId": "G10-PRACTICE-023",
       "chapterId": "CH12",
       "topic": "Probability",
       "sloId": "",
@@ -908,7 +908,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-12-SHORT01",
+      "questionId": "G10-PRACTICE-024",
       "chapterId": "CH12",
       "topic": "Probability",
       "sloId": "",
@@ -924,7 +924,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-MCQ01",
+      "questionId": "G10-PRACTICE-025",
       "chapterId": "CH9",
       "topic": "Tangent and Angles of a Circle",
       "sloId": "",
@@ -940,7 +940,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-MCQ02",
+      "questionId": "G10-PRACTICE-026",
       "chapterId": "CH11",
       "topic": "Information Handling",
       "sloId": "",
@@ -956,7 +956,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-MCQ03",
+      "questionId": "G10-PRACTICE-027",
       "chapterId": "CH12",
       "topic": "Probability",
       "sloId": "",
@@ -972,7 +972,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT04",
+      "questionId": "G10-PRACTICE-028",
       "chapterId": "CH1",
       "topic": "Complex Numbers",
       "sloId": "",
@@ -988,7 +988,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT05",
+      "questionId": "G10-PRACTICE-029",
       "chapterId": "CH2",
       "topic": "Quadratic Equations and Inequalities",
       "sloId": "",
@@ -1004,7 +1004,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT06",
+      "questionId": "G10-PRACTICE-030",
       "chapterId": "CH3",
       "topic": "Matrices and Determinants",
       "sloId": "",
@@ -1020,7 +1020,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT07",
+      "questionId": "G10-PRACTICE-031",
       "chapterId": "CH4",
       "topic": "Functions and Graphs",
       "sloId": "",
@@ -1036,7 +1036,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT08",
+      "questionId": "G10-PRACTICE-032",
       "chapterId": "CH5",
       "topic": "Algebraic Fractions",
       "sloId": "",
@@ -1052,7 +1052,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT09",
+      "questionId": "G10-PRACTICE-033",
       "chapterId": "CH6",
       "topic": "Vectors in Plane",
       "sloId": "",
@@ -1068,7 +1068,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT10",
+      "questionId": "G10-PRACTICE-034",
       "chapterId": "CH7",
       "topic": "Trigonometry",
       "sloId": "",
@@ -1084,7 +1084,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT11",
+      "questionId": "G10-PRACTICE-035",
       "chapterId": "CH8",
       "topic": "Chords and Arcs of a Circle",
       "sloId": "",
@@ -1100,7 +1100,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT12",
+      "questionId": "G10-PRACTICE-036",
       "chapterId": "CH9",
       "topic": "Tangent and Angles of a Circle",
       "sloId": "",
@@ -1116,7 +1116,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT13",
+      "questionId": "G10-PRACTICE-037",
       "chapterId": "CH10",
       "topic": "Practical Geometry of Circles",
       "sloId": "",
@@ -1132,7 +1132,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT14",
+      "questionId": "G10-PRACTICE-038",
       "chapterId": "CH11",
       "topic": "Information Handling",
       "sloId": "",
@@ -1148,7 +1148,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT15",
+      "questionId": "G10-PRACTICE-039",
       "chapterId": "CH12",
       "topic": "Probability",
       "sloId": "",
@@ -1164,7 +1164,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT16",
+      "questionId": "G10-PRACTICE-040",
       "chapterId": "CH1",
       "topic": "Complex Numbers",
       "sloId": "",
@@ -1180,7 +1180,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT17",
+      "questionId": "G10-PRACTICE-041",
       "chapterId": "CH2",
       "topic": "Quadratic Equations and Inequalities",
       "sloId": "",
@@ -1196,7 +1196,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-SHORT18",
+      "questionId": "G10-PRACTICE-042",
       "chapterId": "CH3",
       "topic": "Matrices and Determinants",
       "sloId": "",
@@ -1212,7 +1212,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG19",
+      "questionId": "G10-PRACTICE-043",
       "chapterId": "CH1",
       "topic": "Complex Numbers",
       "sloId": "",
@@ -1228,7 +1228,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG20",
+      "questionId": "G10-PRACTICE-044",
       "chapterId": "CH2",
       "topic": "Quadratic Equations and Inequalities",
       "sloId": "",
@@ -1244,7 +1244,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG21",
+      "questionId": "G10-PRACTICE-045",
       "chapterId": "CH3",
       "topic": "Matrices and Determinants",
       "sloId": "",
@@ -1260,7 +1260,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG22",
+      "questionId": "G10-PRACTICE-046",
       "chapterId": "CH4",
       "topic": "Functions and Graphs",
       "sloId": "",
@@ -1276,7 +1276,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG23",
+      "questionId": "G10-PRACTICE-047",
       "chapterId": "CH5",
       "topic": "Algebraic Fractions",
       "sloId": "",
@@ -1292,7 +1292,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG24",
+      "questionId": "G10-PRACTICE-048",
       "chapterId": "CH7",
       "topic": "Trigonometry",
       "sloId": "",
@@ -1308,7 +1308,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG25",
+      "questionId": "G10-PRACTICE-049",
       "chapterId": "CH6",
       "topic": "Vectors in Plane",
       "sloId": "",
@@ -1324,7 +1324,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG26",
+      "questionId": "G10-PRACTICE-050",
       "chapterId": "CH8",
       "topic": "Chords and Arcs of a Circle",
       "sloId": "",
@@ -1340,7 +1340,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG27",
+      "questionId": "G10-PRACTICE-051",
       "chapterId": "CH10",
       "topic": "Practical Geometry of Circles",
       "sloId": "",
@@ -1356,7 +1356,7 @@
       "selectionWeight": 1
     },
     {
-      "questionId": "G10-ORIG-2-LONG28",
+      "questionId": "G10-PRACTICE-052",
       "chapterId": "CH9",
       "topic": "Tangent and Angles of a Circle",
       "sloId": "",
