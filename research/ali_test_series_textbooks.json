@@ -2613,7 +2613,7 @@
           "topic": "Chords and Arcs of a Circle",
           "questionType": "LONG",
           "marks": 4,
-          "questionText": "A chord AB subtends an angle of 70° at a point C on the major arc. Find the angle subtended by AB at a point D on the opposite arc in the same segment, and state the theorem used.",
+          "questionText": "A chord AB subtends an angle of 70° at a point C on the major arc AB. If D is another point on the major arc AB, find ∠ADB and state the theorem used.",
           "answerText": "Angles in the same segment are equal. Therefore ∠ADB = ∠ACB = 70°.",
           "sourceType": "ORIGINAL_AUTHORED",
           "copyrightStatus": "ORIGINAL",
