@@ -408,7 +408,8 @@ class AliTestSeriesActivity : ComponentActivity() {
                         pdfIsPersistent = true
                         savedBookPath = file.absolutePath
                         pageBitmap = null
-                        pdfName = uri.lastPathSegment?.substringAfterLast('/') ?: "Mathematics.pdf"
+                        // Use the stable local library filename as the book-bank key. URI path segments are often opaque IDs and change when the same PDF is re-imported.
+                        pdfName = file.name
                         useManifestChapters = false
                         pageCount = count
                         pageIndex = 0
