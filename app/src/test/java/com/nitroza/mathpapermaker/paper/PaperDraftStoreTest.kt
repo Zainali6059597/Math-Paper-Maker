@@ -152,9 +152,24 @@ class PaperDraftStoreTest {
     }
 
 
-    @Test fun tooManyQuestionsAreRejected() {
-        val questions = Array(53) { index -> question(id = index + 1L) }
-        assertNull(PaperDraftStore.parseSnapshot(draft(*questions), filesDir))
+    @Test fun customDraftCanRestoreMoreThanFiftyTwoQuestions() {
+        val questions = Array(53) { index ->
+            question(id = index + 1L).put("number", "Custom-" + (index + 1))
+        }
+        val restored = PaperDraftStore.parseSnapshot(
+            draft(*questions, paperMode = "CUSTOM"), filesDir
+        )
+        assertNotNull(restored)
+        assertEquals(53, restored!!.questions.size)
+    }
+
+    @Test fun draftSafetyCeilingStillRejectsMoreThanFiveHundredQuestions() {
+        val questions = Array(501) { index ->
+            question(id = index + 1L).put("number", "Custom-" + (index + 1))
+        }
+        assertNull(PaperDraftStore.parseSnapshot(
+            draft(*questions, paperMode = "CUSTOM"), filesDir
+        ))
     }
 
     @Test fun controlCharactersInCustomSectionAreRejected() {
