@@ -65,7 +65,16 @@ jobs:
           gradle --version
           sdkmanager --list_installed
 
-      # 7. Ensure the app remains offline-only
+      # 7. Guard the fully-qualified Android application identity against package typos.
+      - name: Verify Android package identity
+        shell: bash
+        run: |
+          set -e
+          grep -Fq 'namespace = "com.nitroza.mathpapermaker"' app/build.gradle.kts
+          grep -Fq 'applicationId = "com.nitroza.mathpapermaker"' app/build.gradle.kts
+          echo "Android namespace and applicationId match: com.nitroza.mathpapermaker"
+
+      # 8. Ensure the app remains offline-only
       - name: Verify offline-only manifest
         shell: bash
         run: |
@@ -75,7 +84,7 @@ jobs:
           fi
           echo "Offline-only manifest verified."
 
-      # 8. Run unit tests
+      # 9. Run unit tests
       - name: Run unit tests
         run: gradle --no-daemon --stacktrace testDebugUnitTest
 
