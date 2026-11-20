@@ -30,7 +30,9 @@ data class PaperDraftSnapshot(
 object PaperDraftStore {
     private const val PREFS = "ali_test_series_draft"
     private const val KEY_DRAFT = "current"
-    private const val MAX_QUESTIONS = 52
+    // Board papers contain 52 slots, but Custom mode is intentionally unrestricted.
+    // Keep a generous safety ceiling so larger teacher-made papers still autosave.
+    private const val MAX_QUESTIONS = 500
     private const val MAX_DRAFT_CHARS = 2_000_000
     private const val MAX_QUESTION_TEXT_CHARS = 100_000
 
