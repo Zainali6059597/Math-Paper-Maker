@@ -13,8 +13,8 @@ android {
         applicationId = "com.nitroza.mathpapermaker"
         minSdk = 23
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.4-dev"
+        versionCode = 5
+        versionName = "1.0.5-dev"
     }
     buildFeatures { compose = true }
     compileOptions {
