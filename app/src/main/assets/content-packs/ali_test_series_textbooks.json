@@ -4246,9 +4246,9 @@
     }
   },
   "totals": {
-    "grade9Questions": 47,
-    "grade10Questions": 24,
-    "totalQuestions": 71,
+    "grade9Questions": 95,
+    "grade10Questions": 112,
+    "totalQuestions": 207,
     "questions": 207
   },
   "updatedAt": "2026-11-21"
