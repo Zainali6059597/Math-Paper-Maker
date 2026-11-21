@@ -574,7 +574,7 @@
           }
         ]
       },
-      "questionCount": 94,
+      "questionCount": 95,
       "questions": [
         {
           "questionId": "PUNJAB-G9-Q-MCQ01-V2",
@@ -2171,6 +2171,23 @@
           "summative": true,
           "copyrightStatus": "ORIGINAL",
           "semanticFingerprint": "punjab-g9-q-long047-v3-a-a-fair-die-is-rolled-find-the-probability-of-getting-a-prime-number-b-a-bag-contains-5-white-and-3-black-balls-find-p-",
+          "grade": 9,
+          "sourceType": "ORIGINAL_AUTHORED"
+        },
+        {
+          "questionId": "PUNJAB-G9-Q-LONG048-V3",
+          "chapterId": "CH11",
+          "topic": "Geometrical Constructions and Loci",
+          "sloId": "",
+          "cognitiveLevel": "ANALYSIS",
+          "difficulty": "CHALLENGING",
+          "questionType": "LONG",
+          "marks": 8,
+          "questionText": "(a) Describe the compass-and-ruler construction of the perpendicular bisector of AB=8 cm. (b) State the locus of points equidistant from A and B.",
+          "answerText": "(a) Draw AB=8 cm. With radius greater than 4 cm, draw arcs above and below AB from A. With the same radius, draw arcs from B to intersect them at P and Q. Join P and Q; it is the perpendicular bisector of AB. (b) The locus of all points equidistant from A and B is the perpendicular bisector of AB.",
+          "summative": true,
+          "copyrightStatus": "ORIGINAL",
+          "semanticFingerprint": "punjab-g9-q-long048-v3-perpendicular-bisector-construction-and-locus",
           "grade": 9,
           "sourceType": "ORIGINAL_AUTHORED"
         }
@@ -4232,7 +4249,7 @@
     "grade9Questions": 47,
     "grade10Questions": 24,
     "totalQuestions": 71,
-    "questions": 206
+    "questions": 207
   },
   "updatedAt": "2026-11-21"
 }
