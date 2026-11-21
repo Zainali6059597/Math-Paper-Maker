@@ -16,7 +16,7 @@ class CuratedQuestionBankAssetTest {
         val root = JSONObject(file.readText(Charsets.UTF_8))
         assertEquals(1, root.getInt("version"))
 
-        val expectedCounts = mapOf("9" to 94, "10" to 112)
+        val expectedCounts = mapOf("9" to 95, "10" to 112)
         expectedCounts.forEach { (grade, expectedCount) ->
             val gradeData = root.getJSONObject("grades").getJSONObject(grade)
             val questions = gradeData.getJSONArray("questions")
