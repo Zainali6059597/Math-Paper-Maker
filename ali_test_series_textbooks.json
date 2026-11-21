@@ -2766,7 +2766,7 @@
           "name": "Probability"
         }
       ],
-      "questionCount": 111,
+      "questionCount": 112,
       "questions": [
         {
           "questionId": "G10-ORIG-1-MCQ01",
@@ -4210,6 +4210,19 @@
           "sourceType": "ORIGINAL_AUTHORED",
           "copyrightStatus": "ORIGINAL",
           "difficulty": "CHALLENGING"
+        },
+        {
+          "questionId": "G10-PRACTICE-042",
+          "grade": 10,
+          "chapterId": "CH3",
+          "topic": "Matrices and Determinants",
+          "questionType": "SHORT",
+          "marks": 2,
+          "questionText": "Find the determinant of [[2, −1], [5, 3]].",
+          "answerText": "(2)(3) − (−1)(5) = 6 + 5 = 11.",
+          "sourceType": "ORIGINAL_AUTHORED",
+          "copyrightStatus": "ORIGINAL",
+          "difficulty": "FOUNDATION"
         }
       ],
       "contentPackReference": "app/src/main/assets/content-packs/punjab-grade10-mathematics-2026-27.json"
@@ -4219,7 +4232,7 @@
     "grade9Questions": 47,
     "grade10Questions": 24,
     "totalQuestions": 71,
-    "questions": 205
+    "questions": 206
   },
   "updatedAt": "2026-11-21"
 }
