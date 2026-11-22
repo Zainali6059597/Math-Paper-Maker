@@ -2871,11 +2871,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Solve x²−5x+6<0.",
-      "answerText": "(x−2)(x−3)<0, so 2<x<3.",
+      "questionText": "Solve x²−4x+3<0.",
+      "answerText": "(x−1)(x−3)<0, so 1<x<3.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "ats-g10-textbook-scope-ch2-02-1"
+      "semanticFingerprint": "ats-g10-ch2-short-solve-x2-4x-3-less-than-zero"
     },
     {
       "questionId": "ATS-G10-TEXTBOOK-SCOPE-CH2-02-2",
