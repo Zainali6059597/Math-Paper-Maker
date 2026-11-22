@@ -2042,11 +2042,11 @@
       "difficulty": "AVERAGE",
       "questionType": "SHORT",
       "marks": 2,
-      "questionText": "Evaluate log₅(125).",
-      "answerText": "log₅(125)=3 because 5³=125.",
+      "questionText": "Evaluate log₇(343).",
+      "answerText": "log₇(343)=3 because 7³=343.",
       "summative": true,
       "copyrightStatus": "ORIGINAL",
-      "semanticFingerprint": "ats-g9-ch2-short-evaluate-log5-125"
+      "semanticFingerprint": "ats-g9-ch2-short-evaluate-log7-343"
     },
     {
       "questionId": "ATS-G9-FULLBOOK-CH2-LONG-03",
