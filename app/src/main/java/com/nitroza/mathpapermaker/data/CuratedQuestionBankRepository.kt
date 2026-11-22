@@ -58,7 +58,7 @@ object CuratedQuestionBankRepository {
     ): List<PaperQuestion> {
         val raw = context.assets.open(BUNDLED_BANK_ASSET).bufferedReader(Charsets.UTF_8).use { it.readText() }
         val root = JSONObject(raw)
-        require(root.optInt("version") == 1) { "Unsupported bundled question-bank version." }
+        require(root.optInt("version") == 3) { "Unsupported bundled question-bank version." }
         val gradeData = root.getJSONObject("grades").getJSONObject(grade.toString())
         val identity = gradeData.getJSONObject("identity")
         require(identity.optInt("grade") == grade && identity.optString("board") == "Punjab") {
