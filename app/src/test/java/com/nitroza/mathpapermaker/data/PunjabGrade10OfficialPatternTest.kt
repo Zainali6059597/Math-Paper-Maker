@@ -86,7 +86,7 @@ class PunjabGrade10OfficialPatternTest {
         assertEquals(172, parsed.questions.size)
         assertEquals(172, parsed.questions.map { it.questionId }.toSet().size)
         assertEquals(51, parsed.questions.count { it.questionType == "MCQ" })
-        assertEquals(63, parsed.questions.count { it.questionType == "SHORT" })
+        assertEquals(75, parsed.questions.count { it.questionType == "SHORT" })
         assertEquals(46, parsed.questions.count { it.questionType == "LONG" })
         assertTrue(parsed.questions.all { !it.answerText.isNullOrBlank() })
         assertEquals(52, parsed.slots.size)
