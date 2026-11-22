@@ -108,7 +108,7 @@ class PunjabGrade9OfficialPatternTest {
         assertEquals(52, parsed.slots.size)
         assertEquals(3, parsed.choiceGroups.size)
         assertEquals(2, parsed.bundleChoiceGroups.size)
-        assertEquals(95, parsed.questions.size)
+        assertEquals(134, parsed.questions.size)
         val q8a = parsed.slots.single { it.slotId == "Q8_A" }
         val q9b = parsed.slots.single { it.slotId == "Q9_B" }
         assertEquals(setOf("CH7", "CH10"),
